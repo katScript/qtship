@@ -1,4 +1,4 @@
-# vue-js
+# tmp-vue
 
 ## Project setup
 ```
