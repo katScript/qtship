@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.register-page .div-container-register {
+  width: 95%;
+  height: 300px;
+  border: 1px solid #BF1E2D;
+  border-radius: 20px;
+  margin: 5vh auto;
+}
+.register-page .div-container-register .logo-branch-register {
+  margin-top: -70px;
+}
+.register-page .div-container-register .form-register {
+  margin: auto 10px;
+}
+.register-page .div-container-register .input-form-register {
+  margin-bottom: 30px;
+}
+
+/*# sourceMappingURL=register.css.map */
