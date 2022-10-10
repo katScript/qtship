@@ -1,0 +1,55 @@
+$color_red_qt: #BF1E2D;
+$color_red_qt_hover: #ff0019;
+$color_link_blue: #0097E6;
+$color_active: #2ecc71;
+// Complie scss to css :       sass src/style/scss/navbar-client.scss src/style/css/navbar-client.css
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-client{
+    .nav-item-qt{
+        padding: 0 10px;
+        a {
+            color: $color_red_qt;
+            font-size: 18px;
+        }
+    }
+
+    .nav-item-qt:hover{
+        background-color: $color_red_qt;
+        a { 
+            color: white;
+        }
+    }
+
+    .nav-item-qt-button{
+        background-color: $color_red_qt;
+        a { 
+            color: white;
+        }
+    }
+
+    .nav-item-qt-button:hover{
+        background-color: $color_red_qt_hover;
+        a { 
+            color: white;
+        }
+    }
+
+    .nav-item-login{
+        list-style-type: none;
+        a {
+            text-decoration: none;
+            i{
+                color: $color_red_qt;
+            }
+
+            span {
+                color: $color_active;
+            }
+        }
+    }
+}
