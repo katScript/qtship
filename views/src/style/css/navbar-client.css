@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-client .nav-item-qt {
+  padding: 0 10px;
+}
+.navbar-client .nav-item-qt a {
+  color: #BF1E2D;
+  font-size: 18px;
+}
+.navbar-client .nav-item-qt:hover {
+  background-color: #BF1E2D;
+}
+.navbar-client .nav-item-qt:hover a {
+  color: white;
+}
+.navbar-client .nav-item-qt-button {
+  background-color: #BF1E2D;
+}
+.navbar-client .nav-item-qt-button a {
+  color: white;
+}
+.navbar-client .nav-item-qt-button:hover {
+  background-color: #ff0019;
+}
+.navbar-client .nav-item-qt-button:hover a {
+  color: white;
+}
+.navbar-client .nav-item-login {
+  list-style-type: none;
+}
+.navbar-client .nav-item-login a {
+  text-decoration: none;
+}
+.navbar-client .nav-item-login a i {
+  color: #BF1E2D;
+}
+.navbar-client .nav-item-login a span {
+  color: #2ecc71;
+}
+
+/*# sourceMappingURL=navbar-client.css.map */

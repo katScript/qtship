@@ -1,5 +1,18 @@
 <template>
     <div class="management-client-page">
-        <h1>Client</h1>
+        <NavbarClient />
+
+        <FooterClient />
     </div>
 </template>
+
+<script>
+    import NavbarClient from './common/NavbarClient.vue';
+    import FooterClient from './common/FooterClient.vue';
+    export default {
+        components: {
+            NavbarClient,
+            FooterClient
+        }
+    }
+</script>
