@@ -1,4 +1,4 @@
-// Complie scss to css :       sass src/style/scss/main.scss src/style/css/main.css
+// Complie scss to css :       sass src/style/scss/register.scss src/style/css/register.css
 // @import 'name file scss (not contains .scss)'
 $color_red_qt: #BF1E2D;
 $color_red_qt_hover: #ff0019;
@@ -13,7 +13,7 @@ $color_link_blue: #0097E6;
 .register-page {
     .div-container-register{
         width: 95%;
-        height: 300px;
+        height: auto;
         border: 1px solid #BF1E2D;
         border-radius: 20px;
         margin: 5vh auto;
