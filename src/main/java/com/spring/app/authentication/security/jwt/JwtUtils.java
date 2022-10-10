@@ -1,4 +1,4 @@
-package authentication.security.jwt;
+package com.spring.app.authentication.security.jwt;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import authentication.security.services.UserDetailsImpl;
+import com.spring.app.authentication.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
 @Component

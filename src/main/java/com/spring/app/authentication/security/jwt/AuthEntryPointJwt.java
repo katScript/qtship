@@ -1,4 +1,4 @@
-package authentication.security.jwt;
+package com.spring.app.authentication.security.jwt;
 
 import java.io.IOException;
 

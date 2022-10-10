@@ -1,4 +1,4 @@
-package authentication.payload.request;
+package com.spring.app.authentication.payload.request;
 
 import java.util.Set;
 

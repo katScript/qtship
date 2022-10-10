@@ -1,4 +1,4 @@
-package authentication.payload.response;
+package com.spring.app.authentication.payload.response;
 
 public class MessageResponse {
     private String message;

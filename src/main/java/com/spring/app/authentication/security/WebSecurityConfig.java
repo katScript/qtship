@@ -1,5 +1,8 @@
-package authentication.security;
+package com.spring.app.authentication.security;
 
+import com.spring.app.authentication.security.jwt.AuthEntryPointJwt;
+import com.spring.app.authentication.security.jwt.AuthTokenFilter;
+import com.spring.app.authentication.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import authentication.security.jwt.AuthEntryPointJwt;
-import authentication.security.jwt.AuthTokenFilter;
-import authentication.security.services.UserDetailsServiceImpl;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
+         securedEnabled = true,
+         jsr250Enabled = true,
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired

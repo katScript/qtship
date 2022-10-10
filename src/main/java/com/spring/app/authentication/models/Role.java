@@ -1,4 +1,4 @@
-package authentication.models;
+package com.spring.app.authentication.models;
 
 import javax.persistence.*;
 import java.util.Date;
