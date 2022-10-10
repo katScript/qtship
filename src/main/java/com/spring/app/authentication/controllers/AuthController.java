@@ -1,4 +1,4 @@
-package authentication.controllers;
+package com.spring.app.authentication.controllers;
 
 
 import java.util.HashSet;
@@ -8,6 +8,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.spring.app.authentication.models.Role;
+import com.spring.app.authentication.models.User;
+import com.spring.app.authentication.payload.request.LoginRequest;
+import com.spring.app.authentication.payload.request.SignupRequest;
+import com.spring.app.authentication.payload.response.JwtResponse;
+import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.authentication.repository.UserRepository;
+import com.spring.app.authentication.security.jwt.JwtUtils;
+import com.spring.app.authentication.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,22 +24,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import authentication.models.Role;
-import authentication.models.User;
-import authentication.payload.request.LoginRequest;
-import authentication.payload.request.SignupRequest;
-import authentication.payload.response.JwtResponse;
-import authentication.payload.response.MessageResponse;
-import authentication.repository.RoleRepository;
-import authentication.repository.UserRepository;
-import authentication.security.jwt.JwtUtils;
-import authentication.security.services.UserDetailsImpl;
+import com.spring.app.authentication.repository.RoleRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -68,6 +64,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
+                userDetails.getEmail(),
                 roles));
     }
 
@@ -81,7 +78,8 @@ public class AuthController {
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getUsername());
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByCode("customer")

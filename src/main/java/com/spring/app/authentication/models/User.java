@@ -1,6 +1,4 @@
-package authentication.models;
-
-import com.sun.istack.NotNull;
+package com.spring.app.authentication.models;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,6 +21,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -37,9 +38,10 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public User() {}
-    public User(String username, String password) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public User setPassword(String password) {
@@ -57,6 +59,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public Set<Role> getRoles() {
