@@ -1,6 +1,12 @@
 <template>
     <div id="chart">
-        <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+        <apexchart type="line" height="358" :options="chartOptions" :series="series"></apexchart>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Đơn thành công <a href="#" class="a-detail-right">Chi tiết</a></li>
+            <li class="list-group-item">Đơn đang giao <a href="#" class="a-detail-right">Chi tiết</a></li>
+            <li class="list-group-item">Đơn phát sinh <a href="#" class="a-detail-right">Chi tiết</a></li>
+            <li class="list-group-item">Đơn hoàn <a href="#" class="a-detail-right">Chi tiết</a></li>
+        </ul>
     </div>
 </template>
 
@@ -9,20 +15,29 @@
         data() {
             return {
                 series: [{
-                        name: "High - 2013",
-                        data: [28, 29, 33, 36, 32, 32, 33]
+                        name: "Đơn thành công",
+                        data: [28, 29, 13, 36, 32, 12, 13]
                     },
                     {
-                        name: "Low - 2013",
-                        data: [12, 11, 14, 18, 17, 13, 13]
+                        name: "Đơn đang giao",
+                        data: [23, 10, 39, 21, 44, 31, 51]
+                    },
+                    {
+                        name: "Đơn phát sinh",
+                        data: [15, 11, 14, 9, 5, 20, 13]
+                    },
+                    {
+                        name: "Đơn hoàn",
+                        data: [3, 5, 1, 5, 12, 7, 10]
                     }
                 ],
                 chartOptions: {
                     chart: {
-                        height: 350,
+                        width: '100%',
+                        height: 'auto',
                         type: 'line',
                         dropShadow: {
-                            enabled: true,
+                            enabled: false,
                             color: '#000',
                             top: 18,
                             left: 7,
@@ -33,7 +48,7 @@
                             show: false
                         }
                     },
-                    colors: ['#77B6EA', '#545454'],
+                    colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)','rgb(254, 176, 25)','rgb(255, 69, 96)'],
                     dataLabels: {
                         enabled: true,
                     },
@@ -41,8 +56,8 @@
                         curve: 'smooth'
                     },
                     title: {
-                        text: 'Average High & Low Temperature',
-                        align: 'left'
+                        text: '',
+                        align: ''
                     },
                     grid: {
                         borderColor: '#e7e7e7',
@@ -62,10 +77,10 @@
                     },
                     yaxis: {
                         title: {
-                            text: 'Temperature'
+                            text: 'VNĐ'
                         },
-                        min: 5,
-                        max: 40
+                        min: 0,
+                        max: 100
                     },
                     legend: {
                         position: 'top',
@@ -79,3 +94,11 @@
         }
     };
 </script>
+
+<style scoped>
+    .a-detail-right{
+        right: 0;
+        position: absolute;
+        text-decoration: none;
+    }
+</style>
