@@ -1,0 +1,13 @@
+.management-client-page .border-div-management {
+  border: 1px solid #95a5a6;
+  border-radius: 20px;
+  padding: 0px 50px 0px 50px;
+}
+.management-client-page .title-management i {
+  color: #BF1E2D;
+}
+.management-client-page .list-top-provinces {
+  padding: 0 50px;
+}
+
+/*# sourceMappingURL=client-management.css.map */

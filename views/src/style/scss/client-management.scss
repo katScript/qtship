@@ -1,0 +1,26 @@
+$color_red_qt: #BF1E2D;
+$color_red_qt_hover: #ff0019;
+$color_link_blue: #0097E6;
+$color_border_brown: #95a5a6;
+
+.management-client-page{
+    
+    .border-div-management{
+        border: 1px solid $color_border_brown;
+        border-radius: 20px;
+        padding: 0px 50px 0px 50px;
+    }
+
+    .title-management i{
+        color: $color_red_qt;
+    }
+
+    .number-order-div {
+        // border-left: 0.5px solid black;
+        // border-right: 0.5px solid black;
+    }
+
+    .list-top-provinces {
+        padding: 0 50px;
+    }
+}
