@@ -1,11 +1,11 @@
 <template>
     <div class="row location-picker">
         <div class="col-md-4">
-            <v-select v-model="ttpSelected" :options="ttpList" placeholder="Chọn Tỉnh/Thành phố"></v-select>
+            <v-select v-model="ttpSelected" :options="ttpList" placeholder="Chọn Tỉnh/Thành phố" style="margin-bottom: 28px;"></v-select>
             <!-- binding data to param . Example : ttpSelected : {label: '', code: ''} -->
         </div>
         <div class="col-md-4">
-            <v-select v-model="qhSelected" :options="qhList" placeholder="Chọn Quận/Huyện"> </v-select>
+            <v-select v-model="qhSelected" :options="qhList" placeholder="Chọn Quận/Huyện" style="margin-bottom: 28px;"> </v-select>
         </div>
         <div class="col-md-4">
             <v-select v-model="pxSelected" :options="pxList" placeholder="Chọn Phường/Xã"></v-select>
@@ -57,28 +57,7 @@
 
         },
         updated(){
-            // const self = this;
-            // // Districts
-            // if(self.ttpSelected != '') {
-            //     self.apiDistrictsURL = commonFunction.apiProvincesURL + 'district/' + self.ttpSelected.code;
-            //     self.axios.get(self.apiDistrictsURL).then((response) => {
-            //         let dataDistricts = response.data.results;
-            //         for (let district in dataDistricts) {
-            //             self.qhList.push({ label: dataDistricts[district].district_name, code: dataDistricts[district].district_id });
-            //         }
-            //     })
-            // }
 
-            // //Wards
-            // if(self.qhSelected != '') {
-            //     self.apiWardsURL = commonFunction.apiProvincesURL + 'ward/' + self.qhSelected.code;
-            //     self.axios.get(self.apiWardsURL).then((response) => {
-            //         let dataWards = response.data.results;
-            //         for (let ward in dataWards) {
-            //             self.pxList.push({ label: dataWards[ward].ward_name, code: dataWards[ward].ward_id });
-            //         }
-            //     })
-            // }
         },
         watch: {
             ttpSelected: {

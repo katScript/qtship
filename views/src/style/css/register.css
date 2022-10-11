@@ -8,7 +8,7 @@
   height: auto;
   border: 1px solid #BF1E2D;
   border-radius: 20px;
-  margin: 5vh auto;
+  margin: 10vh auto;
 }
 .register-page .div-container-register .logo-branch-register {
   margin-top: -70px;
@@ -18,6 +18,21 @@
 }
 .register-page .div-container-register .input-form-register {
   margin-bottom: 30px;
+}
+.register-page .div-container-register .btn-register-qt {
+  background-color: #BF1E2D !important;
+  width: 150px;
+  padding: 8px;
+  border-radius: 25px;
+}
+.register-page .div-container-register .a-login-account {
+  text-decoration: none;
+}
+.register-page .div-container-register .a-login-account:hover {
+  color: #ff0019;
+}
+.register-page .div-container-register .vs__search {
+  height: 28.5px;
 }
 
 /*# sourceMappingURL=register.css.map */

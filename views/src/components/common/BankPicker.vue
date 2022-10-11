@@ -10,7 +10,7 @@
                     id="input-register-number-bank" placeholder="Số tài khoản Ngân hàng">
             </div>
             <div class="col-md-5">
-                <v-select v-model="bankSelected" :options="bankList" placeholder="Chọn Ngân hàng"></v-select>
+                <v-select v-model="bankSelected" :options="bankList" placeholder="Chọn Ngân hàng" style="margin-bottom: 28px;"></v-select>
             </div>
             <div class="col-md-3">
                 <input type="text" class="form-control input-form-register" id="input-register-branch-bank"
