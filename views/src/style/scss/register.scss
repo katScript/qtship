@@ -16,7 +16,7 @@ $color_link_blue: #0097E6;
         height: auto;
         border: 1px solid #BF1E2D;
         border-radius: 20px;
-        margin: 5vh auto;
+        margin: 10vh auto;
 
         .logo-branch-register{
             margin-top: -70px;
@@ -28,6 +28,26 @@ $color_link_blue: #0097E6;
 
         .input-form-register{
             margin-bottom: 30px;
+        }
+
+        .btn-register-qt {
+            background-color: $color_red_qt  !important;
+            width: 150px;
+            padding: 8px;
+            border-radius: 25px;
+        }
+
+
+        .a-login-account {
+            text-decoration: none;
+        }
+
+        .a-login-account:hover {
+            color: $color_red_qt_hover;
+        }
+
+        .vs__search{
+            height: 28.5px;
         }
     }
     
