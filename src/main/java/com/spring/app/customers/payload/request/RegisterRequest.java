@@ -4,11 +4,19 @@ import com.spring.app.customers.payload.data.Address;
 import com.spring.app.customers.payload.data.Customer;
 import com.spring.app.customers.payload.data.ForControl;
 
+import javax.validation.constraints.*;
+
 public class RegisterRequest {
+    @NotNull(message = "Username is required!")
+    @Pattern(regexp="^[a-zA-Z ]+$", message = "Username must be a string!")
     private String username;
+    @NotNull(message = "Password is required!")
     private String password;
+    @NotNull(message = "Customer address is required!")
     private Address customerAddress;
+    @NotNull(message = "Customer information is required!")
     private Customer customer;
+    @NotNull(message = "Customer for control information is required!")
     private ForControl forControl;
 
     public String getUsername() {

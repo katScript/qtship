@@ -60,28 +60,34 @@ public class CustomerController {
                     .body(new MessageResponse("Error: Email is already taken!"));
         }
 
+        User _user = null;
+        Customer _customer = null;
+        Address _address = null;
+        ForControl _forControl = null;
+
         try {
             User user = new User(registerRequest.getUsername(),
                     encoder.encode(registerRequest.getPassword()),
                     registerRequest.getUsername());
 
             Set<Role> roles = new HashSet<>();
-            Role userRole = roleRepository.findByCode("customer")
+            Role userRole = roleRepository.findByCode(Customer.ROLE)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
 
             user.setRoles(roles);
-            User newUser = userRepository.save(user);
+            _user = userRepository.save(user);
 
             Customer customer = new Customer(
                     registerRequest.getCustomer().getFullName(),
-                    newUser.getId(),
                     registerRequest.getCustomer().getPhone(),
                     registerRequest.getCustomer().getCompanyName(),
                     registerRequest.getCustomer().getEmail()
             );
 
-            Customer newCustomer = customerRepository.save(customer);
+            customer.setUser(_user);
+
+            _customer = customerRepository.save(customer);
 
             Address address = new Address(
                     registerRequest.getCustomerAddress().getProvince(),
@@ -91,11 +97,9 @@ public class CustomerController {
                     registerRequest.getCustomerAddress().getWard(),
                     registerRequest.getCustomerAddress().getWardId(),
                     registerRequest.getCustomerAddress().getStreet(),
-                    false
+                    true
             );
-
-            address.setCustomer(newCustomer);
-            addressRepository.save(address);
+            address.setCustomer(_customer);
 
             ForControl forControl = new ForControl(
                     registerRequest.getForControl().getHolderName(),
@@ -103,13 +107,19 @@ public class CustomerController {
                     registerRequest.getForControl().getBank(),
                     registerRequest.getForControl().getAddress()
             );
+            forControl.setCustomer(_customer);
 
-            forControl.setCustomer(newCustomer);
-            forControlRepository.save(forControl);
+            _address = addressRepository.save(address);
+            _forControl = forControlRepository.save(forControl);
         } catch (RuntimeException e) {
+            if (_address != null) addressRepository.delete(_address);
+            if (_forControl != null) forControlRepository.delete(_forControl);
+            if (_customer != null)  customerRepository.delete(_customer);
+            if (_user != null) userRepository.delete(_user);
+
             throw new RuntimeException(e);
         }
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Customer registered successfully!"));
     }
 }

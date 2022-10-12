@@ -22,7 +22,7 @@ public class ForControl {
     @Column(name="address")
     private String address;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", nullable = false)
     private Customer customer;
 

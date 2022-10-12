@@ -1,5 +1,7 @@
 package com.spring.app.customers.models;
 
+import com.spring.app.authentication.models.User;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -8,6 +10,8 @@ import java.util.Set;
 @Entity
 @Table(name="customers")
 public class Customer {
+    public static final String ROLE = "customer";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +24,6 @@ public class Customer {
 
     @Column(name="dob")
     private Date dob;
-
-    @Column(name="user_id")
-    private Long userId;
 
     @Column(name="phone_number")
     private String phone;
@@ -48,23 +49,29 @@ public class Customer {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private Set<Address> addressSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private Set<ForControl> forControls = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public Customer() {}
 
     public Customer(
         String fullName,
-        Long userId,
         String phone,
         String companyName,
         String email
     ) {
         this.fullName = fullName;
-        this.userId = userId;
         this.phone = phone;
         this.companyName = companyName;
         this.email = email;
@@ -104,12 +111,12 @@ public class Customer {
         return this;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public Customer setUserId(Long id) {
-        this.userId = id;
+    public Customer setUser(User user) {
+        this.user = user;
 
         return this;
     }

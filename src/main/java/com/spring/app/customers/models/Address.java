@@ -32,9 +32,9 @@ public class Address {
     private String street;
 
     @Column(name="primary")
-    private Boolean primary;
+    private boolean primary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", nullable = false)
     private Customer customer;
 
@@ -133,11 +133,11 @@ public class Address {
         return this;
     }
 
-    public Boolean getPrimary() {
+    public boolean getPrimary() {
         return primary;
     }
 
-    public Address setPrimary(Boolean primary) {
+    public Address setPrimary(boolean primary) {
         this.primary = primary;
         return this;
     }

@@ -1,5 +1,7 @@
 package com.spring.app.authentication.models;
 
+import com.spring.app.customers.models.Customer;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -36,6 +38,9 @@ public class User {
                 inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    private Customer customer;
 
     public User() {}
     public User(String username, String password, String email) {
