@@ -12,7 +12,8 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie"></i> Tổng quan <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie"></i> Tổng quan <span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item nav-item-qt">
                         <a class="nav-link" href="#"><i class="fa-solid fa-clipboard-list"></i> Đơn hàng</a>

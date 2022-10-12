@@ -14,28 +14,27 @@
                                     <tr>
                                         <td style="padding-right: 10px;">Lọc: </td>
                                         <td>
-                                            <select class="form-select" id="select-box-filter-time" v-model="filterTime">
-                                                <option value ="today">Hôm nay</option>
+                                            <select class="form-select" id="select-box-filter-time"
+                                                v-model="filterTime">
+                                                <option value="today">Hôm nay</option>
                                                 <option value="1week">1 tuần</option>
                                                 <option value="1month">1 tháng</option>
                                                 <option value="1year">1 năm</option>
                                                 <option value="timeAbout">Tùy chỉnh</option>
                                             </select>
-                                            <tr :class="classFilterTimeAbout">
-                                                <td>
-                                                    <label for="start">Từ ngày:</label>
-                                                    <input type="date" id="from-time-filter" class="form-control" name="trip-start"
-                                                           value=""
-                                                           min="" max="">
-                                                </td>
-                                                <td>
-                                                    <label for="start">Đến ngày ngày:</label>
-                                                    <input type="date" id="to-time-filter" class="form-control" name="trip-start"
-                                                            value=""
-                                                            min="" max="">
-                                                </td>
-                                            </tr>
+                                    <tr :class="classFilterTimeAbout">
+                                        <td>
+                                            <label for="start">Từ ngày:</label>
+                                            <input type="date" id="from-time-filter" class="form-control"
+                                                name="trip-start" value="" min="" max="">
                                         </td>
+                                        <td>
+                                            <label for="start">Đến ngày ngày:</label>
+                                            <input type="date" id="to-time-filter" class="form-control"
+                                                name="trip-start" value="" min="" max="">
+                                        </td>
+                                    </tr>
+                                    </td>
                                     </tr>
                                 </table>
                             </div>
@@ -131,14 +130,14 @@
                                             </tr>
                                         </table>
                                     </div>
-                                </div> 
+                                </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
-                                  </ul>
+                                </ul>
                             </div>
                             <div class="col-md-6 list-top-provinces">
                                 <div class="row">
@@ -158,60 +157,75 @@
                                             </tr>
                                         </table>
                                     </div>
-                                </div> 
+                                </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
-                                  </ul>
+                                </ul>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="subtab-area">
                         <div class="subtab-area-group">
                             <ul class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản lí đơn hàng</a>
-                                <li class="list-group-item">                        
+                                <a href="#"
+                                    class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản
+                                    lí đơn hàng</a>
+                                <li class="list-group-item">
                                     <table>
                                         <tr>
-                                            <td><div class="dot"></div></td><td>Đang hoạt động</td>
+                                            <td>
+                                                <div class="dot"></div>
+                                            </td>
+                                            <td>Đang hoạt động</td>
                                         </tr>
                                     </table>
                                 </li>
-                            </ul>   
+                            </ul>
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Giao thành công <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Giao thành công <span class="number-item-span">(10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Đã lấy/Đang giao <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Đã lấy/Đang giao <span class="number-item-span">(10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Delay & Hủy lấy <span class="number-item-span">(10ĐH | 10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Delay & Hủy lấy <span class="number-item-span">(10ĐH | 10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Không giao được/Lưu kho <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Không giao được/Lưu kho <span class="number-item-span">(10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Đơn đổi trả (Đơn hoàn) <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Đơn đổi trả (Đơn hoàn) <span class="number-item-span">(10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Delay do sai thông tin ĐH & chờ kiểm tra <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Delay do sai thông tin ĐH & chờ kiểm tra <span
+                                        class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Chưa xử lý <span class="number-item-span">(10ĐH)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Chưa xử lý <span class="number-item-span">(10ĐH)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
-                            </div> 
+                            </div>
                         </div>
                         <div class="subtab-area-group">
                             <ul class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản lí kho và sản phẩm</a>
-                                <li class="list-group-item">                        
-                                Kho: <select class="form-select" aria-label="Default select example" style="width: 200px; display: inline-block;">
+                                <a href="#"
+                                    class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản
+                                    lí kho và sản phẩm</a>
+                                <li class="list-group-item">
+                                    Kho: <select class="form-select" aria-label="Default select example"
+                                        style="width: 200px; display: inline-block;">
                                         <option selected>Tất cả</option>
                                         <option value="1">Kho Thanh Xuân</option>
                                         <option value="2">Kho Mỹ Đình</option>
@@ -220,33 +234,43 @@
                             </ul>
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                  Nhập <span class="number-item-span">(+ 10SP)</span> <i class="fa-solid fa-chevron-right"></i>
+                                    Nhập <span class="number-item-span">(+ 10SP)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Xuất <span class="number-item-span">(+ 10SP)</span> <i class="fa-solid fa-chevron-right"></i>
-                                  </a>
-                                  <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Tồn <span class="number-item-span">(+ 10SP)</span> <i class="fa-solid fa-chevron-right"></i>
-                                  </a>
-                                  <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Đơn hàng đã tạo/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i class="fa-solid fa-chevron-right"></i>
-                                  </a>
-                                  <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Đơn hàng chưa xử lí/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i class="fa-solid fa-chevron-right"></i>
-                                  </a>
-                            </div> 
-                        </div>          
+                                    Xuất <span class="number-item-span">(+ 10SP)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+                                    Tồn <span class="number-item-span">(+ 10SP)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+                                    Đơn hàng đã tạo/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+                                    Đơn hàng chưa xử lí/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i
+                                        class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
                         <div class="subtab-area-group">
                             <ul class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản lí dòng tiền</a>
-                                <li class="list-group-item">                        
+                                <a href="#"
+                                    class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản
+                                    lí dòng tiền</a>
+                                <li class="list-group-item">
                                     <table>
                                         <tr>
-                                            <td><div class="dot"></div></td><td>Đang hoạt động</td>
+                                            <td>
+                                                <div class="dot"></div>
+                                            </td>
+                                            <td>Đang hoạt động</td>
                                         </tr>
                                     </table>
                                 </li>
-                            </ul>   
+                            </ul>
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
                                     Tiền đang luân chuyển (0 VNĐ) <i class="fa-solid fa-chevron-right"></i>
@@ -260,8 +284,8 @@
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
                                     Phí hoàn hàng <i class="fa-solid fa-chevron-right"></i>
                                 </a>
-                            </div> 
-                        </div>                        
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -289,25 +313,25 @@
         },
         data() {
             return {
-                filterTime:'today',
+                filterTime: 'today',
                 classFilterTimeAbout: 'd-none'
             }
         },
         watch: {
             filterTime: {
-                handler:  function () { return this.filterTime == 'timeAbout' ? this.classFilterTimeAbout = 'd-contents' : this.classFilterTimeAbout = 'd-none';},
+                handler: function () { return this.filterTime == 'timeAbout' ? this.classFilterTimeAbout = 'd-contents' : this.classFilterTimeAbout = 'd-none'; },
             }
         },
         method: {
-            debouncer (fn, delay) {
+            debouncer(fn, delay) {
                 var timeoutID = null
                 return function () {
-                clearTimeout(timeoutID)
-                var args = arguments
-                var that = this
-                timeoutID = setTimeout(function () {
-                    fn.apply(that, args)
-                }, delay)
+                    clearTimeout(timeoutID)
+                    var args = arguments
+                    var that = this
+                    timeoutID = setTimeout(function () {
+                        fn.apply(that, args)
+                    }, delay)
                 }
             }
         }
@@ -315,13 +339,13 @@
 </script>
 
 <style scoped>
-.dot {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%; 
-  box-shadow: 0 0 0 3px transparentize($primary-medium, 0.8);
-  background-color: #4cd137;
-  margin-right: 6px;
-}
+    .dot {
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px transparentize($primary-medium, 0.8);
+        background-color: #4cd137;
+        margin-right: 6px;
+    }
 </style>
