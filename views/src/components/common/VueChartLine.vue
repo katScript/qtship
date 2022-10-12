@@ -15,21 +15,21 @@
         data() {
             return {
                 series: [{
-                        name: "Đơn thành công",
-                        data: [28, 29, 13, 36, 32, 12, 13]
-                    },
-                    {
-                        name: "Đơn đang giao",
-                        data: [23, 10, 39, 21, 44, 31, 51]
-                    },
-                    {
-                        name: "Đơn phát sinh",
-                        data: [15, 11, 14, 9, 5, 20, 13]
-                    },
-                    {
-                        name: "Đơn hoàn",
-                        data: [3, 5, 1, 5, 12, 7, 10]
-                    }
+                    name: "Đơn thành công",
+                    data: [28, 29, 13, 36, 32, 12, 13]
+                },
+                {
+                    name: "Đơn đang giao",
+                    data: [23, 10, 39, 21, 44, 31, 51]
+                },
+                {
+                    name: "Đơn phát sinh",
+                    data: [15, 11, 14, 9, 5, 20, 13]
+                },
+                {
+                    name: "Đơn hoàn",
+                    data: [3, 5, 1, 5, 12, 7, 10]
+                }
                 ],
                 chartOptions: {
                     chart: {
@@ -48,7 +48,7 @@
                             show: false
                         }
                     },
-                    colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)','rgb(254, 176, 25)','rgb(255, 69, 96)'],
+                    colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)', 'rgb(254, 176, 25)', 'rgb(255, 69, 96)'],
                     dataLabels: {
                         enabled: true,
                     },
@@ -96,7 +96,7 @@
 </script>
 
 <style scoped>
-    .a-detail-right{
+    .a-detail-right {
         right: 0;
         position: absolute;
         text-decoration: none;

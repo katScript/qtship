@@ -41,7 +41,7 @@
 </script>
 
 <style scoped>
-    .a-detail-right{
+    .a-detail-right {
         right: 0;
         position: absolute;
         text-decoration: none;

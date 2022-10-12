@@ -24,9 +24,10 @@
   
         mounted() {
             let authenication_cookies = this.cookies.get("authenication_cookies");
-            console.log(authenication_cookies);
             if(authenication_cookies == null){
               commonFunction.redirect('/login-page');
+            } else {
+                commonFunction.redirect('/client/management');
             }
         }
     };
