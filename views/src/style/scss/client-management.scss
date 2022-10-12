@@ -2,9 +2,16 @@ $color_red_qt: #BF1E2D;
 $color_red_qt_hover: #ff0019;
 $color_link_blue: #0097E6;
 $color_border_brown: #95a5a6;
+$color_green_qt: #27ae60;
 
 .management-client-page{
     
+    .overview-total-data{
+        h2 {
+            color: $color_red_qt;
+        }
+    }
+
     .border-div-management{
         border: 1px solid $color_border_brown;
         border-radius: 20px;
@@ -22,5 +29,32 @@ $color_border_brown: #95a5a6;
 
     .list-top-provinces {
         padding: 0 50px;
+    }
+
+    .list-group-page-qt {
+        .number-item-span{
+            font-size: 12px;
+            color: $color_green_qt;
+        }
+
+        i{
+            float: right;
+            margin-top: 5px;
+        }
+    }
+
+    .title-group-item-qt{
+        background-color: $color_red_qt;
+        color: white;
+        font-weight: 600;
+    }
+
+    .list-group-page-qt:hover {
+        background-color: $color_red_qt;
+        color: white;
+        .number-item-span{
+            font-size: 12px;
+            color: white;
+        }
     }
 }
