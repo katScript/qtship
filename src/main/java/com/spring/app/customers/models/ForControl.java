@@ -10,9 +10,6 @@ public class ForControl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="customer_id")
-    private Long customerId;
-
     @Column(name="holder_name")
     private String holderName;
 
@@ -38,13 +35,11 @@ public class ForControl {
     public ForControl() {}
 
     public ForControl(
-        Long customerId,
         String holderName,
         String cardNumber,
         String bank,
         String address
     ) {
-        this.customerId = customerId;
         this.holderName = holderName;
         this.cardNumber = cardNumber;
         this.bank = bank;
@@ -53,15 +48,6 @@ public class ForControl {
 
     public Long getId() {
         return id;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public ForControl setCustomerId(Long customerId) {
-        this.customerId = customerId;
-        return this;
     }
 
     public String getHolderName() {
@@ -97,6 +83,15 @@ public class ForControl {
 
     public ForControl setAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public ForControl setCustomer(Customer customer) {
+        this.customer = customer;
         return this;
     }
 

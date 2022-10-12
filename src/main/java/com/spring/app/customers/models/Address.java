@@ -10,9 +10,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="customer_id")
-    private Long customerId;
-
     @Column(name="province")
     private String province;
 
@@ -50,7 +47,6 @@ public class Address {
     public Address() {}
 
     public Address(
-        Long customerId,
         String province,
         Integer provinceId,
         String district,
@@ -60,7 +56,6 @@ public class Address {
         String street,
         boolean primary
     ) {
-        this.customerId = customerId;
         this.province = province;
         this.provinceId = provinceId;
         this.district = district;
@@ -73,15 +68,6 @@ public class Address {
 
     public Long getId() {
         return id;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public Address setCustomerId(Long customerId) {
-        this.customerId = customerId;
-        return this;
     }
 
     public String getProvince() {
