@@ -12,11 +12,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie"></i> Tổng quan <span
-                                class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/client/management"><i class="fa-solid fa-chart-pie"></i> Tổng quan</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-clipboard-list"></i> Đơn hàng</a>
+                        <a class="nav-link" href="/client/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn hàng</a>
                     </li>
                     <li class="nav-item nav-item-qt">
                         <a class="nav-link" href="#"><i class="fa-solid fa-boxes-stacked"></i> QL sản phẩm</a>
