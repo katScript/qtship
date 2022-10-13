@@ -7,7 +7,7 @@
                     <div class="overview-area">
                         <div class="row">
                             <div class="col-6">
-                                <h4 class="title-management"><i class="fa-solid fa-chart-pie"></i> Tổng quan</h4>
+                                <h4 class="title-management"><i class="fa-solid fa-chart-pie"></i> Tổng quan</h4> 
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 <table>
@@ -43,47 +43,47 @@
                         <div class="border-div-management">
                             <br />
                             <div class="row text-center overview-total-data">
-                                <div class="col-md-3">
+                                <div class="col-3">
                                     <h5>Tổng số đơn hàng</h5>
                                     <h2 id="number-orders">100</h2>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-3">
                                     <h5>Tổng sản phẩm mới</h5>
                                     <h2 id="number-orders">20</h2>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-3">
                                     <h5>Tổng sản phẩm</h5>
                                     <h2 id="number-orders">250</h2>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-3">
                                     <h5>Tổng số kho</h5>
                                     <h2 id="number-orders">1</h2>
                                 </div>
                             </div>
                             <br />
                             <div class="row text-center">
-                                <div class="col-md-3 number-order-div">
+                                <div class="col-6 col-md-3 number-order-div">
                                     <h6>Đơn thành công</h6>
                                     <h4 id="number-orders">10</h4>
                                     <p>ĐH: <span id="number-order-success">1</span></p>
                                     <p>SP: <span id="number-prod-success">1</span></p>
                                     <p>CoD: <span id="number-cod-success">1</span></p>
                                 </div>
-                                <div class="col-md-3 number-order-div">
+                                <div class="col-6 col-md-3 number-order-div">
                                     <h6>Đơn đang giao</h6>
                                     <h4 id="number-orders">20</h4>
                                     <p>ĐH: <span id="number-order-processing">1</span></p>
                                     <p>SP: <span id="number-prod-processing">1</span></p>
                                     <p>CoD: <span id="number-cod-processing">1</span></p>
                                 </div>
-                                <div class="col-md-3 number-order-div">
+                                <div class="col-6 col-md-3 number-order-div">
                                     <h6>Đơn phát sinh</h6>
                                     <h4 id="number-orders">10</h4>
                                     <p>ĐH: <span id="number-order-incurred">1</span></p>
                                     <p>SP: <span id="number-prod-incurred">1</span></p>
                                     <p>CoD: <span id="number-cod-incurred">1</span></p>
                                 </div>
-                                <div class="col-md-3 number-order-div">
+                                <div class="col-6 col-md-3 number-order-div">
                                     <h6>Đơn hủy</h6>
                                     <h4 id="number-orders">10</h4>
                                     <p>ĐH: <span id="number-order-cancel">1</span></p>
@@ -101,11 +101,13 @@
                                     <h5>Tổng quan đơn hàng</h5>
                                     <br />
                                     <VueChartPie />
+                                    <br /><br />
                                 </div>
                                 <div class="col-md-6">
                                     <h5>Tổng quan dòng tiền</h5>
                                     <br />
                                     <VueChartLine />
+                                    <br /><br />
                                 </div>
                             </div>
                             <br />
@@ -138,6 +140,7 @@
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                 </ul>
+                                <br />
                             </div>
                             <div class="col-md-6 list-top-provinces">
                                 <div class="row">
@@ -165,6 +168,7 @@
                                     <li class="list-group-item">Item ranking</li>
                                     <li class="list-group-item">Item ranking</li>
                                 </ul>
+                                <br />
                             </div>
                         </div>
                     </div>
@@ -174,18 +178,19 @@
                         <div class="subtab-area-group">
                             <ul class="list-group">
                                 <a href="#"
+                                    class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt"><i class="fa-solid fa-user" style="float: left; padding-right: 10px;"></i>  duongph <i class="fa-solid fa-circle" style="color: #4cd137;"></i></a>
+                            </ul>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+                                    Quản lí thông tin tài khoản <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="subtab-area-group">
+                            <ul class="list-group">
+                                <a href="#"
                                     class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản
                                     lí đơn hàng</a>
-                                <li class="list-group-item">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="dot"></div>
-                                            </td>
-                                            <td>Đang hoạt động</td>
-                                        </tr>
-                                    </table>
-                                </li>
                             </ul>
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
@@ -246,7 +251,7 @@
                                         class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                                    Đơn hàng đã tạo/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i
+                                    Số lượng đơn hàng/Sản phẩm <span class="number-item-span">(10ĐH | 12SP)</span> <i
                                         class="fa-solid fa-chevron-right"></i>
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
@@ -260,16 +265,6 @@
                                 <a href="#"
                                     class="list-group-item list-group-item-action list-group-page-qt title-group-item-qt">Quản
                                     lí dòng tiền</a>
-                                <li class="list-group-item">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="dot"></div>
-                                            </td>
-                                            <td>Đang hoạt động</td>
-                                        </tr>
-                                    </table>
-                                </li>
                             </ul>
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
@@ -283,6 +278,16 @@
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
                                     Phí hoàn hàng <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="subtab-area-group">
+                            <ul class="list-group">
+                                
+                            </ul>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action list-group-page-qt" style="color:red; font-weight: bold;">
+                                    Đăng xuất <i class="fa-solid fa-chevron-right"></i>
                                 </a>
                             </div>
                         </div>
@@ -304,6 +309,10 @@
     import FooterClient from './common/FooterClient.vue';
     import VueChartPie from './common/VueChartPie.vue';
     import VueChartLine from './common/VueChartLine.vue';
+
+    import { useCookies } from "vue3-cookies";
+    // import { commonFunction } from '../scripts/ulti'
+
     export default {
         components: {
             NavbarClient,
@@ -316,6 +325,22 @@
                 filterTime: 'today',
                 classFilterTimeAbout: 'd-none'
             }
+        },
+
+        setup() {
+            const { cookies } = useCookies();
+            return { cookies };
+        },
+  
+        // <data, methods...>
+  
+        mounted() {
+            // let authenication_cookies = this.cookies.get("authenication_cookies");
+            // if(authenication_cookies == null){
+            //   commonFunction.redirect('/login-page');
+            // } else {
+            //     commonFunction.redirect('/client/management');
+            // }
         },
         watch: {
             filterTime: {
@@ -339,13 +364,5 @@
 </script>
 
 <style scoped>
-    .dot {
-        display: block;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        box-shadow: 0 0 0 3px transparentize($primary-medium, 0.8);
-        background-color: #4cd137;
-        margin-right: 6px;
-    }
+
 </style>

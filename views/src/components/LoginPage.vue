@@ -28,7 +28,8 @@
                                 <a href="#" class="a-forget-password">Bạn quên mật khẩu?</a>
                                 <br>
                                 <br>
-                                <button type="" class="btn btn-danger btn-login-qt" v-on:click="login()">Đăng nhập</button>
+                                <button type="" class="btn btn-danger btn-login-qt" >Đăng nhập</button> 
+                                <!-- v-on:click="login()" -->
                                 <br>
                                 <br>
                                 <p>Bạn chưa có tài khoản, <a href="/register-page" class="a-register-account">Đăng ký

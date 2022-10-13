@@ -9,7 +9,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item nav-item-qt">
                         <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie"></i> Tổng quan <span
@@ -28,11 +28,6 @@
                         <a class="nav-link" href="#"><i class="fa-solid fa-circle-plus"></i> Tạo đơn hàng</a>
                     </li>
                 </ul>
-                <div class="form-inline">
-                    <li class="nav-item nav-item-login">
-                        <a href=""><i class="fa-solid fa-user-gear"></i> <span class="span-username">DuongPH</span></a>
-                    </li>
-                </div>
             </div>
         </nav>
     </div>
