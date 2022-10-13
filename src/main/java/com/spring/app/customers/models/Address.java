@@ -31,11 +31,11 @@ public class Address {
     @Column(name="street")
     private String street;
 
-    @Column(name="primary")
+    @Column(name="`primary`")
     private boolean primary;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="customer_id", nullable = false)
+    @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
     @Column(name = "created_at")

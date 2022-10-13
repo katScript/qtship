@@ -23,7 +23,7 @@ public class ForControl {
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="customer_id", nullable = false)
+    @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
     @Column(name = "created_at")

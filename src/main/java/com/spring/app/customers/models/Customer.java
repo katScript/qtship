@@ -50,14 +50,12 @@ public class Customer {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "customer",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<Address> addressSet = new HashSet<>();
+            fetch = FetchType.LAZY)
+    private Set<Address> addressSet;
 
     @OneToMany(mappedBy = "customer",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<ForControl> forControls = new HashSet<>();
+            fetch = FetchType.LAZY)
+    private Set<ForControl> forControls;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
