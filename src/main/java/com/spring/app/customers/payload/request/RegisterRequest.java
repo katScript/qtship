@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 
 public class RegisterRequest {
     @NotNull(message = "Username is required!")
-    @Pattern(regexp="^[a-zA-Z ]+$", message = "Username must be a string!")
     private String username;
     @NotNull(message = "Password is required!")
     private String password;

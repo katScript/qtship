@@ -2,11 +2,11 @@ package com.spring.app.customers.payload.data;
 
 public class Address {
     String province;
-    Integer provinceId;
+    String provinceId;
     String district;
-    Integer districtId;
+    String districtId;
     String ward;
-    Integer wardId;
+    String wardId;
     String street;
 
     public String getProvince() {
@@ -17,11 +17,11 @@ public class Address {
         this.province = province;
     }
 
-    public Integer getProvinceId() {
+    public String getProvinceId() {
         return provinceId;
     }
 
-    public void setProvinceId(Integer provinceId) {
+    public void setProvinceId(String provinceId) {
         this.provinceId = provinceId;
     }
 
@@ -33,11 +33,11 @@ public class Address {
         this.district = district;
     }
 
-    public Integer getDistrictId() {
+    public String getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(String districtId) {
         this.districtId = districtId;
     }
 
@@ -49,11 +49,11 @@ public class Address {
         this.ward = ward;
     }
 
-    public Integer getWardId() {
+    public String getWardId() {
         return wardId;
     }
 
-    public void setWardId(Integer wardId) {
+    public void setWardId(String wardId) {
         this.wardId = wardId;
     }
 
