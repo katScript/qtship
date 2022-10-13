@@ -27,7 +27,7 @@
             if(authenication_cookies == null){
               commonFunction.redirect('/login-page');
             } else {
-                commonFunction.redirect('/client/management');
+                commonFunction.redirect('/');
             }
         }
     };

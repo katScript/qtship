@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../scss/client-management.scss"],"names":[],"mappings":"AASQ;EACI,OAVG;;AAcX;EACI;EACA;EACA;;AAGJ;EACI,OArBO;;AAkCP;EACI;EACA,OAhCK;;AAmCT;EACI;EACA;;AAIR;EACI,kBA9CO;EA+CP;EACA;;AAGJ;EACI,kBApDO;EAqDP;;AACA;EACI;EACA","file":"client-management.css"}
+{"version":3,"sourceRoot":"","sources":["../scss/client-management.scss"],"names":[],"mappings":"AASQ;EACI,OAVG;;AAcX;EACI;EACA;;AAIJ;EACI,OArBO;;AAkCP;EACI;EACA,OAhCK;;AAmCT;EACI;EACA;;AAIR;EACI,kBA9CO;EA+CP;EACA;;AAGJ;EACI,kBApDO;EAqDP;;AACA;EACI;EACA","file":"client-management.css"}

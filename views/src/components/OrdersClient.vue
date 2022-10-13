@@ -1,7 +1,7 @@
 <template>
   <div class="management-client-page">
     <NavbarClient />
-    <div class="container-fluid" style="width: 95%">
+    <div class="container-fluid" style="width: 98%">
       <div class="row">
         <div class="col-md-10">
           <div class="orders-overview-area">
@@ -11,28 +11,17 @@
                   <h4 class="title-management">
                     <i class="fa-solid fa-clipboard-list"></i> Quản lí đơn hàng
                   </h4>
+                  <br>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <input
-                    type="text"
-                    class="form-control form-search-control"
-                    id=""
-                    placeholder="Mã đơn hàng"
-                  />
+                  <input type="text" class="form-control form-search-control" id="" placeholder="Mã đơn hàng" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <input
-                    type="text"
-                    class="form-control form-search-control"
-                    id=""
-                    placeholder="Số điện thoại người nhận"
-                  />
+                  <input type="text" class="form-control form-search-control" id=""
+                    placeholder="Số điện thoại người nhận" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select class="form-select" aria-label="Default select example">
                     <option value="label" disabled hidden selected>
                       Trạng thái đơn hàng
                     </option>
@@ -51,11 +40,7 @@
                   <table class="w-100">
                     <tr>
                       <td>
-                        <select
-                          class="form-select"
-                          id="select-box-filter-time"
-                          v-model="filterTime"
-                        >
+                        <select class="form-select" id="select-box-filter-time" v-model="filterTime">
                           <option value="label" hidden>
                             Thời gian tạo đơn
                           </option>
@@ -66,33 +51,19 @@
                           <option value="timeCOAll">Tất cả</option>
                           <option value="timeCOTimeAbout">Tùy chỉnh</option>
                         </select>
-                        <tr :class="classFilterTimeAbout">
-                          <td>
-                            <label for="start">Từ ngày:</label>
-                            <input
-                              type="date"
-                              id="from-time-filter"
-                              class="form-control"
-                              name="trip-start"
-                              value=""
-                              min=""
-                              max=""
-                            />
-                          </td>
-                          <td>
-                            <label for="start">Đến ngày ngày:</label>
-                            <input
-                              type="date"
-                              id="to-time-filter"
-                              class="form-control"
-                              name="trip-start"
-                              value=""
-                              min=""
-                              max=""
-                            />
-                          </td>
-                        </tr>
+                    <tr :class="classFilterTimeAbout">
+                      <td>
+                        <label for="start">Từ ngày:</label>
+                        <input type="date" id="from-time-filter" class="form-control" name="" value="" min=""
+                          max="" />
                       </td>
+                      <td>
+                        <label for="start">Đến ngày ngày:</label>
+                        <input type="date" id="to-time-filter" class="form-control" name="" value="" min=""
+                          max="" />
+                      </td>
+                    </tr>
+                    </td>
                     </tr>
                   </table>
                 </div>
@@ -100,11 +71,7 @@
                   <table class="w-100">
                     <tr>
                       <td>
-                        <select
-                          class="form-select"
-                          id="select-box-filter-time"
-                          v-model="filterTimeDS"
-                        >
+                        <select class="form-select" id="select-box-filter-time" v-model="filterTimeDS">
                           <option value="label" hidden>
                             Thời gian đối soát
                           </option>
@@ -115,41 +82,24 @@
                           <option value="controlTimeAll">Tất cả</option>
                           <option value="controlTimeAboutDS">Tùy chỉnh</option>
                         </select>
-                        <tr :class="classFilterTimeAboutDS">
-                          <td>
-                            <label for="start">Từ ngày:</label>
-                            <input
-                              type="date"
-                              id="from-time-filter"
-                              class="form-control"
-                              name="trip-start"
-                              value=""
-                              min=""
-                              max=""
-                            />
-                          </td>
-                          <td>
-                            <label for="start">Đến ngày ngày:</label>
-                            <input
-                              type="date"
-                              id="to-time-filter"
-                              class="form-control"
-                              name="trip-start"
-                              value=""
-                              min=""
-                              max=""
-                            />
-                          </td>
-                        </tr>
+                    <tr :class="classFilterTimeAboutDS">
+                      <td>
+                        <label for="start">Từ ngày:</label>
+                        <input type="date" id="from-time-filter" class="form-control" name="" value="" min=""
+                          max="" />
                       </td>
+                      <td>
+                        <label for="start">Đến ngày ngày:</label>
+                        <input type="date" id="to-time-filter" class="form-control" name="" value="" min=""
+                          max="" />
+                      </td>
+                    </tr>
+                    </td>
                     </tr>
                   </table>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select class="form-select" aria-label="Default select example">
                     <option value="label" disabled hidden selected>
                       Dịch vụ giao hàng
                     </option>
@@ -160,10 +110,7 @@
                   </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select class="form-select" aria-label="Default select example">
                     <option value="label" disabled hidden selected>
                       Trạng thái hóa đơn
                     </option>
@@ -176,7 +123,7 @@
                     <i class="fa-sharp fa-solid fa-magnifying-glass"></i> Tìm
                     kiếm đơn hàng
                   </button>
-                  <button type="reset" class="btn btn-secondary w-23" style="float: right;">
+                  <button type="" class="btn btn-secondary w-23" style="float: right;" v-on:click="resetFormSearch()">
                     <i class="fa-solid fa-eraser"></i> Reset
                   </button>
                 </div>
@@ -197,65 +144,75 @@
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
-import FooterClient from "./common/FooterClient.vue";
-import ToolbarRight from "./common/ToolbarRight.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
+  import FooterClient from "./common/FooterClient.vue";
+  import ToolbarRight from "./common/ToolbarRight.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+  import { useCookies } from "vue3-cookies";
+  // import { commonFunction } from '../scripts/ulti'
+  import { debounce } from 'vue-debounce'
 
-export default {
-  components: {
-    NavbarClient,
-    FooterClient,
-    ToolbarRight,
-  },
-  data() {
-    return {
-      filterTime: "label",
-      filterTimeDS: "label",
-      classFilterTimeAbout: "d-none",
-      classFilterTimeAboutDS: "d-none",
-    };
-  },
+  export default {
+    components: {
+      NavbarClient,
+      FooterClient,
+      ToolbarRight,
+    },
+    data() {
+      return {
+        orderCode: '',
+        receiverPhonenumber: '',
+        filterTime: "label",
+        filterTimeDS: "label",
+        classFilterTimeAbout: "d-none",
+        classFilterTimeAboutDS: "d-none",
+      };
+    },
 
-  setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
+    setup() {
+      const { cookies } = useCookies();
+      return { cookies };
+    },
 
-  // <data, methods...>
+    // <data, methods...>
 
-  mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/login-page');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
-  watch: {
-    filterTime: {
-      handler: function () {
-        return this.filterTime == "timeCOTimeAbout"
-          ? (this.classFilterTimeAbout = "d-contents")
-          : (this.classFilterTimeAbout = "d-none");
+    mounted() {
+      // let authenication_cookies = this.cookies.get("authenication_cookies");
+      // if(authenication_cookies == null){
+      //   commonFunction.redirect('/login-page');
+      // } else {
+      //     commonFunction.redirect('/client/management');
+      // }
+    },
+    watch: {
+      filterTime: {
+        handler: debounce(function () {
+          return this.filterTime == "timeCOTimeAbout"
+            ? (this.classFilterTimeAbout = "d-contents")
+            : (this.classFilterTimeAbout = "d-none");
+        }, 500)
+      },
+      filterTimeDS: {
+        handler: function () {
+          return this.filterTimeDS == "controlTimeAboutDS"
+            ? (this.classFilterTimeAboutDS = "d-contents")
+            : (this.classFilterTimeAboutDS = "d-none");
+        },
       },
     },
-    filterTimeDS: {
-      handler: function () {
-        return this.filterTimeDS == "controlTimeAboutDS"
-          ? (this.classFilterTimeAboutDS = "d-contents")
-          : (this.classFilterTimeAboutDS = "d-none");
-      },
+    method: {
+      resetFormSearch: debounce(function () {
+        this.filterTime = "label";
+        this.filterTimeDS = "label";
+        this.classFilterTimeAbout = "d-none";
+        this.classFilterTimeAboutDS = "d-none";
+      }, 1000)
     },
-  },
-  method: {},
-};
+  };
 </script>
 
 <style scoped>
-.form-search-control {
-  margin-bottom: 10px;
-}
+  .form-search-control {
+    margin-bottom: 10px;
+  }
 </style>

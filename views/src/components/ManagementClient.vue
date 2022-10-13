@@ -1,7 +1,7 @@
 <template>
   <div class="management-client-page">
     <NavbarClient />
-    <div class="container-fluid" style="width: 95%">
+    <div class="container-fluid" style="width: 98%">
       <div class="row">
         <div class="col-md-10">
           <div class="overview-area">
@@ -16,44 +16,26 @@
                   <tr>
                     <td style="padding-right: 10px">Lọc:</td>
                     <td>
-                      <select
-                        class="form-select"
-                        id="select-box-filter-time"
-                        v-model="filterTime"
-                      >
+                      <select class="form-select" id="select-box-filter-time" v-model="filterTime">
                         <option value="today">Hôm nay</option>
                         <option value="1week">1 tuần</option>
                         <option value="1month">1 tháng</option>
                         <option value="1year">1 năm</option>
                         <option value="timeAbout">Tùy chỉnh</option>
                       </select>
-                      <tr :class="classFilterTimeAbout">
-                        <td>
-                          <label for="start">Từ ngày:</label>
-                          <input
-                            type="date"
-                            id="from-time-filter"
-                            class="form-control"
-                            name="trip-start"
-                            value=""
-                            min=""
-                            max=""
-                          />
-                        </td>
-                        <td>
-                          <label for="start">Đến ngày ngày:</label>
-                          <input
-                            type="date"
-                            id="to-time-filter"
-                            class="form-control"
-                            name="trip-start"
-                            value=""
-                            min=""
-                            max=""
-                          />
-                        </td>
-                      </tr>
+                  <tr :class="classFilterTimeAbout">
+                    <td>
+                      <label for="start">Từ ngày:</label>
+                      <input type="date" id="from-time-filter" class="form-control" name="trip-start" value="" min=""
+                        max="" />
                     </td>
+                    <td>
+                      <label for="start">Đến ngày ngày:</label>
+                      <input type="date" id="to-time-filter" class="form-control" name="trip-start" value="" min=""
+                        max="" />
+                    </td>
+                  </tr>
+                  </td>
                   </tr>
                 </table>
               </div>
@@ -205,68 +187,68 @@
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
-import FooterClient from "./common/FooterClient.vue";
-import VueChartPie from "./common/VueChartPie.vue";
-import VueChartLine from "./common/VueChartLine.vue";
-import ToolbarRight from "./common/ToolbarRight.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
+  import FooterClient from "./common/FooterClient.vue";
+  import VueChartPie from "./common/VueChartPie.vue";
+  import VueChartLine from "./common/VueChartLine.vue";
+  import ToolbarRight from "./common/ToolbarRight.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+  import { useCookies } from "vue3-cookies";
+  // import { commonFunction } from '../scripts/ulti'
 
-export default {
-  components: {
-    NavbarClient,
-    FooterClient,
-    VueChartPie,
-    VueChartLine,
-    ToolbarRight,
-  },
-  data() {
-    return {
-      filterTime: "today",
-      classFilterTimeAbout: "d-none",
-    };
-  },
-
-  setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
-
-  // <data, methods...>
-
-  mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/login-page');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
-  watch: {
-    filterTime: {
-      handler: function () {
-        return this.filterTime == "timeAbout"
-          ? (this.classFilterTimeAbout = "d-contents")
-          : (this.classFilterTimeAbout = "d-none");
-      },
+  export default {
+    components: {
+      NavbarClient,
+      FooterClient,
+      VueChartPie,
+      VueChartLine,
+      ToolbarRight,
     },
-  },
-  method: {
-    debouncer(fn, delay) {
-      var timeoutID = null;
-      return function () {
-        clearTimeout(timeoutID);
-        var args = arguments;
-        var that = this;
-        timeoutID = setTimeout(function () {
-          fn.apply(that, args);
-        }, delay);
+    data() {
+      return {
+        filterTime: "today",
+        classFilterTimeAbout: "d-none",
       };
     },
-  },
-};
+
+    setup() {
+      const { cookies } = useCookies();
+      return { cookies };
+    },
+
+    // <data, methods...>
+
+    mounted() {
+      // let authenication_cookies = this.cookies.get("authenication_cookies");
+      // if(authenication_cookies == null){
+      //   commonFunction.redirect('/login-page');
+      // } else {
+      //     commonFunction.redirect('/client/management');
+      // }
+    },
+    watch: {
+      filterTime: {
+        handler: function () {
+          return this.filterTime == "timeAbout"
+            ? (this.classFilterTimeAbout = "d-contents")
+            : (this.classFilterTimeAbout = "d-none");
+        },
+      },
+    },
+    method: {
+      debouncer(fn, delay) {
+        var timeoutID = null;
+        return function () {
+          clearTimeout(timeoutID);
+          var args = arguments;
+          var that = this;
+          timeoutID = setTimeout(function () {
+            fn.apply(that, args);
+          }, delay);
+        };
+      },
+    },
+  };
 </script>
 
 <style scoped>
