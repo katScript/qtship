@@ -20,13 +20,13 @@ public class Address {
     private String ward;
 
     @Column(name="province_id")
-    private Integer provinceId;
+    private String provinceId;
 
     @Column(name="district_id")
-    private Integer districtId;
+    private String districtId;
 
     @Column(name="ward_id")
-    private Integer wardId;
+    private String wardId;
 
     @Column(name="street")
     private String street;
@@ -48,11 +48,11 @@ public class Address {
 
     public Address(
         String province,
-        Integer provinceId,
+        String provinceId,
         String district,
-        Integer districtId,
+        String districtId,
         String ward,
-        Integer wardId,
+        String wardId,
         String street,
         boolean primary
     ) {
@@ -79,11 +79,11 @@ public class Address {
         return this;
     }
 
-    public Integer getProvinceId() {
+    public String getProvinceId() {
         return provinceId;
     }
 
-    public Address setProvinceId(Integer provinceId) {
+    public Address setProvinceId(String provinceId) {
         this.provinceId = provinceId;
         return this;
     }
@@ -97,11 +97,11 @@ public class Address {
         return this;
     }
 
-    public Integer getDistrictId() {
+    public String getDistrictId() {
         return districtId;
     }
 
-    public Address setDistrictId(Integer districtId) {
+    public Address setDistrictId(String districtId) {
         this.districtId = districtId;
         return this;
     }
@@ -115,11 +115,11 @@ public class Address {
         return this;
     }
 
-    public Integer getWardId() {
+    public String getWardId() {
         return wardId;
     }
 
-    public Address setWardId(Integer wardId) {
+    public Address setWardId(String wardId) {
         this.wardId = wardId;
         return this;
     }
