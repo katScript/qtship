@@ -8,6 +8,7 @@ const commonFunction = {
     encodePassword(pass) { return md5(sha256(pass)); },
     regexPassword: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/,
     regexEmail: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+    regexPhone: /[0-9]{10}/g,
     typeEmail: 'EMAIL',
     typePassword: 'PASSWORD',
     regexStringValidate(string, type) {
@@ -20,6 +21,11 @@ const commonFunction = {
                 break;
             case "PASSWORD":
                 if (string.match(commonFunction.regexPassword)) {
+                    valid = true;
+                }
+                break;
+            case "PHONE":
+                if (string.match(commonFunction.regexPhone)) {
                     valid = true;
                 }
                 break;
