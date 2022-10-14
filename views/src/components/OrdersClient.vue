@@ -39,17 +39,16 @@
                       <option value="label" disabled hidden selected>
                         Trạng thái đơn hàng
                       </option>
-                      <option value="odrsuccess">
-                        Giao thành công
-                      </option>
-                      <option value="odrPaymented">Đã thanh toán</option>
-                      <option value="odrDelivering">Đang giao</option>
                       <option value="odrWaitingtaked">Chờ lấy</option>
                       <option value="odrTaked">Đã lấy</option>
-                      <option value="odrCanceled">Đơn hoàn</option>
+                      <option value="odrDelivering">Đang giao</option>
                       <option value="odrDeliveryPending">
                         Delay giao hàng
                       </option>
+                      <option value="odrsuccess">Giao thành công</option>
+                      <option value="odrPaymented">Đã thanh toán</option>
+                      <option value="odrCanceled">Đơn hoàn</option>
+
                       <option value="odrTaked">Đã đối soát</option>
                       <option value="odrCanceled">Đã hủy</option>
                     </select>
