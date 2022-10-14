@@ -12,6 +12,7 @@
                         <div class="w-75 mx-auto">
                             <div class="mb-3">
                                 <label for="input-account-login" class="form-label label-qt">Email đăng nhập</label>
+                                <small class="notify-message">{{ msgError }}</small>
                                 <input type="text" class="form-control" id="input-account-login" v-model="username">
                             </div>
                             <div class="mb-3">
@@ -28,8 +29,8 @@
                                 <a href="#" class="a-forget-password">Bạn quên mật khẩu?</a>
                                 <br>
                                 <br>
-                                <button type="" class="btn btn-danger btn-login-qt" >Đăng nhập</button> 
-                                <!-- v-on:click="login()" -->
+                                <button type="" class="btn btn-danger btn-login-qt" v-on:click="login()">Đăng
+                                    nhập</button>
                                 <br>
                                 <br>
                                 <p>Bạn chưa có tài khoản, <a href="/register-page" class="a-register-account">Đăng ký
@@ -61,6 +62,7 @@
                 rememberMe: false,
                 validationUsername: [],
                 validationPassword: [],
+                msgError: '',
                 isValid: 0,
                 loading: false
             }
@@ -72,14 +74,14 @@
                 this.validationForm();
                 if (this.isValid == 0) {
                     axios
-                        .post(commonFunction.DOMAIN_URL + "api/auth/signin", {
+                        .post(commonFunction.DOMAIN_URL + "v1/customer/auth/login", {
                             username: this.username,
                             password: this.password,
                         })
                         .then((response) => {
                             let resData = response.data;
                             console.log(resData);
-                            if(resData.accessToken && !this.cookies.get('authenication_cookies')) {
+                            if (resData.accessToken && !this.cookies.get('authenication_cookies')) {
                                 let authenCookie = {
                                     username: resData.username,
                                     token: resData.accessToken

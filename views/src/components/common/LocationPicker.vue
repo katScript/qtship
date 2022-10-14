@@ -1,20 +1,23 @@
 <template>
     <div class="row location-picker">
         <div class="col-md-4">
-            <v-select v-model="ttpSelected" :options="ttpList" placeholder="Chọn Tỉnh/Thành phố" style="margin-bottom: 28px;"></v-select>
+            <v-select v-model="ttpSelected" :options="ttpList" placeholder="Chọn Tỉnh/Thành phố"
+                class="form-control-location"></v-select>
             <!-- binding data to param . Example : ttpSelected : {label: '', code: ''} -->
         </div>
         <div class="col-md-4">
-            <v-select v-model="qhSelected" :options="qhList" placeholder="Chọn Quận/Huyện" style="margin-bottom: 28px;"> </v-select>
+            <v-select v-model="qhSelected" :options="qhList" placeholder="Chọn Quận/Huyện"
+                class="form-control-location"> </v-select>
         </div>
         <div class="col-md-4">
-            <v-select v-model="pxSelected" :options="pxList" placeholder="Chọn Phường/Xã"></v-select>
+            <v-select v-model="pxSelected" :options="pxList" placeholder="Chọn Phường/Xã" class="">
+            </v-select>
         </div>
 
         <div class="col-md-12">
-            <br/>
+            <br />
             <input type="text" class="form-control input-form-register" id="input-address-detail-shop"
-                            placeholder="Địa chỉ cụ thể: Số nhà, tên Đường,..." v-model="addressDetail">
+                placeholder="Địa chỉ cụ thể: Số nhà, tên Đường,..." v-model="addressDetail">
         </div>
     </div>
 </template>
@@ -27,12 +30,12 @@
         },
         data() {
             return {
-                //{code: 'CA', country: 'Canada'}
+                //{code: 'CA', label: 'Canada'}
                 apiProvincesURL: '',
-                apiDistrictsURL:'',
-                apiWardsURL:'',
-                ttpSelected:'',
-                ttpSelectedBk:'',
+                apiDistrictsURL: '',
+                apiWardsURL: '',
+                ttpSelected: '',
+                ttpSelectedBk: '',
                 qhSelected: '',
                 pxSelected: '',
                 ttpList: [],
@@ -43,10 +46,10 @@
         },
         mounted() {
             const self = this;
-            
+
             // Provinces
             self.apiProvincesURL = commonFunction.apiProvincesURL;
-            if(self.ttpSelected == '') {
+            if (self.ttpSelected == '') {
                 self.axios.get(self.apiProvincesURL).then((response) => {
                     let dataProvince = response.data.results;
                     for (let province in dataProvince) {
@@ -56,12 +59,13 @@
             }
 
         },
-        updated(){
+        updated() {
 
         },
         watch: {
             ttpSelected: {
                 handler: function () {
+                    this.$emit('updateCustomerAddress', this.ttpSelected, 'PROVINCE');
                     this.qhList = [];
                     this.qhSelected = '';
                     this.apiDistrictsURL = commonFunction.apiProvincesURL + 'district/' + this.ttpSelected.code;
@@ -74,7 +78,8 @@
                 }
             },
             qhSelected: {
-                handler: function() {
+                handler: function () {
+                    this.$emit('updateCustomerAddress', this.qhSelected, 'DISTRICT');
                     this.pxList = [];
                     this.pxSelected = '';
                     this.apiWardsURL = commonFunction.apiProvincesURL + 'ward/' + this.qhSelected.code;
@@ -85,6 +90,16 @@
                         }
                     })
                 }
+            },
+            pxSelected: {
+                handler: function () {
+                    this.$emit('updateCustomerAddress', this.pxSelected, 'WARD');
+                }
+            },
+            addressDetail: {
+                handler: function () {
+                    this.$emit('updateCustomerAddress', this.addressDetail, 'STREET');
+                }
             }
         },
         methods: {
@@ -93,6 +108,10 @@
     }
 </script>
 
-<style>
-
+<style scoped>
+    @media (max-width: 768px) {
+        .form-control-location {
+            margin-bottom: 28px;
+        }
+    }
 </style>

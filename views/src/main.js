@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueApexCharts from 'vue3-apexcharts'
 // import { globalCookiesConfig } from "vue3-cookies";
+import { vue3Debounce } from 'vue-debounce'
 
 // globalCookiesConfig({
 //   expireTimes: "1d",
@@ -22,5 +23,5 @@ app.component('v-select', VueSelect)
 app.use(VueAxios, axios)
 app.use(VueApexCharts)
 app.component('vue-apexchart', VueApexCharts)
-
+app.directive('debounce', vue3Debounce({ lock: true }))
 app.mount('#app')
