@@ -99,24 +99,23 @@
     </div>
     <div class="subtab-area-group">
       <ul class="list-group">
-        <a href="#" class="
+        <a class="
             list-group-item list-group-item-action list-group-page-qt
             title-group-item-qt
           ">Quản lí dòng tiền</a>
       </ul>
       <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+        <a class="list-group-item list-group-item-action list-group-page-qt">
           Tiền đang luân chuyển (0 VNĐ)
-          <i class="fa-solid fa-chevron-right"></i>
         </a>
-        <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-          Tổng thu (0 VNĐ) <i class="fa-solid fa-chevron-right"></i>
+        <a class="list-group-item list-group-item-action list-group-page-qt">
+          Tổng thu (0 VNĐ) 
         </a>
-        <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-          Tiền thu hộ (0 VNĐ) <i class="fa-solid fa-chevron-right"></i>
+        <a class="list-group-item list-group-item-action list-group-page-qt">
+          Tiền thu hộ (0 VNĐ) 
         </a>
-        <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-          Phí hoàn hàng <i class="fa-solid fa-chevron-right"></i>
+        <a class="list-group-item list-group-item-action list-group-page-qt">
+          Phí hoàn hàng 
         </a>
       </div>
     </div>
