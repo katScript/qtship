@@ -178,6 +178,9 @@
                       </option>
                       <option value="invoiceIssued">Đã xuất hóa đơn</option>
                       <option value="invoiceUnissued">Chưa xuất hóa đơn</option>
+                      <option value="invoiceUnissued">
+                        Không xuất hóa đơn
+                      </option>
                     </select>
                   </div>
                   <div class="col-12 col-sm-6 col-md-3 form-group">
@@ -207,14 +210,18 @@
                 <thead>
                   <tr>
                     <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Mã khách hàng/Số điện thoại</th>
                     <th scope="col">Khách hàng</th>
-                    <th scope="col">Trạng thái</th>
-                    <th scope="col">Cập nhật</th>
+                    <th scope="col">Trạng thái đơn hàng</th>
+                    <th scope="col">Dịch vụ giao hàng</th>
+                    <th scope="col">Đối soát</th>
+                    <th scope="col">Hóa đơn</th>
+                    <th scope="col">Chức năng</th>
                   </tr>
                 </thead>
                 <tbody v-if="countOrder == 0">
                   <tr>
-                    <td colspan="4" class="text-center">
+                    <td colspan="7" class="text-center">
                       <img src="../images/emptyList.png" alt="" />
                       <br />
                       Không có đơn hàng <a href="">Tạo đơn hàng!</a>
@@ -224,50 +231,45 @@
                 <tbody v-else>
                   <tr>
                     <td>11112</td>
-                    <td>Otto</td>
+                    <td>123123123</td>
+                    <td>duongph</td>
                     <td>Đang giao</td>
+                    <td>Economy</td>
+                    <td>2022/10/10 00:00</td>
+                    <td>Đã xuất hóa đơn</td>
                     <td>
-                      <a href="" class="btn btn-primary a-function a-detail"
-                        >Chi tiết</a
-                      >
-                      <a href="" class="btn btn-success a-function a-detail"
-                        >Cập nhật</a
-                      >
-                      <a href="" class="btn btn-danger a-function a-detail"
-                        >Hủy</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>11113</td>
-                    <td>Thornton</td>
-                    <td>Đang giao</td>
-                    <td>
-                      <a href="" class="btn btn-primary a-function a-detail"
-                        >Chi tiết</a
-                      >
-                      <a href="" class="btn btn-success a-function a-detail"
-                        >Cập nhật</a
-                      >
-                      <a href="" class="btn btn-danger a-function a-detail"
-                        >Hủy</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>11114</td>
-                    <td>twitter</td>
-                    <td>Đang giao</td>
-                    <td>
-                      <a href="" class="btn btn-primary a-function a-detail"
-                        >Chi tiết</a
-                      >
-                      <a href="" class="btn btn-success a-function a-detail"
-                        >Cập nhật</a
-                      >
-                      <a href="" class="btn btn-danger a-function a-detail"
-                        >Hủy</a
-                      >
+                      <a
+                        href=""
+                        class="btn btn-primary a-function a-detail"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Chi tiết đơn hàng"
+                        ><i class="fa-solid fa-circle-info"></i
+                      ></a>
+                      <a
+                        href=""
+                        class="btn btn-success a-function a-detail"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Cập nhật đơn hàng"
+                        ><i class="fa-solid fa-file-pen"></i
+                      ></a>
+                      <a
+                        href=""
+                        class="btn btn-dark a-function a-detail"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Lịch sử cập nhật"
+                        ><i class="fa-solid fa-clock-rotate-left"></i
+                      ></a>
+                      <a
+                        href=""
+                        class="btn btn-danger a-function a-detail"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Hủy đơn hàng"
+                        ><i class="fa-solid fa-trash"></i
+                      ></a>
                     </td>
                   </tr>
                 </tbody>
@@ -316,7 +318,9 @@ export default {
 
   setup() {
     const { cookies } = useCookies();
-    return { cookies };
+    return {
+      cookies,
+    };
   },
 
   // <data, methods...>
@@ -360,6 +364,7 @@ export default {
 .form-search-control {
   margin-bottom: 10px;
 }
+
 a {
   text-decoration: none;
 }
