@@ -40,10 +40,12 @@
                         Trạng thái đơn hàng
                       </option>
                       <option value="odrsuccess">
-                        Giao thành công/Đã thanh toán
+                        Giao thành công
                       </option>
+                      <option value="odrPaymented">Đã thanh toán</option>
                       <option value="odrDelivering">Đang giao</option>
-                      <option value="odrTaked">Đã lấy hàng/Nhập kho</option>
+                      <option value="odrWaitingtaked">Chờ lấy</option>
+                      <option value="odrTaked">Đã lấy</option>
                       <option value="odrCanceled">Đơn hoàn</option>
                       <option value="odrDeliveryPending">
                         Delay giao hàng
