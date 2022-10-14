@@ -36,7 +36,7 @@
 
                         <br />
                         <h5>Thông tin đối soát ngân hàng</h5>
-                        <BankPicker />
+                        <BankPicker @updateForControl="updateForControl" />
                         <br />
                         <div class="col-md-12">
                             <input type="checkbox" class="form-check-input" id="radio-accept-contract">
@@ -98,6 +98,12 @@
                 }
             }
         },
+        updated(){
+            this.customer.fullName = this.customer.companyName;
+            this.username = this.customer.email; 
+        },
+        watch:{
+        },
         methods: {
             updateCustomerAddress(data, type) {
                 switch (type) {
@@ -120,6 +126,23 @@
                         break;
                 }
 
+            },
+            updateForControl(data, type) {
+                switch (type) {
+                    case 'HOLDER':
+                        this.forControl.holderName = data;
+                        break;
+                    case 'CARDNUMBER':
+                        this.forControl.cardNumber = data;
+                        break;
+                    case 'BANK':
+                        this.forControl.bank = data.code;
+                        break;
+                    case 'ADDRESS':
+                        this.forControl.address = data;
+                        break;
+                    default:
+                }       
             }
         },
     }
