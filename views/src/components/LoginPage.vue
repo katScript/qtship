@@ -1,163 +1,135 @@
 <template>
-  <div class="login-page">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-6 h-100">
-          <img
-            src="../images/logo-branch.png"
-            class="w-50 h-auto mx-auto d-block align-middle branch-logo"
-            alt="Branch logo"
-          />
-          <br />
-        </div>
-        <div class="col-md-6">
-          <div class="div-form-login">
-            <div class="w-75 mx-auto">
-              <div class="mb-3">
-                <label for="input-account-login" class="form-label label-qt"
-                  >Email đăng nhập</label
-                >
-                <small class="notify-message">{{ msgError }}</small>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="input-account-login"
-                  v-model="username"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label label-qt"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="input-password-login"
-                  v-model="password"
-                />
-              </div>
-              <div class="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="radio-remember-account"
-                  v-model="rememberMe"
-                />
-                <label class="form-check-label" for="exampleCheck1"
-                  >Remember me</label
-                >
-              </div>
-              <div class="mb-3 text-center">
-                <a href="#" class="a-forget-password">Bạn quên mật khẩu?</a>
-                <br />
-                <br />
-                <button
-                  type=""
-                  class="btn btn-danger btn-login-qt"
-                  v-on:click="login()"
-                >
-                  Đăng nhập
-                </button>
-                <br />
-                <br />
-                <p>
-                  Bạn chưa có tài khoản,
-                  <a href="/register-page" class="a-register-account"
-                    >Đăng ký ngay!</a
-                  >
-                </p>
-              </div>
+    <div class="login-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 h-100">
+                    <img src="../images/logo-branch.png" class="w-50 h-auto mx-auto d-block align-middle branch-logo"
+                        alt="Branch logo" />
+                    <br />
+                </div>
+                <div class="col-md-6">
+                    <div class="div-form-login">
+                        <div class="w-75 mx-auto">
+                            <div class="mb-3">
+                                <label for="input-account-login" class="form-label label-qt">Email đăng nhập</label>
+                                <small class="notify-message">{{ msgError }}</small>
+                                <input type="text" class="form-control" id="input-account-login" v-model="username" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label label-qt">Password</label>
+                                <input type="password" class="form-control" id="input-password-login"
+                                    v-model="password" required/>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="radio-remember-account"
+                                    v-model="rememberMe" />
+                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                            </div>
+                            <div class="mb-3 text-center">
+                                <a href="#" class="a-forget-password">Bạn quên mật khẩu?</a>
+                                <br />
+                                <br />
+                                <button type="" class="btn btn-danger btn-login-qt" v-on:click="login()">
+                                    Đăng nhập
+                                </button>
+                                <br />
+                                <br />
+                                <p>
+                                    Bạn chưa có tài khoản,
+                                    <a href="/register-page" class="a-register-account">Đăng ký ngay!</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
-import { useCookies } from "vue3-cookies";
-import { commonFunction } from "../scripts/ulti";
-import axios from "axios";
-export default {
-  setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
-  components: {},
-  data() {
-    return {
-      username: "",
-      password: "",
-      rememberMe: false,
-      validationUsername: [],
-      validationPassword: [],
-      msgError: "",
-      isValid: 0,
-      loading: false,
+    import { useCookies } from "vue3-cookies";
+    import { commonFunction } from "../scripts/ulti";
+    import axios from "axios";
+    export default {
+        setup() {
+            const { cookies } = useCookies();
+            return { cookies };
+        },
+        components: {},
+        data() {
+            return {
+                username: "",
+                password: "",
+                rememberMe: false,
+                msgError: "",
+                isValid: 0,
+                loading: false,
+            };
+        },
+        methods: {
+            login: function () {
+                this.isValid = 0;
+                this.loading = true;
+                this.validationForm();
+                if (this.isValid == 0) {
+                    axios
+                        .post(commonFunction.DOMAIN_URL + "v1/customer/auth/login", {
+                            username: this.username,
+                            password: this.password,
+                        })
+                        .then((response) => {
+                            let resData = response.data;
+                            console.log(resData);
+                            if (
+                                resData.accessToken &&
+                                !this.cookies.get("authenication_cookies")
+                            ) {
+                                let authenCookie = resData.username;
+                                let tokenCookie = resData.accessToken;
+
+                                this.cookies.set(
+                                    "accesstoken_cookies",
+                                    tokenCookie,
+                                    commonFunction.EXPIRED_TIME_COOKIES
+                                );
+                                if (this.rememberMe) {
+                                    this.cookies.set(
+                                        "authenication_cookies",
+                                        authenCookie,
+                                        commonFunction.EXPIRED_TIME_COOKIES
+                                    );
+                                }
+                                commonFunction.redirect("/client/management");
+                            } else {
+                                commonFunction.redirect("/");
+                            }
+                        })
+                        .catch((error) => {
+                            alert("Thông tin đăng nhập không chính xác. Vui lòng thử lại!");
+                            console.log(error);
+                        });
+                } else {
+                    alert("Vui lòng điền đầy đủ thông tin đăng nhập!");
+                }
+            },
+            validationForm: function () {
+                this.errorValidation = [];
+                if (this.username == "" && !this.username) {
+                    this.isValid += 1;
+                    // if(!regexStringValidate(this.username, commonFunction.typeEmail)) {
+                    //     this.validationUsername.push("Email không đúng định dạng(Ex: example@example.com,...");
+                    // }
+                }
+                if (this.password == "" && !this.password) {
+                    this.isValid += 1;
+                    // if(!regexStringValidate(this.username, commonFunction.typePassword)) {
+                    //     this.validationUsername.push("Mật khẩu từ 7 đến 15 ký tự trong đó có ít nhất một chữ số và một ký tự đặc biệt");
+                    // }
+                }
+            },
+            resetValidation: function () {
+            },
+        },
     };
-  },
-  methods: {
-    login: function () {
-      this.isValid = 0;
-      this.loading = true;
-      this.validationForm();
-      if (this.isValid == 0) {
-        axios
-          .post(commonFunction.DOMAIN_URL + "v1/customer/auth/login", {
-            username: this.username,
-            password: this.password,
-          })
-          .then((response) => {
-            let resData = response.data;
-            console.log(resData);
-            if (
-              resData.accessToken &&
-              !this.cookies.get("authenication_cookies")
-            ) {
-              let authenCookie = resData.username;
-              let tokenCookie = resData.accessToken;
-              this.cookies.set(
-                "authenication_cookies",
-                authenCookie,
-                commonFunction.EXPIRED_TIME_COOKIES
-              );
-              this.cookies.set(
-                "accesstoken_cookies",
-                tokenCookie,
-                commonFunction.EXPIRED_TIME_COOKIES
-              );
-              commonFunction.redirect("/client/management");
-            } else {
-              commonFunction.redirect("/");
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    },
-    validationForm: function () {
-      this.errorValidation = [];
-      if (this.username == "" && !this.username) {
-        this.validationUsername.push(
-          "Vui lòng điền đầy đủ thông tin đăng nhập!"
-        );
-        this.isValid += 1;
-        // if(!regexStringValidate(this.username, commonFunction.typeEmail)) {
-        //     this.validationUsername.push("Email không đúng định dạng(Ex: example@example.com,...");
-        // }
-      }
-      if (this.password == "" && !this.password) {
-        this.validationPassword.push("Vui lòng nhập mật  khẩu!");
-        this.isValid += 1;
-        // if(!regexStringValidate(this.username, commonFunction.typePassword)) {
-        //     this.validationUsername.push("Mật khẩu từ 7 đến 15 ký tự trong đó có ít nhất một chữ số và một ký tự đặc biệt");
-        // }
-      }
-    },
-    resetValidation: function () {
-      this.validationUsername = [];
-      this.validationPassword = [];
-    },
-  },
-};
 </script>

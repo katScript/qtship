@@ -2,14 +2,17 @@
     <div class="bank-picker">
         <div class="row">
             <div class="col-md-12">
+                <small class="text-danger">{{msgValidationFor.forControl.holderName}}</small>
                 <input v-model="holderName" type="text" class="form-control input-form-register" id="input-register-name-bank"
                     placeholder="Tên chủ tài khoản">
             </div>
             <div class="col-md-4">
+                <small class="text-danger">{{msgValidationFor.forControl.cardNumber}}</small>
                 <input v-model="cardNumber" type="text" class="form-control input-form-register" id="input-register-number-bank"
                     placeholder="Số tài khoản Ngân hàng">
             </div>
             <div class="col-md-5">
+                <small class="text-danger">{{msgValidationFor.forControl.bank}}</small>
                 <v-select v-model="bankSelected" :options="bankList" placeholder="Chọn Ngân hàng"
                     style="margin-bottom: 28px;"></v-select>
             </div>
@@ -24,6 +27,7 @@
 <script>
     import { commonFunction } from '../../scripts/ulti'
     export default {
+        props: ['msgValidationFor'],
         components: {
         },
         data() {
