@@ -3,3 +3,12 @@ $color_red_qt_hover: #ff0019;
 $color_link_blue: #0097E6;
 $color_border_brown: #95a5a6;
 $color_green_qt: #27ae60;
+
+.order-list-data{
+    table {
+        vertical-align: middle;
+        .a-function{
+            margin: 0px 5px 0px 0px;
+        }
+    }
+}
