@@ -3,7 +3,10 @@
     <NavbarClient />
     <div class="container-fluid" style="width: 98%">
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-2">
+          <NotficationClient />
+        </div>
+        <div class="col-md-8">
           <div class="orders-overview-area">
             <div class="orders-filter-form">
               <div class="row">
@@ -205,6 +208,7 @@
   import NavbarClient from "./common/NavbarClient.vue";
   import FooterClient from "./common/FooterClient.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
+  import NotficationClient from "./common/ToolbarRight.vue";
 
   import { useCookies } from "vue3-cookies";
   // import { commonFunction } from '../scripts/ulti'
@@ -215,6 +219,7 @@
       NavbarClient,
       FooterClient,
       ToolbarRight,
+      NotficationClient
     },
     data() {
       return {
