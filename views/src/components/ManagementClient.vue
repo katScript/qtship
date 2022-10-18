@@ -3,7 +3,10 @@
     <NavbarClient />
     <div class="container-fluid" style="width: 98%">
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-2">
+          <NotficationClient />
+        </div>
+        <div class="col-md-8">
           <div class="overview-area">
             <div class="row">
               <div class="col-6">
@@ -192,6 +195,7 @@
   import VueChartPie from "./common/VueChartPie.vue";
   import VueChartLine from "./common/VueChartLine.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
+  import NotficationClient from "./common/NotficationClient.vue";
 
   import { useCookies } from "vue3-cookies";
   // import { commonFunction } from '../scripts/ulti'
@@ -203,6 +207,7 @@
       VueChartPie,
       VueChartLine,
       ToolbarRight,
+      NotficationClient
     },
     data() {
       return {
