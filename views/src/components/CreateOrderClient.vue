@@ -144,49 +144,47 @@
                                             style="float: right;">Danh sách sản phẩm</button></div>
                                 </div>
                                 <br>
-                                <div class="row">
-                                    <div class="col-11">
-                                        <div class="row">
-                                            <div class="col-2"><img src="" alt="" width="100" height="100"></div>
-                                            <div class="col-10">
-                                                <div class="col-12">
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>Chọn sản phẩm</option>
-                                                        <option>Chọn sản phẩm</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12">
-                                                    Line 2
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1">
-                                        <button  class="btn btn-outline-success"><i class="fa-solid fa-plus"></i></button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-11">
-                                        <div class="row">
-                                            <div class="col-2"><img src="" alt="" width="100" height="100"></div>
-                                            <div class="col-10">
-                                                <div class="col-12">
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>Chọn sản phẩm</option>
-                                                        <option>Chọn sản phẩm</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12">
-                                                    Line 2
+                                <div class="list-product-in-order" v-for="index in numberProduct" :key="index">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <div class="row">
+                                                <div class="col-2"><img src="" alt="" class="mb-1" width="80"
+                                                        height="80"></div>
+                                                <div class="col-10">
+                                                    <div class="row">
+                                                        <div class="col-10">
+                                                            <v-select v-model="productSelected" :options="listProducts"
+                                                                style="width: 104%;" placeholder="Chọn sản phẩm"
+                                                                class="">
+                                                            </v-select>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <input type="number" class="form-control mb-1"
+                                                                placeholder="SL" value="">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Trọng lượng (kg)" value="">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Giá bán (VNĐ)" value="">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-1">
+                                            <button class="btn btn-outline-success"><i
+                                                    class="fa-solid fa-plus plus-order-number"></i></button>
+                                            <button class="btn btn-outline-danger"><i
+                                                    class="fa-solid fa-minus minus-order-number"></i></button>
+                                        </div>
                                     </div>
-                                    <div class="col-1">
-                                        <button  class="btn btn-outline-success"><i class="fa-solid fa-minus"></i></button>
-                                    </div>
+                                    <hr>
                                 </div>
-                                <hr>
+
                                 <div class="row">
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" placeholder="Trọng lượng đơn hàng">
@@ -197,9 +195,56 @@
                                         <br>
                                     </div>
                                     <div class="col-sm-3">
-                                        <img src="" alt="" width="150"  height="150">
+                                        <img src="" alt="" width="150" height="150">
+                                    </div>
+                                    <div class="col-sm-8">
+                                        Phí ship: <span class="feeShip">0 đ</span>
+                                        <br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option value="1">Shop trả ship</option>
+                                            <option value="2">Người nhận trả ship</option>
+                                        </select>
+                                        <br>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="">Ghi chú đơn hàng</label>
+                                            <textarea type="" class="form-control" id="" aria-describedby="emailHelp"
+                                                placeholder="Nhập ghi chú của đơn hàng" />
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="" class="label-control"><span style="color: red;">(*)</span> TH Hoàn
+                                            hàng: </label>
+                                        <br>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option value="1">Lưu kho chờ check</option>
+                                            <option value="2">Không nhận hàng trả</option>
+                                            <option value="3">Không lưu kho - Hoàn ngay</option>
+                                        </select>
+                                        <br>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+                            <div class="col-md-6">
+                                <input v-model="isAccepted" type="checkbox" class="form-check-input"
+                                    id="radio-accept-contract">
+                                <label class="form-check-label" for="exampleCheck1" style="padding-left: 10px;"> Tôi đã
+                                    đọc
+                                    và đồng ý với Chính sách bảo mật thông tin</label>
+                                    <br>
+                                    <button class="btn btn-success w-100" style="font-size: 18px;"><i class="fa-solid fa-up-right-from-square"></i> Đăng đơn hàng</button>
                             </div>
                         </div>
                     </div>
@@ -237,6 +282,9 @@
         },
         data() {
             return {
+                numberProduct: 3,
+                productSelected: '',
+                listProduct: [],
                 customerAddress: {
                     province: "",
                     provinceId: "",
@@ -334,5 +382,14 @@
 
     .show {
         display: inline;
+    }
+
+    .vs__search,
+    .vs__search:focus {
+        margin: 7px 0px;
+    }
+
+    .vs__dropdown-toggle {
+        width: 105% !important;
     }
 </style>

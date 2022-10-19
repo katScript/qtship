@@ -20,4 +20,8 @@
   @import "./style/css/navbar-client.css";
   @import "./style/css/client-management.css";
   @import "./style/css/client-orders.css";
+
+  body {
+    font-family: 'Raleway', sans-serif !important;
+  }
 </style>
