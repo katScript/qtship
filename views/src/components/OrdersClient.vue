@@ -1,7 +1,7 @@
 <template>
   <div class="management-client-page">
     <NavbarClient />
-    <div class="container-fluid" style="width: 98%">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-2">
           <NotficationClient />
@@ -128,13 +128,20 @@
                   </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <button class="btn btn-danger w-75">
-                    <i class="fa-sharp fa-solid fa-magnifying-glass"></i> Tìm
-                    kiếm đơn hàng
-                  </button>
-                  <button type="" class="btn btn-secondary w-23" style="float: right" v-on:click="resetFormSearch()">
-                    <i class="fa-solid fa-eraser"></i> Reset
-                  </button>
+                  <div class="row">
+                    <div class="col-8">
+                      <button class="btn btn-danger">
+                        <i class="fa-sharp fa-solid fa-magnifying-glass"></i> Tìm
+                        kiếm đơn hàng
+                      </button>
+                    </div>
+                    <div class="col-4">
+                      <button class="btn btn-secondary" v-on:click="resetFormSearch()" style="margin: 0px -5px">
+                        <i class="fa-solid fa-eraser"></i> Reset
+                      </button>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -176,14 +183,14 @@
                     <td>2022/10/10 00:00</td>
                     <td>Đã xuất hóa đơn</td>
                     <td>
-                      <a href="" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn-primary a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Chi tiết đơn hàng"><i class="fa-solid fa-circle-info"></i></a>
-                      <a href="" class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn-success a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Cập nhật đơn hàng"><i class="fa-solid fa-file-pen"></i></a>
-                      <a href="" class="btn btn-dark a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn-dark a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Lịch sử cập nhật"><i
                           class="fa-solid fa-clock-rotate-left"></i></a>
-                      <a href="" class="btn btn-danger a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn-danger a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Hủy đơn hàng"><i class="fa-solid fa-trash"></i></a>
                     </td>
                   </tr>
@@ -208,7 +215,7 @@
   import NavbarClient from "./common/NavbarClient.vue";
   import FooterClient from "./common/FooterClient.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
-  import NotficationClient from "./common/ToolbarRight.vue";
+  import NotficationClient from "./common/NotficationClient.vue";
 
   import { useCookies } from "vue3-cookies";
   // import { commonFunction } from '../scripts/ulti'
@@ -284,5 +291,17 @@
 
   a {
     text-decoration: none;
+  }
+  table tr td {
+  
+  }
+
+  table tr td a {
+    font-size: 25px;
+  }
+
+  table tr td a i {
+    font-size: 20px;
+    padding: 5px 5px 5px 5px;
   }
 </style>

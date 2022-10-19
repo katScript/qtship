@@ -1,7 +1,7 @@
 <template>
   <div class="management-client-page">
     <NavbarClient />
-    <div class="container-fluid" style="width: 98%">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-2">
           <NotficationClient />
@@ -110,7 +110,7 @@
                 <div class="col-md-6">
                   <h5>Tổng quan dòng tiền</h5>
                   <br />
-                  <VueChartLine />
+                  <VueChartColumn />
                   <br /><br />
                 </div>
               </div>
@@ -193,7 +193,7 @@
   import NavbarClient from "./common/NavbarClient.vue";
   import FooterClient from "./common/FooterClient.vue";
   import VueChartPie from "./common/VueChartPie.vue";
-  import VueChartLine from "./common/VueChartLine.vue";
+  import VueChartColumn from "./common/VueChartColumn.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
   import NotficationClient from "./common/NotficationClient.vue";
 
@@ -205,7 +205,7 @@
       NavbarClient,
       FooterClient,
       VueChartPie,
-      VueChartLine,
+      VueChartColumn,
       ToolbarRight,
       NotficationClient
     },

@@ -4,6 +4,8 @@ import RegisterPage from '@/components/RegisterPage.vue'
 import ManagementClientPage from '@/components/ManagementClient.vue'
 import OrdersClient from '@/components/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
+import CreateOrderClient from '@/components/CreateOrderClient.vue'
+
 
 const history = createWebHistory();
 const router = createRouter({
@@ -14,6 +16,7 @@ const router = createRouter({
         {path: '/register-page', component: RegisterPage},
         {path: '/client/management', component: ManagementClientPage},
         {path: '/client/orders', component: OrdersClient},
+        {path: '/client/orders/create', component: CreateOrderClient},
         
     ]
 });
