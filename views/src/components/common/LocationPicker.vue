@@ -73,27 +73,32 @@
                     this.$emit('updateCustomerAddress', this.ttpSelected, 'PROVINCE');
                     this.qhList = [];
                     this.qhSelected = '';
-                    this.apiDistrictsURL = commonFunction.apiProvincesURL + 'district/' + this.ttpSelected.code;
-                    this.axios.get(this.apiDistrictsURL).then((response) => {
-                        let dataDistricts = response.data.results;
-                        for (let district in dataDistricts) {
-                            this.qhList.push({ label: dataDistricts[district].district_name, code: dataDistricts[district].district_id });
-                        }
-                    })
+                    if(this.ttpSelected){
+                        this.apiDistrictsURL = commonFunction.apiProvincesURL + 'district/' + this.ttpSelected.code;
+                        this.axios.get(this.apiDistrictsURL).then((response) => {
+                            let dataDistricts = response.data.results;
+                            for (let district in dataDistricts) {
+                                this.qhList.push({ label: dataDistricts[district].district_name, code: dataDistricts[district].district_id });
+                            }
+                        })
+                    }
                 }
             },
             qhSelected: {
                 handler: function () {
                     this.$emit('updateCustomerAddress', this.qhSelected, 'DISTRICT');
+                    this.$emit('updateCustomerAddressOrder', this.qhSelected, 'DISTRICT');
                     this.pxList = [];
                     this.pxSelected = '';
-                    this.apiWardsURL = commonFunction.apiProvincesURL + 'ward/' + this.qhSelected.code;
-                    this.axios.get(this.apiWardsURL).then((response) => {
-                        let dataWards = response.data.results;
-                        for (let ward in dataWards) {
-                            this.pxList.push({ label: dataWards[ward].ward_name, code: dataWards[ward].ward_id });
-                        }
-                    })
+                    if(this.qhSelected){
+                        this.apiWardsURL = commonFunction.apiProvincesURL + 'ward/' + this.qhSelected.code;
+                        this.axios.get(this.apiWardsURL).then((response) => {
+                            let dataWards = response.data.results;
+                            for (let ward in dataWards) {
+                                this.pxList.push({ label: dataWards[ward].ward_name, code: dataWards[ward].ward_id });
+                            }
+                        })
+                    }
                 }
             },
             pxSelected: {
