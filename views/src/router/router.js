@@ -6,6 +6,7 @@ import OrdersClient from '@/components/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
 import CreateOrderClient from '@/components/CreateOrderClient.vue'
 import ManagementCashClient from '@/components/ManagementCashClient.vue'
+import ManageAccountInfo from '@/components/ManageAccountInfo.vue'
 
 const history = createWebHistory();
 const router = createRouter({
@@ -19,6 +20,7 @@ const router = createRouter({
         {path: '/client/orders/create', component: CreateOrderClient},
         
         {path: '/client/management-cash', component: ManagementCashClient},
+        {path: '/client/account-info', component: ManageAccountInfo},
     ]
 });
 
