@@ -17,9 +17,9 @@
                   </h4>
                 </div>
                 <div class="col-md-3 d-flex justify-content-end">
-                  <button class="btn btn-outline-success">
+                  <a href="/client/stock-product/create-product" class="btn btn-outline-success">
                     Tạo Sản phẩm mới
-                  </button>
+                  </a>
                 </div>
               </div>
               <br />
