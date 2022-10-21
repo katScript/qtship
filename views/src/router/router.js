@@ -8,6 +8,7 @@ import CreateOrderClient from '@/components/CreateOrderClient.vue'
 import StockProductClient from '@/components/StockProductClient.vue'
 import ManagementCashClient from '@/components/ManagementCashClient.vue'
 import ManageAccountInfo from '@/components/ManageAccountInfo.vue'
+import CreateProductClient from '@/components/CreateProductClient.vue'
 
 const history = createWebHistory();
 const router = createRouter({
@@ -22,6 +23,8 @@ const router = createRouter({
         {path: '/client/stock-product', component: StockProductClient},
         {path: '/client/management-cash', component: ManagementCashClient},
         {path: '/client/account-info', component: ManageAccountInfo},
+        {path: '/client/stock-product/create-product', component: CreateProductClient},
+        
     ]
 });
 

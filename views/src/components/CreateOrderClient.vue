@@ -282,6 +282,7 @@
         },
         data() {
             return {
+                isAccepted: false,
                 numberProduct: 3,
                 productSelected: '',
                 listProduct: [],
