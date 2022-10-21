@@ -14,8 +14,8 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id", insertable = false, updatable = false)
     private Long id;
-
     @Column(name="full_name")
     private String fullName;
 
@@ -43,19 +43,19 @@ public class Customer {
     @Column(name="subscription")
     private Boolean subscription;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
 
     @OneToMany(mappedBy = "customer",
-            fetch = FetchType.LAZY)
-    private Set<Address> addressSet;
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Address> addressSet = new HashSet<>();
 
     @OneToMany(mappedBy = "customer",
-            fetch = FetchType.LAZY)
-    private Set<ForControl> forControls;
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ForControl> forControls = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -77,6 +77,10 @@ public class Customer {
 
     public Long getId() {
         return id;
+    }
+
+    public String getCustomerId() {
+        return String.format("%09d", id);
     }
 
     public String getFullName() {
@@ -188,12 +192,22 @@ public class Customer {
         return this;
     }
 
+    public Customer addAddress(Address address) {
+        this.addressSet.add(address);
+        return this;
+    }
+
     public Set<ForControl> getForControls() {
         return forControls;
     }
 
     public Customer setForControls(Set<ForControl> forControls) {
         this.forControls = forControls;
+        return this;
+    }
+
+    public Customer addForControls(ForControl forControl) {
+        this.forControls.add(forControl);
         return this;
     }
 

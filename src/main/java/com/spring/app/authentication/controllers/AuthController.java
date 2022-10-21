@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import com.spring.app.authentication.repository.RoleRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController
+@RestController("UserAuthController")
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
