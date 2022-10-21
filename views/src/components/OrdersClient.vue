@@ -183,14 +183,14 @@
                     <td>2022/10/10 00:00</td>
                     <td>Đã xuất hóa đơn</td>
                     <td>
-                      <a href="" class="btn-primary a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Chi tiết đơn hàng"><i class="fa-solid fa-circle-info"></i></a>
-                      <a href="" class="btn-success a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Cập nhật đơn hàng"><i class="fa-solid fa-file-pen"></i></a>
-                      <a href="" class="btn-dark a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn btn-dark a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Lịch sử cập nhật"><i
                           class="fa-solid fa-clock-rotate-left"></i></a>
-                      <a href="" class="btn-danger a-function a-detail" data-bs-toggle="tooltip"
+                      <a href="" class="btn btn-danger a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Hủy đơn hàng"><i class="fa-solid fa-trash"></i></a>
                     </td>
                   </tr>
@@ -297,11 +297,12 @@
   }
 
   table tr td a {
-    font-size: 25px;
+    /* font-size: 5px; */
+    padding: 2px;
   }
 
   table tr td a i {
-    font-size: 20px;
-    padding: 5px 5px 5px 5px;
+    font-size: 18px;
+    padding: 2px 2px 2px 2px;
   }
 </style>
