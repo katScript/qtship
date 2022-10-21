@@ -140,8 +140,8 @@
                                     <div class="col-6">
                                         <h5>Thông tin sản phẩm</h5>
                                     </div>
-                                    <div class="col-6"><button class="btn btn-outline-success"
-                                            style="float: right;">Danh sách sản phẩm</button></div>
+                                    <div class="col-6"><a href="/stock-product/create-product" class="btn btn-outline-success"
+                                            style="float: right;">Danh sách sản phẩm</a></div>
                                 </div>
                                 <br>
                                 <div class="list-product-in-order" v-for="index in numberProduct" :key="index">
