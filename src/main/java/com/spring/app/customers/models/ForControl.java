@@ -8,6 +8,7 @@ import java.util.Date;
 public class ForControl {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id", insertable = false, updatable = false)
     private Long id;
 
     @Column(name="holder_name")
@@ -26,10 +27,10 @@ public class ForControl {
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
 
     public ForControl() {}

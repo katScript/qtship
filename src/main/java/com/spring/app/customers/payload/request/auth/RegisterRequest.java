@@ -1,8 +1,8 @@
-package com.spring.app.customers.payload.request;
+package com.spring.app.customers.payload.request.auth;
 
-import com.spring.app.customers.payload.data.Address;
-import com.spring.app.customers.payload.data.Customer;
-import com.spring.app.customers.payload.data.ForControl;
+import com.spring.app.customers.payload.helperData.Address;
+import com.spring.app.customers.payload.helperData.Customer;
+import com.spring.app.customers.payload.helperData.ForControl;
 
 import javax.validation.constraints.*;
 

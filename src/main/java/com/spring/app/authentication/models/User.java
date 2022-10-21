@@ -79,6 +79,11 @@ public class User {
         return this;
     }
 
+    public User addRole(Role role) {
+        this.roles.add(role);
+        return this;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }

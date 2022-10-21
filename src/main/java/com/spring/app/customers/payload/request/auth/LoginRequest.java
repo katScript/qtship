@@ -1,4 +1,4 @@
-package com.spring.app.customers.payload.request;
+package com.spring.app.customers.payload.request.auth;
 
 public class LoginRequest {
     String username;
