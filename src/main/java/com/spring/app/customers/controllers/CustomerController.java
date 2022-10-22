@@ -34,14 +34,13 @@ public class CustomerController {
         Customer customer = customerRepository.findByUser(user)
                 .orElse(null);
 
-
         if (customer == null)
             return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
 
         return ResponseEntity.ok(new DetailResponse(customer));
     }
 
-    @PostMapping("/save/{id}")
+    @PostMapping("/save/")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody com.spring.app.customers.payload.helperData.Customer customerData) {
         User user = userRepository.findByUsername(customerData.getUserName())
                 .orElse(null);

@@ -12,12 +12,16 @@ import com.spring.app.authentication.security.services.UserDetailsImpl;
 import com.spring.app.customers.models.Address;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.ForControl;
+import com.spring.app.customers.payload.request.auth.ForgotPasswordRequest;
 import com.spring.app.customers.payload.request.auth.RegisterRequest;
+import com.spring.app.customers.payload.request.auth.ResetPasswordRequest;
+import com.spring.app.customers.payload.response.customer.ForgotPasswordResponse;
 import com.spring.app.customers.repository.AddressRepository;
 import com.spring.app.customers.repository.CustomerRepository;
 import com.spring.app.customers.repository.ForControlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,10 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -79,6 +80,42 @@ public class AuthController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @PostMapping("/forget")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
+        User user = userRepository.findByUsername(forgotPasswordRequest.getUsername()).orElse(null);
+
+        if (user == null)
+            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+
+        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
+
+        return ResponseEntity.ok(new ForgotPasswordResponse(jwt,
+                user.getUsername(),
+                user.getEmail())
+        );
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        String username = jwtUtils.getUserNameFromJwtToken(resetPasswordRequest.getToken());
+
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if (user == null)
+            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+
+        Customer customer = customerRepository.findByUser(user)
+                .orElse(null);
+
+        if (customer == null)
+            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+
+        user.setPassword(encoder.encode(resetPasswordRequest.getPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("Password change success!"));
     }
 
     @PostMapping("/register")

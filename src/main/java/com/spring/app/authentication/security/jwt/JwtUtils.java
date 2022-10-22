@@ -2,6 +2,7 @@ package com.spring.app.authentication.security.jwt;
 
 import java.util.Date;
 
+import com.spring.app.authentication.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,15 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    public String generateJwtTokenWithoutAuth(User user) {
+        return Jwts.builder()
+                .setSubject((user.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
