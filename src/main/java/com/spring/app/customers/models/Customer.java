@@ -1,6 +1,8 @@
 package com.spring.app.customers.models;
 
 import com.spring.app.authentication.models.User;
+import com.spring.app.orders.models.Order;
+import com.spring.app.products.models.Product;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,54 +10,49 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="customers")
+@Table(name = "customers")
 public class Customer {
     public static final String ROLE = "customer";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
-
-    @Column(name="gender")
+    @Column(name = "gender")
     private String gender;
-
-    @Column(name="dob")
+    @Column(name = "dob")
     private Date dob;
-
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phone;
-
-    @Column(name="company_name")
+    @Column(name = "company_name")
     private String companyName;
-
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
-
-    @Column(name="cid_front")
+    @Column(name = "cid_front")
     private String cidFront;
-
-    @Column(name="cid_back")
+    @Column(name = "cid_back")
     private String cidBack;
-
-    @Column(name="subscription")
+    @Column(name = "subscription")
     private Boolean subscription;
-
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
-
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
-
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Address> addressSet = new HashSet<>();
-
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ForControl> forControls = new HashSet<>();
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<>();
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Product> products = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -64,10 +61,10 @@ public class Customer {
     public Customer() {}
 
     public Customer(
-        String fullName,
-        String phone,
-        String companyName,
-        String email
+            String fullName,
+            String phone,
+            String companyName,
+            String email
     ) {
         this.fullName = fullName;
         this.phone = phone;
@@ -81,6 +78,34 @@ public class Customer {
 
     public String getCustomerId() {
         return String.format("%09d", id);
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public Customer setOrders(Set<Order> orders) {
+        this.orders = orders;
+        return this;
+    }
+
+    public Customer addOrders(Order order) {
+        this.orders.add(order);
+        return this;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public Customer setProducts(Set<Product> products) {
+        this.products = products;
+        return this;
+    }
+
+    public Customer addProducts(Product product) {
+        this.products.add(product);
+        return this;
     }
 
     public String getFullName() {
