@@ -37,7 +37,7 @@
                                         <i class="fa-solid fa-location-dot"></i>
                                     </div>
                                     <div class="col-11">
-                                        <LocationPicker :updateCustomerAddress="updateCustomerAddress"
+                                        <LocationPicker @updateCustomerAddress="updateCustomerAddress"
                                             :msgValidationFor="msgValidationFor" />
                                     </div>
                                 </div>
@@ -140,11 +140,11 @@
                                     <div class="col-6">
                                         <h5>Thông tin sản phẩm</h5>
                                     </div>
-                                    <div class="col-6"><a href="/stock-product/create-product" class="btn btn-outline-success"
+                                    <div class="col-6"><a href="/client/orders/create" class="btn btn-outline-success"
                                             style="float: right;">Danh sách sản phẩm</a></div>
                                 </div>
                                 <br>
-                                <div class="list-product-in-order" v-for="index in numberProduct" :key="index">
+                                <div class="list-product-in-order" v-for="index in productSelectedFor.length" :key="index">
                                     <div class="row">
                                         <div class="col-11">
                                             <div class="row">
@@ -153,7 +153,7 @@
                                                 <div class="col-10">
                                                     <div class="row">
                                                         <div class="col-10">
-                                                            <v-select v-model="productSelected" :options="listProducts"
+                                                            <v-select v-model="productSelected[index]" :options="listProducts"
                                                                 style="width: 104%;" placeholder="Chọn sản phẩm"
                                                                 class="">
                                                             </v-select>
@@ -176,9 +176,9 @@
                                         </div>
 
                                         <div class="col-1">
-                                            <button class="btn btn-outline-success"><i
+                                            <button class="btn btn-outline-success" v-on:click="addItemProductList()"><i
                                                     class="fa-solid fa-plus plus-order-number"></i></button>
-                                            <button class="btn btn-outline-danger"><i
+                                            <button class="btn btn-outline-danger" :class="numberProduct > 1 ? 'show' : 'hide'" v-on:click="removeItemProductList(productSelected[index])"><i
                                                     class="fa-solid fa-minus minus-order-number"></i></button>
                                         </div>
                                     </div>
@@ -215,6 +215,40 @@
                                                 placeholder="Nhập ghi chú của đơn hàng" />
                                             <br>
                                         </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <input type="text" class="form-control" placeholder="Mã giảm giá">
+                                            </div>
+                                            <div class="col-4">
+                                                <button class="btn btn-danger w-100" v-on:click="isDisplayListVourcer = !isDisplayListVourcer">{{!isDisplayListVourcer ? 'Thêm mã giảm giá' : 'Đóng'}}</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row" :class="isDisplayListVourcer ? 'show' : 'hide'">
+                                            <div class="col-12">
+                                                <div class="list-group">
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="row">
+                                                            <div class="col-1 mt-1"><i class="fa-solid fa-ticket text-danger" style="font-size: 24px;"></i></div>
+                                                            <div class="col-3 mt-1">MPVC001-VC</div>
+                                                            <div class="col-5 mt-1">Miễn phí phí vận chuyển</div>
+                                                            <div class="col-3"><button class="btn btn-outline-danger w-100">Áp dụng</button></div>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="row">
+                                                            <div class="col-1 mt-1"><i class="fa-solid fa-ticket text-danger" style="font-size: 24px;"></i></div>
+                                                            <div class="col-3 mt-1">MPVC001-VC</div>
+                                                            <div class="col-5 mt-1">Miễn phí phí vận chuyển</div>
+                                                            <div class="col-3"><button class="btn btn-outline-danger w-100">Áp dụng</button></div>
+                                                        </div>
+                                                    </a>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                        <br>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="" class="label-control"><span style="color: red;">(*)</span> TH Hoàn
@@ -283,9 +317,11 @@
         data() {
             return {
                 isAccepted: false,
+                isDisplayListVourcer: false,
                 numberProduct: 3,
-                productSelected: '',
-                listProduct: [],
+                productSelectedFor: [{code: '', label: ''}],
+                productSelected: [{code: '', label: ''}],
+                listProducts: [{code: 'SP1', label: 'SP1'},{code: 'SP2', label: 'SP2'}],
                 customerAddress: {
                     province: "",
                     provinceId: "",
@@ -369,6 +405,14 @@
                         "Vui lòng điền địa chỉ chi tiết!";
                 }
             },
+            addItemProductList() {
+                let product = {code: '', label: ''};
+                this.productSelectedFor.push(product);
+            },
+            removeItemProductList(product) {
+                this.productSelected = this.productSelected.filter(p => p.code !== product.code);
+                this.productSelectedFor.length -= 1;
+            }
         },
     };
 </script>

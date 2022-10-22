@@ -87,7 +87,6 @@
             qhSelected: {
                 handler: function () {
                     this.$emit('updateCustomerAddress', this.qhSelected, 'DISTRICT');
-                    this.$emit('updateCustomerAddressOrder', this.qhSelected, 'DISTRICT');
                     this.pxList = [];
                     this.pxSelected = '';
                     if(this.qhSelected){
