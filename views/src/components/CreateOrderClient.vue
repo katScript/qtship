@@ -320,7 +320,7 @@
                 isDisplayListVourcer: false,
                 numberProduct: 3,
                 productSelectedFor: [{code: '', label: ''}],
-                productSelected: [{code: '', label: ''}],
+                productSelected: [],
                 listProducts: [{code: 'SP1', label: 'SP1'},{code: 'SP2', label: 'SP2'}],
                 customerAddress: {
                     province: "",
