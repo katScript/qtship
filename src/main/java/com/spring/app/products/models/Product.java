@@ -67,6 +67,15 @@ public class Product {
         return this;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Product setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public Integer getQty() {
         return qty;
     }

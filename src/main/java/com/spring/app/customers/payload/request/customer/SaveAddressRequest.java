@@ -1,6 +1,6 @@
 package com.spring.app.customers.payload.request.customer;
 
-import com.spring.app.customers.payload.helperData.Address;
+import com.spring.app.customers.payload.Address;
 
 public class SaveAddressRequest {
     private Long customerId;

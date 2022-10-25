@@ -1,4 +1,4 @@
-package com.spring.app.customers.repository;
+package com.spring.app.customers.models.repository;
 
 import com.spring.app.authentication.models.User;
 import com.spring.app.customers.models.Customer;

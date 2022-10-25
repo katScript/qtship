@@ -1,4 +1,4 @@
-package com.spring.app.authentication.repository;
+package com.spring.app.authentication.models.repository;
 
 import java.util.Optional;
 

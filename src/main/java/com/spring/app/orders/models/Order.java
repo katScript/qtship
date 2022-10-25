@@ -20,9 +20,17 @@ public class Order {
     private String feedback;
     @Column(name = "notification")
     private Boolean notification;
+    @Column(name = "subtotal")
+    private Double subtotal;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
+    @Column(name = "sender_name")
+    private String senderName;
+    @Column(name = "sender_phone")
+    private String senderPhone;
+    @Column(name = "sender_address")
+    private String senderAddress;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status", referencedColumnName = "code")
     private OrderStatus status;
@@ -39,25 +47,35 @@ public class Order {
     public Order(
             String note,
             String feedback,
-            Boolean notification
+            Boolean notification,
+            Double subtotal
     ) {
         this.note = note;
         this.feedback = feedback;
         this.notification = notification;
+        this.subtotal = subtotal;
     }
 
     public Order(
             String note,
             OrderStatus status,
             String feedback,
+            Double subtotal,
             Boolean notification,
-            Customer customer
+            Customer customer,
+            String senderName,
+            String senderPhone,
+            String senderAddress
     ) {
         this.note = note;
         this.feedback = feedback;
+        this.subtotal = subtotal;
         this.notification = notification;
         this.status = status;
         this.customer = customer;
+        this.senderName = senderName;
+        this.senderPhone = senderPhone;
+        this.senderAddress = senderAddress;
     }
 
     public Long getId() {
@@ -90,6 +108,33 @@ public class Order {
         this.customer = customer;
         return this;
     }
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public Order setSenderName(String senderName) {
+        this.senderName = senderName;
+        return this;
+    }
+
+    public String getSenderPhone() {
+        return senderPhone;
+    }
+
+    public Order setSenderPhone(String senderPhone) {
+        this.senderPhone = senderPhone;
+        return this;
+    }
+
+    public String getSenderAddress() {
+        return senderAddress;
+    }
+
+    public Order setSenderAddress(String senderAddress) {
+        this.senderAddress = senderAddress;
+        return this;
+    }
+
 
     public String getNote() {
         return note;
@@ -133,5 +178,13 @@ public class Order {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 }
