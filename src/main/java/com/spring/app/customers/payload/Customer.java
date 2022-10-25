@@ -1,4 +1,4 @@
-package com.spring.app.customers.payload.helperData;
+package com.spring.app.customers.payload;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -18,8 +18,8 @@ public class Customer {
     private Boolean subscription;
     private Date createdAt;
     private Date updatedAt;
-    private Set<Address> addressSet = new HashSet<>();
-    private Set<ForControl> forControls = new HashSet<>();
+    private Set<Address> addressSet;
+    private Set<ForControl> forControls;
 
     private String username;
 

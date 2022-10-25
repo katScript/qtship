@@ -1,4 +1,4 @@
-package com.spring.app.customers.payload.helperData;
+package com.spring.app.customers.payload;
 
 import java.util.Date;
 

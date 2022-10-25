@@ -1,6 +1,6 @@
 package com.spring.app.customers.payload.request.customer;
 
-import com.spring.app.customers.payload.helperData.Customer;
+import com.spring.app.customers.payload.Customer;
 
 public class SaveCustomerRequest {
     private Customer customer;

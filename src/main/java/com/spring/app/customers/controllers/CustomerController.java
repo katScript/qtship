@@ -2,11 +2,10 @@ package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.response.MessageResponse;
-import com.spring.app.authentication.repository.UserRepository;
+import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Customer;
-import com.spring.app.customers.payload.request.customer.SaveCustomerRequest;
 import com.spring.app.customers.payload.response.customer.DetailResponse;
-import com.spring.app.customers.repository.CustomerRepository;
+import com.spring.app.customers.models.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,7 @@ public class CustomerController {
     }
 
     @PostMapping("/save/")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody com.spring.app.customers.payload.helperData.Customer customerData) {
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody com.spring.app.customers.payload.Customer customerData) {
         User user = userRepository.findByUsername(customerData.getUserName())
                 .orElse(null);
 

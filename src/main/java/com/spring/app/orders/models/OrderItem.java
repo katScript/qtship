@@ -18,12 +18,6 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
-    @Column(name = "sender_name")
-    private String senderName;
-    @Column(name = "sender_phone")
-    private String senderPhone;
-    @Column(name = "sender_address")
-    private String senderAddress;
     @Column(name = "price")
     private Double price;
     @Column(name = "created_at", insertable = false, updatable = false)
@@ -61,33 +55,6 @@ public class OrderItem {
 
     public OrderItem setShippingAddress(ShippingAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
-        return this;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public OrderItem setSenderName(String senderName) {
-        this.senderName = senderName;
-        return this;
-    }
-
-    public String getSenderPhone() {
-        return senderPhone;
-    }
-
-    public OrderItem setSenderPhone(String senderPhone) {
-        this.senderPhone = senderPhone;
-        return this;
-    }
-
-    public String getSenderAddress() {
-        return senderAddress;
-    }
-
-    public OrderItem setSenderAddress(String senderAddress) {
-        this.senderAddress = senderAddress;
         return this;
     }
 
