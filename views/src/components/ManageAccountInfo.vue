@@ -15,8 +15,7 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Mã người dùng</label>
-                                <input type="text" class="form-control" id=" " value="U0010001" readonly disabled
-                                    style="border: none;">
+                                <p>U0010001</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Họ và tên</label>
@@ -24,8 +23,7 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Email</label>
-                                <input type="email" class="form-control" id=" " value="duongph@gmail.com" readonly
-                                    disabled style="border: none;">
+                                <p>duongph@gmail.com</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Số điện thoại</label>
@@ -35,8 +33,7 @@
                                 <div class="row">
                                     <div class="col-9 form-group">
                                         <label for="">Mật khẩu</label>
-                                        <input type="password" class="form-control" id=" " value="123123123" readonly
-                                            disabled style="border: none;">
+                                        <p>*********</p>
                                     </div>
                                     <div class="col-3 d-flex justify-content-end mt-4">
                                         <button class="btn btn-outline-danger" :class="!isDisplayFormChangePass ? 'show' : 'hide'" v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Đổi mật khẩu</button>

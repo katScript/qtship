@@ -1,7 +1,7 @@
 <template>
     <div class="container navbar-client">
         <nav class="navbar navbar-expand-lg justify-content-between">
-            <a href="/client/management">
+            <a href="/">
                 <img class="navbar-brand" src="../../images/logo-branch.png" width="100" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -30,8 +30,11 @@
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent" v-else-if="isShipper">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item nav-item-qt">
+                        <a class="nav-link" href="/shipper/management"><i class="fa-solid fa-home"></i> Trang chủ</a>
+                    </li>
                     <li class="nav-item nav-item-qt d-flex">
-                        <a class="nav-link" href="/shipper/management"><i class="fa-solid fa-user"></i> Shipper1</a><a class="nav-link mt-1" style="font-size: 12px; color: #4cd137;" disable><i class="fa-solid fa-circle" style="font-size: 8px"></i> Đang hoạt động</a>
+                        <a class="nav-link" href="/shipper/account-info"><i class="fa-solid fa-user"></i> Shipper1</a><a class="nav-link mt-1" style="font-size: 12px; color: #4cd137;" disable><i class="fa-solid fa-circle" style="font-size: 8px"></i> Đang hoạt động</a>
                     </li>
                     <li class="nav-item nav-item-qt d-flex">
                         <a class="nav-link" href=""><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
