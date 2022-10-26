@@ -140,7 +140,7 @@
                                     <div class="col-6">
                                         <h5>Thông tin sản phẩm</h5>
                                     </div>
-                                    <div class="col-6"><a href="/client/orders/create" class="btn btn-outline-success"
+                                    <div class="col-6"><a href="/client/stock/create-product" class="btn btn-outline-success"
                                             style="float: right;">Danh sách sản phẩm</a></div>
                                 </div>
                                 <br>

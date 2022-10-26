@@ -18,7 +18,7 @@
                         <a class="nav-link" href="/client/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn hàng</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/stock-product"><i class="fa-solid fa-boxes-stacked"></i> QL sản phẩm</a>
+                        <a class="nav-link" href="/client/stock-product"><i class="fa-solid fa-boxes-stacked"></i> QL kho & sản phẩm</a>
                     </li>
                     <li class="nav-item nav-item-qt">
                         <a class="nav-link" href="/client/management-cash"><i class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>

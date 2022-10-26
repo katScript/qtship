@@ -17,13 +17,78 @@
                   </h4>
                 </div>
                 <div class="col-md-3 d-flex justify-content-end">
-                  <a href="/client/stock/create-product" class="btn btn-outline-success">
+                  <a
+                    href="/client/stock/create-product"
+                    class="btn btn-outline-success"
+                  >
                     Tạo Sản phẩm mới
                   </a>
                 </div>
               </div>
               <br />
               <div class="row">
+                <h5>Kho</h5>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="">Tên kho:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Tên kho/Tên cửa hàng"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="">Địa chỉ:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Địa chỉ cụ thể"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="">Contact:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Số điện thoại,..."
+                    />
+                  </div>
+                  <br />
+                  <button class="btn btn-success">Tạo kho mới</button>
+                </div>
+                <div class="col-md-6">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Tên kho</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Contact</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Kho Mỹ Đình</td>
+                        <td>Mỹ Đình, Hà Nội, Việt Nam</td>
+                        <td>0987654321</td>
+                        <td>
+                          <a
+                            href=""
+                            class="btn btn-success"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Cập nhật"
+                            ><i class="fa-solid fa-file-pen"></i
+                          ></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <h5>Sản phẩm</h5>
                 <div class="col-md-6">
                   <input
                     type="text"
@@ -69,9 +134,9 @@
                     <tr>
                       <th scope="col">Mã SP</th>
                       <th scope="col" class="w-50">Tên sản phẩm</th>
-                      <th scope="col">Đã xuất</th>
-                      <th scope="col">Tồn kho</th>
-                      <th scope="col">Doanh thu</th>
+                      <th scope="col">Giá gốc</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Khối lượng</th>
                       <th scope="col">Chức năng</th>
                     </tr>
                   </thead>
