@@ -23,8 +23,7 @@ public class Customer {
 
     private String username;
 
-    public Customer() {
-    }
+    public Customer() {}
 
     public Customer(com.spring.app.customers.models.Customer customer) {
         this.id = customer.getId();
@@ -43,10 +42,10 @@ public class Customer {
         this.customerId = customer.getCustomerId();
 
         for (com.spring.app.customers.models.Address address : customer.getAddressSet())
-            this.addressSet.add(new Address(address));
+            this.addAddress(new Address(address));
 
         for (com.spring.app.customers.models.ForControl forControl : customer.getForControls())
-            this.forControls.add(new ForControl(forControl));
+            this.addForControl(new ForControl(forControl));
     }
 
     public Long getId() {
@@ -145,12 +144,28 @@ public class Customer {
         this.addressSet = addressSet;
     }
 
+    public void addAddress(Address address) {
+        if (this.addressSet.isEmpty()) {
+            this.addressSet = new HashSet<>();
+        }
+
+        this.addressSet.add(address);
+    }
+
     public Set<ForControl> getForControls() {
         return forControls;
     }
 
     public void setForControls(Set<ForControl> forControls) {
         this.forControls = forControls;
+    }
+
+    public void addForControl(ForControl forControl) {
+        if (this.forControls.isEmpty()) {
+            this.forControls = new HashSet<>();
+        }
+
+        this.forControls.add(forControl);
     }
 
     public Date getCreatedAt() {

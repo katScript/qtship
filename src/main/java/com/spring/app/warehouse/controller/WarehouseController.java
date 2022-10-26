@@ -1,0 +1,103 @@
+package com.spring.app.warehouse.controller;
+
+import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.customers.models.Customer;
+import com.spring.app.customers.models.repository.CustomerRepository;
+import com.spring.app.warehouse.models.Warehouse;
+import com.spring.app.warehouse.models.repository.WarehouseRepository;
+import com.spring.app.warehouse.payload.request.DeleteRequest;
+import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
+import com.spring.app.warehouse.payload.response.WarehouseListResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/v1/warehouse")
+public class WarehouseController {
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    WarehouseRepository warehouseRepository;
+
+    @PostMapping("/save")
+    public ResponseEntity<?> saveWarehouse(@Valid @RequestBody WarehouseDataRequest warehouseDataRequest) {
+        Customer customer = customerRepository.findById(warehouseDataRequest.getCustomerId())
+                                .orElse(null);
+
+        if (customer != null) {
+            Warehouse warehouse;
+            if (warehouseDataRequest.getId() == null) {
+                warehouse = new Warehouse(
+                        warehouseDataRequest.getName(),
+                        warehouseDataRequest.getAddress(),
+                        warehouseDataRequest.getPhone());
+
+                warehouse.setCustomer(customer);
+            } else {
+                warehouse = warehouseRepository.findById(warehouseDataRequest.getId())
+                                        .orElse(null);
+
+                if (warehouse == null)
+                    return ResponseEntity.ok(new MessageResponse("Warehouse not found!"));
+
+                warehouse.setName(warehouseDataRequest.getName())
+                        .setPhone(warehouseDataRequest.getPhone())
+                        .setAddress(warehouseDataRequest.getAddress());
+            }
+
+            warehouseRepository.save(warehouse);
+
+            return ResponseEntity.ok(new MessageResponse("Warehouse save successfully!"));
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteWarehouse(@Valid @RequestBody DeleteRequest deleteRequest) {
+        Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
+                .orElse(null);
+
+        if (customer != null) {
+            Warehouse warehouse = warehouseRepository.findById(deleteRequest.getId()).orElse(null);
+
+            if (warehouse == null)
+                return ResponseEntity.ok(new MessageResponse("Warehouse not found!"));
+
+            warehouseRepository.delete(warehouse);
+
+            return ResponseEntity.ok(new MessageResponse("Warehouse deleted successfully!"));
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+    }
+
+    @GetMapping("/all/customer/{id}")
+    public ResponseEntity<?> getWarehouseByCustomer(@Valid @PathVariable Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElse(null);
+
+        if (customer != null) {
+            List<WarehouseListResponse> warehouses = new ArrayList<>();
+
+            for (Warehouse w: customer.getWarehouses()) {
+                warehouses.add(new WarehouseListResponse(
+                        w.getId(),
+                        w.getName(),
+                        w.getAddress(),
+                        w.getPhone()
+                ));
+            }
+
+            return ResponseEntity.ok(warehouses);
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+    }
+}

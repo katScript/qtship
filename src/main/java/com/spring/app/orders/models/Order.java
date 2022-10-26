@@ -1,6 +1,7 @@
 package com.spring.app.orders.models;
 
 import com.spring.app.customers.models.Customer;
+import com.spring.app.warehouse.models.Warehouse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -31,12 +32,19 @@ public class Order {
     private String senderPhone;
     @Column(name = "sender_address")
     private String senderAddress;
+    @Column(name = "shipping_fee")
+    private Boolean shippingFee;
+    @Column(name = "coupon")
+    private String coupon;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status", referencedColumnName = "code")
     private OrderStatus status;
     @OneToMany(mappedBy = "order",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderItem> orderItemSet = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    private Warehouse warehouse;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -45,27 +53,41 @@ public class Order {
     public Order() {}
 
     public Order(
-            String note,
-            String feedback,
-            Boolean notification,
-            Double subtotal
-    ) {
-        this.note = note;
-        this.feedback = feedback;
-        this.notification = notification;
-        this.subtotal = subtotal;
-    }
-
-    public Order(
+            String senderName,
+            String senderPhone,
+            String senderAddress,
             String note,
             OrderStatus status,
             String feedback,
             Double subtotal,
             Boolean notification,
+            Boolean shippingFee,
+            String coupon
+    ) {
+        this.senderName = senderName;
+        this.senderPhone = senderPhone;
+        this.senderAddress = senderAddress;
+        this.note = note;
+        this.feedback = feedback;
+        this.notification = notification;
+        this.subtotal = subtotal;
+        this.status = status;
+        this.shippingFee = shippingFee;
+        this.coupon = coupon;
+    }
+
+    public Order(
             Customer customer,
             String senderName,
             String senderPhone,
-            String senderAddress
+            String senderAddress,
+            String note,
+            OrderStatus status,
+            String feedback,
+            Double subtotal,
+            Boolean notification,
+            Boolean shippingFee,
+            String coupon
     ) {
         this.note = note;
         this.feedback = feedback;
@@ -76,6 +98,8 @@ public class Order {
         this.senderName = senderName;
         this.senderPhone = senderPhone;
         this.senderAddress = senderAddress;
+        this.shippingFee = shippingFee;
+        this.coupon = coupon;
     }
 
     public Long getId() {
@@ -184,7 +208,35 @@ public class Order {
         return subtotal;
     }
 
-    public void setSubtotal(Double subtotal) {
+    public Order setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+        return this;
+    }
+
+    public Boolean getShippingFee() {
+        return shippingFee;
+    }
+
+    public Order setShippingFee(Boolean shippingFee) {
+        this.shippingFee = shippingFee;
+        return this;
+    }
+
+    public String getCoupon() {
+        return coupon;
+    }
+
+    public Order setCoupon(String coupon) {
+        this.coupon = coupon;
+        return this;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public Order setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+        return this;
     }
 }

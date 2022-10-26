@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController("CustomerAuthController")
+@RestController
 @RequestMapping("/v1/order")
 public class OrderController {
     CustomerRepository customerRepository;
