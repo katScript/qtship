@@ -3,7 +3,9 @@ package com.spring.app.customers.controllers;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.response.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
+import com.spring.app.customers.models.Address;
 import com.spring.app.customers.models.Customer;
+import com.spring.app.customers.payload.request.customer.SaveAddressRequest;
 import com.spring.app.customers.payload.response.customer.DetailResponse;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/v1/customer")
 public class CustomerController {
-
     @Autowired
     CustomerRepository customerRepository;
     @Autowired
@@ -69,27 +70,29 @@ public class CustomerController {
     }
 
 
-//    @PostMapping("/address/save")
-//    public ResponseEntity<?> saveAddress(@Valid @RequestBody SaveAddressRequest addressRequest) {
-//        Customer customer = customerRepository.findById(addressRequest.getCustomerId())
-//                .orElse(null);
-//
-//        if (customer == null)
-//            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
-//
-//        Address address = new Address(
-//                addressRequest.getAddress().getProvince(),
-//                addressRequest.getAddress().getProvinceId(),
-//                addressRequest.getAddress().getDistrict(),
-//                addressRequest.getAddress().getDistrictId(),
-//                addressRequest.getAddress().getWard(),
-//                addressRequest.getAddress().getWardId(),
-//                addressRequest.getAddress().getStreet(),
-//                addressRequest.getAddress().getPrimary()
-//        );
-//
-//
-//
-//    }
+    @PostMapping("/address/save")
+    public ResponseEntity<?> saveAddress(@Valid @RequestBody SaveAddressRequest addressRequest) {
+        Customer customer = customerRepository.findById(addressRequest.getCustomerId())
+                .orElse(null);
+
+        if (customer == null)
+            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+
+        Address address = new Address(
+                addressRequest.getAddress().getProvince(),
+                addressRequest.getAddress().getProvinceId(),
+                addressRequest.getAddress().getDistrict(),
+                addressRequest.getAddress().getDistrictId(),
+                addressRequest.getAddress().getWard(),
+                addressRequest.getAddress().getWardId(),
+                addressRequest.getAddress().getStreet(),
+                addressRequest.getAddress().getPrimary()
+        );
+
+        customer.addAddress(address);
+        customerRepository.saveAndFlush(customer);
+
+        return ResponseEntity.ok(new MessageResponse("Save success!"));
+    }
 
 }

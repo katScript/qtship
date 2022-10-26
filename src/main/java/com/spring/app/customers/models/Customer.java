@@ -3,6 +3,7 @@ package com.spring.app.customers.models;
 import com.spring.app.authentication.models.User;
 import com.spring.app.orders.models.Order;
 import com.spring.app.products.models.Product;
+import com.spring.app.warehouse.models.Warehouse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -53,7 +54,10 @@ public class Customer {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
-
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Warehouse> warehouses = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -242,5 +246,18 @@ public class Customer {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Set<Warehouse> getWarehouses() {
+        return warehouses;
+    }
+
+    public void setWarehouses(Set<Warehouse> warehouses) {
+        this.warehouses = warehouses;
+    }
+
+    public Customer addWarehouse(Warehouse warehouse) {
+        this.warehouses.add(warehouse);
+        return this;
     }
 }
