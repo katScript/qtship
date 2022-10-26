@@ -1,4 +1,4 @@
-package com.spring.app.warehouse.payload.request;
+package com.spring.app.customers.payload.request;
 
 public class DeleteRequest {
     private Long customerId;

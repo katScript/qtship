@@ -128,7 +128,7 @@ public class OrderListResponse {
     }
 
     public void addOrderItem(OrderItem orderItem) {
-        if (this.orderItem.isEmpty()) {
+        if (this.orderItem == null) {
             this.orderItem = new ArrayList<>();
         }
 

@@ -145,7 +145,7 @@ public class Customer {
     }
 
     public void addAddress(Address address) {
-        if (this.addressSet.isEmpty()) {
+        if (this.addressSet == null) {
             this.addressSet = new HashSet<>();
         }
 
@@ -161,7 +161,7 @@ public class Customer {
     }
 
     public void addForControl(ForControl forControl) {
-        if (this.forControls.isEmpty()) {
+        if (this.forControls == null) {
             this.forControls = new HashSet<>();
         }
 

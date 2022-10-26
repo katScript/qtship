@@ -38,6 +38,7 @@ public class Product {
 
     public Product(
         String sku,
+        String name,
         Integer qty,
         Double weight,
         Double basePrice,
@@ -47,6 +48,7 @@ public class Product {
     ) {
         this.sku = sku;
         this.qty = qty;
+        this.name = name;
         this.weight = weight;
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;

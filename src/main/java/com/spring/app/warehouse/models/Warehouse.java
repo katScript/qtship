@@ -22,7 +22,7 @@ public class Warehouse {
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 

@@ -6,6 +6,7 @@ import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.payload.response.OrderListResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/order")
 public class OrderController {
+    @Autowired
     CustomerRepository customerRepository;
+    @Autowired
     OrderRepository orderRepository;
 
     @GetMapping("/customer/{id}")
