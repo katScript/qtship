@@ -5,7 +5,7 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.warehouse.models.Warehouse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
-import com.spring.app.warehouse.payload.request.DeleteRequest;
+import com.spring.app.customers.payload.request.DeleteRequest;
 import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
 import com.spring.app.warehouse.payload.response.WarehouseListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +70,10 @@ public class WarehouseController {
             if (warehouse == null)
                 return ResponseEntity.ok(new MessageResponse("Warehouse not found!"));
 
-            warehouseRepository.delete(warehouse);
+            if (!warehouse.getCustomer().getId().equals(customer.getId()))
+                return ResponseEntity.ok(new MessageResponse("Can't delete this warehouse! Customer not valid!"));
 
+            warehouseRepository.delete(warehouse);
             return ResponseEntity.ok(new MessageResponse("Warehouse deleted successfully!"));
         }
 

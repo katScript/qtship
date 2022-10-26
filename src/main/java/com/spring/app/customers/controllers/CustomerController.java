@@ -40,7 +40,7 @@ public class CustomerController {
         return ResponseEntity.ok(new DetailResponse(customer));
     }
 
-    @PostMapping("/save/")
+    @PostMapping("/save")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody com.spring.app.customers.payload.Customer customerData) {
         User user = userRepository.findByUsername(customerData.getUserName())
                 .orElse(null);

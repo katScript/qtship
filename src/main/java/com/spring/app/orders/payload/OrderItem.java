@@ -59,7 +59,7 @@ public class OrderItem {
     }
 
     public void addProduct(ProductDetailResponse product) {
-        if (this.products.isEmpty()) {
+        if (this.products == null) {
             this.products = new ArrayList<>();
         }
 
