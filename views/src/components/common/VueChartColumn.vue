@@ -43,7 +43,7 @@ export default {
           },
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994],
+          categories: ["Đơn thành công", "Đơn đang giao", "Đơn phát sinh", "Đơn hoàn"],
         },
       },
       series: [
