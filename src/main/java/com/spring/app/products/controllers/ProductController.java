@@ -1,7 +1,7 @@
 package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
-import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.products.models.Product;
@@ -48,10 +48,10 @@ public class ProductController {
                 product = productRepository.findById(productDataRequest.getId()).orElse(null);
 
                 if (product == null)
-                    return ResponseEntity.status(500).body(new MessageResponse("Error: Product is not found."));
+                    return ResponseEntity.badRequest().body(new MessageResponse("Error: Product is not found."));
 
                 if (!product.getCustomer().getId().equals(customer.getId()))
-                    return ResponseEntity.status(500).body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
+                    return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
 
                 product.setSku(productDataRequest.getSku())
                         .setName(productDataRequest.getName())
@@ -66,7 +66,7 @@ public class ProductController {
             return ResponseEntity.ok(new MessageResponse("Product save success"));
         }
 
-        return ResponseEntity.status(500).body(new MessageResponse("Error: Customer is not found."));
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
     }
 
     @PostMapping("/delete")
@@ -78,16 +78,16 @@ public class ProductController {
             Product product = productRepository.findById(deleteRequest.getId()).orElse(null);
 
             if (product == null)
-                return ResponseEntity.status(500).body(new MessageResponse("Error: Product is not found."));
+                return ResponseEntity.badRequest().body(new MessageResponse("Error: Product is not found."));
 
             if (!product.getCustomer().getId().equals(customer.getId()))
-                return ResponseEntity.status(500).body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
+                return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
 
             productRepository.delete(product);
             return ResponseEntity.ok(new MessageResponse("Product deleted successfully!"));
         }
 
-        return ResponseEntity.ok(new MessageResponse("Product save success"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer not found!"));
     }
 
     @GetMapping("/customer/{id}")
@@ -116,6 +116,6 @@ public class ProductController {
             return ResponseEntity.ok(productList);
         }
 
-        return ResponseEntity.status(500).body(new MessageResponse("Error: Customer is not found."));
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
     }
 }

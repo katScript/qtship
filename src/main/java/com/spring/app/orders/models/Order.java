@@ -34,6 +34,8 @@ public class Order {
     private String senderAddress;
     @Column(name = "shipping_fee")
     private Boolean shippingFee;
+    @Column(name = "shipping_type")
+    private String shippingType;
     @Column(name = "coupon")
     private String coupon;
     @OneToOne(cascade = CascadeType.ALL)
@@ -57,12 +59,11 @@ public class Order {
             String senderPhone,
             String senderAddress,
             String note,
-            OrderStatus status,
             String feedback,
-            Double subtotal,
             Boolean notification,
             Boolean shippingFee,
-            String coupon
+            String coupon,
+            String shippingType
     ) {
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -70,10 +71,9 @@ public class Order {
         this.note = note;
         this.feedback = feedback;
         this.notification = notification;
-        this.subtotal = subtotal;
-        this.status = status;
         this.shippingFee = shippingFee;
         this.coupon = coupon;
+        this.shippingType = shippingType;
     }
 
     public Order(
@@ -87,7 +87,8 @@ public class Order {
             Double subtotal,
             Boolean notification,
             Boolean shippingFee,
-            String coupon
+            String coupon,
+            String shippingType
     ) {
         this.note = note;
         this.feedback = feedback;
@@ -100,6 +101,7 @@ public class Order {
         this.senderAddress = senderAddress;
         this.shippingFee = shippingFee;
         this.coupon = coupon;
+        this.shippingType = shippingType;
     }
 
     public Long getId() {
@@ -237,6 +239,15 @@ public class Order {
 
     public Order setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+        return this;
+    }
+
+    public String getShippingType() {
+        return shippingType;
+    }
+
+    public Order setShippingType(String shippingType) {
+        this.shippingType = shippingType;
         return this;
     }
 }

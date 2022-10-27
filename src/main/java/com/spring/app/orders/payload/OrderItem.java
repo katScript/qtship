@@ -2,6 +2,7 @@ package com.spring.app.orders.payload;
 
 
 import com.spring.app.products.payload.response.ProductDetailResponse;
+import com.spring.app.shipping.payload.request.ShippingAddressRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public class OrderItem {
     private Long id;
     private Double price;
-    private ShippingAddress shippingAddress;
+    private ShippingAddressRequest shippingAddress;
     private List<ProductDetailResponse> products;
 
     public OrderItem() {}
@@ -17,7 +18,7 @@ public class OrderItem {
     public OrderItem(
             Long id,
             Double price,
-            ShippingAddress shippingAddress,
+            ShippingAddressRequest shippingAddress,
             List<ProductDetailResponse> products
     ) {
         this.id = id;
@@ -42,11 +43,11 @@ public class OrderItem {
         this.price = price;
     }
 
-    public ShippingAddress getShippingAddress() {
+    public ShippingAddressRequest getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(ShippingAddress shippingAddress) {
+    public void setShippingAddress(ShippingAddressRequest shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 

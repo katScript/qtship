@@ -1,6 +1,7 @@
-package com.spring.app.orders.payload;
+package com.spring.app.shipping.payload.request;
 
-public class ShippingAddress {
+public class ShippingAddressRequest {
+    private Long id;
     private String receiverName;
     private String phone;
     private String province;
@@ -11,9 +12,9 @@ public class ShippingAddress {
     private String districtId;
     private String wardId;
 
-    public ShippingAddress() {}
+    public ShippingAddressRequest() {}
 
-    public ShippingAddress(
+    public ShippingAddressRequest(
             String receiverName,
             String phone,
             String province,
@@ -105,5 +106,13 @@ public class ShippingAddress {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

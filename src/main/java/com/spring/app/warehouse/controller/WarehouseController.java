@@ -1,6 +1,6 @@
 package com.spring.app.warehouse.controller;
 
-import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.warehouse.models.Warehouse;
@@ -44,7 +44,7 @@ public class WarehouseController {
                                         .orElse(null);
 
                 if (warehouse == null)
-                    return ResponseEntity.ok(new MessageResponse("Warehouse not found!"));
+                    return ResponseEntity.badRequest().body(new MessageResponse("Warehouse not found!"));
 
                 warehouse.setName(warehouseDataRequest.getName())
                         .setPhone(warehouseDataRequest.getPhone())
@@ -56,7 +56,7 @@ public class WarehouseController {
             return ResponseEntity.ok(new MessageResponse("Warehouse save successfully!"));
         }
 
-        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 
     @PostMapping("/delete")
@@ -68,16 +68,16 @@ public class WarehouseController {
             Warehouse warehouse = warehouseRepository.findById(deleteRequest.getId()).orElse(null);
 
             if (warehouse == null)
-                return ResponseEntity.ok(new MessageResponse("Warehouse not found!"));
+                return ResponseEntity.badRequest().body(new MessageResponse("Warehouse not found!"));
 
             if (!warehouse.getCustomer().getId().equals(customer.getId()))
-                return ResponseEntity.ok(new MessageResponse("Can't delete this warehouse! Customer not valid!"));
+                return ResponseEntity.badRequest().body(new MessageResponse("Can't delete this warehouse! Customer not valid!"));
 
             warehouseRepository.delete(warehouse);
             return ResponseEntity.ok(new MessageResponse("Warehouse deleted successfully!"));
         }
 
-        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 
     @GetMapping("/all/customer/{id}")
@@ -100,6 +100,6 @@ public class WarehouseController {
             return ResponseEntity.ok(warehouses);
         }
 
-        return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 }
