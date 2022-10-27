@@ -41,28 +41,6 @@ public class OrderListResponse {
         this.senderAddress = senderAddress;
     }
 
-    public OrderListResponse(
-            String id,
-            String customerId,
-            String node,
-            String feedback,
-            Double subtotal,
-            String senderName,
-            String senderPhone,
-            String senderAddress,
-            List<OrderItem> orderItem
-    ) {
-        this.id = id;
-        this.customerId = customerId;
-        this.node = node;
-        this.feedback = feedback;
-        this.subtotal = subtotal;
-        this.orderItem = orderItem;
-        this.senderName = senderName;
-        this.senderPhone = senderPhone;
-        this.senderAddress = senderAddress;
-    }
-
     public String getId() {
         return id;
     }

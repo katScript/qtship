@@ -34,7 +34,19 @@ public class OrderItem {
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Package> packages = new HashSet<>();
 
+    public OrderItem() {}
 
+    public OrderItem(
+            Double price,
+            Order order,
+            ShippingAddress shippingAddress,
+            Set<Package> packages
+    ) {
+        this.price = price;
+        this.order = order;
+        this.shippingAddress = shippingAddress;
+        this.packages = packages;
+    }
 
     public Long getId() {
         return id;

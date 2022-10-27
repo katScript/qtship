@@ -23,8 +23,8 @@ public class Order {
     private Boolean notification;
     @Column(name = "subtotal")
     private Double subtotal;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customer_id", referencedColumnName = "id")
     private Customer customer;
     @Column(name = "sender_name")
     private String senderName;
