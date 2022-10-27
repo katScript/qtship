@@ -14,8 +14,6 @@ public class Package {
     private Long id;
     @Column(name = "qty")
     private Integer qty;
-    @Column(name = "price")
-    private Double price;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -24,19 +22,17 @@ public class Package {
     @JoinColumn(name="order_items_id", referencedColumnName = "id", nullable = false)
     private OrderItem orderItem;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sku", referencedColumnName = "sku")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     public Package () {}
 
     public Package (
         Integer qty,
-        Double price,
         OrderItem orderItem,
         Product product
     ) {
         this.qty = qty;
-        this.price = price;
         this.orderItem = orderItem;
         this.product = product;
     }
@@ -51,15 +47,6 @@ public class Package {
 
     public Package setQty(Integer qty) {
         this.qty = qty;
-        return this;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public Package setPrice(Double price) {
-        this.price = price;
         return this;
     }
 

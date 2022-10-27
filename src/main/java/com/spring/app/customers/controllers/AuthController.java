@@ -4,7 +4,7 @@ import com.spring.app.authentication.models.Role;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.request.LoginRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
-import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.RoleRepository;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
@@ -20,6 +20,7 @@ import com.spring.app.customers.models.repository.AddressRepository;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.customers.models.repository.ForControlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -86,7 +87,7 @@ public class AuthController {
         User user = userRepository.findByUsername(forgotPasswordRequest.getUsername()).orElse(null);
 
         if (user == null)
-            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+            return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists!"));
 
         String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
 
@@ -103,13 +104,13 @@ public class AuthController {
         User user = userRepository.findByUsername(username).orElse(null);
 
         if (user == null)
-            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+            return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists."));
 
         Customer customer = customerRepository.findByUser(user)
                 .orElse(null);
 
         if (customer == null)
-            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Customer is not found."));
 
         user.setPassword(encoder.encode(resetPasswordRequest.getPassword()));
         userRepository.save(user);

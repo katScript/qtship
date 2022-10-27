@@ -1,7 +1,7 @@
 package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.User;
-import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Address;
 import com.spring.app.customers.models.Customer;
@@ -29,13 +29,13 @@ public class CustomerController {
                 .orElse(null);
 
         if (user == null)
-            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: User account is not exists."));
 
         Customer customer = customerRepository.findByUser(user)
                 .orElse(null);
 
         if (customer == null)
-            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
         return ResponseEntity.ok(new DetailResponse(customer));
     }
@@ -46,13 +46,13 @@ public class CustomerController {
                 .orElse(null);
 
         if (user == null)
-            return ResponseEntity.ok(new MessageResponse("Error: User account is not exists."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: User account is not exists."));
 
         Customer customer = customerRepository.findByUser(user)
                 .orElse(null);
 
         if (customer == null)
-            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
         customer.setFullName(customerData.getFullName())
                 .setGender(customerData.getGender())
@@ -76,7 +76,7 @@ public class CustomerController {
                 .orElse(null);
 
         if (customer == null)
-            return ResponseEntity.ok(new MessageResponse("Error: Customer is not found."));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
         Address address = new Address(
                 addressRequest.getAddress().getProvince(),

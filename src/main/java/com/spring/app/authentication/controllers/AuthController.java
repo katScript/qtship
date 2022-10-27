@@ -13,7 +13,7 @@ import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.request.LoginRequest;
 import com.spring.app.authentication.payload.request.SignupRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
-import com.spring.app.authentication.payload.response.MessageResponse;
+import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
 import com.spring.app.authentication.security.services.UserDetailsImpl;
