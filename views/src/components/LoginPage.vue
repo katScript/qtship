@@ -136,9 +136,9 @@ export default {
                   commonFunction.EXPIRED_TIME_COOKIES
                 );
               }
-              commonFunction.redirect("/client/management");
-            } else {
               commonFunction.redirect("/");
+            } else {
+              commonFunction.redirect("/login-page");
             }
           })
           .catch((error) => {

@@ -11,6 +11,7 @@ import ManageAccountInfo from '@/components/ManageAccountInfo.vue'
 import CreateProductClient from '@/components/CreateProductClient.vue'
 import ManagementShipper from '@/components/ManagementShipper.vue'
 import ManageAccountShipperInfo from '@/components/ManageAccountShipperInfo.vue'
+import ManagementAdmin from '@/components/ManagementAdmin.vue'
 
 const history = createWebHistory();
 const router = createRouter({
@@ -28,6 +29,8 @@ const router = createRouter({
         {path: '/client/stock/create-product', component: CreateProductClient},
         {path: '/shipper/management', component: ManagementShipper},
         {path: '/shipper/account-info', component: ManageAccountShipperInfo},
+        {path: '/admin/management', component: ManagementAdmin},
+       
     ]
 });
 
