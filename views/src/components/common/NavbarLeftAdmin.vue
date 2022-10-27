@@ -91,7 +91,7 @@ export default {
 .list-group-item {
   border-radius: 0px;
   font-size: 12px;
-  width: 101%;
+  width: 100.1%;
 }
 .show {
   display: inline;

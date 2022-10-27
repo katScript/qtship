@@ -17,9 +17,9 @@
       </div>
       <div class="content-management w-100">
         <br />
-        <h3 class="title-managenent-type text-danger">
+        <h5 class="title-managenent-type text-danger">
           <i class="fa-solid fa-sitemap"></i> Quản lí ...
-        </h3>
+        </h5>
       </div>
     </div>
   </div>
