@@ -176,7 +176,7 @@ export default {
 }
 .list-group-item {
   border-radius: 0px;
-  font-size: 12px;
+  font-size: 13px;
   width: 100.1%;
 }
 .show {

@@ -17,9 +17,17 @@
       </div>
       <div class="content-management w-100">
         <br />
-        <h5 class="title-managenent-type text-danger">
-          <i class="fa-solid fa-sitemap"></i> Quản lí ...
-        </h5>
+        <BoxDataOverview />
+        <hr />
+        <div class="row">
+          <div class="col-md-4">
+            <h5>Hiệu suất giao hàng</h5>
+            <DeliveryPerformanceChart />
+          </div>
+          <div class="col-md-4">
+            <OrderTypeAdminChart />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -27,6 +35,9 @@
 
 <script>
 import NavbarLeftAdmin from "./common/NavbarLeftAdmin.vue";
+import BoxDataOverview from "./common/BoxDataOverview.vue";
+import DeliveryPerformanceChart from "./common/DeliveryPerformanceChart.vue";
+import OrderTypeAdminChart from "./common/OrderTypeAdminChart.vue";
 
 export default {
   data() {
@@ -36,6 +47,9 @@ export default {
   },
   components: {
     NavbarLeftAdmin,
+    BoxDataOverview,
+    DeliveryPerformanceChart,
+    OrderTypeAdminChart,
   },
   methods: {
     toggleCollapseNavbarLeft() {
@@ -46,11 +60,18 @@ export default {
 </script>
 
 <style scoped>
+* {
+    overflow: hidden;
+}
 .show {
   display: block;
 }
 .hide {
   display: none;
+}
+
+.content-management {
+  margin-left: 40px;
 }
 
 .btn-collapse-nav-left {
@@ -59,6 +80,7 @@ export default {
   width: 50px;
   height: 100vh;
   position: absolute;
+  margin-right: 10px;
 }
 .title-managenent-type {
   margin-left: 60px;
