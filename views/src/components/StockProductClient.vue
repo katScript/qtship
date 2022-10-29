@@ -17,10 +17,7 @@
                   </h4>
                 </div>
                 <div class="col-md-3 d-flex justify-content-end">
-                  <a
-                    href="/client/stock/create-product"
-                    class="btn btn-outline-success"
-                  >
+                  <a href="/client/stock/create-product" class="btn btn-outline-success">
                     Tạo Sản phẩm mới
                   </a>
                 </div>
@@ -31,27 +28,15 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="">Tên kho:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Tên kho/Tên cửa hàng"
-                    />
+                    <input type="text" class="form-control" placeholder="Tên kho/Tên cửa hàng" />
                   </div>
                   <div class="form-group">
                     <label for="">Địa chỉ:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Địa chỉ cụ thể"
-                    />
+                    <input type="text" class="form-control" placeholder="Địa chỉ cụ thể" />
                   </div>
                   <div class="form-group">
                     <label for="">Contact:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Số điện thoại,..."
-                    />
+                    <input type="text" class="form-control" placeholder="Số điện thoại,..." />
                   </div>
                   <br />
                   <button class="btn btn-success">Tạo kho mới</button>
@@ -72,14 +57,8 @@
                         <td>Mỹ Đình, Hà Nội, Việt Nam</td>
                         <td>0987654321</td>
                         <td>
-                          <a
-                            href=""
-                            class="btn btn-success"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Cập nhật"
-                            ><i class="fa-solid fa-file-pen"></i
-                          ></a>
+                          <a href="" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Cập nhật"><i class="fa-solid fa-file-pen"></i></a>
                         </td>
                       </tr>
                     </tbody>
@@ -90,17 +69,10 @@
               <div class="row">
                 <h5>Sản phẩm</h5>
                 <div class="col-md-6">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Nhập Tên sản phẩm hoặc Mã sản phẩm"
-                  />
+                  <input type="text" class="form-control" placeholder="Nhập Tên sản phẩm hoặc Mã sản phẩm" />
                 </div>
                 <div class="col-md-2">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select class="form-select" aria-label="Default select example">
                     <option selected>- Lọc thứ tự -</option>
                     <option value="1">Bán chạy nhất</option>
                     <option value="2">Tên: A -> Z</option>
@@ -110,10 +82,7 @@
                   </select>
                 </div>
                 <div class="col-md-2">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select class="form-select" aria-label="Default select example">
                     <option selected>- Kho -</option>
                     <option value="1">Kho 1</option>
                     <option value="2">Kho 2</option>
@@ -148,30 +117,12 @@
                       <td>24</td>
                       <td>10000</td>
                       <td>
-                        <a
-                          href=""
-                          class="btn btn-primary a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Chi tiết"
-                          ><i class="fa-solid fa-circle-info"></i
-                        ></a>
-                        <a
-                          href=""
-                          class="btn btn-success a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Cập nhật"
-                          ><i class="fa-solid fa-file-pen"></i
-                        ></a>
-                        <a
-                          href=""
-                          class="btn btn-danger a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Xóa"
-                          ><i class="fa-solid fa-trash"></i
-                        ></a>
+                        <a href="" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
+                          data-bs-placement="top" title="Chi tiết"><i class="fa-solid fa-circle-info"></i></a>
+                        <a href="" class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
+                          data-bs-placement="top" title="Cập nhật"><i class="fa-solid fa-file-pen"></i></a>
+                        <a href="" class="btn btn-danger a-function a-detail" data-bs-toggle="tooltip"
+                          data-bs-placement="top" title="Xóa"><i class="fa-solid fa-trash"></i></a>
                       </td>
                     </tr>
                   </tbody>
@@ -193,93 +144,91 @@
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
-import FooterClient from "./common/FooterClient.vue";
-import ToolbarRight from "./common/ToolbarRight.vue";
-import NotficationClient from "./common/NotficationClient.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
+  import FooterClient from "./common/FooterClient.vue";
+  import ToolbarRight from "./common/ToolbarRight.vue";
+  import NotficationClient from "./common/NotficationClient.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
-import { debounce } from "vue-debounce";
+  import { useCookies } from "vue3-cookies";
+  import { commonFunction } from '../scripts/ulti'
+  import { debounce } from "vue-debounce";
 
-export default {
-  components: {
-    NavbarClient,
-    FooterClient,
-    ToolbarRight,
-    NotficationClient,
-  },
-  data() {
-    return {
-      orderCode: "",
-      receiverPhonenumber: "",
-      filterTime: "label",
-      filterTimeDS: "label",
-      classFilterTimeAbout: "d-none",
-      classFilterTimeAboutDS: "d-none",
-      countOrder: 3,
-    };
-  },
-
-  setup() {
-    const { cookies } = useCookies();
-    return {
-      cookies,
-    };
-  },
-
-  // <data, methods...>
-
-  mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
-  watch: {
-    filterTime: {
-      handler: debounce(function () {
-        return this.filterTime == "timeCOTimeAbout"
-          ? (this.classFilterTimeAbout = "d-contents")
-          : (this.classFilterTimeAbout = "d-none");
-      }, 500),
+  export default {
+    components: {
+      NavbarClient,
+      FooterClient,
+      ToolbarRight,
+      NotficationClient,
     },
-    filterTimeDS: {
-      handler: function () {
-        return this.filterTimeDS == "controlTimeAboutDS"
-          ? (this.classFilterTimeAboutDS = "d-contents")
-          : (this.classFilterTimeAboutDS = "d-none");
+    data() {
+      return {
+        orderCode: "",
+        receiverPhonenumber: "",
+        filterTime: "label",
+        filterTimeDS: "label",
+        classFilterTimeAbout: "d-none",
+        classFilterTimeAboutDS: "d-none",
+        countOrder: 3,
+      };
+    },
+
+    setup() {
+      const { cookies } = useCookies();
+      return {
+        cookies,
+      };
+    },
+
+    // <data, methods...>
+
+    mounted() {
+      let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
+    },
+    watch: {
+      filterTime: {
+        handler: debounce(function () {
+          return this.filterTime == "timeCOTimeAbout"
+            ? (this.classFilterTimeAbout = "d-contents")
+            : (this.classFilterTimeAbout = "d-none");
+        }, 500),
+      },
+      filterTimeDS: {
+        handler: function () {
+          return this.filterTimeDS == "controlTimeAboutDS"
+            ? (this.classFilterTimeAboutDS = "d-contents")
+            : (this.classFilterTimeAboutDS = "d-none");
+        },
       },
     },
-  },
-  method: {
-    resetFormSearch: debounce(function () {
-      this.filterTime = "label";
-      this.filterTimeDS = "label";
-      this.classFilterTimeAbout = "d-none";
-      this.classFilterTimeAboutDS = "d-none";
-    }, 1000),
-  },
-};
+    method: {
+      resetFormSearch: debounce(function () {
+        this.filterTime = "label";
+        this.filterTimeDS = "label";
+        this.classFilterTimeAbout = "d-none";
+        this.classFilterTimeAboutDS = "d-none";
+      }, 1000),
+    },
+  };
 </script>
 
 <style scoped>
-a {
-  text-decoration: none;
-}
-table tr td {
-}
+  a {
+    text-decoration: none;
+  }
 
-table tr td a {
-  /* font-size: 5px; */
-  padding: 2px;
-  margin: 0px 3px;
-}
+  table tr td {}
 
-table tr td a i {
-  font-size: 18px;
-  padding: 2px 2px 2px 2px;
-}
+  table tr td a {
+    /* font-size: 5px; */
+    padding: 2px;
+    margin: 0px 3px;
+  }
+
+  table tr td a i {
+    font-size: 18px;
+    padding: 2px 2px 2px 2px;
+  }
 </style>

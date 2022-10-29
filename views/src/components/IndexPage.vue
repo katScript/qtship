@@ -24,10 +24,15 @@
   
         mounted() {
             let authenication_cookies = this.cookies.get("authenication_cookies");
-            if(authenication_cookies == null){
+            let authenrole_cookies = this.cookies.get("authenrole_cookies");
+            if(authenication_cookies == null || authenrole_cookies == null){
               commonFunction.redirect('/login-page');
-            } else {
+            } else if(authenication_cookies && authenrole_cookies == 'customer' ) {
                 commonFunction.redirect('/client/management');
+            } else if(authenication_cookies && authenrole_cookies == 'shipper' ) {
+                commonFunction.redirect('/shipper/management');
+            } else if(authenication_cookies && authenrole_cookies == 'admin' ) {
+                commonFunction.redirect('/admin/management');
             }
         }
     };

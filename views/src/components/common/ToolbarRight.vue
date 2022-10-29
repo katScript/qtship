@@ -6,7 +6,7 @@
             list-group-item list-group-item-action list-group-page-qt
             title-group-item-qt
           "><i class="fa-solid fa-user" style="float: left; padding-right: 10px"></i>
-          duongph
+          {{usernameSession}}
           <i class="fa-solid fa-circle" style="color: #4cd137; font-size: 10px; padding-top: 3px"></i></a>
       </ul>
       <div class="list-group">
@@ -143,12 +143,18 @@
       };
     },
     data() {
-      return {};
+      return {
+        usernameSession:""
+      };
+    },
+    mounted() {
+      this.usernameSession =  this.cookies.get("authenication_cookies");
     },
     methods: {
       signOut: function () {
         this.cookies.remove("authenication_cookies");
         this.cookies.remove("accesstoken_cookies");
+        this.cookies.remove("authenrole_cookies");
         commonFunction.redirect("/");
       },
     },

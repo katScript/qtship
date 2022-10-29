@@ -140,11 +140,13 @@
                                     <div class="col-6">
                                         <h5>Thông tin sản phẩm</h5>
                                     </div>
-                                    <div class="col-6"><a href="/client/stock/create-product" class="btn btn-outline-success"
-                                            style="float: right;">Danh sách sản phẩm</a></div>
+                                    <div class="col-6"><a href="/client/stock/create-product"
+                                            class="btn btn-outline-success" style="float: right;">Danh sách sản phẩm</a>
+                                    </div>
                                 </div>
                                 <br>
-                                <div class="list-product-in-order" v-for="index in productSelectedFor.length" :key="index">
+                                <div class="list-product-in-order" v-for="index in productSelectedFor.length"
+                                    :key="index">
                                     <div class="row">
                                         <div class="col-11">
                                             <div class="row">
@@ -153,9 +155,9 @@
                                                 <div class="col-10">
                                                     <div class="row">
                                                         <div class="col-10">
-                                                            <v-select v-model="productSelected[index]" :options="listProducts"
-                                                                style="width: 104%;" placeholder="Chọn sản phẩm"
-                                                                class="">
+                                                            <v-select v-model="productSelected[index]"
+                                                                :options="listProducts" style="width: 104%;"
+                                                                placeholder="Chọn sản phẩm" class="">
                                                             </v-select>
                                                         </div>
                                                         <div class="col-2">
@@ -178,7 +180,9 @@
                                         <div class="col-1">
                                             <button class="btn btn-outline-success" v-on:click="addItemProductList()"><i
                                                     class="fa-solid fa-plus plus-order-number"></i></button>
-                                            <button class="btn btn-outline-danger" :class="numberProduct > 1 ? 'show' : 'hide'" v-on:click="removeItemProductList(productSelected[index])"><i
+                                            <button class="btn btn-outline-danger"
+                                                :class="numberProduct > 1 ? 'show' : 'hide'"
+                                                v-on:click="removeItemProductList(productSelected[index])"><i
                                                     class="fa-solid fa-minus minus-order-number"></i></button>
                                         </div>
                                     </div>
@@ -222,30 +226,40 @@
                                                 <input type="text" class="form-control" placeholder="Mã giảm giá">
                                             </div>
                                             <div class="col-4">
-                                                <button class="btn btn-danger w-100" v-on:click="isDisplayListVourcer = !isDisplayListVourcer">{{!isDisplayListVourcer ? 'Thêm mã giảm giá' : 'Đóng'}}</button>
+                                                <button class="btn btn-danger w-100"
+                                                    v-on:click="isDisplayListVourcer = !isDisplayListVourcer">{{!isDisplayListVourcer
+                                                    ? 'Thêm mã giảm giá' : 'Đóng'}}</button>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="row" :class="isDisplayListVourcer ? 'show' : 'hide'">
                                             <div class="col-12">
                                                 <div class="list-group">
                                                     <a href="#" class="list-group-item list-group-item-action">
                                                         <div class="row">
-                                                            <div class="col-1 mt-1"><i class="fa-solid fa-ticket text-danger" style="font-size: 24px;"></i></div>
+                                                            <div class="col-1 mt-1"><i
+                                                                    class="fa-solid fa-ticket text-danger"
+                                                                    style="font-size: 24px;"></i></div>
                                                             <div class="col-3 mt-1">MPVC001-VC</div>
                                                             <div class="col-5 mt-1">Miễn phí phí vận chuyển</div>
-                                                            <div class="col-3"><button class="btn btn-outline-danger w-100">Áp dụng</button></div>
+                                                            <div class="col-3"><button
+                                                                    class="btn btn-outline-danger w-100">Áp
+                                                                    dụng</button></div>
                                                         </div>
                                                     </a>
                                                     <a href="#" class="list-group-item list-group-item-action">
                                                         <div class="row">
-                                                            <div class="col-1 mt-1"><i class="fa-solid fa-ticket text-danger" style="font-size: 24px;"></i></div>
+                                                            <div class="col-1 mt-1"><i
+                                                                    class="fa-solid fa-ticket text-danger"
+                                                                    style="font-size: 24px;"></i></div>
                                                             <div class="col-3 mt-1">MPVC001-VC</div>
                                                             <div class="col-5 mt-1">Miễn phí phí vận chuyển</div>
-                                                            <div class="col-3"><button class="btn btn-outline-danger w-100">Áp dụng</button></div>
+                                                            <div class="col-3"><button
+                                                                    class="btn btn-outline-danger w-100">Áp
+                                                                    dụng</button></div>
                                                         </div>
                                                     </a>
-                                                  </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <br>
@@ -277,8 +291,9 @@
                                 <label class="form-check-label" for="exampleCheck1" style="padding-left: 10px;"> Tôi đã
                                     đọc
                                     và đồng ý với Chính sách bảo mật thông tin</label>
-                                    <br>
-                                    <button class="btn btn-success w-100" style="font-size: 18px;"><i class="fa-solid fa-up-right-from-square"></i> Đăng đơn hàng</button>
+                                <br>
+                                <button class="btn btn-success w-100" style="font-size: 18px;"><i
+                                        class="fa-solid fa-up-right-from-square"></i> Đăng đơn hàng</button>
                             </div>
                         </div>
                     </div>
@@ -301,8 +316,8 @@
     import ToolbarRight from "./common/ToolbarRight.vue";
     import NotficationClient from "./common/NotficationClient.vue";
     import LocationPicker from "./common/LocationPicker.vue";
-    // import { commonFunction } from "../scripts/ulti";
 
+    import { commonFunction } from "../scripts/ulti";
     import { useCookies } from "vue3-cookies";
     // import $ from "jquery"
 
@@ -319,9 +334,9 @@
                 isAccepted: false,
                 isDisplayListVourcer: false,
                 numberProduct: 3,
-                productSelectedFor: [{code: '', label: ''}],
+                productSelectedFor: [{ code: '', label: '' }],
                 productSelected: [],
-                listProducts: [{code: 'SP1', label: 'SP1'},{code: 'SP2', label: 'SP2'}],
+                listProducts: [{ code: 'SP1', label: 'SP1' }, { code: 'SP2', label: 'SP2' }],
                 customerAddress: {
                     province: "",
                     provinceId: "",
@@ -353,12 +368,10 @@
         // <data, methods...>
 
         mounted() {
-            // let authenication_cookies = this.cookies.get("authenication_cookies");
-            // if(authenication_cookies == null){
-            //   commonFunction.redirect('/');
-            // } else {
-            //     commonFunction.redirect('/client/management');
-            // }
+            let authenication_cookies = this.cookies.get("authenication_cookies");
+            if (authenication_cookies == null) {
+                commonFunction.redirect('/');
+            }
         },
         watch: {},
         methods: {
@@ -406,7 +419,7 @@
                 }
             },
             addItemProductList() {
-                let product = {code: '', label: ''};
+                let product = { code: '', label: '' };
                 this.productSelectedFor.push(product);
             },
             removeItemProductList(product) {

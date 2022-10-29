@@ -215,7 +215,7 @@ import ToolbarRight from "./common/ToolbarRight.vue";
 import NotficationClient from "./common/NotficationClient.vue";
 
 import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+import { commonFunction } from '../scripts/ulti'
 
 export default {
   components: {
@@ -238,12 +238,10 @@ export default {
   // <data, methods...>
 
   mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
+    let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
   },
   watch: {},
   method: {},

@@ -5,16 +5,8 @@ import VueSelect from 'vue-select'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueApexCharts from 'vue3-apexcharts'
-// import { globalCookiesConfig } from "vue3-cookies";
 import { vue3Debounce } from 'vue-debounce'
-
-// globalCookiesConfig({
-//   expireTimes: "1d",
-//   path: "/",
-//   domain: "",
-//   secure: true,
-//   sameSite: "Lax",
-// });
+import store from './store'
 
 // Complie scss to css : sass path-scss path-css
 const app = createApp(App);
@@ -23,5 +15,6 @@ app.component('v-select', VueSelect)
 app.use(VueAxios, axios)
 app.use(VueApexCharts)
 app.component('vue-apexchart', VueApexCharts)
+app.use(store);
 app.directive('debounce', vue3Debounce({ lock: true }))
 app.mount('#app')

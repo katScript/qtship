@@ -60,9 +60,7 @@
                 <div class="col-12">
                   <b>Đơn đã xử lí:</b>
                   <br />
-                  <small
-                    >(*) Tổng giá trị các đơn hàng đã giao và thu COD</small
-                  >
+                  <small>(*) Tổng giá trị các đơn hàng đã giao và thu COD</small>
                 </div>
                 <div class="col-12">
                   <h3>6.500.000 <span style="font-size: 15px">(VNĐ)</span></h3>
@@ -77,14 +75,10 @@
         <h4>Danh sách đơn hàng</h4>
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#home"
-              >Chờ bàn giao</a
-            >
+            <a class="nav-link active" data-toggle="tab" href="#home">Chờ bàn giao</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#contact"
-              >Đã bàn giao</a
-            >
+            <a class="nav-link" data-toggle="tab" href="#contact">Đã bàn giao</a>
           </li>
         </ul>
 
@@ -108,68 +102,68 @@
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
-import FooterClient from "./common/FooterClient.vue";
-import ListOrderShipper from "./ListOrderShipper.vue";
-import ListOrderTransferShipper from "./ListOrderTransferShipper.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
+  import FooterClient from "./common/FooterClient.vue";
+  import ListOrderShipper from "./common/ListOrderShipper.vue";
+  import ListOrderTransferShipper from "./common/ListOrderTransferShipper.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+  import { useCookies } from "vue3-cookies";
+  import { commonFunction } from '../scripts/ulti'
 
-export default {
-  components: {
-    NavbarClient,
-    FooterClient,
-    ListOrderShipper,
-    ListOrderTransferShipper,
-  },
-  data() {
-    return {
-      isShipper: true,
-      currentDate: "",
-    };
-  },
+  export default {
+    components: {
+      NavbarClient,
+      FooterClient,
+      ListOrderShipper,
+      ListOrderTransferShipper,
+    },
+    data() {
+      return {
+        isShipper: true,
+        currentDate: "",
+      };
+    },
 
-  setup() {
-    const { cookies } = useCookies();
-    return {
-      cookies,
-    };
-  },
+    setup() {
+      const { cookies } = useCookies();
+      return {
+        cookies,
+      };
+    },
 
-  // <data, methods...>
-  created() {},
-  mounted() {
-    let today = new Date();
-    this.currentDate =
-      String(today.getDate()).padStart(2, "0") +
-      "/" +
-      String(today.getMonth() + 1).padStart(2, "0") +
-      "/" +
-      today.getFullYear();
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
+    // <data, methods...>
+    created() { },
+    mounted() {
+      let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
 
-  method: {},
-};
+
+      let today = new Date();
+      this.currentDate =
+        String(today.getDate()).padStart(2, "0") +
+        "/" +
+        String(today.getMonth() + 1).padStart(2, "0") +
+        "/" +
+        today.getFullYear();
+    },
+
+    method: {},
+  };
 </script>
 
 <style scoped>
-ul li {
-  list-style: none;
-}
+  ul li {
+    list-style: none;
+  }
 
-.nav-link {
-  color: black;
-}
+  .nav-link {
+    color: black;
+  }
 
-.nav-tabs .nav-link.active {
-  color: #bf1e2d;
-  font-weight: 600;
-}
+  .nav-tabs .nav-link.active {
+    color: #bf1e2d;
+    font-weight: 600;
+  }
 </style>
