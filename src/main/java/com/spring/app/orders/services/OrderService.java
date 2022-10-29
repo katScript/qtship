@@ -66,13 +66,6 @@ public class OrderService {
             _order = new Order();
         }
 
-        Set<OrderItem> orderItems = processOrder(order);
-        Double subtotal = 0.0;
-
-        for (OrderItem oi: orderItems) {
-            subtotal += oi.getPrice();
-        }
-
         _order.setCoupon(order.getCoupon())
                 .setFeedback(order.getFeedback())
                 .setNote(order.getNote())
@@ -82,11 +75,18 @@ public class OrderService {
                 .setSenderPhone(order.getSenderPhone())
                 .setShippingFee(order.getShippingFee())
                 .setShippingType(order.getShippingType())
-                .setOrderItemSet(orderItems)
-                .setSubtotal(subtotal)
                 .setStatus(this.orderStatusRepository.findByCode(order.getStatus())
                         .orElseThrow(() -> new RuntimeException("Order status not found!"))
                 );
+
+        Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
+        Double subtotal = 0.0;
+
+        for (OrderItem oi: orderItems) {
+            subtotal += oi.getPrice();
+        }
+
+        _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
 
         this.orderRepository.save(_order);
     }
@@ -103,13 +103,6 @@ public class OrderService {
             _order = new Order();
         }
 
-        Set<OrderItem> orderItems = processOrder(order);
-        Double subtotal = 0.0;
-
-        for (OrderItem oi: orderItems) {
-            subtotal += oi.getPrice();
-        }
-
         _order.setCustomer(customer)
                 .setCoupon(order.getCoupon())
                 .setFeedback(order.getFeedback())
@@ -118,35 +111,29 @@ public class OrderService {
                 .setSenderName(order.getSenderName())
                 .setSenderPhone(order.getSenderName())
                 .setSenderPhone(order.getSenderPhone())
+                .setSenderAddress(order.getSenderAddress())
                 .setShippingFee(order.getShippingFee())
                 .setShippingType(order.getShippingType())
                 .setWarehouse(
                         this.warehouseRepository.findById(order.getWarehouseId())
                                 .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
-                ).setOrderItemSet(orderItems)
-                .setSubtotal(subtotal)
-                .setStatus(this.orderStatusRepository.findByCode(order.getStatus())
-                    .orElseThrow(() -> new RuntimeException("Order status not found!"))
+                ).setStatus(this.orderStatusRepository.findByCode(order.getStatus())
+                        .orElseThrow(() -> new RuntimeException("Order status not found!"))
                 );
+
+        Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
+        Double subtotal = 0.0;
+
+        for (OrderItem oi: orderItems) {
+            subtotal += oi.getPrice();
+        }
+
+        _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
 
         this.orderRepository.save(_order);
     }
 
-//    public OrderStatus processStatus(String curStatus, String status) {
-//        OrderStatus curOrderStatus;
-//        if (curStatus != null)
-//            curOrderStatus = this.orderStatusRepository.findByCode(curStatus)
-//                .orElseThrow(() -> new RuntimeException("Current status not found!"));
-//        else
-//
-//        OrderStatus orderStatus = this.orderStatusRepository.findByCode(status)
-//                .orElseThrow(() -> new RuntimeException("Order status not found!"));
-//
-//
-//    }
-
-    public Set<OrderItem> processOrder(OrderDataRequest order) {
-        List<OrderItemRequest> orderItems = order.getOrderItem();
+    public Set<OrderItem> processOrder(List<OrderItemRequest> orderItems, Order order) {
         Set<OrderItem> orderItemSet = new HashSet<>();
 
         for (OrderItemRequest od: orderItems) {
@@ -159,10 +146,12 @@ public class OrderService {
                 orderItem = new OrderItem();
             }
 
-            orderItem.setPackages(this.processPackage(od.getProducts()));
+            Set<Package> packageSet = this.processPackage(od.getProducts(), orderItem);
+
+            orderItem.setPackages(packageSet);
             orderItem.setShippingAddress(this.processShippingAddress(od.getShippingAddress()));
             orderItem.setPrice(processPrice(orderItem.getPackages()));
-
+            orderItem.setOrder(order);
             orderItemSet.add(orderItem);
         }
 
@@ -201,7 +190,7 @@ public class OrderService {
         return _shippingAddress;
     }
 
-    public Set<Package> processPackage(List<PackageDataRequest> products) {
+    public Set<Package> processPackage(List<PackageDataRequest> products, OrderItem orderItem) {
         Set<Package> packages = new HashSet<>();
         HashMap<Long, Boolean> map = new HashMap<>();
 
@@ -231,6 +220,8 @@ public class OrderService {
 
             product.setQty(curQty - p.getQty());
             pkage.setQty(p.getQty());
+            pkage.setOrderItem(orderItem);
+
             packages.add(pkage);
         }
 

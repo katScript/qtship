@@ -47,8 +47,7 @@ public class Customer {
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ForControl> forControls = new HashSet<>();
     @OneToMany(mappedBy = "customer",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY)
     private Set<Order> orders = new HashSet<>();
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY,

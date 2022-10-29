@@ -84,22 +84,22 @@ public class OrderController {
             Set<Order> orders = customer.getOrders();
 
             for (Order o : orders) {
-                OrderListResponse res = new OrderListResponse(
-                        o.getOrderCode(),
-                        o.getStatus().getCode(),
-                        o.getCustomer().getCustomerId(),
-                        o.getNote(),
-                        o.getFeedback(),
-                        o.getSubtotal(),
-                        o.getSenderName(),
-                        o.getSenderPhone(),
-                        o.getSenderAddress()
-                );
-
-                listOrder.add(res);
+//                OrderListResponse res = new OrderListResponse(
+//                        o.getOrderCode(),
+//                        o.getStatus().getCode(),
+//                        o.getCustomer().getCustomerId(),
+//                        o.getNote(),
+//                        o.getFeedback(),
+//                        o.getSubtotal(),
+//                        o.getSenderName(),
+//                        o.getSenderPhone(),
+//                        o.getSenderAddress()
+//                );
+//
+//                listOrder.add(res);
             }
 
-            return ResponseEntity.ok(listOrder);
+            return ResponseEntity.ok("test");
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));

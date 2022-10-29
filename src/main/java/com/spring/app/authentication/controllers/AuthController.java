@@ -91,4 +91,27 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already taken!"));
+        }
+
+        User user = new User(signUpRequest.getUsername(),
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getUsername());
+
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByCode(signUpRequest.getRole())
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
+
+        user.setRoles(roles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
 }
