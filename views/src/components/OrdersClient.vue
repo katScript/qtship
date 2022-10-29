@@ -141,7 +141,7 @@
                       </button>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@
   import NotficationClient from "./common/NotficationClient.vue";
 
   import { useCookies } from "vue3-cookies";
-  // import { commonFunction } from '../scripts/ulti'
+  import { commonFunction } from '../scripts/ulti'
   import { debounce } from "vue-debounce";
 
   export default {
@@ -250,12 +250,10 @@
     // <data, methods...>
 
     mounted() {
-      // let authenication_cookies = this.cookies.get("authenication_cookies");
-      // if(authenication_cookies == null){
-      //   commonFunction.redirect('/');
-      // } else {
-      //     commonFunction.redirect('/client/management');
-      // }
+      let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
     },
     watch: {
       filterTime: {
@@ -292,9 +290,8 @@
   a {
     text-decoration: none;
   }
-  table tr td {
-  
-  }
+
+  table tr td {}
 
   table tr td a {
     /* font-size: 5px; */

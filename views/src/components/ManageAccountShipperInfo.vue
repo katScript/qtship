@@ -2,12 +2,8 @@
   <div class="container management-account-shipper">
     <NavbarClient :isShipper="isShipper" />
     <h5>Thông tin tài khoản</h5>
-    <small class="text-danger"
-      ><i
-        >(*) Bạn không có quyền tự thay đổi thông tin tài khoản! Mọi thay đổi và
-        thắc mắc vui lòng liên hệ với quản trị viên!</i
-      ></small
-    >
+    <small class="text-danger"><i>(*) Bạn không có quyền tự thay đổi thông tin tài khoản! Mọi thay đổi và
+        thắc mắc vui lòng liên hệ với quản trị viên!</i></small>
     <hr />
     <div class="row">
       <div class="col-md-2">
@@ -43,48 +39,44 @@
           <p>20/12/2020</p>
         </div>
         <br />
-        <a href="/shipper/management" class="btn btn-outline-danger"
-          ><i class="fa-solid fa-angle-left"></i> Quay lại</a
-        >
+        <a href="/shipper/management" class="btn btn-outline-danger"><i class="fa-solid fa-angle-left"></i> Quay lại</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+  import { useCookies } from "vue3-cookies";
+  import { commonFunction } from '../scripts/ulti'
 
-export default {
-  setup() {
-    const { cookies } = useCookies();
-    return {
-      cookies,
-    };
-  },
-  components: {
-    NavbarClient,
-  },
-  data() {
-    return {
-      isShipper: true,
-    };
-  },
-  mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
-};
+  export default {
+    setup() {
+      const { cookies } = useCookies();
+      return {
+        cookies,
+      };
+    },
+    components: {
+      NavbarClient,
+    },
+    data() {
+      return {
+        isShipper: true,
+      };
+    },
+    mounted() {
+      let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
+    },
+  };
 </script>
 
 <style scoped>
-label {
-  font-weight: 600;
-}
+  label {
+    font-weight: 600;
+  }
 </style>

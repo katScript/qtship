@@ -27,11 +27,11 @@
             let authenrole_cookies = this.cookies.get("authenrole_cookies");
             if(authenication_cookies == null || authenrole_cookies == null){
               commonFunction.redirect('/login-page');
-            } else if(authenrole_cookies.roles == 'customer' ) {
+            } else if(authenication_cookies && authenrole_cookies == 'customer' ) {
                 commonFunction.redirect('/client/management');
-            } else if(authenrole_cookies.roles == 'shipper' ) {
+            } else if(authenication_cookies && authenrole_cookies == 'shipper' ) {
                 commonFunction.redirect('/shipper/management');
-            } else if(authenrole_cookies.roles == 'admin' ) {
+            } else if(authenication_cookies && authenrole_cookies == 'admin' ) {
                 commonFunction.redirect('/admin/management');
             }
         }

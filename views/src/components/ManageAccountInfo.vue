@@ -36,10 +36,17 @@
                                         <p>*********</p>
                                     </div>
                                     <div class="col-3 d-flex justify-content-end mt-4">
-                                        <button class="btn btn-outline-danger" :class="!isDisplayFormChangePass ? 'show' : 'hide'" v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Đổi mật khẩu</button>
-                                        <button class="btn btn-danger" :class="isDisplayFormChangePass ? 'show' : 'hide'" v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Hủy bỏ</button>
+                                        <button class="btn btn-outline-danger"
+                                            :class="!isDisplayFormChangePass ? 'show' : 'hide'"
+                                            v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Đổi mật
+                                            khẩu</button>
+                                        <button class="btn btn-danger"
+                                            :class="isDisplayFormChangePass ? 'show' : 'hide'"
+                                            v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Hủy
+                                            bỏ</button>
                                     </div>
-                                    <div class="col-9 form-change-passwword" :class="isDisplayFormChangePass ? 'show' : 'hide'">
+                                    <div class="col-9 form-change-passwword"
+                                        :class="isDisplayFormChangePass ? 'show' : 'hide'">
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu cũ"
                                             style="margin-bottom: 3px;">
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu mới"
@@ -96,7 +103,7 @@
     import NotficationClient from "./common/NotficationClient.vue";
 
     import { useCookies } from "vue3-cookies";
-    // import { commonFunction } from '../scripts/ulti'
+    import { commonFunction } from '../scripts/ulti'
 
     export default {
         components: {
@@ -119,12 +126,10 @@
         // <data, methods...>
 
         mounted() {
-            // let authenication_cookies = this.cookies.get("authenication_cookies");
-            // if(authenication_cookies == null){
-            //   commonFunction.redirect('/login-page');
-            // } else {
-            //     commonFunction.redirect('/client/management');
-            // }
+            let authenication_cookies = this.cookies.get("authenication_cookies");
+            if (authenication_cookies == null) {
+                commonFunction.redirect('/');
+            }
         },
         watch: {
         },

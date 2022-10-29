@@ -34,8 +34,8 @@ const commonFunction = {
         }
         return valid;
     },
-    DOMAIN_URL: 'https://myhost.api.local/',
-    EXPIRED_TIME_COOKIES: "1d"
+    DOMAIN_URL: 'https://api.dcodetest.com/',
+    EXPIRED_TIME_COOKIES: "2min"
 }
 
 export { commonFunction };

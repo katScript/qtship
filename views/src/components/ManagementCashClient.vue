@@ -63,23 +63,16 @@
             </div>
             <hr />
             <div class="row">
-              <div class="col-md-3"><h5>Lịch sử đối soát</h5></div>
+              <div class="col-md-3">
+                <h5>Lịch sử đối soát</h5>
+              </div>
               <div class="col-md-9">
                 <div class="row">
                   <div class="col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Mã đơn hàng"
-                    />
+                    <input type="text" class="form-control" placeholder="Mã đơn hàng" />
                   </div>
                   <div class="col-md-4">
-                    <input
-                      type="date"
-                      name=""
-                      id=""
-                      class="form-control w-100"
-                    />
+                    <input type="date" name="" id="" class="form-control w-100" />
                   </div>
                   <div class="col-md-4">
                     <button class="btn btn-success w-100">
@@ -132,57 +125,55 @@
 </template>
 
 <script>
-import NavbarClient from "./common/NavbarClient.vue";
-import FooterClient from "./common/FooterClient.vue";
-import ToolbarRight from "./common/ToolbarRight.vue";
-import NotficationClient from "./common/NotficationClient.vue";
+  import NavbarClient from "./common/NavbarClient.vue";
+  import FooterClient from "./common/FooterClient.vue";
+  import ToolbarRight from "./common/ToolbarRight.vue";
+  import NotficationClient from "./common/NotficationClient.vue";
 
-import { useCookies } from "vue3-cookies";
-// import { commonFunction } from '../scripts/ulti'
+  import { useCookies } from "vue3-cookies";
+  import { commonFunction } from '../scripts/ulti'
 
-export default {
-  components: {
-    NavbarClient,
-    FooterClient,
-    ToolbarRight,
-    NotficationClient,
-  },
-  data() {
-    return {
-      orderCode: "",
-      receiverPhonenumber: "",
-      filterTime: "label",
-      filterTimeDS: "label",
-      classFilterTimeAbout: "d-none",
-      classFilterTimeAboutDS: "d-none",
-      countOrder: 3,
-    };
-  },
+  export default {
+    components: {
+      NavbarClient,
+      FooterClient,
+      ToolbarRight,
+      NotficationClient,
+    },
+    data() {
+      return {
+        orderCode: "",
+        receiverPhonenumber: "",
+        filterTime: "label",
+        filterTimeDS: "label",
+        classFilterTimeAbout: "d-none",
+        classFilterTimeAboutDS: "d-none",
+        countOrder: 3,
+      };
+    },
 
-  setup() {
-    const { cookies } = useCookies();
-    return {
-      cookies,
-    };
-  },
+    setup() {
+      const { cookies } = useCookies();
+      return {
+        cookies,
+      };
+    },
 
-  // <data, methods...>
+    // <data, methods...>
 
-  mounted() {
-    // let authenication_cookies = this.cookies.get("authenication_cookies");
-    // if(authenication_cookies == null){
-    //   commonFunction.redirect('/');
-    // } else {
-    //     commonFunction.redirect('/client/management');
-    // }
-  },
-  watch: {},
-  method: {},
-};
+    mounted() {
+      let authenication_cookies = this.cookies.get("authenication_cookies");
+      if (authenication_cookies == null) {
+        commonFunction.redirect('/');
+      }
+    },
+    watch: {},
+    method: {},
+  };
 </script>
 
 <style scoped>
-ul li {
-  list-style: none;
-}
+  ul li {
+    list-style: none;
+  }
 </style>

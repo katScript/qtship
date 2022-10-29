@@ -12,19 +12,24 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="!isShipper">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/management"><i class="fa-solid fa-chart-pie"></i> Tổng quan</a>
+                        <a class="nav-link" href="/client/management"><i class="fa-solid fa-chart-pie"></i> Tổng
+                            quan</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn hàng</a>
+                        <a class="nav-link" href="/client/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn
+                            hàng</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/stock-product"><i class="fa-solid fa-boxes-stacked"></i> QL kho & sản phẩm</a>
+                        <a class="nav-link" href="/client/stock-product"><i class="fa-solid fa-boxes-stacked"></i> QL
+                            kho & sản phẩm</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/management-cash"><i class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>
+                        <a class="nav-link" href="/client/management-cash"><i
+                                class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>
                     </li>
                     <li class="nav-item nav-item-qt nav-item-qt-button">
-                        <a class="nav-link" href="/client/orders/create"><i class="fa-solid fa-circle-plus"></i> Tạo đơn hàng</a>
+                        <a class="nav-link" href="/client/orders/create"><i class="fa-solid fa-circle-plus"></i> Tạo đơn
+                            hàng</a>
                     </li>
                 </ul>
             </div>
@@ -34,10 +39,13 @@
                         <a class="nav-link" href="/shipper/management"><i class="fa-solid fa-home"></i> Trang chủ</a>
                     </li>
                     <li class="nav-item nav-item-qt d-flex">
-                        <a class="nav-link" href="/shipper/account-info"><i class="fa-solid fa-user"></i> Shipper1</a><a class="nav-link mt-1" style="font-size: 12px; color: #4cd137;" disable><i class="fa-solid fa-circle" style="font-size: 8px"></i> Đang hoạt động</a>
+                        <a class="nav-link" href="/shipper/account-info"><i class="fa-solid fa-user"></i> {{usernameSession}}</a><a
+                            class="nav-link mt-1" style="font-size: 12px; color: #4cd137;" disable><i
+                                class="fa-solid fa-circle" style="font-size: 8px"></i> Đang hoạt động</a>
                     </li>
                     <li class="nav-item nav-item-qt d-flex">
-                        <a class="nav-link" href=""><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                        <a class="nav-link" href="#" v-on:click="signOut()"><i
+                                class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
                     </li>
                 </ul>
             </div>
@@ -46,9 +54,31 @@
 </template>
 
 <script>
+    import { useCookies } from "vue3-cookies";
+    import { commonFunction } from '../../scripts/ulti'
     export default {
+        setup() {
+            const { cookies } = useCookies();
+            return { cookies };
+        },
+        data() {
+            return {
+                usernameSession: ""
+            }
+        },
+        mounted() {
+            this.usernameSession = this.cookies.get("authenication_cookies");
+        },
         components: {
         },
-        props: ['isShipper']
+        props: ['isShipper'],
+        methods: {
+            signOut: function () {
+                this.cookies.remove("authenication_cookies");
+                this.cookies.remove("accesstoken_cookies");
+                this.cookies.remove("authenrole_cookies");
+                commonFunction.redirect("/");
+            },
+        },
     }
 </script>
