@@ -196,6 +196,7 @@
   import VueChartColumn from "./common/VueChartColumn.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
   import NotficationClient from "./common/NotficationClient.vue";
+  import axios from "axios";
 
   import { useCookies } from "vue3-cookies";
   import { commonFunction } from '../scripts/ulti'
@@ -213,6 +214,7 @@
       return {
         filterTime: "today",
         classFilterTimeAbout: "d-none",
+        customerInfo: null
       };
     },
 
@@ -225,9 +227,22 @@
 
     mounted() {
       let authenication_cookies = this.cookies.get("authenication_cookies");
+      let idrequest_cookies = this.cookies.get("idrequest_cookies");
+      let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
       if (authenication_cookies == null) {
         commonFunction.redirect('/');
       }
+
+      const config = {
+        headers: { Authorization: 'Bearer ' + accesstoken_cookies }
+      };
+      axios
+        .get(commonFunction.DOMAIN_URL + "v1/customer/detail/" + idrequest_cookies, config)
+        .then((response) => {
+          this.customerInfo = response.data.customer;
+          localStorage.setItem("id_customer_request", this.customerInfo.id);
+        }).catch((e) => { console.log(e) })
+
     },
     watch: {
       filterTime: {

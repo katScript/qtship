@@ -7,7 +7,7 @@
           <NotficationClient />
         </div>
         <div class="col-md-8">
-          <div class="stock-product-management">
+          <div class="warehouse-product-management">
             <div class="form-filter">
               <div class="row">
                 <div class="col-md-9">
@@ -17,7 +17,7 @@
                   </h4>
                 </div>
                 <div class="col-md-3 d-flex justify-content-end">
-                  <a href="/client/stock/create-product" class="btn btn-outline-success">
+                  <a href="/client/warehouse/create-product" class="btn btn-outline-success">
                     Tạo Sản phẩm mới
                   </a>
                 </div>
@@ -28,18 +28,21 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="">Tên kho:</label>
-                    <input type="text" class="form-control" placeholder="Tên kho/Tên cửa hàng" />
+                    <input type="text" class="form-control" v-model="formDataWarehouse.name"
+                      placeholder="Tên kho/Tên cửa hàng" required />
                   </div>
                   <div class="form-group">
                     <label for="">Địa chỉ:</label>
-                    <input type="text" class="form-control" placeholder="Địa chỉ cụ thể" />
+                    <input type="text" class="form-control" v-model="formDataWarehouse.address"
+                      placeholder="Địa chỉ cụ thể" required />
                   </div>
                   <div class="form-group">
                     <label for="">Contact:</label>
-                    <input type="text" class="form-control" placeholder="Số điện thoại,..." />
+                    <input type="text" class="form-control" v-model="formDataWarehouse.phone"
+                      placeholder="Số điện thoại,..." required />
                   </div>
                   <br />
-                  <button class="btn btn-success">Tạo kho mới</button>
+                  <button class="btn btn-success" v-on:click="createNewWarehouse">Tạo kho mới</button>
                 </div>
                 <div class="col-md-6">
                   <table class="table">
@@ -52,10 +55,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Kho Mỹ Đình</td>
-                        <td>Mỹ Đình, Hà Nội, Việt Nam</td>
-                        <td>0987654321</td>
+                      <tr v-for="(warehouse,index) in listwarehouseByCustomer" :key="index">
+                        <td>{{warehouse.name}}</td>
+                        <td>{{warehouse.address}}</td>
+                        <td>{{warehouse.phone}}</td>
                         <td>
                           <a href="" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Cập nhật"><i class="fa-solid fa-file-pen"></i></a>
@@ -83,9 +86,8 @@
                 </div>
                 <div class="col-md-2">
                   <select class="form-select" aria-label="Default select example">
-                    <option selected>- Kho -</option>
-                    <option value="1">Kho 1</option>
-                    <option value="2">Kho 2</option>
+                    <option v-for="(warehouse,index) in listwarehouseByCustomer" :key="index" :value="warehouse.id">
+                      {{warehouse.name}}</option>
                   </select>
                 </div>
                 <div class="col-md-2">
@@ -96,7 +98,7 @@
               </div>
             </div>
             <br />
-            <div class="stock-product-management-area">
+            <div class="warehouse-product-management-area">
               <div class="row">
                 <table class="table table-hover">
                   <thead>
@@ -152,6 +154,7 @@
   import { useCookies } from "vue3-cookies";
   import { commonFunction } from '../scripts/ulti'
   import { debounce } from "vue-debounce";
+  import axios from "axios";
 
   export default {
     components: {
@@ -168,7 +171,14 @@
         filterTimeDS: "label",
         classFilterTimeAbout: "d-none",
         classFilterTimeAboutDS: "d-none",
-        countOrder: 3,
+        listwarehouseByCustomer: [],
+        idRequest: 0,
+        formDataWarehouse: {
+          name: '',
+          address: '',
+          phone: ''
+        },
+        configRequestApi: {},
       };
     },
 
@@ -183,9 +193,23 @@
 
     mounted() {
       let authenication_cookies = this.cookies.get("authenication_cookies");
+      this.idRequest = localStorage.getItem("id_customer_request");
+      let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
       if (authenication_cookies == null) {
         commonFunction.redirect('/');
       }
+
+      this.configRequestApi = {
+        headers: { Authorization: 'Bearer ' + accesstoken_cookies }
+      };
+      axios
+        .get(commonFunction.DOMAIN_URL + "v1/warehouse/all/customer/" + this.idRequest, this.configRequestApi)
+        .then((response) => {
+          let respronseData = response.data;
+          respronseData.forEach(element => {
+            this.listwarehouseByCustomer.push(element);
+          });
+        }).catch((e) => { console.log(e) })
     },
     watch: {
       filterTime: {
@@ -203,14 +227,28 @@
         },
       },
     },
-    method: {
-      resetFormSearch: debounce(function () {
-        this.filterTime = "label";
-        this.filterTimeDS = "label";
-        this.classFilterTimeAbout = "d-none";
-        this.classFilterTimeAboutDS = "d-none";
-      }, 1000),
-    },
+    methods: {
+      createNewWarehouse: function () {
+        axios
+          .post(commonFunction.DOMAIN_URL + "v1/warehouse/save/" + this.idRequest,
+            {
+              customerId: this.idRequest,
+              name: this.formDataWarehouse.name,
+              address: this.formDataWarehouse.address,
+              phone: this.formDataWarehouse.phone
+            }, this.configRequestApi)
+          .then((response) => {
+            if (response.status == 200) {
+              alert("Đăng kí thành công - "+ response.data.message)
+            } else {
+              alert("Fail! Đăng kí không thành công! Vui lòng thử lại!");
+            }
+          }).catch((e) => { 
+            alert('ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!')
+            console.log(e) ;
+          })
+      },
+    }
   };
 </script>
 

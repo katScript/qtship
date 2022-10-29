@@ -144,17 +144,16 @@
     },
     data() {
       return {
-        usernameSession:""
+        usernameSession: ""
       };
     },
     mounted() {
-      this.usernameSession =  this.cookies.get("authenication_cookies");
+      this.usernameSession = this.cookies.get("authenication_cookies");
     },
     methods: {
       signOut: function () {
-        this.cookies.remove("authenication_cookies");
-        this.cookies.remove("accesstoken_cookies");
-        this.cookies.remove("authenrole_cookies");
+        commonFunction.removeAllCookiesClient(this.cookies);
+        localStorage.clear();
         commonFunction.redirect("/");
       },
     },

@@ -35,7 +35,14 @@ const commonFunction = {
         return valid;
     },
     DOMAIN_URL: 'https://api.dcodetest.com/',
-    EXPIRED_TIME_COOKIES: "2min"
+    EXPIRED_TIME_COOKIES: "1d",
+    
+    removeAllCookiesClient: function(cookies){
+        cookies.remove("authenication_cookies");
+        cookies.remove("accesstoken_cookies");
+        cookies.remove("authenrole_cookies");
+        cookies.remove("idrequest_cookies");
+    }
 }
 
 export { commonFunction };

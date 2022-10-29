@@ -1,5 +1,5 @@
 export default {
-    changeTypeFlagLogin({ commit }, flag) {
-        commit('setFlagLogin', flag);
+    changeTypeFlagLogin({ context }, flag) {
+        context.commit('setFlagLogin', flag);
     }
 }
