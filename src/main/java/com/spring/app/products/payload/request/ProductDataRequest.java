@@ -1,5 +1,7 @@
 package com.spring.app.products.payload.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProductDataRequest {
     private Long id;
     private Long customerId;
@@ -10,6 +12,7 @@ public class ProductDataRequest {
     private Double basePrice;
     private Double publicPrice;
     private String description;
+    private MultipartFile file;
 
     public Long getId() {
         return id;
@@ -81,5 +84,13 @@ public class ProductDataRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }
