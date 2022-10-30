@@ -1,0 +1,27 @@
+label {
+  font-weight: 600;
+}
+
+.pop-up-notify {
+  width: 99vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.22);
+  position: fixed;
+  z-index: 10;
+  margin: auto;
+}
+.pop-up-notify table, .pop-up-notify tr, .pop-up-notify td {
+  width: 100%;
+}
+.pop-up-notify table .content-notify, .pop-up-notify tr .content-notify, .pop-up-notify td .content-notify {
+  height: 300px;
+  width: 400px;
+  background-color: white;
+  margin: auto;
+  vertical-align: middle;
+}
+.pop-up-notify table i, .pop-up-notify tr i, .pop-up-notify td i {
+  font-size: 20px;
+}
+
+/*# sourceMappingURL=global.css.map */
