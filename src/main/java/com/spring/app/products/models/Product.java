@@ -26,6 +26,8 @@ public class Product {
     private Double publicPrice;
     @Column(name = "description")
     private String description;
+    @Column(name = "image")
+    private String image;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
@@ -44,6 +46,7 @@ public class Product {
         Double basePrice,
         Double publicPrice,
         String description,
+        String image,
         Customer customer
     ) {
         this.sku = sku;
@@ -53,6 +56,7 @@ public class Product {
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;
         this.description = description;
+        this.image = image;
         this.customer = customer;
     }
 
@@ -138,5 +142,13 @@ public class Product {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

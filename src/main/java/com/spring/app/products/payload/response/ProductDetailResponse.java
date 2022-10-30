@@ -11,6 +11,7 @@ public class ProductDetailResponse {
     private Double basePrice;
     private Double publicPrice;
     private String description;
+    private String image;
 
     public ProductDetailResponse() {}
 
@@ -116,5 +117,13 @@ public class ProductDetailResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
