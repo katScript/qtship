@@ -91,10 +91,16 @@
                 let authenCookie = resData.username;
                 let authenRole = resData.roles;
                 let tokenCookie = resData.accessToken;
+                let idRequest = resData.id;
 
                 this.cookies.set(
                   "accesstoken_cookies",
                   tokenCookie,
+                  commonFunction.EXPIRED_TIME_COOKIES
+                );
+                this.cookies.set(
+                  "idrequest_cookies",
+                  idRequest,
                   commonFunction.EXPIRED_TIME_COOKIES
                 );
                 this.cookies.set(

@@ -20,7 +20,7 @@
                             hàng</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/stock-product"><i class="fa-solid fa-boxes-stacked"></i> QL
+                        <a class="nav-link" href="/client/warehouse-product"><i class="fa-solid fa-boxes-stacked"></i> QL
                             kho & sản phẩm</a>
                     </li>
                     <li class="nav-item nav-item-qt">
@@ -74,9 +74,8 @@
         props: ['isShipper'],
         methods: {
             signOut: function () {
-                this.cookies.remove("authenication_cookies");
-                this.cookies.remove("accesstoken_cookies");
-                this.cookies.remove("authenrole_cookies");
+                commonFunction.removeAllCookiesClient(this.cookies);
+                localStorage.clear();
                 commonFunction.redirect("/");
             },
         },

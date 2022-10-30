@@ -1,15 +1,32 @@
 import { createStore } from 'vuex'
-import state from './states'
-import getters from './getters'
-import mutations from './mutations'
-import actions from './actions'
 
 // Create a new store instance.
 const store = createStore({
-    state,
-    getters,
-    mutations,
-    actions
+    // state,
+    // getters,
+    // mutations,
+    // actions
+
+    state(){
+        return {
+            product: {
+                idProductUpdate: 0
+            }
+        }
+    },
+    getters: {
+        getProductIdUpdate: (state) => state.product.idProductUpdate
+    },
+    mutations: {
+        SET_PRODUCT_ID_UPDATE(state, id) {
+            state.product.idProductUpdate = id;
+        }
+    },
+    actions: {
+        setProductIdForUpdate({commit}, id) {
+            commit("SET_PRODUCT_ID_UPDATE", id)
+        }
+    }
 })
 
 

@@ -3,6 +3,7 @@ import md5 from "md5";
 
 const commonFunction = {
     redirect(url) { window.location.href = url; },
+    reloadPage() {location.reload();},
     apiProvincesURL: 'https://vapi.vnappmob.com/api/province/',
     apiBanksURL: 'https://api.vietqr.io/v2/banks',
     encodePassword(pass) { return md5(sha256(pass)); },
@@ -35,7 +36,17 @@ const commonFunction = {
         return valid;
     },
     DOMAIN_URL: 'https://api.dcodetest.com/',
-    EXPIRED_TIME_COOKIES: "2min"
+    EXPIRED_TIME_COOKIES: "1d",
+    removeAllCookiesClient: function(cookies){
+        cookies.remove("authenication_cookies");
+        cookies.remove("accesstoken_cookies");
+        cookies.remove("authenrole_cookies");
+        cookies.remove("idrequest_cookies");
+    },
+    typeNotifyDelete: 'DELETE',
+    typeNotifyCreate: 'CREATE',
+    typeNotifySuccess: 'SUCCESS',
+    typeNotifyFail: 'FAIL',
 }
 
 export { commonFunction };
