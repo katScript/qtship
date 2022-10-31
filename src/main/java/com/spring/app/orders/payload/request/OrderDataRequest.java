@@ -1,7 +1,10 @@
 package com.spring.app.orders.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class OrderDataRequest {
@@ -18,6 +21,8 @@ public class OrderDataRequest {
     private String coupon;
     private Long warehouseId;
     private String shippingType;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime shippingDate;
     private List<OrderItemRequest> orderItem;
 
 
@@ -133,4 +138,11 @@ public class OrderDataRequest {
         this.orderItem = orderItem;
     }
 
+    public LocalDateTime getShippingDate() {
+        return shippingDate;
+    }
+
+    public void setShippingDate(LocalDateTime shippingDate) {
+        this.shippingDate = shippingDate;
+    }
 }
