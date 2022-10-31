@@ -23,9 +23,6 @@ public class Order {
     private Boolean notification;
     @Column(name = "subtotal")
     private Double subtotal;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="customer_id", referencedColumnName = "id")
-    private Customer customer;
     @Column(name = "sender_name")
     private String senderName;
     @Column(name = "sender_phone")
@@ -36,21 +33,24 @@ public class Order {
     private Boolean shippingFee;
     @Column(name = "shipping_type")
     private String shippingType;
+    @Column(name = "shipping_time")
+    private Date shippingTime;
     @Column(name = "coupon")
     private String coupon;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "status", referencedColumnName = "code")
-    private OrderStatus status;
-    @OneToMany(mappedBy = "order",
-            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OrderItem> orderItemSet = new HashSet<>();
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
-    private Warehouse warehouse;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
+    private String status;
+    @OneToMany(mappedBy = "order",
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItemSet = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    private Warehouse warehouse;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="customer_id", referencedColumnName = "id")
+    private Customer customer;
 
     public Order() {}
 
@@ -63,7 +63,8 @@ public class Order {
             Boolean notification,
             Boolean shippingFee,
             String coupon,
-            String shippingType
+            String shippingType,
+            Date shippingTime
     ) {
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -74,34 +75,7 @@ public class Order {
         this.shippingFee = shippingFee;
         this.coupon = coupon;
         this.shippingType = shippingType;
-    }
-
-    public Order(
-            Customer customer,
-            String senderName,
-            String senderPhone,
-            String senderAddress,
-            String note,
-            OrderStatus status,
-            String feedback,
-            Double subtotal,
-            Boolean notification,
-            Boolean shippingFee,
-            String coupon,
-            String shippingType
-    ) {
-        this.note = note;
-        this.feedback = feedback;
-        this.subtotal = subtotal;
-        this.notification = notification;
-        this.status = status;
-        this.customer = customer;
-        this.senderName = senderName;
-        this.senderPhone = senderPhone;
-        this.senderAddress = senderAddress;
-        this.shippingFee = shippingFee;
-        this.coupon = coupon;
-        this.shippingType = shippingType;
+        this.shippingTime = shippingTime;
     }
 
     public Long getId() {
@@ -171,11 +145,11 @@ public class Order {
         return this;
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public Order setStatus(OrderStatus status) {
+    public Order setStatus(String status) {
         this.status = status;
         return this;
     }
@@ -248,6 +222,15 @@ public class Order {
 
     public Order setShippingType(String shippingType) {
         this.shippingType = shippingType;
+        return this;
+    }
+
+    public Date getShippingTime() {
+        return shippingTime;
+    }
+
+    public Order setShippingTime(Date shippingTime) {
+        this.shippingTime = shippingTime;
         return this;
     }
 }

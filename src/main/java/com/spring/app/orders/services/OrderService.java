@@ -18,10 +18,9 @@ import com.spring.app.products.payload.request.PackageDataRequest;
 import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.request.ShippingAddressRequest;
-import com.spring.app.warehouse.models.Warehouse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
-import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
 
+import java.time.ZoneId;
 import java.util.*;
 
 public class OrderService {
@@ -74,10 +73,8 @@ public class OrderService {
                 .setSenderPhone(order.getSenderName())
                 .setSenderPhone(order.getSenderPhone())
                 .setShippingFee(order.getShippingFee())
-                .setShippingType(order.getShippingType())
-                .setStatus(this.orderStatusRepository.findByCode(order.getStatus())
-                        .orElseThrow(() -> new RuntimeException("Order status not found!"))
-                );
+                .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
+                .setShippingType(order.getShippingType());
 
         Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
         Double subtotal = 0.0;
@@ -87,6 +84,10 @@ public class OrderService {
         }
 
         _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
+
+        OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
+
+        _order.setStatus(status.getCode());
 
         this.orderRepository.save(_order);
     }
@@ -114,11 +115,10 @@ public class OrderService {
                 .setSenderAddress(order.getSenderAddress())
                 .setShippingFee(order.getShippingFee())
                 .setShippingType(order.getShippingType())
+                .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
                 .setWarehouse(
                         this.warehouseRepository.findById(order.getWarehouseId())
                                 .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
-                ).setStatus(this.orderStatusRepository.findByCode(order.getStatus())
-                        .orElseThrow(() -> new RuntimeException("Order status not found!"))
                 );
 
         Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
@@ -129,6 +129,9 @@ public class OrderService {
         }
 
         _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
+
+        OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
+        _order.setStatus(status.getCode());
 
         this.orderRepository.save(_order);
     }
