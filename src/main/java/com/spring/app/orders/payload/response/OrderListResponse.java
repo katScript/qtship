@@ -1,9 +1,6 @@
 package com.spring.app.orders.payload.response;
 
-import com.spring.app.orders.payload.OrderItem;
-
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderListResponse {
@@ -11,7 +8,7 @@ public class OrderListResponse {
     private String customerId;
     private String status;
     private String feedback;
-    private String node;
+    private String note;
     private Double subtotal;
     private String senderName;
     private String senderPhone;
@@ -19,8 +16,10 @@ public class OrderListResponse {
     private Boolean notification;
     private Boolean shippingFee;
     private String shippingType;
-    private Date shippingTime;
+    private String shippingTime;
     private String coupon;
+    private List<OrderItemResponse> orderItemResponse;
+
     public OrderListResponse() {}
 
     public OrderListResponse(
@@ -36,14 +35,15 @@ public class OrderListResponse {
             Boolean notification,
             Boolean shippingFee,
             String shippingType,
-            Date shippingTime,
-            String coupon
+            String shippingTime,
+            String coupon,
+            List<OrderItemResponse> orderItemResponse
     ) {
         this.id = id;
         this.customerId = customerId;
         this.status = status;
         this.feedback = feedback;
-        this.node = node;
+        this.note = note;
         this.subtotal = subtotal;
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -53,6 +53,7 @@ public class OrderListResponse {
         this.shippingType = shippingType;
         this.shippingTime = shippingTime;
         this.coupon = coupon;
+        this.orderItemResponse = orderItemResponse;
     }
 
     public String getSenderAddress() {
@@ -80,11 +81,11 @@ public class OrderListResponse {
     }
 
     public String getNode() {
-        return node;
+        return note;
     }
 
     public void setNode(String node) {
-        this.node = node;
+        this.note = node;
     }
 
     public String getFeedback() {
@@ -135,11 +136,11 @@ public class OrderListResponse {
         this.shippingType = shippingType;
     }
 
-    public Date getShippingTime() {
+    public String getShippingTime() {
         return shippingTime;
     }
 
-    public void setShippingTime(Date shippingTime) {
+    public void setShippingTime(String shippingTime) {
         this.shippingTime = shippingTime;
     }
 
@@ -165,5 +166,13 @@ public class OrderListResponse {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<OrderItemResponse> getOrderItemResponse() {
+        return orderItemResponse;
+    }
+
+    public void setOrderItemResponse(List<OrderItemResponse> orderItemResponse) {
+        this.orderItemResponse = orderItemResponse;
     }
 }
