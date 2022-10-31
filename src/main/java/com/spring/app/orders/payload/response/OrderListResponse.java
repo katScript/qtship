@@ -1,6 +1,5 @@
 package com.spring.app.orders.payload.response;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderListResponse {
@@ -8,7 +7,7 @@ public class OrderListResponse {
     private String customerId;
     private String status;
     private String feedback;
-    private String node;
+    private String note;
     private Double subtotal;
     private String senderName;
     private String senderPhone;
@@ -27,7 +26,7 @@ public class OrderListResponse {
             String customerId,
             String status,
             String feedback,
-            String node,
+            String note,
             Double subtotal,
             String senderName,
             String senderPhone,
@@ -43,7 +42,7 @@ public class OrderListResponse {
         this.customerId = customerId;
         this.status = status;
         this.feedback = feedback;
-        this.node = node;
+        this.note = note;
         this.subtotal = subtotal;
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -80,12 +79,12 @@ public class OrderListResponse {
         this.senderName = senderName;
     }
 
-    public String getNode() {
-        return node;
+    public String getNote() {
+        return note;
     }
 
-    public void setNode(String node) {
-        this.node = node;
+    public void setNote(String node) {
+        this.note = node;
     }
 
     public String getFeedback() {
