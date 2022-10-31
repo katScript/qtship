@@ -8,7 +8,7 @@ public class OrderListResponse {
     private String customerId;
     private String status;
     private String feedback;
-    private String node;
+    private String note;
     private Double subtotal;
     private String senderName;
     private String senderPhone;
@@ -43,7 +43,7 @@ public class OrderListResponse {
         this.customerId = customerId;
         this.status = status;
         this.feedback = feedback;
-        this.node = node;
+        this.note = note;
         this.subtotal = subtotal;
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -81,11 +81,11 @@ public class OrderListResponse {
     }
 
     public String getNode() {
-        return node;
+        return note;
     }
 
     public void setNode(String node) {
-        this.node = node;
+        this.note = node;
     }
 
     public String getFeedback() {
