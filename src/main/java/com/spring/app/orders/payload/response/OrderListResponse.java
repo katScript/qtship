@@ -1,9 +1,6 @@
 package com.spring.app.orders.payload.response;
 
-import com.spring.app.orders.payload.OrderItem;
-
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderListResponse {
@@ -19,8 +16,10 @@ public class OrderListResponse {
     private Boolean notification;
     private Boolean shippingFee;
     private String shippingType;
-    private Date shippingTime;
+    private String shippingTime;
     private String coupon;
+    private List<OrderItemResponse> orderItemResponse;
+
     public OrderListResponse() {}
 
     public OrderListResponse(
@@ -36,8 +35,9 @@ public class OrderListResponse {
             Boolean notification,
             Boolean shippingFee,
             String shippingType,
-            Date shippingTime,
-            String coupon
+            String shippingTime,
+            String coupon,
+            List<OrderItemResponse> orderItemResponse
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -53,6 +53,7 @@ public class OrderListResponse {
         this.shippingType = shippingType;
         this.shippingTime = shippingTime;
         this.coupon = coupon;
+        this.orderItemResponse = orderItemResponse;
     }
 
     public String getSenderAddress() {
@@ -135,11 +136,11 @@ public class OrderListResponse {
         this.shippingType = shippingType;
     }
 
-    public Date getShippingTime() {
+    public String getShippingTime() {
         return shippingTime;
     }
 
-    public void setShippingTime(Date shippingTime) {
+    public void setShippingTime(String shippingTime) {
         this.shippingTime = shippingTime;
     }
 
@@ -165,5 +166,13 @@ public class OrderListResponse {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<OrderItemResponse> getOrderItemResponse() {
+        return orderItemResponse;
+    }
+
+    public void setOrderItemResponse(List<OrderItemResponse> orderItemResponse) {
+        this.orderItemResponse = orderItemResponse;
     }
 }
