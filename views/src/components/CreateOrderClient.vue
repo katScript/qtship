@@ -21,14 +21,16 @@
                                     <div class="col-1"><i class="fa-solid fa-phone"></i></div>
                                     <div class="form-group col-11">
                                         <input type="text" class="form-control" id=""
-                                            placeholder="Số điện thoại người nhận" />
+                                            placeholder="Số điện thoại người nhận"
+                                            v-model="formDataOrder.orderItemResponse[0].shippingAddressResponse.phone" />
                                         <br />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-1"><i class="fa-solid fa-user"></i></div>
                                     <div class="form-group col-11">
-                                        <input type="text" class="form-control" id="" placeholder="Tên người nhận" />
+                                        <input type="text" class="form-control" id="" placeholder="Tên người nhận"
+                                            v-model="formDataOrder.orderItemResponse[0].shippingAddressResponse.receiverName" />
                                         <br />
                                     </div>
                                 </div>
@@ -47,15 +49,15 @@
                                     <div class="col-1"><i class="fa-solid fa-phone"></i></div>
                                     <div class="form-group col-11">
                                         <input type="text" class="form-control" id=""
-                                            placeholder="Số điện thoại người gửi" />
+                                            placeholder="Số điện thoại người gửi" v-model="formDataOrder.senderPhone" />
                                         <br />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-1"><i class="fa-solid fa-user"></i></div>
                                     <div class="form-group col-11">
-                                        <input type="text" class="form-control" id=""
-                                            placeholder="Thông tin người gửi" />
+                                        <input type="text" class="form-control" id="" placeholder="Thông tin người gửi"
+                                            v-model="formDataOrder.senderName" />
                                         <br />
                                     </div>
                                 </div>
@@ -64,7 +66,8 @@
                                         <i class="fa-solid fa-location-dot"></i>
                                     </div>
                                     <div class="col-11">
-                                        <input type="text" class="form-control" id="" placeholder="Địa chỉ người gửi" />
+                                        <input type="text" class="form-control" id="" placeholder="Địa chỉ người gửi"
+                                            v-model="formDataOrder.senderAddress" />
                                         <br />
                                     </div>
                                 </div>
@@ -106,10 +109,10 @@
                                             <label for="" class="label-control">Địa điểm lấy hàng</label>
                                         </div>
                                         <div class="col-8">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option value="1">Stock 1</option>
-                                                <option value="2">Stock 2</option>
-                                                <option value="3">Stock 3</option>
+                                            <select class="form-select" aria-label="Default select example"
+                                                v-model="formDataOrder.warehouseId">
+                                                <option :value="w.id" v-for="(w, index) in listWarehouseByCustomer"
+                                                    :key="index">{{w.name}}</option>
                                             </select>
                                             <br />
                                         </div>
@@ -123,11 +126,11 @@
                                             <div class="row">
                                                 <div class="col-8">
                                                     <input type="date" id="datetimepicker-take-order"
-                                                        class="form-control" name="" />
+                                                        class="form-control" name="" v-model="shippingDateDDMMYYYY" />
                                                 </div>
                                                 <div class="col-4">
                                                     <input type="time" id="datetimepicker-take-order"
-                                                        class="form-control" name="" />
+                                                        class="form-control" name="" v-model="shippingDateHHMMSS" />
                                                 </div>
                                             </div>
                                             <br />
@@ -145,8 +148,7 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="list-product-in-order" v-for="index in productSelectedFor.length"
-                                    :key="index">
+                                <div class="list-product-in-order" v-for="(ps,index) in productSelected" :key="index">
                                     <div class="row">
                                         <div class="col-11">
                                             <div class="row">
@@ -155,22 +157,28 @@
                                                 <div class="col-10">
                                                     <div class="row">
                                                         <div class="col-10">
-                                                            <v-select v-model="productSelected[index]"
-                                                                :options="listProducts" style="width: 104%;"
-                                                                placeholder="Chọn sản phẩm" class="">
-                                                            </v-select>
+                                                            <select class="form-select"
+                                                                aria-label="Default select example"
+                                                                v-model="productSelected[index]">
+                                                                <!-- index 0 is default -->
+                                                                <option :value="p"
+                                                                    v-for="(p, index) in listProductByCustomer"
+                                                                    :key="index">{{p.name}}</option>
+                                                            </select>
                                                         </div>
                                                         <div class="col-2">
                                                             <input type="number" class="form-control mb-1"
-                                                                placeholder="SL" value="">
+                                                                placeholder="SL">
                                                         </div>
                                                         <div class="col-6">
                                                             <input type="text" class="form-control"
-                                                                placeholder="Trọng lượng (kg)" value="">
+                                                                v-model="productSelected[index].weight"
+                                                                placeholder="Trọng lượng (kg)">
                                                         </div>
                                                         <div class="col-6">
                                                             <input type="text" class="form-control"
-                                                                placeholder="Giá bán (VNĐ)" value="">
+                                                                v-model="productSelected[index].publicPrice"
+                                                                placeholder="Giá bán (VNĐ)">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -178,10 +186,11 @@
                                         </div>
 
                                         <div class="col-1">
-                                            <button class="btn btn-outline-success" v-on:click="addItemProductList()"><i
+                                            <button class="btn btn-outline-success"
+                                                v-on:click="addItemProductList(index)"><i
                                                     class="fa-solid fa-plus plus-order-number"></i></button>
                                             <button class="btn btn-outline-danger"
-                                                :class="numberProduct > 1 ? 'show' : 'hide'"
+                                                :class="productSelected.length > 1 ? 'show' : 'hide'"
                                                 v-on:click="removeItemProductList(productSelected[index])"><i
                                                     class="fa-solid fa-minus minus-order-number"></i></button>
                                         </div>
@@ -191,11 +200,14 @@
 
                                 <div class="row">
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" placeholder="Trọng lượng đơn hàng">
+                                        <input type="text" class="form-control" placeholder="Trọng lượng đơn hàng"
+                                            v-model="formDataOrder.shippingFee">
                                         <br>
-                                        <input type="text" class="form-control" placeholder="Tiền thu hộ">
+                                        <input type="text" class="form-control" placeholder="Tiền thu hộ"
+                                            v-model="formDataOrder.subtotal">
                                         <br>
-                                        <input type="text" class="form-control" placeholder="Giá trị hàng">
+                                        <input type="text" class="form-control" placeholder="Giá trị hàng"
+                                            v-model="formDataOrder.subtotal">
                                         <br>
                                     </div>
                                     <div class="col-sm-3">
@@ -206,7 +218,8 @@
                                         <br>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-select" aria-label="Default select example">
+                                        <select class="form-select" aria-label="Default select example"
+                                            v-model="formDataOrder.shippingFee">
                                             <option value="1">Shop trả ship</option>
                                             <option value="2">Người nhận trả ship</option>
                                         </select>
@@ -216,7 +229,7 @@
                                         <div class="form-group">
                                             <label for="">Ghi chú đơn hàng</label>
                                             <textarea type="" class="form-control" id="" aria-describedby="emailHelp"
-                                                placeholder="Nhập ghi chú của đơn hàng" />
+                                                v-model="formDataOrder.note" placeholder="Nhập ghi chú của đơn hàng" />
                                             <br>
                                         </div>
                                     </div>
@@ -227,8 +240,10 @@
                                             </div>
                                             <div class="col-4">
                                                 <button class="btn btn-danger w-100"
-                                                    v-on:click="isDisplayListVourcer = !isDisplayListVourcer">{{!isDisplayListVourcer
-                                                    ? 'Thêm mã giảm giá' : 'Đóng'}}</button>
+                                                    v-on:click="isDisplayListVourcer = !isDisplayListVourcer">{{
+                                                    !isDisplayListVourcer
+                                                    ? 'Thêm mã giảm giá' : 'Đóng'
+                                                    }}</button>
                                             </div>
                                         </div>
 
@@ -319,6 +334,7 @@
 
     import { commonFunction } from "../scripts/ulti";
     import { useCookies } from "vue3-cookies";
+    import axios from "axios";
     // import $ from "jquery"
 
     export default {
@@ -334,9 +350,10 @@
                 isAccepted: false,
                 isDisplayListVourcer: false,
                 numberProduct: 3,
-                productSelectedFor: [{ code: '', label: '' }],
-                productSelected: [],
-                listProducts: [{ code: 'SP1', label: 'SP1' }, { code: 'SP2', label: 'SP2' }],
+                productSelected: [
+                    { sku: "default", weight: "", publicPrice: "" }
+                ],
+                listProducts: [],
                 customerAddress: {
                     province: "",
                     provinceId: "",
@@ -355,6 +372,46 @@
                     },
                 },
                 isSelectedTypeLH: "",
+                configRequestApi: {},
+                listWarehouseByCustomer: [],
+                listProductByCustomer: [],
+                shippingDateDDMMYYYY: "",
+                shippingDateHHMMSS: "",
+                formDataOrder: {
+                    id: "",
+                    customerId: "",
+                    senderName: "",
+                    senderPhone: "",
+                    senderAddress: "",
+                    note: "",
+                    status: "",
+                    feedback: "",
+                    notification: "",
+                    shippingFee: "",
+                    coupon: "",
+                    warehouseId: "",
+                    shippingType: "",
+                    shippingTime: "",
+                    subtotal: "",
+                    orderItemResponse: [
+                        {
+                            price: "",
+                            shippingAddressResponse: {
+                                name: "",
+                                phone: "",
+                                province: "",
+                                district: "",
+                                ward: "",
+                                street: "",
+                                provinceId: "",
+                                districtId: "",
+                                wardId: ""
+                            },
+                            products: [
+                            ]
+                        }
+                    ]
+                }
             };
         },
 
@@ -369,11 +426,52 @@
 
         mounted() {
             let authenication_cookies = this.cookies.get("authenication_cookies");
+            this.idRequest = localStorage.getItem("id_customer_request");
+            let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
             if (authenication_cookies == null) {
                 commonFunction.redirect('/');
             }
+
+            this.configRequestApi = {
+                headers: { Authorization: 'Bearer ' + accesstoken_cookies }
+            };
+
+            //warehouse
+            axios
+                .get(commonFunction.DOMAIN_URL + "v1/warehouse/all/customer/" + this.idRequest, this.configRequestApi)
+                .then((response) => {
+                    let respronseData = response.data;
+                    this.listWarehouseByCustomer = respronseData;
+                }).catch((e) => { console.log(e) })
+
+            //customer detail
+            axios
+                .get(commonFunction.DOMAIN_URL + "v1/customer/detail/" + this.idRequest, this.configRequestApi)
+                .then((response) => {
+                    let respronseData = response.data;
+                    this.formDataOrder.senderName = respronseData.customer.companyName + " - " + respronseData.customer.fullName;
+                    this.formDataOrder.senderPhone = respronseData.customer.phone;
+                    this.formDataOrder.senderAddress = respronseData.customer.addressSet[0].street + ", " + respronseData.customer.addressSet[0].ward + ", " + respronseData.customer.addressSet[0].district + ", " + respronseData.customer.addressSet[0].province;
+                }).catch((e) => { console.log(e) })
+
+            //product
+            axios
+                .get(commonFunction.DOMAIN_URL + "v1/product/customer/" + this.idRequest, this.configRequestApi)
+                .then((response) => {
+                    let respronseData = response.data;
+                    this.listProductByCustomer = respronseData;
+                }).catch((e) => { console.log(e) })
         },
-        watch: {},
+        updated() {
+            // this.formDataOrder.priceTotal = this.productSelected.reduce(function (sum, p) {
+            //     return sum + p.publicPrice;
+            // }, 0);
+            // this.formDataOrder.weightTotal = this.productSelected.reduce(function (sum, p) {
+            //     return sum + p.weight;
+            // }, 0);
+        },
+        watch: {
+        },
         methods: {
             updateCustomerAddress(data, type) {
                 switch (type) {
@@ -395,6 +493,15 @@
                     default:
                         break;
                 }
+
+                //mapping data to formData
+                this.formDataOrder.orderItemResponse[0].province = this.customerAddress.province;
+                this.formDataOrder.orderItemResponse[0].district = this.customerAddress.district;
+                this.formDataOrder.orderItemResponse[0].ward = this.customerAddress.ward;
+                this.formDataOrder.orderItemResponse[0].street = this.customerAddress.street;
+                this.formDataOrder.orderItemResponse[0].provinceId = this.customerAddress.provinceId;
+                this.formDataOrder.orderItemResponse[0].districtId = this.customerAddress.districtId;
+                this.formDataOrder.orderItemResponse[0].wardId = this.customerAddress.wardId;
             },
             validationForm() {
                 if (this.customerAddress.provinceId == "") {
@@ -418,13 +525,17 @@
                         "Vui lòng điền địa chỉ chi tiết!";
                 }
             },
-            addItemProductList() {
-                let product = { code: '', label: '' };
-                this.productSelectedFor.push(product);
+            addItemProductList(index) {
+                console.log(index);
+
+                if (this.productSelected[index].sku != "default") {
+                    this.productSelected.push({ sku: "default", weight: "", publicPrice: "" });
+                }
             },
             removeItemProductList(product) {
-                this.productSelected = this.productSelected.filter(p => p.code !== product.code);
-                this.productSelectedFor.length -= 1;
+                if (product) {
+                    this.productSelected = this.productSelected.filter(p => p.sku !== product.sku);
+                }
             }
         },
     };
