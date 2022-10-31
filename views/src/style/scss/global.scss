@@ -1,0 +1,28 @@
+// sass src/style/scss/global.scss src/style/css/global.css
+label {
+    font-weight: 600;
+}
+
+.pop-up-notify{
+    width: 99vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.220);
+    position: fixed;
+    z-index: 10;
+    margin: auto;
+    table, tr, td{
+        width: 100%;
+        .content-notify{
+            height: 300px;
+            width: 400px;
+            background-color: white;
+            margin: auto;
+            vertical-align: middle;
+        }
+
+        i{
+            font-size: 20px;
+        }
+    }
+
+}
