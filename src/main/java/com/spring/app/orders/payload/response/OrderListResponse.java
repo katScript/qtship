@@ -3,6 +3,7 @@ package com.spring.app.orders.payload.response;
 import com.spring.app.orders.payload.OrderItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OrderListResponse {
@@ -15,42 +16,43 @@ public class OrderListResponse {
     private String senderName;
     private String senderPhone;
     private String senderAddress;
-    private List<OrderItem> orderItem;
-
+    private Boolean notification;
+    private Boolean shippingFee;
+    private String shippingType;
+    private Date shippingTime;
+    private String coupon;
     public OrderListResponse() {}
 
     public OrderListResponse(
             String id,
-            String status,
             String customerId,
-            String node,
+            String status,
             String feedback,
+            String node,
             Double subtotal,
             String senderName,
             String senderPhone,
-            String senderAddress
+            String senderAddress,
+            Boolean notification,
+            Boolean shippingFee,
+            String shippingType,
+            Date shippingTime,
+            String coupon
     ) {
         this.id = id;
-        this.status = status;
         this.customerId = customerId;
-        this.node = node;
+        this.status = status;
         this.feedback = feedback;
+        this.node = node;
         this.subtotal = subtotal;
         this.senderName = senderName;
         this.senderPhone = senderPhone;
         this.senderAddress = senderAddress;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
+        this.notification = notification;
+        this.shippingFee = shippingFee;
+        this.shippingType = shippingType;
+        this.shippingTime = shippingTime;
+        this.coupon = coupon;
     }
 
     public String getSenderAddress() {
@@ -77,10 +79,6 @@ public class OrderListResponse {
         this.senderName = senderName;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
     public String getNode() {
         return node;
     }
@@ -97,22 +95,6 @@ public class OrderListResponse {
         this.feedback = feedback;
     }
 
-    public List<OrderItem> getOrderItem() {
-        return orderItem;
-    }
-
-    public void setOrderItem(List<OrderItem> orderItem) {
-        this.orderItem = orderItem;
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        if (this.orderItem == null) {
-            this.orderItem = new ArrayList<>();
-        }
-
-        this.orderItem.add(orderItem);
-    }
-
     public String getStatus() {
         return status;
     }
@@ -127,5 +109,61 @@ public class OrderListResponse {
 
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public Boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Boolean notification) {
+        this.notification = notification;
+    }
+
+    public Boolean getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(Boolean shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
+    public String getShippingType() {
+        return shippingType;
+    }
+
+    public void setShippingType(String shippingType) {
+        this.shippingType = shippingType;
+    }
+
+    public Date getShippingTime() {
+        return shippingTime;
+    }
+
+    public void setShippingTime(Date shippingTime) {
+        this.shippingTime = shippingTime;
+    }
+
+    public String getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(String coupon) {
+        this.coupon = coupon;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
