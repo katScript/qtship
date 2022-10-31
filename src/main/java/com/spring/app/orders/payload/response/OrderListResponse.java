@@ -27,7 +27,7 @@ public class OrderListResponse {
             String customerId,
             String status,
             String feedback,
-            String node,
+            String note,
             Double subtotal,
             String senderName,
             String senderPhone,
