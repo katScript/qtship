@@ -1,6 +1,5 @@
 package com.spring.app.orders.payload.response;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderListResponse {
@@ -80,11 +79,11 @@ public class OrderListResponse {
         this.senderName = senderName;
     }
 
-    public String getNode() {
+    public String getNote() {
         return note;
     }
 
-    public void setNode(String node) {
+    public void setNote(String node) {
         this.note = node;
     }
 
