@@ -76,7 +76,8 @@ const commonFunction = {
         if(id){
             $(id).prop( "disabled", true )
         }
-    }
+    },
+    currentURL: function(){ return location.href;}
 }
 
 export { commonFunction };
