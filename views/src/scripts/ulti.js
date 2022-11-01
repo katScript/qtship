@@ -1,18 +1,19 @@
 import { sha256 } from "js-sha256";
 import md5 from "md5";
+import $ from "jquery"
 
 const commonFunction = {
-    redirect(url) { window.location.href = url; },
-    reloadPage() {location.reload();},
+    redirect: function(url) { window.location.href = url; },
+    reloadPage: function() {location.reload();},
     apiProvincesURL: 'https://vapi.vnappmob.com/api/province/',
     apiBanksURL: 'https://api.vietqr.io/v2/banks',
-    encodePassword(pass) { return md5(sha256(pass)); },
+    encodePassword: function(pass) { return md5(sha256(pass)); },
     regexPassword: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/,
     regexEmail: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
     regexPhone: /[0-9]{10}/g,
     typeEmail: 'EMAIL',
     typePassword: 'PASSWORD',
-    regexStringValidate(string, type) {
+    regexStringValidate: function(string, type) {
         let valid = false;
         switch (type) {
             case "EMAIL":
@@ -47,9 +48,35 @@ const commonFunction = {
     typeNotifyCreate: 'CREATE',
     typeNotifySuccess: 'SUCCESS',
     typeNotifyFail: 'FAIL',
-    typeShippingSTANDARD: "STANDARD",
-    typeShippingFAST: "FAST",
-    typeShippingSUPER: "SUPER"
+    typeShipping: [
+        "STANDARD",
+        "FAST",
+        "SUPER"
+    ],
+    typeReturnOrder: [
+        "SAVE_WARE_WAITING_CHECK",
+        "CAN_NOT_RETURN",
+        "DON_NOT_SAVE_RETURN_NOW"
+    ],
+    generateCodeToText(text) {
+        switch(text){
+            case "SAVE_WARE_WAITING_CHECK": return "Lưu kho chờ check";
+            case "CAN_NOT_RETURN": return "Không thể hoàn trả";
+            case "DON_NOT_SAVE_RETURN_NOW": return "Không lưu kho hoàn ngay";
+            case "STANDARD": return "Standard";
+            case "FAST": return "Fast";
+            case "SUPER": return "Super";
+            default: return "";
+        }
+    },
+    disableInput: function(className, id){
+        if(className) {
+            $(className).prop( "disabled", true )
+        }
+        if(id){
+            $(id).prop( "disabled", true )
+        }
+    }
 }
 
 export { commonFunction };
