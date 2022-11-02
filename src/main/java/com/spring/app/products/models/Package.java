@@ -21,7 +21,7 @@ public class Package {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="order_items_id", referencedColumnName = "id", nullable = false)
     private OrderItem orderItem;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 

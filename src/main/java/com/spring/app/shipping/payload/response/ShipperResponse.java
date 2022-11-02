@@ -12,6 +12,8 @@ public class ShipperResponse {
     private String currentAddress;
     private Date createdAt;
 
+    public ShipperResponse() {}
+
     public ShipperResponse(
             Long id,
             String shipperCode,
