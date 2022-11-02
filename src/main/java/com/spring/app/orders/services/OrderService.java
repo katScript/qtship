@@ -56,7 +56,20 @@ public class OrderService {
 
     }
 
-    public void placeGuestOrder(OrderDataRequest order) {
+    public void saveGuestOrder(OrderDataRequest order) {
+        this.orderRepository.save(this.processOrder(order));
+    }
+
+    public void saveCustomerOrder(OrderDataRequest order) {
+        Customer customer = this.customerRepository.findById(order.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("Customer not found!"));
+
+        Order _order = this.processOrder(order).setCustomer(customer);
+
+        this.orderRepository.save(_order);
+    }
+
+    public Order processOrder(OrderDataRequest order) {
         Order _order;
         if (order.getId() != null) {
             _order = this.orderRepository.findById(order.getId())
@@ -66,47 +79,6 @@ public class OrderService {
         }
 
         _order.setCoupon(order.getCoupon())
-                .setFeedback(order.getFeedback())
-                .setNote(order.getNote())
-                .setNotification(order.getNotification())
-                .setSenderName(order.getSenderName())
-                .setSenderPhone(order.getSenderName())
-                .setSenderPhone(order.getSenderPhone())
-                .setShippingFee(order.getShippingFee())
-                .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
-                .setShippingType(order.getShippingType())
-                .setReturnCode(order.getReturnCode());
-
-        Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
-        Double subtotal = 0.0;
-
-        for (OrderItem oi: orderItems) {
-            subtotal += oi.getPrice();
-        }
-
-        _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
-
-        OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
-
-        _order.setStatus(status.getCode());
-
-        this.orderRepository.save(_order);
-    }
-
-    public void placeCustomerOrder(OrderDataRequest order) {
-        Customer customer = this.customerRepository.findById(order.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found!"));
-
-        Order _order;
-        if (order.getId() != null) {
-            _order = this.orderRepository.findById(order.getId())
-                    .orElseThrow(() -> new RuntimeException("Order not found!"));
-        } else {
-            _order = new Order();
-        }
-
-        _order.setCustomer(customer)
-                .setCoupon(order.getCoupon())
                 .setFeedback(order.getFeedback())
                 .setNote(order.getNote())
                 .setNotification(order.getNotification())
@@ -123,7 +95,7 @@ public class OrderService {
                                 .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
                 );
 
-        Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
+        Set<OrderItem> orderItems = this.processOrderItem(order.getOrderItem(), _order);
         Double subtotal = 0.0;
 
         for (OrderItem oi: orderItems) {
@@ -135,10 +107,10 @@ public class OrderService {
         OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
         _order.setStatus(status.getCode());
 
-        this.orderRepository.save(_order);
+        return _order;
     }
 
-    public Set<OrderItem> processOrder(List<OrderItemRequest> orderItems, Order order) {
+    public Set<OrderItem> processOrderItem(List<OrderItemRequest> orderItems, Order order) {
         Set<OrderItem> orderItemSet = new HashSet<>();
 
         for (OrderItemRequest od: orderItems) {

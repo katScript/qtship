@@ -28,14 +28,20 @@ public class Warehouse {
 
     public Warehouse() {}
 
+    public Warehouse(Customer customer) {
+        this.customer = customer;
+    }
+
     public Warehouse(
             String name,
             String address,
-            String phone
+            String phone,
+            Customer customer
     ) {
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.customer = customer;
     }
 
     public Long getId() {
