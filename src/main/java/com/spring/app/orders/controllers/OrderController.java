@@ -110,7 +110,10 @@ public class OrderController {
                         packageResponses.add(new PackageResponse(
                                 itemPackage.getProduct().getId(),
                                 itemPackage.getProduct().getSku(),
-                                itemPackage.getQty()
+                                itemPackage.getQty(),
+                                itemPackage.getProduct().getName(),
+                                itemPackage.getProduct().getWeight(),
+                                itemPackage.getProduct().getPublicPrice()
                         ));
                     }
 
