@@ -17,7 +17,9 @@ public class OrderListResponse {
     private String shippingType;
     private String shippingTime;
     private String coupon;
-    private List<OrderItemResponse> orderItemResponse;
+    private List<OrderItemResponse> orderItem;
+    private String createdAt;
+    private String updateAt;
 
     public OrderListResponse() {}
 
@@ -36,7 +38,9 @@ public class OrderListResponse {
             String shippingType,
             String shippingTime,
             String coupon,
-            List<OrderItemResponse> orderItemResponse
+            String createAt,
+            String updateAt,
+            List<OrderItemResponse> orderItem
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -52,7 +56,7 @@ public class OrderListResponse {
         this.shippingType = shippingType;
         this.shippingTime = shippingTime;
         this.coupon = coupon;
-        this.orderItemResponse = orderItemResponse;
+        this.orderItem = orderItem;
     }
 
     public String getSenderAddress() {
@@ -167,11 +171,27 @@ public class OrderListResponse {
         this.id = id;
     }
 
-    public List<OrderItemResponse> getOrderItemResponse() {
-        return orderItemResponse;
+    public List<OrderItemResponse> getOrderItem() {
+        return orderItem;
     }
 
-    public void setOrderItemResponse(List<OrderItemResponse> orderItemResponse) {
-        this.orderItemResponse = orderItemResponse;
+    public void setOrderItem(List<OrderItemResponse> orderItemResponse) {
+        this.orderItem = orderItemResponse;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
     }
 }
