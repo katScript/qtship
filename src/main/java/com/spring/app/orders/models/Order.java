@@ -37,6 +37,8 @@ public class Order {
     private Date shippingTime;
     @Column(name = "coupon")
     private String coupon;
+    @Column(name = "return_code")
+    private String returnCode;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -64,7 +66,8 @@ public class Order {
             Boolean shippingFee,
             String coupon,
             String shippingType,
-            Date shippingTime
+            Date shippingTime,
+            String returnCode
     ) {
         this.senderName = senderName;
         this.senderPhone = senderPhone;
@@ -76,6 +79,7 @@ public class Order {
         this.coupon = coupon;
         this.shippingType = shippingType;
         this.shippingTime = shippingTime;
+        this.returnCode = returnCode;
     }
 
     public Long getId() {
@@ -231,6 +235,15 @@ public class Order {
 
     public Order setShippingTime(Date shippingTime) {
         this.shippingTime = shippingTime;
+        return this;
+    }
+
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public Order setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
         return this;
     }
 }
