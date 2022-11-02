@@ -77,7 +77,11 @@ const commonFunction = {
             $(id).prop( "disabled", true )
         }
     },
-    currentURL: function(){ return location.href;}
+    currentURL: function(){ return location.href;},
+    typeOrderSuccess: "DONE",
+    typeOrderDelivery: "DELiVERY",
+    typeOrderOccurred: "OCCURRED",
+    typeOrderCancel: "CANCEL",
 }
 
 export { commonFunction };

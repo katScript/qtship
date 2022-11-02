@@ -78,7 +78,7 @@
         this.validationForm();
         if (this.isValid == 0) {
           axios
-            .post(commonFunction.DOMAIN_URL + "v1/customer/auth/login", {
+            .post(commonFunction.DOMAIN_URL + "api/auth/login", {
               username: this.username,
               password: this.password,
             })
