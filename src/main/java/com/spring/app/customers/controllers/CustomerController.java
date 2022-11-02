@@ -69,7 +69,6 @@ public class CustomerController {
         return ResponseEntity.ok(new MessageResponse("Save success!"));
     }
 
-
     @PostMapping("/address/save")
     public ResponseEntity<?> saveAddress(@Valid @RequestBody SaveAddressRequest addressRequest) {
         Customer customer = customerRepository.findById(addressRequest.getCustomerId())
@@ -94,5 +93,4 @@ public class CustomerController {
 
         return ResponseEntity.ok(new MessageResponse("Save success!"));
     }
-
 }

@@ -146,6 +146,12 @@ public class OrderController {
                                 .atZone(ZoneId.systemDefault()).toLocalDateTime()
                                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         o.getCoupon(),
+                        o.getCreatedAt().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                        o.getUpdatedAt().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         orderItemResponses
                 );
 

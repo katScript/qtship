@@ -7,17 +7,17 @@ import java.util.List;
 
 public class OrderItemResponse {
     private Double price;
-    private ShippingAddressResponse shippingAddressResponse;
+    private ShippingAddressResponse shippingAddress;
     private List<PackageResponse> products;
 
     public OrderItemResponse() {}
     public OrderItemResponse(
             Double price,
-            ShippingAddressResponse shippingAddressResponse,
+            ShippingAddressResponse shippingAddress,
             List<PackageResponse> products
     ) {
         this.price = price;
-        this.shippingAddressResponse = shippingAddressResponse;
+        this.shippingAddress = shippingAddress;
         this.products = products;
     }
 
@@ -29,12 +29,12 @@ public class OrderItemResponse {
         this.price = price;
     }
 
-    public ShippingAddressResponse getShippingAddressResponse() {
-        return shippingAddressResponse;
+    public ShippingAddressResponse getShippingAddress() {
+        return shippingAddress;
     }
 
-    public void setShippingAddressResponse(ShippingAddressResponse shippingAddressResponse) {
-        this.shippingAddressResponse = shippingAddressResponse;
+    public void setShippingAddress(ShippingAddressResponse shippingAddressResponse) {
+        this.shippingAddress = shippingAddressResponse;
     }
 
     public List<PackageResponse> getProducts() {
