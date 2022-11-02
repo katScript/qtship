@@ -21,6 +21,7 @@ import com.spring.app.products.payload.response.PackageResponse;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
+import com.spring.app.warehouse.payload.response.WarehouseListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,6 +108,7 @@ public class OrderController {
 
                     for (Package itemPackage : i.getPackages()) {
                         packageResponses.add(new PackageResponse(
+                                itemPackage.getProduct().getId(),
                                 itemPackage.getProduct().getSku(),
                                 itemPackage.getQty()
                         ));
@@ -152,7 +154,14 @@ public class OrderController {
                         o.getUpdatedAt().toInstant()
                                 .atZone(ZoneId.systemDefault()).toLocalDateTime()
                                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                        orderItemResponses
+                        orderItemResponses,
+                        new WarehouseListResponse(
+                                o.getWarehouse().getId(),
+                                o.getWarehouse().getName(),
+                                o.getWarehouse().getAddress(),
+                                o.getWarehouse().getPhone()
+                        ),
+                        o.getReturnCode()
                 );
 
                 listOrder.add(res);

@@ -74,7 +74,8 @@ public class OrderService {
                 .setSenderPhone(order.getSenderPhone())
                 .setShippingFee(order.getShippingFee())
                 .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
-                .setShippingType(order.getShippingType());
+                .setShippingType(order.getShippingType())
+                .setReturnCode(order.getReturnCode());
 
         Set<OrderItem> orderItems = this.processOrder(order.getOrderItem(), _order);
         Double subtotal = 0.0;
@@ -115,6 +116,7 @@ public class OrderService {
                 .setSenderAddress(order.getSenderAddress())
                 .setShippingFee(order.getShippingFee())
                 .setShippingType(order.getShippingType())
+                .setReturnCode(order.getReturnCode())
                 .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
                 .setWarehouse(
                         this.warehouseRepository.findById(order.getWarehouseId())

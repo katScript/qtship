@@ -1,5 +1,7 @@
 package com.spring.app.orders.payload.response;
 
+import com.spring.app.warehouse.payload.response.WarehouseListResponse;
+
 import java.util.List;
 
 public class OrderListResponse {
@@ -17,10 +19,11 @@ public class OrderListResponse {
     private String shippingType;
     private String shippingTime;
     private String coupon;
-    private List<OrderItemResponse> orderItem;
     private String createdAt;
     private String updateAt;
-
+    private WarehouseListResponse warehouse;
+    private String returnCode;
+    private List<OrderItemResponse> orderItem;
     public OrderListResponse() {}
 
     public OrderListResponse(
@@ -40,7 +43,9 @@ public class OrderListResponse {
             String coupon,
             String createAt,
             String updateAt,
-            List<OrderItemResponse> orderItem
+            List<OrderItemResponse> orderItem,
+            WarehouseListResponse warehouse,
+            String returnCode
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -57,6 +62,10 @@ public class OrderListResponse {
         this.shippingTime = shippingTime;
         this.coupon = coupon;
         this.orderItem = orderItem;
+        this.createdAt = createAt;
+        this.updateAt = updateAt;
+        this.warehouse = warehouse;
+        this.returnCode = returnCode;
     }
 
     public String getSenderAddress() {
@@ -193,5 +202,21 @@ public class OrderListResponse {
 
     public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public WarehouseListResponse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(WarehouseListResponse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
     }
 }

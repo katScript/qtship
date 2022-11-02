@@ -21,6 +21,7 @@ public class OrderDataRequest {
     private String coupon;
     private Long warehouseId;
     private String shippingType;
+    private String returnCode;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime shippingDate;
     private List<OrderItemRequest> orderItem;
@@ -144,5 +145,13 @@ public class OrderDataRequest {
 
     public void setShippingDate(LocalDateTime shippingDate) {
         this.shippingDate = shippingDate;
+    }
+
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
     }
 }
