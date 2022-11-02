@@ -1,5 +1,8 @@
 <template>
   <div class="management-client-page">
+    <div :class="isLoading ? 'show' : 'hide'">
+      <ActionLoading />
+    </div>
     <NavbarClient />
     <div class="container-fluid">
       <div class="row">
@@ -151,51 +154,31 @@
                 Số đơn hàng:
                 <span class="count-orders-filtered">{{ countOrder }}</span> ĐH
               </h5>
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Mã đơn hàng</th>
-                    <th scope="col">Mã khách hàng/Số điện thoại</th>
-                    <th scope="col">Khách hàng</th>
-                    <th scope="col">Trạng thái đơn hàng</th>
-                    <th scope="col">Dịch vụ giao hàng</th>
-                    <th scope="col">Đối soát</th>
-                    <th scope="col">Hóa đơn</th>
-                    <th scope="col">Chức năng</th>
-                  </tr>
-                </thead>
-                <tbody v-if="countOrder == 0">
-                  <tr>
-                    <td colspan="7" class="text-center">
-                      <img src="../images/emptyList.png" alt="" />
-                      <br />
-                      Không có đơn hàng <a href="">Tạo đơn hàng!</a>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr>
-                    <td>11112</td>
-                    <td>123123123</td>
-                    <td>duongph</td>
-                    <td>Đang giao</td>
-                    <td>Economy</td>
-                    <td>2022/10/10 00:00</td>
-                    <td>Đã xuất hóa đơn</td>
-                    <td>
-                      <a href="" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Chi tiết đơn hàng"><i class="fa-solid fa-circle-info"></i></a>
-                      <a href="" class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Cập nhật đơn hàng"><i class="fa-solid fa-file-pen"></i></a>
-                      <a href="" class="btn btn-dark a-function a-detail" data-bs-toggle="tooltip"
+              <easy-data-table :headers="headersOrder" :items="listOrderByCustomer"
+                table-class-name="easy-data-table-customize">
+                <!-- #item-btn-function="item"  item: valua of row-->
+                <template #item-name-receiver="item">
+                  {{item.orderItemResponse[0].shippingAddressResponse.name}}
+                </template>
+                <template #item-phone-receiver="item">
+                  {{item.orderItemResponse[0].shippingAddressResponse.phone}}
+                </template>
+                <template #item-btn-function="item">
+                  <table class="w-100">
+                    <tr>
+                      <td><a href="" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Chi tiết đơn hàng"><i class="fa-solid fa-circle-info"></i></a></td>
+                      <td><a :href="'/client/orders/create#_' + item.id" class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Cập nhật đơn hàng"><i class="fa-solid fa-file-pen"></i></a><input type="hidden" v-model="item.id"></td>
+                      <td><a href="" class="btn btn-dark a-function a-detail" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Lịch sử cập nhật"><i
-                          class="fa-solid fa-clock-rotate-left"></i></a>
-                      <a href="" class="btn btn-danger a-function a-detail" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Hủy đơn hàng"><i class="fa-solid fa-trash"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                          class="fa-solid fa-clock-rotate-left"></i></a></td>
+                      <td><a href="" class="btn btn-danger a-function a-detail" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Hủy đơn hàng"><i class="fa-solid fa-trash"></i></a></td>
+                    </tr>
+                  </table>
+                </template>
+              </easy-data-table>
             </div>
           </div>
         </div>
@@ -216,17 +199,20 @@
   import FooterClient from "./common/FooterClient.vue";
   import ToolbarRight from "./common/ToolbarRight.vue";
   import NotficationClient from "./common/NotficationClient.vue";
+  import ActionLoading from "./common/ActionLoading.vue";
 
   import { useCookies } from "vue3-cookies";
   import { commonFunction } from '../scripts/ulti'
   import { debounce } from "vue-debounce";
+  import axios from "axios";
 
   export default {
     components: {
       NavbarClient,
       FooterClient,
       ToolbarRight,
-      NotficationClient
+      NotficationClient,
+      ActionLoading
     },
     data() {
       return {
@@ -237,6 +223,20 @@
         classFilterTimeAbout: "d-none",
         classFilterTimeAboutDS: "d-none",
         countOrder: 3,
+        idRequest: "",
+        isLoading: false,
+        configRequestApi: {},
+        listOrderByCustomer: [],
+        headersOrder: [
+          { text: "Mã ĐH", value: "id", sortable: true },
+          { text: "Tên người nhận", value: "name-receiver", sortable: true },
+          { text: "SĐT nhận", value: "phone-receiver" },
+          { text: "Trạng thái ĐH", value: "status", sortable: true },
+          { text: "Dịch vụ giao hàng", value: "shippingType", sortable: true },
+          { text: "Tổng giá trị ĐH (VNĐ)", value: "subtotal", sortable: true },
+          { text: "Ngày tạo đơn", value: "", sortable: true },
+          { text: "Chức năng", value: "btn-function" },
+        ],
       };
     },
 
@@ -251,9 +251,31 @@
 
     mounted() {
       let authenication_cookies = this.cookies.get("authenication_cookies");
+      this.idRequest = localStorage.getItem("id_customer_request");
+      let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
       if (authenication_cookies == null) {
-        commonFunction.redirect('/');
+        commonFunction.redirect("/");
       }
+
+      this.configRequestApi = {
+        headers: { Authorization: "Bearer " + accesstoken_cookies },
+      };
+
+      axios
+        .get(
+          commonFunction.DOMAIN_URL +
+          "v1/order/all/customer/" +
+          this.idRequest,
+          this.configRequestApi
+        )
+        .then((response) => {
+          let respronseData = response.data;
+          this.listOrderByCustomer = respronseData;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
     },
     watch: {
       filterTime: {
@@ -278,11 +300,20 @@
         this.classFilterTimeAbout = "d-none";
         this.classFilterTimeAboutDS = "d-none";
       }, 1000),
+      genUrlUpdateOrder(item) { return "/client/orders/create#" + item.id },
     },
   };
 </script>
 
 <style scoped>
+  .show {
+    display: block;
+  }
+
+  .hide {
+    display: none;
+  }
+
   .form-search-control {
     margin-bottom: 10px;
   }

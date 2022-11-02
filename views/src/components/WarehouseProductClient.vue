@@ -1,5 +1,6 @@
 <template>
   <div class="management-client-page">
+    <div :class="isLoading ? 'show' : 'hide'"><ActionLoading /></div>
     <div>
       <PopupNotify
         :class="isShowNotify ? 'show' : 'hide'"
@@ -409,6 +410,7 @@ import FooterClient from "./common/FooterClient.vue";
 import ToolbarRight from "./common/ToolbarRight.vue";
 import NotficationClient from "./common/NotficationClient.vue";
 import PopupNotify from "./common/PopupNotify.vue";
+import ActionLoading from "./common/ActionLoading.vue";
 
 import { useCookies } from "vue3-cookies";
 import { commonFunction } from "../scripts/ulti";
@@ -422,9 +424,11 @@ export default {
     ToolbarRight,
     NotficationClient,
     PopupNotify,
+    ActionLoading
   },
   data() {
     return {
+      isLoading: false,
       filterTime: "label",
       filterTimeDS: "label",
       classFilterTimeAbout: "d-none",
@@ -553,6 +557,7 @@ export default {
   methods: {
     //warehouse
     createNewWarehouse: function () {
+      this.isLoading = true;
       axios
         .post(
           commonFunction.DOMAIN_URL + "v1/warehouse/save",
@@ -566,18 +571,22 @@ export default {
         )
         .then((response) => {
           if (response.status == 200) {
+            this.isLoading = false;
             alert("SUCCESS: Tạo mới thành công - " + response.data.message);
             commonFunction.reloadPage();
           } else {
+            this.isLoading = false;
             alert("FAIL: Đăng kí không thành công! Vui lòng thử lại!");
           }
         })
         .catch((e) => {
+          this.isLoading = false;
           alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
           console.log(e);
         });
     },
     updateWarehouse: function () {
+      this.isLoading = true;
       axios
         .post(
           commonFunction.DOMAIN_URL + "v1/warehouse/save",
@@ -592,13 +601,16 @@ export default {
         )
         .then((response) => {
           if (response.status == 200) {
+            this.isLoading = false;
             alert("SUCCESS: Cập nhật thành công - " + response.data.message);
             commonFunction.reloadPage();
           } else {
+            this.isLoading = false;
             alert("FAIL: Cập nhật không thành công! Vui lòng thử lại!");
           }
         })
         .catch((e) => {
+          this.isLoading = false;
           alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
           console.log(e);
         });
@@ -647,6 +659,7 @@ export default {
 
     //product
     createNewProduct: function () {
+      this.isLoading = true;
       let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
       let formData = new FormData();
       formData.append("file", this.productImg);
@@ -668,18 +681,22 @@ export default {
         })
         .then((response) => {
           if (response.status == 200) {
+            this.isLoading = false;
             alert("SUCCESS: Tạo mới thành công - " + response.data.message);
             commonFunction.reloadPage();
           } else {
+            this.isLoading = false;
             alert("FAIL: Đăng kí không thành công! Vui lòng thử lại!");
           }
         })
         .catch((e) => {
+          this.isLoading = false;
           alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
           console.log(e);
         });
     },
     updateProduct: function () {
+      this.isLoading = true;
       let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
       let formData = new FormData();
       formData.append("file", this.productImg);
@@ -701,13 +718,16 @@ export default {
         })
         .then((response) => {
           if (response.status == 200) {
+            this.isLoading = false;
             alert("SUCCESS: Cập nhật thành công - " + response.data.message);
             commonFunction.reloadPage();
           } else {
+            this.isLoading = false;
             alert("FAIL: Cập nhật không thành công! Vui lòng thử lại!");
           }
         })
         .catch((e) => {
+          this.isLoading = false;
           alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
           console.log(e);
         });
