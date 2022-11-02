@@ -13,6 +13,8 @@ import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.request.LoginRequest;
 import com.spring.app.authentication.payload.request.SignupRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
+import com.spring.app.customers.payload.request.auth.ForgotPasswordRequest;
+import com.spring.app.customers.payload.response.customer.ForgotPasswordResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
@@ -66,5 +68,20 @@ public class AuthController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @PostMapping("/forget")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
+        User user = userRepository.findByUsername(forgotPasswordRequest.getUsername()).orElse(null);
+
+        if (user == null)
+            return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists!"));
+
+        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
+
+        return ResponseEntity.ok(new ForgotPasswordResponse(jwt,
+                user.getUsername(),
+                user.getEmail())
+        );
     }
 }

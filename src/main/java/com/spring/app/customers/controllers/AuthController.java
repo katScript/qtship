@@ -39,42 +39,16 @@ import java.util.stream.Collectors;
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
-
     @Autowired
     CustomerRepository customerRepository;
-
-    @Autowired
-    AddressRepository addressRepository;
-
-    @Autowired
-    ForControlRepository forControlRepository;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     PasswordEncoder encoder;
-
     @Autowired
     JwtUtils jwtUtils;
-
-    @PostMapping("/forget")
-    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        User user = userRepository.findByUsername(forgotPasswordRequest.getUsername()).orElse(null);
-
-        if (user == null)
-            return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists!"));
-
-        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
-
-        return ResponseEntity.ok(new ForgotPasswordResponse(jwt,
-                user.getUsername(),
-                user.getEmail())
-        );
-    }
 
     @PostMapping("/reset")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
@@ -98,7 +72,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> registerCustomer(@Valid @RequestBody RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
