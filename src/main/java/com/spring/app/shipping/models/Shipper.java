@@ -8,6 +8,7 @@ import java.util.Date;
 @Entity
 @Table(name="shippers")
 public class Shipper {
+    public static final String ROLE = "shipper";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
@@ -50,71 +51,75 @@ public class Shipper {
         return id;
     }
 
-    public void setId(Long id) {
+    public Shipper setId(Long id) {
         this.id = id;
+        return this;
     }
+    
 
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public Shipper setFullName(String fullName) {
         this.fullName = fullName;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public Shipper setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public Shipper setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public Shipper setAddress(String address) {
         this.address = address;
+        return this;
     }
 
     public String getCurrentAddress() {
         return currentAddress;
     }
 
-    public void setCurrentAddress(String currentAddress) {
+    public Shipper setCurrentAddress(String currentAddress) {
         this.currentAddress = currentAddress;
+        return this;
     }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public Shipper setUser(User user) {
         this.user = user;
+        return this;
     }
 
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public String getShipperCode() {
+        return "SPC" + String.format("%06d", id);
     }
 }

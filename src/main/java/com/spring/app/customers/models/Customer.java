@@ -80,7 +80,7 @@ public class Customer {
     }
 
     public String getCustomerId() {
-        return String.format("%09d", id);
+        return "CTM" + String.format("%06d", id);
     }
 
     public Set<Order> getOrders() {
