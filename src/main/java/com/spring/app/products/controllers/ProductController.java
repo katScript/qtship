@@ -1,8 +1,7 @@
 package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
-import com.spring.app.file.services.FilesStorageService;
-import com.spring.app.file.services.FilesStorageServiceImpl;
+import com.spring.app.fileManager.services.FilesStorageServiceImpl;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
