@@ -1,4 +1,4 @@
-package com.spring.app.file.services;
+package com.spring.app.fileManager.services;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()), REPLACE_EXISTING);
 
-            return this.load(file.getOriginalFilename());
+            return this.load(path + "/" + file.getOriginalFilename());
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }

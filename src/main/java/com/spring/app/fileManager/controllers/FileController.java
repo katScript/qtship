@@ -1,6 +1,6 @@
-package com.spring.app.file.controllers;
+package com.spring.app.fileManager.controllers;
 
-import com.spring.app.file.services.FilesStorageServiceImpl;
+import com.spring.app.fileManager.services.FilesStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

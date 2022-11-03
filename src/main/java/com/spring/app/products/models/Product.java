@@ -28,6 +28,8 @@ public class Product {
     private String description;
     @Column(name = "image")
     private String image;
+    @Column(name = "is_guest")
+    private Boolean isGuest = false;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
@@ -150,5 +152,13 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Boolean getGuest() {
+        return isGuest;
+    }
+
+    public void setGuest(Boolean guest) {
+        isGuest = guest;
     }
 }
