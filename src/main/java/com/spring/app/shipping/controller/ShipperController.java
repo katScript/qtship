@@ -1,7 +1,9 @@
 package com.spring.app.shipping.controller;
 
 import com.spring.app.authentication.models.User;
+import com.spring.app.authentication.models.repository.RoleRepository;
 import com.spring.app.authentication.models.repository.UserRepository;
+import com.spring.app.authentication.security.jwt.JwtUtils;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
@@ -9,11 +11,10 @@ import com.spring.app.shipping.payload.request.ShipperRequest;
 import com.spring.app.shipping.payload.response.ShipperResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -23,27 +24,12 @@ public class ShipperController {
     ShipperRepository shipperRepository;
     @Autowired
     UserRepository userRepository;
-
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllShipper() {
-        List<Shipper> shipperList = shipperRepository.findAll();
-        List<ShipperResponse> shipperResponses = new ArrayList<>();
-
-        for (Shipper sh : shipperList) {
-            shipperResponses.add(new ShipperResponse(
-                    sh.getId(),
-                    sh.getShipperCode(),
-                    sh.getFullName(),
-                    sh.getEmail(),
-                    sh.getPhone(),
-                    sh.getAddress(),
-                    sh.getCurrentAddress(),
-                    sh.getCreatedAt()
-            ));
-        }
-
-        return ResponseEntity.ok(shipperResponses);
-    }
+    @Autowired
+    PasswordEncoder encoder;
+    @Autowired
+    JwtUtils jwtUtils;
+    @Autowired
+    RoleRepository roleRepository;
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> getShippingDetail(@Valid @PathVariable Long id) {
@@ -73,7 +59,7 @@ public class ShipperController {
     @PostMapping("/save")
     public ResponseEntity<?> saveShipper(@Valid @RequestBody ShipperRequest shipperRequest) {
         Shipper shipper = shipperRepository.findById(shipperRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Can not find shipper!"));
+                .orElse(new Shipper());
 
         shipper.setFullName(shipperRequest.getFullName())
                 .setEmail(shipperRequest.getEmail())
@@ -84,15 +70,5 @@ public class ShipperController {
         shipperRepository.save(shipper);
 
         return ResponseEntity.ok(new MessageResponse("Save shipper data success!"));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteShipper(@Valid @PathVariable Long id) {
-        Shipper shipper = shipperRepository.findById(id).orElseThrow(() -> new RuntimeException("Shipper not found!"));
-
-        shipperRepository.delete(shipper);
-
-        return ResponseEntity.ok(new MessageResponse("Delete shipper data success!"));
-
     }
 }
