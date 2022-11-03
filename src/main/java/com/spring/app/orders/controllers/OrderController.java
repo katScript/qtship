@@ -18,6 +18,7 @@ import com.spring.app.products.models.Package;
 import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.response.PackageResponse;
+import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
@@ -75,20 +76,182 @@ public class OrderController {
         this.initOrderService();
 
         if (order.getCustomerId() != null) {
-            this.orderService.placeCustomerOrder(order);
+            this.orderService.saveCustomerOrder(order);
         } else {
-            this.orderService.placeGuestOrder(order);
+            this.orderService.saveGuestOrder(order);
         }
 
         return ResponseEntity.ok(new MessageResponse("Place order successfully!"));
     }
 
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getById(@Valid @PathVariable Long id) {
+        Order o = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+
+        for (OrderItem i : o.getOrderItemSet()) {
+            List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
+
+            for (Package itemPackage : i.getPackages()) {
+                productDetailResponses.add(new ProductDetailResponse(
+                        itemPackage.getProduct().getId(),
+                        itemPackage.getProduct().getCustomer().getCustomerId(),
+                        itemPackage.getProduct().getCustomer().getFullName(),
+                        itemPackage.getProduct().getSku(),
+                        itemPackage.getQty(),
+                        itemPackage.getProduct().getName(),
+                        itemPackage.getProduct().getWeight(),
+                        itemPackage.getProduct().getBasePrice(),
+                        itemPackage.getProduct().getPublicPrice(),
+                        itemPackage.getProduct().getDescription(),
+                        itemPackage.getProduct().getCreatedAt(),
+                        itemPackage.getProduct().getUpdatedAt()
+                ));
+            }
+
+            orderItemResponses.add(new OrderItemResponse(
+                    i.getPrice(),
+                    new ShippingAddressResponse(
+                            i.getShippingAddress().getName(),
+                            i.getShippingAddress().getPhone(),
+                            i.getShippingAddress().getProvince(),
+                            i.getShippingAddress().getDistrict(),
+                            i.getShippingAddress().getWard(),
+                            i.getShippingAddress().getProvinceId(),
+                            i.getShippingAddress().getDistrictId(),
+                            i.getShippingAddress().getWardId(),
+                            i.getShippingAddress().getStreet()
+                    ),
+                    productDetailResponses
+            ));
+        }
+
+        OrderListResponse orderResponse = new OrderListResponse(
+                o.getOrderCode(),
+                o.getCustomer().getCustomerId(),
+                o.getStatus(),
+                o.getFeedback(),
+                o.getNote(),
+                o.getSubtotal(),
+                o.getSenderName(),
+                o.getSenderPhone(),
+                o.getSenderAddress(),
+                o.getNotification(),
+                o.getShippingFee(),
+                o.getShippingType(),
+                o.getShippingTime().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                o.getCoupon(),
+                o.getCreatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                o.getUpdatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                orderItemResponses,
+                new WarehouseListResponse(
+                        o.getWarehouse().getId(),
+                        o.getWarehouse().getName(),
+                        o.getWarehouse().getAddress(),
+                        o.getWarehouse().getPhone()
+                ),
+                o.getReturnCode()
+        );
+
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrder() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderListResponse> listOrder = new ArrayList<>();
+
+        for (Order o : orders) {
+            List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+
+            for (OrderItem i : o.getOrderItemSet()) {
+                List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
+
+                for (Package itemPackage : i.getPackages()) {
+                    productDetailResponses.add(new ProductDetailResponse(
+                            itemPackage.getProduct().getId(),
+                            itemPackage.getProduct().getCustomer().getCustomerId(),
+                            itemPackage.getProduct().getCustomer().getFullName(),
+                            itemPackage.getProduct().getSku(),
+                            itemPackage.getQty(),
+                            itemPackage.getProduct().getName(),
+                            itemPackage.getProduct().getWeight(),
+                            itemPackage.getProduct().getBasePrice(),
+                            itemPackage.getProduct().getPublicPrice(),
+                            itemPackage.getProduct().getDescription(),
+                            itemPackage.getProduct().getCreatedAt(),
+                            itemPackage.getProduct().getUpdatedAt()
+                    ));
+                }
+
+                orderItemResponses.add(new OrderItemResponse(
+                        i.getPrice(),
+                        new ShippingAddressResponse(
+                                i.getShippingAddress().getName(),
+                                i.getShippingAddress().getPhone(),
+                                i.getShippingAddress().getProvince(),
+                                i.getShippingAddress().getDistrict(),
+                                i.getShippingAddress().getWard(),
+                                i.getShippingAddress().getProvinceId(),
+                                i.getShippingAddress().getDistrictId(),
+                                i.getShippingAddress().getWardId(),
+                                i.getShippingAddress().getStreet()
+                        ),
+                        productDetailResponses
+                ));
+            }
+
+            OrderListResponse res = new OrderListResponse(
+                    o.getOrderCode(),
+                    o.getCustomer().getCustomerId(),
+                    o.getStatus(),
+                    o.getFeedback(),
+                    o.getNote(),
+                    o.getSubtotal(),
+                    o.getSenderName(),
+                    o.getSenderPhone(),
+                    o.getSenderAddress(),
+                    o.getNotification(),
+                    o.getShippingFee(),
+                    o.getShippingType(),
+                    o.getShippingTime().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                    o.getCoupon(),
+                    o.getCreatedAt().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                    o.getUpdatedAt().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                    orderItemResponses,
+                    new WarehouseListResponse(
+                            o.getWarehouse().getId(),
+                            o.getWarehouse().getName(),
+                            o.getWarehouse().getAddress(),
+                            o.getWarehouse().getPhone()
+                    ),
+                    o.getReturnCode()
+            );
+
+            listOrder.add(res);
+        }
+
+        return ResponseEntity.ok(listOrder);
+    }
+
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getOrderByCustomerId(
             @Valid @PathVariable Long id,
-            @RequestParam(value = "status", required=false, defaultValue = "default") String status,
-            @RequestParam(value = "from", required=false) String from,
-            @RequestParam(value = "to", required=false) String to
+            @RequestParam(value = "status", required = false, defaultValue = "default") String status,
+            @RequestParam(value = "from", required = false) String from,
+            @RequestParam(value = "to", required = false) String to
     ) throws ParseException {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
@@ -104,16 +267,22 @@ public class OrderController {
                 List<OrderItemResponse> orderItemResponses = new ArrayList<>();
 
                 for (OrderItem i : o.getOrderItemSet()) {
-                    List<PackageResponse> packageResponses = new ArrayList<>();
+                    List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
 
                     for (Package itemPackage : i.getPackages()) {
-                        packageResponses.add(new PackageResponse(
+                        productDetailResponses.add(new ProductDetailResponse(
                                 itemPackage.getProduct().getId(),
+                                itemPackage.getProduct().getCustomer().getCustomerId(),
+                                itemPackage.getProduct().getCustomer().getFullName(),
                                 itemPackage.getProduct().getSku(),
                                 itemPackage.getQty(),
                                 itemPackage.getProduct().getName(),
                                 itemPackage.getProduct().getWeight(),
-                                itemPackage.getProduct().getPublicPrice()
+                                itemPackage.getProduct().getBasePrice(),
+                                itemPackage.getProduct().getPublicPrice(),
+                                itemPackage.getProduct().getDescription(),
+                                itemPackage.getProduct().getCreatedAt(),
+                                itemPackage.getProduct().getUpdatedAt()
                         ));
                     }
 
@@ -130,7 +299,7 @@ public class OrderController {
                                     i.getShippingAddress().getWardId(),
                                     i.getShippingAddress().getStreet()
                             ),
-                            packageResponses
+                            productDetailResponses
                     ));
                 }
 

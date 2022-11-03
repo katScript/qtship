@@ -2,7 +2,7 @@ package com.spring.app.shipping.payload.request;
 
 public class ShippingAddressRequest {
     private Long id;
-    private String receiverName;
+    private String name;
     private String phone;
     private String province;
     private String district;
@@ -15,7 +15,7 @@ public class ShippingAddressRequest {
     public ShippingAddressRequest() {}
 
     public ShippingAddressRequest(
-            String receiverName,
+            String name,
             String phone,
             String province,
             String provinceId,
@@ -32,16 +32,16 @@ public class ShippingAddressRequest {
         this.ward = ward;
         this.wardId = wardId;
         this.street = street;
-        this.receiverName = receiverName;
+        this.name = name;
         this.phone = phone;
     }
 
-    public String getReceiverName() {
-        return receiverName;
+    public String getName() {
+        return name;
     }
 
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {

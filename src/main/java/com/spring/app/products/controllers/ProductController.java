@@ -10,13 +10,10 @@ import com.spring.app.products.payload.request.ProductDataRequest;
 import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.products.models.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -34,9 +31,48 @@ public class ProductController {
     @Autowired
     FilesStorageService storageService;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllProduct() {
+        List<Product> products = productRepository.findAll();
+        List<ProductDetailResponse> productList = new ArrayList<>();
+
+        for (Product p : products) {
+            ProductDetailResponse pD = new ProductDetailResponse(
+                    p.getId(),
+                    p.getCustomer().getCustomerId(),
+                    p.getCustomer().getFullName(),
+                    p.getSku(),
+                    p.getQty(),
+                    p.getName(),
+                    p.getWeight(),
+                    p.getBasePrice(),
+                    p.getPublicPrice(),
+                    p.getDescription(),
+                    p.getCreatedAt(),
+                    p.getUpdatedAt()
+            );
+
+            if (p.getImage() != null) {
+                Resource resource = storageService.load(p.getImage());
+
+                if (resource != null) {
+                    try {
+                        pD.setImage(String.valueOf(resource.getURL().getFile()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            productList.add(pD);
+        }
+
+        return ResponseEntity.ok(productList);
+    }
+
     @PostMapping(value = "/save",
             consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+            produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> saveProduct(@Valid ProductDataRequest productDataRequest) {
         Customer customer = customerRepository.findById(productDataRequest.getCustomerId())
                 .orElse(null);
@@ -130,7 +166,9 @@ public class ProductController {
                         p.getWeight(),
                         p.getBasePrice(),
                         p.getPublicPrice(),
-                        p.getDescription()
+                        p.getDescription(),
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
                 );
 
                 if (p.getImage() != null) {

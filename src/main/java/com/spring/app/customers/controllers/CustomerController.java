@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,6 +24,18 @@ public class CustomerController {
     CustomerRepository customerRepository;
     @Autowired
     UserRepository userRepository;
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllCustomer() {
+        List<Customer> customerList = customerRepository.findAll();
+        List<DetailResponse> responses = new ArrayList<>();
+
+        for (Customer c: customerList) {
+            responses.add(new DetailResponse(c));
+        }
+
+        return ResponseEntity.ok(responses);
+    }
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> customerDetail(@Valid @PathVariable Long id) {
@@ -38,6 +52,14 @@ public class CustomerController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
         return ResponseEntity.ok(new DetailResponse(customer));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCustomer(@Valid @PathVariable Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        customerRepository.delete(customer);
+        return ResponseEntity.ok(new MessageResponse("Delete customer success!"));
     }
 
     @PostMapping("/save")
