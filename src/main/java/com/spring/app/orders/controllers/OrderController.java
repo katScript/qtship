@@ -103,7 +103,9 @@ public class OrderController {
                         itemPackage.getProduct().getWeight(),
                         itemPackage.getProduct().getBasePrice(),
                         itemPackage.getProduct().getPublicPrice(),
-                        itemPackage.getProduct().getDescription()
+                        itemPackage.getProduct().getDescription(),
+                        itemPackage.getProduct().getCreatedAt(),
+                        itemPackage.getProduct().getUpdatedAt()
                 ));
             }
 
@@ -182,7 +184,9 @@ public class OrderController {
                             itemPackage.getProduct().getWeight(),
                             itemPackage.getProduct().getBasePrice(),
                             itemPackage.getProduct().getPublicPrice(),
-                            itemPackage.getProduct().getDescription()
+                            itemPackage.getProduct().getDescription(),
+                            itemPackage.getProduct().getCreatedAt(),
+                            itemPackage.getProduct().getUpdatedAt()
                     ));
                 }
 
@@ -276,7 +280,9 @@ public class OrderController {
                                 itemPackage.getProduct().getWeight(),
                                 itemPackage.getProduct().getBasePrice(),
                                 itemPackage.getProduct().getPublicPrice(),
-                                itemPackage.getProduct().getDescription()
+                                itemPackage.getProduct().getDescription(),
+                                itemPackage.getProduct().getCreatedAt(),
+                                itemPackage.getProduct().getUpdatedAt()
                         ));
                     }
 
