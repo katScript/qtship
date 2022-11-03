@@ -25,6 +25,38 @@ public class WarehouseController {
     @Autowired
     WarehouseRepository warehouseRepository;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllWarehouse() {
+        List<Warehouse> warehouses = warehouseRepository.findAll();
+        List<WarehouseListResponse> warehousesResponse = new ArrayList<>();
+
+        for (Warehouse w: warehouses) {
+            warehousesResponse.add(new WarehouseListResponse(
+                    w.getId(),
+                    w.getName(),
+                    w.getAddress(),
+                    w.getPhone()
+            ));
+        }
+
+        return ResponseEntity.ok(warehousesResponse);
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getById(@Valid @PathVariable Long id) {
+        Warehouse warehouse = warehouseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cannot find warehouse"));
+
+        WarehouseListResponse warehouseListResponse = new WarehouseListResponse(
+                warehouse.getId(),
+                warehouse.getName(),
+                warehouse.getAddress(),
+                warehouse.getPhone()
+        );
+
+        return ResponseEntity.ok(warehouseListResponse);
+    }
+
     @PostMapping("/save")
     public ResponseEntity<?> saveWarehouse(@Valid @RequestBody WarehouseDataRequest warehouseDataRequest) {
         Customer customer = customerRepository.findById(warehouseDataRequest.getCustomerId())
@@ -32,24 +64,17 @@ public class WarehouseController {
 
         if (customer != null) {
             Warehouse warehouse;
-            if (warehouseDataRequest.getId() == null) {
-                warehouse = new Warehouse(
-                        warehouseDataRequest.getName(),
-                        warehouseDataRequest.getAddress(),
-                        warehouseDataRequest.getPhone());
 
-                warehouse.setCustomer(customer);
-            } else {
+            if (warehouseDataRequest.getId() != null) {
                 warehouse = warehouseRepository.findById(warehouseDataRequest.getId())
-                                        .orElse(null);
-
-                if (warehouse == null)
-                    return ResponseEntity.badRequest().body(new MessageResponse("Warehouse not found!"));
-
-                warehouse.setName(warehouseDataRequest.getName())
-                        .setPhone(warehouseDataRequest.getPhone())
-                        .setAddress(warehouseDataRequest.getAddress());
+                        .orElseThrow(() -> new RuntimeException("Warehouse not found!"));
+            } else {
+                warehouse = new Warehouse(customer);
             }
+
+            warehouse.setName(warehouseDataRequest.getName())
+                    .setPhone(warehouseDataRequest.getPhone())
+                    .setAddress(warehouseDataRequest.getAddress());
 
             warehouseRepository.save(warehouse);
 
