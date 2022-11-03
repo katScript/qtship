@@ -139,7 +139,6 @@
         methods: {
             register: function () {
                 this.isValid = 0;
-                this.loading = true;
                 this.validationForm();
                 if (this.isValid > 0) {
                     // alert('Đăng kí không thành công! Vui lòng kiểm tra lại thông tin!');

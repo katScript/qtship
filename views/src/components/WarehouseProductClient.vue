@@ -242,7 +242,7 @@
                           </div>
                           <div class="col-8">
                             <div class="form-group">
-                              <label for="">Ảnh sản phẩm</label> <span>{{formDataProduct.image ? 'Đã upload' : ''}}</span>
+                              <label for="">Ảnh sản phẩm</label> <span>{{formDataProduct.image}}</span>
                               <input
                                 type="file"
                                 class="form-control"
@@ -282,7 +282,7 @@
                           width="200"
                           height="200"
                           class=""
-                          v-if="!urlImgProductUpload"
+                          v-if="!urlImgProductUpload && !formDataProduct.image"
                           src="../images/img-default.jpg"
                         />
                         <img
@@ -290,9 +290,17 @@
                           width="200"
                           height="200"
                           class=""
-                          v-else
+                          v-if="urlImgProductUpload && !formDataProduct.image"
                           :src="urlImgProductUpload"
-                        />
+                        />                        
+                        <img
+                        alt=""
+                        width="200"
+                        height="200"
+                        class=""
+                        v-if="formDataProduct.image"
+                        :src="formDataProduct.image"
+                      />
                       </div>
                     </div>
                   </div>
