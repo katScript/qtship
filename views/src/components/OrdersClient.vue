@@ -158,10 +158,10 @@
                 table-class-name="easy-data-table-customize">
                 <!-- #item-btn-function="item"  item: valua of row-->
                 <template #item-name-receiver="item">
-                  {{item.orderItemResponse[0].shippingAddressResponse.name}}
+                  {{item.orderItem[0].shippingAddress.name}}
                 </template>
                 <template #item-phone-receiver="item">
-                  {{item.orderItemResponse[0].shippingAddressResponse.phone}}
+                  {{item.orderItem[0].shippingAddress.phone}}
                 </template>
                 <template #item-btn-function="item">
                   <table class="w-100">

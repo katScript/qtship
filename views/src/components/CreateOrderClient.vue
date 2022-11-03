@@ -34,7 +34,7 @@
                                     <div class="form-group col-11">
                                         <input type="text" class="form-control" id="" placeholder="Tên người nhận"
                                             v-model="
-                        formDataOrder.orderItem[0].shippingAddress.receiverName
+                        formDataOrder.orderItem[0].shippingAddress.name
                       " />
                                         <br />
                                     </div>
@@ -44,7 +44,8 @@
                                         <i class="fa-solid fa-location-dot"></i>
                                     </div>
                                     <div class="col-11">
-                                        <LocationPicker @updateCustomerAddress="updateCustomerAddress"
+                                        <span v-if="idOrderUpdateQuery"><b>Địa chỉ hiện tại: </b> {{addressOrderUpdated}}</span>
+                                        <LocationPicker @updateCustomerAddress="updateCustomerAddress" :customerAddress="customerAddress"
                                             :msgValidationFor="msgValidationFor" />
                                     </div>
                                 </div>
@@ -77,7 +78,7 @@
                                     </div>
                                 </div>
                                 <hr />
-                                <h5>Phương thức giao & nhận hàng</h5>
+                                <h5>Phương thức giao & lấy hàng</h5>
                                 <div class="form-group row">
                                     <div class="col-1">
                                         <i class="fa-solid fa-truck-fast"></i>
@@ -220,7 +221,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12">
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 Phí ship: <span class="feeShip">0 đ</span>
@@ -237,16 +238,13 @@
                                                 <div class="form-group">
                                                     <label for="">Ghi chú đơn hàng</label>
                                                     <textarea type="" class="form-control" id=""
-                                                        aria-describedby="emailHelp" v-model="formDataOrder.note"
+                                                        aria-describedby="emailHelp" rows="4" v-model="formDataOrder.note"
                                                         placeholder="Nhập ghi chú của đơn hàng" />
                                                     <br />
                                                 </div>
                                             </div>
                                         </div>
                                         <br />
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <img src="" alt="" width="150" height="150" />
                                     </div>
                                     <div class="col-12">
                                         <div class="row">
@@ -385,6 +383,7 @@
                 isDisplayListVourcer: false,
                 idRequest: "",
                 idOrderUpdateQuery: "",
+                addressOrderUpdated: "",
                 numberProduct: 3,
                 productSelected: [
                     { sku: "default", weight: "", publicPrice: "", qty: "" },
@@ -412,7 +411,6 @@
                 listWarehouseByCustomer: [],
                 listProductByCustomer: [],
                 listOrderByCustomer: [],
-                formDataUpdateOrder: {},
                 shippingDateFullDate: "",
                 shippingDateHHMM: "",
                 formDataOrder: {
@@ -434,7 +432,7 @@
                     orderItem: [
                         {
                             shippingAddress: {
-                                receiverName: "",
+                                name: "",
                                 phone: "",
                                 province: "",
                                 district: "",
@@ -549,10 +547,12 @@
                     .then((response) => {
                         let respronseData = response.data;
                         this.listOrderByCustomer = respronseData;
-                        this.formDataUpdateOrder = this.listOrderByCustomer.filter(item => item.id == this.idOrderUpdateQuery);
-                        console.log(this.formDataUpdateOrder.orderItemResponse);
-                        this.productSelected = this.formDataUpdateOrder.orderItemResponse[0].products;
-                        console.log(this.productSelected);
+                        this.formDataOrder = this.listOrderByCustomer.filter(item => item.id == this.idOrderUpdateQuery)[0];
+                        this.productSelected = this.formDataOrder.orderItem[0].products;
+                        this.addressOrderUpdated = this.formDataOrder.orderItem[0].shippingAddress.street 
+                                                    + ", " + this.formDataOrder.orderItem[0].shippingAddress.ward 
+                                                    + ", " + this.formDataOrder.orderItem[0].shippingAddress.district
+                                                    + ", " + this.formDataOrder.orderItem[0].shippingAddress.province;
                     })
                     .catch((e) => {
                         console.log(e);
