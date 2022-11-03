@@ -29,7 +29,7 @@ public class Product {
     @Column(name = "image")
     private String image;
     @Column(name = "is_guest")
-    private Boolean isGuest;
+    private Boolean isGuest = false;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
