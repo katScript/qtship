@@ -64,7 +64,8 @@ public class OrderService {
         Customer customer = this.customerRepository.findById(order.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
-        Order _order = this.processOrder(order).setCustomer(customer);
+        Order _order = this.processOrder(order);
+        _order.setCustomer(customer);
 
         this.orderRepository.save(_order);
     }
