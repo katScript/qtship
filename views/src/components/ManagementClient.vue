@@ -29,13 +29,13 @@
                   <tr :class="classFilterTimeAbout">
                     <td>
                       <label for="start">Từ ngày:</label>
-                      <input type="date" id="from-time-filter" class="form-control" name="trip-start" value="" min=""
-                        max="" />
+                      <input type="date" id="from-time-filter" class="form-control" name="trip-start"
+                        v-model="filterTimeFrom" />
                     </td>
                     <td>
                       <label for="start">Đến ngày ngày:</label>
-                      <input type="date" id="to-time-filter" class="form-control" name="trip-start" value="" min=""
-                        max="" />
+                      <input type="date" id="to-time-filter" class="form-control" name="trip-start"
+                        v-model="filterTimeTo" />
                     </td>
                   </tr>
                   </td>
@@ -49,11 +49,11 @@
               <div class="row text-center overview-total-data">
                 <div class="col-3">
                   <h5>Tổng số đơn hàng</h5>
-                  <h2 id="number-orders">100</h2>
+                  <h2 id="number-orders">{{totalOrderByDate}}</h2>
                 </div>
                 <div class="col-3">
                   <h5>Tổng sản phẩm mới</h5>
-                  <h2 id="number-orders">20</h2>
+                  <h2 id="number-orders">{{totalProductByDate}}</h2>
                 </div>
                 <div class="col-3">
                   <h5>Tổng sản phẩm</h5>
@@ -69,30 +69,18 @@
                 <div class="col-6 col-md-3 number-order-div">
                   <h6>Đơn thành công</h6>
                   <h4 id="number-orders">10</h4>
-                  <p>ĐH: <span id="number-order-success">1</span></p>
-                  <p>SP: <span id="number-prod-success">1</span></p>
-                  <p>CoD: <span id="number-cod-success">1</span></p>
                 </div>
                 <div class="col-6 col-md-3 number-order-div">
                   <h6>Đơn đang giao</h6>
                   <h4 id="number-orders">20</h4>
-                  <p>ĐH: <span id="number-order-processing">1</span></p>
-                  <p>SP: <span id="number-prod-processing">1</span></p>
-                  <p>CoD: <span id="number-cod-processing">1</span></p>
                 </div>
                 <div class="col-6 col-md-3 number-order-div">
                   <h6>Đơn phát sinh</h6>
                   <h4 id="number-orders">10</h4>
-                  <p>ĐH: <span id="number-order-incurred">1</span></p>
-                  <p>SP: <span id="number-prod-incurred">1</span></p>
-                  <p>CoD: <span id="number-cod-incurred">1</span></p>
                 </div>
                 <div class="col-6 col-md-3 number-order-div">
                   <h6>Đơn hủy</h6>
                   <h4 id="number-orders">10</h4>
-                  <p>ĐH: <span id="number-order-cancel">1</span></p>
-                  <p>SP: <span id="number-prod-cancel">1</span></p>
-                  <p>CoD: <span id="number-cod-cancel">1</span></p>
                 </div>
               </div>
               <br />
@@ -129,8 +117,8 @@
                         <td style="padding-right: 10px">Lọc:</td>
                         <td>
                           <select name="cars" id="cars">
-                            <option value="today">Bán chạy nhất</option>
-                            <option value="1week">Bán ít nhất</option>
+                            <option value="bcn">Bán chạy nhất</option>
+                            <option value="bit">Bán ít nhất</option>
                           </select>
                         </td>
                       </tr>
@@ -156,9 +144,9 @@
                       <tr>
                         <td style="padding-right: 10px">Lọc:</td>
                         <td>
-                          <select name="cars" id="cars">
-                            <option value="today">Bán chạy nhất</option>
-                            <option value="1week">Bán ít nhất</option>
+                          <select name="" id="">
+                            <option value="bcn">Bán chạy nhất</option>
+                            <option value="bit">Bán ít nhất</option>
                           </select>
                         </td>
                       </tr>
@@ -198,6 +186,7 @@
   import NotficationClient from "./common/NotficationClient.vue";
   import axios from "axios";
 
+  import moment from 'moment'
   import { useCookies } from "vue3-cookies";
   import { commonFunction } from '../scripts/ulti'
 
@@ -214,7 +203,20 @@
       return {
         filterTime: "today",
         classFilterTimeAbout: "d-none",
-        customerInfo: null
+        customerInfo: null,
+        filterTimeFrom: "",
+        filterTimeTo: "",
+        numberOrderSuccess: 0,
+        numberOrderDelivery: 0,
+        numberOrderOccurred: 0,
+        numberOrderCancel: 0,
+        idRequest: "",
+        configRequestApi: {},
+        listOrderByCustomer: [],
+        listProductByCustomer: [],
+        totalOrderByDate: 0,
+        totalProductByDate: 0,
+        dateFilter: ""
       };
     },
 
@@ -222,34 +224,90 @@
       const { cookies } = useCookies();
       return { cookies };
     },
-
     // <data, methods...>
 
     mounted() {
-      let authenication_cookies = this.cookies.get("authenication_cookies");
-      let idrequest_cookies = this.cookies.get("idrequest_cookies");
-      let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
+      const self = this;
+      let authenication_cookies = self.cookies.get("authenication_cookies");
+      let accesstoken_cookies = self.cookies.get("accesstoken_cookies");
+      self.idRequest = self.cookies.get("idrequest_cookies");
+      self.dateFilter = moment(new Date()).format("YYYY-MM-DD HH:MM:SS");
+
       if (authenication_cookies == null) {
-        commonFunction.redirect('/');
+        commonFunction.redirect("/");
       }
 
-      const config = {
-        headers: { Authorization: 'Bearer ' + accesstoken_cookies }
+      self.configRequestApi = {
+        headers: { Authorization: "Bearer " + accesstoken_cookies },
       };
+
+      //customer
       axios
-        .get(commonFunction.DOMAIN_URL + "v1/customer/detail/" + idrequest_cookies, config)
+        .get(commonFunction.DOMAIN_URL + "v1/customer/detail/" + self.idRequest, self.configRequestApi)
         .then((response) => {
-          this.customerInfo = response.data.customer;
-          localStorage.setItem("id_customer_request", this.customerInfo.id);
+          self.customerInfo = response.data.customer;
+          localStorage.setItem("id_customer_request", self.customerInfo.id);
         }).catch((e) => { console.log(e) })
 
+      //product
+      axios
+        .get(
+          commonFunction.DOMAIN_URL + "v1/product/customer/" + self.idRequest,
+          self.configRequestApi
+        )
+        .then((response) => {
+          let respronseData = response.data;
+          self.listProductByCustomer = respronseData;
+          self.totalProductByDate = self.listProductByCustomer.length;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      //orders
+      axios
+        .get(
+          commonFunction.DOMAIN_URL +
+          "v1/order/all/customer/" +
+          self.idRequest,
+          self.configRequestApi
+        )
+        .then((response) => {
+          let respronseData = response.data;
+          self.listOrderByCustomer = respronseData;
+          self.totalOrderByDate = self.listOrderByCustomer.length;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     watch: {
       filterTime: {
         handler: function () {
-          return this.filterTime == "timeAbout"
+          this.filterTime == "timeAbout"
             ? (this.classFilterTimeAbout = "d-contents")
             : (this.classFilterTimeAbout = "d-none");
+          if (this.filterTime == "today") {
+            this.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
+            this.totalOrderByDate = this.listOrderByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+            this.totalProductByDate = this.listProductByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+          } else if (this.filterTime == "1week") {
+            this.dateFilter = moment().subtract(1, "weeks").format("YYYY-MM-DD HH:MM:SS");
+            this.totalOrderByDate = this.listOrderByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+            this.totalProductByDate = this.listProductByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+          } else if (this.filterTime == "1month") {
+            this.dateFilter = moment().subtract(1, "months").format("YYYY-MM-DD HH:MM:SS");
+            this.totalOrderByDate = this.listOrderByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+            this.totalProductByDate = this.listProductByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+          } else if (this.filterTime == "1year") {
+            this.dateFilter = moment().subtract(1, "years").format("YYYY-MM-DD HH:MM:SS");
+            this.totalOrderByDate = this.listOrderByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+            this.totalProductByDate = this.listProductByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+          } else {
+            this.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
+            this.totalOrderByDate = this.listOrderByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+            this.totalProductByDate = this.listProductByCustomer.filter(e => e.createdAt >= this.dateFilter).length;
+          }
         },
       },
     },
@@ -266,6 +324,7 @@
         };
       },
     },
+
   };
 </script>
 

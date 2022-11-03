@@ -178,9 +178,11 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-2">
-                                                            <input type="number" class="form-control mb-1" v-model="
-                                  formDataOrder.orderItem[0].products[index].qty
-                                " placeholder="SL" />
+                                                            <input type="number" class="form-control mb-1" min="0"
+                                                                v-model=" 
+                                                                formDataOrder.orderItem[0].products[index].qty "
+                                                                placeholder="
+                                                                SL" />
                                                         </div>
                                                         <div class="col-6">
                                                             <input type="text"
