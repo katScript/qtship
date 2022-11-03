@@ -2,6 +2,7 @@ package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
 import com.spring.app.file.services.FilesStorageService;
+import com.spring.app.file.services.FilesStorageServiceImpl;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -14,9 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ProductController {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    FilesStorageService storageService;
+    FilesStorageServiceImpl storageService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct() {
@@ -53,15 +54,12 @@ public class ProductController {
             );
 
             if (p.getImage() != null) {
-                Resource resource = storageService.load(p.getImage());
-
-                if (resource != null) {
-                    try {
-                        pD.setImage(String.valueOf(resource.getURL().getFile()));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                pD.setImage(
+                    ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .build().toUriString()
+                        + "/image/product/" + p.getCustomer().getCustomerId() + "/" + p.getImage()
+                );
             }
 
             productList.add(pD);
@@ -81,7 +79,7 @@ public class ProductController {
             try {
                 Product product;
                 if (productDataRequest.getId() == null) {
-                    Resource resource = storageService.save(productDataRequest.getFile());
+                    Resource resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
 
                     product = new Product(
                             productDataRequest.getSku(),
@@ -111,7 +109,7 @@ public class ProductController {
                             .setPublicPrice(productDataRequest.getPublicPrice())
                             .setDescription(productDataRequest.getDescription());
 
-                    Resource resource = storageService.save(productDataRequest.getFile());
+                    Resource resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
                     product.setImage(resource.getFilename());
                 }
 
@@ -172,15 +170,12 @@ public class ProductController {
                 );
 
                 if (p.getImage() != null) {
-                    Resource resource = storageService.load(p.getImage());
-
-                    if (resource != null) {
-                        try {
-                            pD.setImage(String.valueOf(resource.getURL().getFile()));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+                    pD.setImage(
+                        ServletUriComponentsBuilder
+                            .fromCurrentContextPath()
+                            .build().toUriString()
+                            + "/image/product/" + p.getCustomer().getCustomerId() + "/" + p.getImage()
+                    );
                 }
 
                 productList.add(pD);
