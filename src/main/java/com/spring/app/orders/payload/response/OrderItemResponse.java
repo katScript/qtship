@@ -1,6 +1,7 @@
 package com.spring.app.orders.payload.response;
 
 import com.spring.app.products.payload.response.PackageResponse;
+import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 
 import java.util.List;
@@ -8,13 +9,13 @@ import java.util.List;
 public class OrderItemResponse {
     private Double price;
     private ShippingAddressResponse shippingAddress;
-    private List<PackageResponse> products;
+    private List<ProductDetailResponse> products;
 
     public OrderItemResponse() {}
     public OrderItemResponse(
             Double price,
             ShippingAddressResponse shippingAddress,
-            List<PackageResponse> products
+            List<ProductDetailResponse> products
     ) {
         this.price = price;
         this.shippingAddress = shippingAddress;
@@ -37,11 +38,11 @@ public class OrderItemResponse {
         this.shippingAddress = shippingAddressResponse;
     }
 
-    public List<PackageResponse> getProducts() {
+    public List<ProductDetailResponse> getProducts() {
         return products;
     }
 
-    public void setProducts(List<PackageResponse> products) {
+    public void setProducts(List<ProductDetailResponse> products) {
         this.products = products;
     }
 }

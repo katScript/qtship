@@ -18,6 +18,7 @@ import com.spring.app.products.models.Package;
 import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.response.PackageResponse;
+import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
@@ -89,16 +90,20 @@ public class OrderController {
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
 
         for (OrderItem i : o.getOrderItemSet()) {
-            List<PackageResponse> packageResponses = new ArrayList<>();
+            List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
 
             for (Package itemPackage : i.getPackages()) {
-                packageResponses.add(new PackageResponse(
+                productDetailResponses.add(new ProductDetailResponse(
                         itemPackage.getProduct().getId(),
+                        itemPackage.getProduct().getCustomer().getCustomerId(),
+                        itemPackage.getProduct().getCustomer().getFullName(),
                         itemPackage.getProduct().getSku(),
                         itemPackage.getQty(),
                         itemPackage.getProduct().getName(),
                         itemPackage.getProduct().getWeight(),
-                        itemPackage.getProduct().getPublicPrice()
+                        itemPackage.getProduct().getBasePrice(),
+                        itemPackage.getProduct().getPublicPrice(),
+                        itemPackage.getProduct().getDescription()
                 ));
             }
 
@@ -115,7 +120,7 @@ public class OrderController {
                             i.getShippingAddress().getWardId(),
                             i.getShippingAddress().getStreet()
                     ),
-                    packageResponses
+                    productDetailResponses
             ));
         }
 
@@ -164,16 +169,20 @@ public class OrderController {
             List<OrderItemResponse> orderItemResponses = new ArrayList<>();
 
             for (OrderItem i : o.getOrderItemSet()) {
-                List<PackageResponse> packageResponses = new ArrayList<>();
+                List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
 
                 for (Package itemPackage : i.getPackages()) {
-                    packageResponses.add(new PackageResponse(
+                    productDetailResponses.add(new ProductDetailResponse(
                             itemPackage.getProduct().getId(),
+                            itemPackage.getProduct().getCustomer().getCustomerId(),
+                            itemPackage.getProduct().getCustomer().getFullName(),
                             itemPackage.getProduct().getSku(),
                             itemPackage.getQty(),
                             itemPackage.getProduct().getName(),
                             itemPackage.getProduct().getWeight(),
-                            itemPackage.getProduct().getPublicPrice()
+                            itemPackage.getProduct().getBasePrice(),
+                            itemPackage.getProduct().getPublicPrice(),
+                            itemPackage.getProduct().getDescription()
                     ));
                 }
 
@@ -190,7 +199,7 @@ public class OrderController {
                                 i.getShippingAddress().getWardId(),
                                 i.getShippingAddress().getStreet()
                         ),
-                        packageResponses
+                        productDetailResponses
                 ));
             }
 
@@ -254,16 +263,20 @@ public class OrderController {
                 List<OrderItemResponse> orderItemResponses = new ArrayList<>();
 
                 for (OrderItem i : o.getOrderItemSet()) {
-                    List<PackageResponse> packageResponses = new ArrayList<>();
+                    List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
 
                     for (Package itemPackage : i.getPackages()) {
-                        packageResponses.add(new PackageResponse(
+                        productDetailResponses.add(new ProductDetailResponse(
                                 itemPackage.getProduct().getId(),
+                                itemPackage.getProduct().getCustomer().getCustomerId(),
+                                itemPackage.getProduct().getCustomer().getFullName(),
                                 itemPackage.getProduct().getSku(),
                                 itemPackage.getQty(),
                                 itemPackage.getProduct().getName(),
                                 itemPackage.getProduct().getWeight(),
-                                itemPackage.getProduct().getPublicPrice()
+                                itemPackage.getProduct().getBasePrice(),
+                                itemPackage.getProduct().getPublicPrice(),
+                                itemPackage.getProduct().getDescription()
                         ));
                     }
 
@@ -280,7 +293,7 @@ public class OrderController {
                                     i.getShippingAddress().getWardId(),
                                     i.getShippingAddress().getStreet()
                             ),
-                            packageResponses
+                            productDetailResponses
                     ));
                 }
 
