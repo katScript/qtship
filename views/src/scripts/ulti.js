@@ -4,7 +4,7 @@ import $ from "jquery"
 
 const commonFunction = {
     redirect: function(url) { window.location.href = url; },
-    reloadPage: function() {location.reload();},
+    reloadPage: function() {location.reload(true);},
     apiProvincesURL: 'https://vapi.vnappmob.com/api/province/',
     apiBanksURL: 'https://api.vietqr.io/v2/banks',
     encodePassword: function(pass) { return md5(sha256(pass)); },
