@@ -47,7 +47,9 @@ public class ProductController {
                     p.getWeight(),
                     p.getBasePrice(),
                     p.getPublicPrice(),
-                    p.getDescription()
+                    p.getDescription(),
+                    p.getCreatedAt(),
+                    p.getUpdatedAt()
             );
 
             if (p.getImage() != null) {
@@ -164,7 +166,9 @@ public class ProductController {
                         p.getWeight(),
                         p.getBasePrice(),
                         p.getPublicPrice(),
-                        p.getDescription()
+                        p.getDescription(),
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
                 );
 
                 if (p.getImage() != null) {

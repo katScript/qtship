@@ -1,5 +1,7 @@
 package com.spring.app.products.payload.response;
 
+import java.util.Date;
+
 public class ProductDetailResponse {
     private Long id;
     private String customerId;
@@ -12,6 +14,8 @@ public class ProductDetailResponse {
     private Double publicPrice;
     private String description;
     private String image;
+    private Date createdDate;
+    private Date updatedDate;
 
     public ProductDetailResponse() {}
 
@@ -25,7 +29,9 @@ public class ProductDetailResponse {
             Double weight,
             Double basePrice,
             Double publicPrice,
-            String description
+            String description,
+            Date createdDate,
+            Date updatedDate
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -37,6 +43,8 @@ public class ProductDetailResponse {
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;
         this.description = description;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }
 
     public Long getId() {
@@ -125,5 +133,21 @@ public class ProductDetailResponse {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }
