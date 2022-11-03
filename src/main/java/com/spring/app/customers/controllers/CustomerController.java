@@ -37,7 +37,7 @@ public class CustomerController {
         return ResponseEntity.ok(responses);
     }
 
-    @DeleteMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public ResponseEntity<?> customerDetail(@Valid @PathVariable Long id) {
         User user = userRepository.findById(id)
                 .orElse(null);
@@ -54,7 +54,7 @@ public class CustomerController {
         return ResponseEntity.ok(new DetailResponse(customer));
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCustomer(@Valid @PathVariable Long id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 
