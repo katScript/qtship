@@ -1,50 +1,74 @@
 package com.spring.app.file.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
-    private final Path root = Paths.get("views//src//images//product");
+    @Value("${qt.app.serviceBasePath}")
+    private String basePath;
 
-    private final List<String> base = new ArrayList<String>() {{
-        add("views");
-        add("views//src");
-        add("views//src//images");
-        add("views//src//images//product");
-    }};
+    public Path getRoot() {
+        return Paths.get(basePath + "/views/src/images/product");
+    }
+
+    public Path getRoot(String path) {
+        return Paths.get(basePath + "/views/src/images/product/" + path);
+    }
 
     @Override
     public void init() {
         try {
-            for (String b: base) {
-                Files.createDirectory(Paths.get(b));
-            }
+            Files.createDirectory(this.getRoot());
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
 
     @Override
+    public void init(String path) {
+        try {
+            Files.createDirectory(this.getRoot(path));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+    }
+
+    @Override
+    public Resource save(MultipartFile file, String path) {
+        try {
+            if (!Files.exists(this.getRoot(path)))
+                this.init(path);
+
+            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()), REPLACE_EXISTING);
+
+            return this.load(file.getOriginalFilename());
+        } catch (Exception e) {
+            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+        }
+    }
+
+    @Override
     public Resource save(MultipartFile file) {
         try {
-            if (!Files.exists(root))
+            if (!Files.exists(this.getRoot()))
                 this.init();
 
-            Files.deleteIfExists(this.root.resolve(file.getOriginalFilename()));
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.getRoot().resolve(file.getOriginalFilename()), REPLACE_EXISTING);
 
             return this.load(file.getOriginalFilename());
         } catch (Exception e) {
@@ -55,7 +79,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public Resource load(String filename) {
         try {
-            Path file = root.resolve(filename);
+            Path file = this.getRoot().resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -70,15 +94,19 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        FileSystemUtils.deleteRecursively(this.getRoot().toFile());
     }
 
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.getRoot(), 1).filter(path -> !path.equals(this.getRoot())).map(this.getRoot()::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
+    }
+
+    public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
+        return Files.readAllBytes(new File(basePath + "/views/src/images/product/" + fileName).toPath());
     }
 }

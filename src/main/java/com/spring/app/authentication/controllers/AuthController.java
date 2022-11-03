@@ -1,17 +1,13 @@
 package com.spring.app.authentication.controllers;
 
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.spring.app.authentication.models.Role;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.request.LoginRequest;
-import com.spring.app.authentication.payload.request.SignupRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
 import com.spring.app.customers.payload.request.auth.ForgotPasswordRequest;
 import com.spring.app.customers.payload.response.customer.ForgotPasswordResponse;
