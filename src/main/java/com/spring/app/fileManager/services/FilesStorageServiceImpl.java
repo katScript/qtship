@@ -54,7 +54,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             if (!Files.exists(this.getRoot(path)))
                 this.init(path);
 
-            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()), REPLACE_EXISTING);
+            Files.deleteIfExists(this.getRoot(path).resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()));
 
             return this.load(path + "/" + file.getOriginalFilename());
         } catch (Exception e) {
@@ -68,6 +69,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             if (!Files.exists(this.getRoot()))
                 this.init();
 
+            Files.deleteIfExists(this.getRoot().resolve(file.getOriginalFilename()));
             Files.copy(file.getInputStream(), this.getRoot().resolve(file.getOriginalFilename()), REPLACE_EXISTING);
 
             return this.load(file.getOriginalFilename());
