@@ -182,7 +182,7 @@ public class OrderService {
             _shippingAddress = new ShippingAddress();
         }
 
-        _shippingAddress.setName(shippingAddress.getReceiverName())
+        _shippingAddress.setName(shippingAddress.getName())
                 .setPhone(shippingAddress.getPhone())
                 .setProvince(shippingAddress.getProvince())
                 .setProvinceId(shippingAddress.getProvinceId())
