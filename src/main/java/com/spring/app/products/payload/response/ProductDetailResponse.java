@@ -14,8 +14,8 @@ public class ProductDetailResponse {
     private Double publicPrice;
     private String description;
     private String image;
-    private Date createdDate;
-    private Date updatedDate;
+    private Date createdAt;
+    private Date updatedAt;
 
     public ProductDetailResponse() {}
 
@@ -30,8 +30,8 @@ public class ProductDetailResponse {
             Double basePrice,
             Double publicPrice,
             String description,
-            Date createdDate,
-            Date updatedDate
+            Date createdAt,
+            Date updatedAt
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -43,8 +43,8 @@ public class ProductDetailResponse {
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;
         this.description = description;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -135,19 +135,19 @@ public class ProductDetailResponse {
         this.image = image;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedAt(Date createdDate) {
+        this.createdAt = createdDate;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedAt(Date updatedDate) {
+        this.updatedAt = updatedDate;
     }
 }
