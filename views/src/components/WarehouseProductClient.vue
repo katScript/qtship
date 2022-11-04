@@ -363,6 +363,9 @@
                       style="width: 80px; height: 80px"
                     />
                   </template>
+                  <template #item-createdAt="item">
+                    {{formatDateYYYYMMDD(item.createdAt)}}
+                  </template>
                   <template #item-image="item">
                     <img :src="item.image" style="width: 80px; height: 80px" />
                   </template>
@@ -418,6 +421,7 @@ import NotficationClient from "./common/NotficationClient.vue";
 import PopupNotify from "./common/PopupNotify.vue";
 import ActionLoading from "./common/ActionLoading.vue";
 
+import moment from "moment";
 import { useCookies } from "vue3-cookies";
 import { commonFunction } from "../scripts/ulti";
 import { debounce } from "vue-debounce";
@@ -472,6 +476,7 @@ export default {
         { text: "Giá gốc (VNĐ)", value: "basePrice", sortable: true },
         { text: "Giá bán (VNĐ)", value: "publicPrice", sortable: true },
         { text: "Mô tả", value: "description" },
+        { text: "Ngày tạo", value: "createdAt", sortable: true },
         { text: "Chức năng", value: "btn-function" },
       ],
       listWarehouseByCustomer: [],
@@ -860,6 +865,9 @@ export default {
         this.msgValidationFor.product.image =
           "Vui lòng upload ảnh cho sản phẩm!";
       }
+    },
+    formatDateYYYYMMDD(value) {
+      return moment(value).format("YYYY-MM-DD");
     },
   },
 };
