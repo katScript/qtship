@@ -1,11 +1,12 @@
 package com.spring.app.orders.payload.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderStatusRequest {
     private Long id;
     private String code;
-    private List<String> child;
+    private List<String> child = new ArrayList<>();
 
     public String getCode() {
         return code;
