@@ -52,25 +52,22 @@ public class OrderController {
 
     OrderService orderService;
 
-    private void initOrderService() {
-        if (this.orderService == null)
-            this.orderService = new OrderService(
-                    this.orderRepository,
-                    this.orderItemRepository,
-                    this.orderStatusRepository,
-                    this.customerRepository,
-                    this.productRepository,
-                    this.packageRepository,
-                    this.shippingAddressRepository,
-                    this.warehouseRepository,
-                    this.couponRepository
-            );
+    public OrderController() {
+        this.orderService = new OrderService(
+                this.orderRepository,
+                this.orderItemRepository,
+                this.orderStatusRepository,
+                this.customerRepository,
+                this.productRepository,
+                this.packageRepository,
+                this.shippingAddressRepository,
+                this.warehouseRepository,
+                this.couponRepository
+        );
     }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderDataRequest order) {
-        this.initOrderService();
-
         if (order.getCustomerId() != null) {
             this.orderService.saveCustomerOrder(order);
         } else {
@@ -82,8 +79,6 @@ public class OrderController {
 
     @PostMapping("/update/status")
     public ResponseEntity<?> updateOrderStatus(@Valid @RequestBody OrderStatusUpdateRequest order) {
-        this.initOrderService();
-
         this.orderService.updateStatus(order);
 
         return ResponseEntity.ok(new MessageResponse("Status update successfully!"));
