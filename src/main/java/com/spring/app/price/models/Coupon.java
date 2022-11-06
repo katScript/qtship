@@ -14,6 +14,8 @@ public class Coupon {
     private Long id;
     @Column(name = "code")
     private String code;
+    @Column(name = "enable")
+    private Boolean enable;
     @Column(name = "rule")
     private String rule;
     @Column(name = "value")
@@ -28,6 +30,8 @@ public class Coupon {
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
+    public static String BASE = "base";
+    public static String PERCENT = "percent";
 
     public Coupon() {}
 
@@ -37,7 +41,8 @@ public class Coupon {
             Double value,
             Date validFrom,
             Date validTo,
-            String validRoles
+            String validRoles,
+            Boolean enable
     ) {
         this.code = code;
         this.rule = rule;
@@ -45,6 +50,11 @@ public class Coupon {
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.validRoles = validRoles;
+        this.enable = enable;
+    }
+
+    public Boolean isValid() {
+        return this.getValidFrom().after(new Date()) && this.getValidTo().after(new Date());
     }
 
     public Long getId() {
@@ -55,63 +65,79 @@ public class Coupon {
         return code;
     }
 
-    public void setCode(String code) {
+    public Coupon setCode(String code) {
         this.code = code;
+        return this;
     }
 
     public String getRule() {
         return rule;
     }
 
-    public void setRule(String rule) {
+    public Coupon setRule(String rule) {
         this.rule = rule;
+        return this;
     }
 
     public Double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public Coupon setValue(Double value) {
         this.value = value;
+        return this;
     }
 
     public Date getValidFrom() {
         return validFrom;
     }
 
-    public void setValidFrom(Date validFrom) {
+    public Coupon setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
+        return this;
     }
 
     public Date getValidTo() {
         return validTo;
     }
 
-    public void setValidTo(Date validTo) {
+    public Coupon setValidTo(Date validTo) {
         this.validTo = validTo;
+        return this;
     }
 
     public String getValidRoles() {
         return validRoles;
     }
 
-    public void setValidRoles(String validRoles) {
+    public Coupon setValidRoles(String validRoles) {
         this.validRoles = validRoles;
+        return this;
     }
 
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public Coupon setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public Coupon setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

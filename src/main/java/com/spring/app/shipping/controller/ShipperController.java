@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,9 @@ public class ShipperController {
                     sh.getPhone(),
                     sh.getAddress(),
                     sh.getCurrentAddress(),
-                    sh.getCreatedAt()
+                    sh.getCreatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             ));
         }
 
@@ -66,7 +70,9 @@ public class ShipperController {
                 shipper.getPhone(),
                 shipper.getAddress(),
                 shipper.getCurrentAddress(),
-                shipper.getCreatedAt()
+                shipper.getCreatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         ));
     }
 

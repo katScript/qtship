@@ -3,12 +3,13 @@ package com.spring.app.orders.payload.request;
 import com.spring.app.products.payload.request.PackageDataRequest;
 import com.spring.app.shipping.payload.request.ShippingAddressRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemRequest {
     private Long id;
     private ShippingAddressRequest shippingAddress;
-    private List<PackageDataRequest> products;
+    private List<PackageDataRequest> products = new ArrayList<>();
 
     public Long getId() {
         return id;

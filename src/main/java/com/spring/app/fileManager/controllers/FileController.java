@@ -23,6 +23,13 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
+    }
 
+    @GetMapping("/product/{fileName}")
+    public ResponseEntity<?> downloadImageFromFileSystem(@Valid @PathVariable String fileName) throws IOException {
+        byte[] imageData = service.downloadImageFromFileSystem(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
     }
 }

@@ -2,7 +2,8 @@
 node_modules
 /dist
 
-src/images/product
+src/images/product/*
+!src/images/product/img-default.jpg
 
 # local env files
 .env.local

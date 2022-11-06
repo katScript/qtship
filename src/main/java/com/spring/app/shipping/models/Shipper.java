@@ -36,6 +36,7 @@ public class Shipper {
     public Shipper(
         String fullName,
         String email,
+        String phone,
         String address,
         String currentAddress,
         User user
@@ -44,6 +45,7 @@ public class Shipper {
         this.email = email;
         this.address = address;
         this.currentAddress = currentAddress;
+        this.phone = phone;
         this.user = user;
     }
 
