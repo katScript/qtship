@@ -36,6 +36,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="">Tên kho:</label>
+                    <small class="text-danger">{{msgValidationFor.warehouse.name}}</small>
                     <input
                       type="text"
                       class="form-control"
@@ -46,6 +47,7 @@
                   </div>
                   <div class="form-group">
                     <label for="">Địa chỉ:</label>
+                    <small class="text-danger">{{msgValidationFor.warehouse.address}}</small>
                     <input
                       type="text"
                       class="form-control"
@@ -56,6 +58,7 @@
                   </div>
                   <div class="form-group">
                     <label for="">Thông tin liên hệ:</label>
+                    <small class="text-danger">{{msgValidationFor.warehouse.phone}}</small>
                     <input
                       type="text"
                       class="form-control"
@@ -134,6 +137,7 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label for="">Tên sản phẩm</label>
+                      <small class="text-danger"> {{msgValidationFor.product.name}}</small>
                       <input
                         type="text"
                         class="form-control"
@@ -153,6 +157,7 @@
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label for="">SKU</label>
+                      <small class="text-danger"> {{msgValidationFor.product.sku}}</small>
                       <input
                         type="text"
                         class="form-control"
@@ -171,6 +176,7 @@
                         <table class="w-100">
                           <tr>
                             <td>
+                              <small class="text-danger"> {{msgValidationFor.product.basePrice}}</small>
                               <input
                                 type="text"
                                 class="form-control"
@@ -190,6 +196,7 @@
                         <table class="w-100">
                           <tr>
                             <td>
+                              <small class="text-danger"> {{msgValidationFor.product.publicPrice}}</small>
                               <input
                                 type="text"
                                 class="form-control"
@@ -209,6 +216,7 @@
                         <table class="w-100">
                           <tr>
                             <td>
+                              <small class="text-danger"> {{msgValidationFor.product.weight}}</small>
                               <input
                                 type="text"
                                 class="form-control"
@@ -232,6 +240,7 @@
                           <div class="col-4">
                             <div class="form-group">
                               <label for="">Số lượng</label>
+                              <small class="text-danger"> {{msgValidationFor.product.qty}}</small>
                               <input
                                 type="text"
                                 class="form-control"
@@ -243,7 +252,8 @@
                           <div class="col-8">
                             <div class="form-group">
                               <label for="">Ảnh sản phẩm</label>
-                              <span>{{ formDataProduct.image }}</span>
+                              <small class="text-danger"> {{msgValidationFor.product.image}}</small>
+                              <span v-if="!urlImgProductUpload">{{ formDataProduct.image }}</span>
                               <input
                                 type="file"
                                 class="form-control"
@@ -291,7 +301,7 @@
                           width="200"
                           height="200"
                           class=""
-                          v-if="urlImgProductUpload && !formDataProduct.image"
+                          v-else-if="urlImgProductUpload"
                           :src="urlImgProductUpload"
                         />
                         <img
@@ -299,7 +309,7 @@
                           width="200"
                           height="200"
                           class=""
-                          v-if="formDataProduct.image"
+                          v-else-if="formDataProduct.image"
                           :src="formDataProduct.image"
                         />
                       </div>
@@ -475,7 +485,6 @@ export default {
         { text: "Trọng lượng(kg)", value: "weight", sortable: true },
         { text: "Giá gốc (VNĐ)", value: "basePrice", sortable: true },
         { text: "Giá bán (VNĐ)", value: "publicPrice", sortable: true },
-        { text: "Mô tả", value: "description" },
         { text: "Ngày tạo", value: "createdAt", sortable: true },
         { text: "Chức năng", value: "btn-function" },
       ],
@@ -860,7 +869,13 @@ export default {
           "Vui lòng nhập giá bán của sản phẩm!";
       }
 
-      if (this.$refs.productImgUpload.files[0] == null) {
+      if (this.formDataProduct.weight == "") {
+        this.isValid += 1;
+        this.msgValidationFor.product.weight =
+          "Vui lòng nhập trọng lượng của sản phẩm!";
+      }
+
+      if (this.$refs.productImgUpload.files[0] == null && this.formDataProduct.image == "") {
         this.isValid += 1;
         this.msgValidationFor.product.image =
           "Vui lòng upload ảnh cho sản phẩm!";
