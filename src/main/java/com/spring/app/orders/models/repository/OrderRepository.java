@@ -13,6 +13,6 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomer (Customer customer);
 
-    @Query("select o from Order o where o.customer = ?1 and o.status = ?2 and o.createdAt between ?3 and ?4 order by o.createdAt desc")
+    @Query("select o from Order o where o.customer = ?1 and o.status = ?2 or ?2 is null and o.createdAt between ?3 and ?4 order by o.createdAt desc")
     List<Order> findByCustomerAndStatusAndCreatedAtBetween (Customer customer, String status, Date from, Date to);
 }

@@ -57,7 +57,8 @@ public class OrderService {
     }
 
     public void saveGuestOrder(OrderDataRequest order) {
-        this.orderRepository.save(this.processOrder(order));
+        Order _order = this.processOrder(order);
+        this.orderRepository.save(_order);
     }
 
     public void saveCustomerOrder(OrderDataRequest order) {
@@ -128,7 +129,6 @@ public class OrderService {
 
             orderItem.setPackages(packageSet);
             orderItem.setShippingAddress(this.processShippingAddress(od.getShippingAddress()));
-            orderItem.setPrice(processPrice(orderItem.getPackages()));
             orderItem.setOrder(order);
             orderItemSet.add(orderItem);
         }

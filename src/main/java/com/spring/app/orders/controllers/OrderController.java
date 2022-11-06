@@ -249,7 +249,7 @@ public class OrderController {
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getOrderByCustomerId(
             @Valid @PathVariable Long id,
-            @RequestParam(value = "status", required = false, defaultValue = "default") String status,
+            @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to
     ) throws ParseException {
