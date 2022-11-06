@@ -48,6 +48,7 @@ const commonFunction = {
     typeNotifyCreate: 'CREATE',
     typeNotifySuccess: 'SUCCESS',
     typeNotifyFail: 'FAIL',
+    typeNotifyCancel: 'CANCEL',
     typeShipping: [
         "STANDARD",
         "FAST",
