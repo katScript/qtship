@@ -10,17 +10,28 @@ import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.request.OrderDataRequest;
 import com.spring.app.orders.payload.request.OrderItemRequest;
+import com.spring.app.orders.payload.request.OrderStatusRequest;
+import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
+import com.spring.app.orders.payload.response.OrderItemResponse;
+import com.spring.app.orders.payload.response.OrderListResponse;
+import com.spring.app.price.models.repository.CouponRepository;
+import com.spring.app.price.service.PriceCalculate;
 import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
 import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.request.PackageDataRequest;
+import com.spring.app.products.payload.response.ProductDetailResponse;
+import com.spring.app.products.service.ProductService;
 import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.request.ShippingAddressRequest;
+import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
+import com.spring.app.warehouse.payload.response.WarehouseListResponse;
 
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class OrderService {
@@ -32,6 +43,8 @@ public class OrderService {
     public ProductRepository productRepository;
     public ShippingAddressRepository shippingAddressRepository;
     public WarehouseRepository warehouseRepository;
+    public PriceCalculate priceCalculate;
+    public ProductService productService;
 
     public OrderService() {}
 
@@ -43,7 +56,8 @@ public class OrderService {
             ProductRepository productRepository,
             PackageRepository packageRepository,
             ShippingAddressRepository shippingAddressRepository,
-            WarehouseRepository warehouseRepository
+            WarehouseRepository warehouseRepository,
+            CouponRepository couponRepository
     ) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
@@ -53,7 +67,21 @@ public class OrderService {
         this.packageRepository = packageRepository;
         this.shippingAddressRepository = shippingAddressRepository;
         this.warehouseRepository = warehouseRepository;
+        this.productService = new ProductService();
+        this.priceCalculate = new PriceCalculate(couponRepository);
 
+    }
+
+    public void updateStatus(OrderStatusUpdateRequest order) {
+        Order _order = this.orderRepository.findById(order.getId())
+                .orElseThrow(() -> new RuntimeException("Order not found!"));
+
+
+        OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus())
+                .orElseThrow(() -> new RuntimeException("Order status not found!"));
+
+        _order.setStatus(status.getCode());
+        this.orderRepository.save(_order);
     }
 
     public void saveGuestOrder(OrderDataRequest order) {
@@ -98,13 +126,8 @@ public class OrderService {
                 );
 
         Set<OrderItem> orderItems = this.processOrderItem(order.getOrderItem(), _order);
-        Double subtotal = 0.0;
-
-        for (OrderItem oi: orderItems) {
-            subtotal += oi.getPrice();
-        }
-
-        _order.setOrderItemSet(orderItems).setSubtotal(subtotal);
+        _order.setOrderItemSet(orderItems);
+        priceCalculate.processSubtotal(_order);
 
         OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
         _order.setStatus(status.getCode());
@@ -204,5 +227,69 @@ public class OrderService {
         }
 
         return packages;
+    }
+
+    public OrderListResponse getOrderDetail(Order order) {
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+
+        for (OrderItem i : order.getOrderItemSet()) {
+            List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
+
+            for (Package itemPackage : i.getPackages()) {
+                productDetailResponses.add(
+                        this.productService.
+                                processProductDataResponse(itemPackage.getProduct())
+                );
+            }
+
+            orderItemResponses.add(new OrderItemResponse(
+                    i.getPrice(),
+                    new ShippingAddressResponse(
+                            i.getShippingAddress().getName(),
+                            i.getShippingAddress().getPhone(),
+                            i.getShippingAddress().getProvince(),
+                            i.getShippingAddress().getDistrict(),
+                            i.getShippingAddress().getWard(),
+                            i.getShippingAddress().getProvinceId(),
+                            i.getShippingAddress().getDistrictId(),
+                            i.getShippingAddress().getWardId(),
+                            i.getShippingAddress().getStreet()
+                    ),
+                    productDetailResponses
+            ));
+        }
+
+        return new OrderListResponse(
+                order.getOrderCode(),
+                order.getCustomer().getCustomerId(),
+                order.getStatus(),
+                order.getFeedback(),
+                order.getNote(),
+                order.getSubtotal(),
+                order.getSenderName(),
+                order.getSenderPhone(),
+                order.getSenderAddress(),
+                order.getNotification(),
+                order.getShippingFee(),
+                order.getShippingType(),
+                order.getShippingTime().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                order.getCoupon(),
+                order.getCreatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                order.getUpdatedAt().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                orderItemResponses,
+                new WarehouseListResponse(
+                        order.getWarehouse().getId(),
+                        order.getWarehouse().getName(),
+                        order.getWarehouse().getAddress(),
+                        order.getWarehouse().getPhone()
+                ),
+                order.getReturnCode()
+        );
     }
 }

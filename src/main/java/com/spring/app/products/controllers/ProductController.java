@@ -9,12 +9,12 @@ import com.spring.app.products.models.Product;
 import com.spring.app.products.payload.request.ProductDataRequest;
 import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.products.models.repository.ProductRepository;
+import com.spring.app.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public class ProductController {
     ProductRepository productRepository;
     @Autowired
     FilesStorageServiceImpl storageService;
+    ProductService productService = new ProductService();
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct() {
@@ -37,31 +38,7 @@ public class ProductController {
         List<ProductDetailResponse> productList = new ArrayList<>();
 
         for (Product p : products) {
-            ProductDetailResponse pD = new ProductDetailResponse(
-                    p.getId(),
-                    p.getCustomer().getCustomerId(),
-                    p.getCustomer().getFullName(),
-                    p.getSku(),
-                    p.getQty(),
-                    p.getName(),
-                    p.getWeight(),
-                    p.getBasePrice(),
-                    p.getPublicPrice(),
-                    p.getDescription(),
-                    p.getCreatedAt(),
-                    p.getUpdatedAt()
-            );
-
-            if (p.getImage() != null) {
-                pD.setImage(
-                    ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .build().toUriString()
-                        + "/image/product/" + p.getCustomer().getCustomerId() + "/" + p.getImage()
-                );
-            }
-
-            productList.add(pD);
+            productList.add(this.productService.processProductDataResponse(p));
         }
 
         return ResponseEntity.ok(productList);
@@ -77,9 +54,13 @@ public class ProductController {
         if (customer != null) {
             try {
                 Product product;
-                if (productDataRequest.getId() == null) {
-                    Resource resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
+                Resource resource = null;
 
+                if (productDataRequest.getFile() != null) {
+                    resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
+                }
+
+                if (productDataRequest.getId() == null) {
                     product = new Product(
                             productDataRequest.getSku(),
                             productDataRequest.getName(),
@@ -88,7 +69,7 @@ public class ProductController {
                             productDataRequest.getBasePrice(),
                             productDataRequest.getPublicPrice(),
                             productDataRequest.getDescription(),
-                            resource.getFilename(),
+                            resource != null ? resource.getFilename() : null,
                             customer
                     );
                 } else {
@@ -108,8 +89,7 @@ public class ProductController {
                             .setPublicPrice(productDataRequest.getPublicPrice())
                             .setDescription(productDataRequest.getDescription());
 
-                    Resource resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
-                    product.setImage(resource.getFilename());
+                    product.setImage(resource != null ? resource.getFilename() : null);
                 }
 
                 productRepository.save(product);
@@ -153,31 +133,7 @@ public class ProductController {
             List<ProductDetailResponse> productList = new ArrayList<>();
 
             for (Product p : customer.getProducts()) {
-                ProductDetailResponse pD = new ProductDetailResponse(
-                        p.getId(),
-                        customer.getCustomerId(),
-                        customer.getFullName(),
-                        p.getSku(),
-                        p.getQty(),
-                        p.getName(),
-                        p.getWeight(),
-                        p.getBasePrice(),
-                        p.getPublicPrice(),
-                        p.getDescription(),
-                        p.getCreatedAt(),
-                        p.getUpdatedAt()
-                );
-
-                if (p.getImage() != null) {
-                    pD.setImage(
-                        ServletUriComponentsBuilder
-                            .fromCurrentContextPath()
-                            .build().toUriString()
-                            + "/image/product/" + p.getCustomer().getCustomerId() + "/" + p.getImage()
-                    );
-                }
-
-                productList.add(pD);
+                productList.add(this.productService.processProductDataResponse(p));
             }
 
             return ResponseEntity.ok(productList);

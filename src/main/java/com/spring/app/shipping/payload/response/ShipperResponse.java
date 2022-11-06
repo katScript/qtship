@@ -10,7 +10,7 @@ public class ShipperResponse {
     private String phone;
     private String address;
     private String currentAddress;
-    private Date createdAt;
+    private String createdAt;
 
     public ShipperResponse() {}
 
@@ -22,7 +22,7 @@ public class ShipperResponse {
             String phone,
             String address,
             String currentAddress,
-            Date createdAt
+            String createdAt
     ) {
         this.id = id;
         this.shipperCode = shipperCode;
@@ -90,11 +90,11 @@ public class ShipperResponse {
         this.currentAddress = currentAddress;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 }

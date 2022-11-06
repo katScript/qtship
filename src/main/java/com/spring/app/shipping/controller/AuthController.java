@@ -54,6 +54,7 @@ public class AuthController {
             Shipper shipper = new Shipper(
                     registerRequest.getData().getFullName(),
                     registerRequest.getData().getEmail(),
+                    registerRequest.getData().getPhone(),
                     registerRequest.getData().getAddress(),
                     registerRequest.getData().getCurrentAddress(),
                     user

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +25,7 @@ public class OrderDataRequest {
     private String returnCode;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime shippingDate;
-    private List<OrderItemRequest> orderItem;
-
+    private List<OrderItemRequest> orderItem = new ArrayList<>();
 
     public Long getId() {
         return id;

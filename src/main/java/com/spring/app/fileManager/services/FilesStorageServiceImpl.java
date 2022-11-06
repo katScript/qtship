@@ -14,6 +14,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -21,6 +22,8 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class FilesStorageServiceImpl implements FilesStorageService {
     @Value("${qt.app.serviceBasePath}")
     private String basePath;
+
+    public static final String DEFAULT = "img-default.jpg";
 
     public Path getRoot() {
         return Paths.get(basePath + "/views/src/images/product");
@@ -110,5 +113,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
         return Files.readAllBytes(new File(basePath + "/views/src/images/product/" + fileName).toPath());
+    }
+
+    public String getImageUrl(String path) {
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .build().toUriString()
+                + "/image/product/" + path;
     }
 }
