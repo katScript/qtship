@@ -1,10 +1,15 @@
 package com.spring.app.products.service;
 
 import com.spring.app.fileManager.services.FilesStorageServiceImpl;
+import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
+import com.spring.app.products.payload.response.PackageResponse;
 import com.spring.app.products.payload.response.ProductDetailResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ProductService {
@@ -34,5 +39,30 @@ public class ProductService {
         );
 
         return pD;
+    }
+
+    public PackageResponse processPackageProductResponse(Package data) {
+        Product product = data.getProduct();
+        PackageResponse pk = new PackageResponse(
+                data.getId(),
+                product.getId(),
+                product.getCustomer().getCustomerId(),
+                product.getCustomer().getFullName(),
+                product.getSku(),
+                data.getQty(),
+                product.getName(),
+                product.getWeight(),
+                product.getBasePrice(),
+                product.getPublicPrice(),
+                product.getDescription()
+        );
+
+        pk.setImage(
+                data.getProduct().getImage() != null ?
+                        storageService.getImageUrl(product.getCustomer().getCustomerId() + "/" + product.getImage()) :
+                        storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT)
+        );
+
+        return pk;
     }
 }

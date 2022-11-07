@@ -1,6 +1,7 @@
 package com.spring.app.shipping.payload.response;
 
 public class ShippingAddressResponse {
+    private Long id;
     private String name;
     private String phone;
     private String province;
@@ -14,6 +15,7 @@ public class ShippingAddressResponse {
     public ShippingAddressResponse() {}
 
     public ShippingAddressResponse(
+            Long id,
             String name,
             String phone,
             String province,
@@ -24,6 +26,7 @@ public class ShippingAddressResponse {
             String wardId,
             String street
     ) {
+        this.id = id;
         this.name = name;
         this.phone = phone;
         this.province = province;
@@ -106,5 +109,13 @@ public class ShippingAddressResponse {
 
     public void setWardId(String wardId) {
         this.wardId = wardId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
