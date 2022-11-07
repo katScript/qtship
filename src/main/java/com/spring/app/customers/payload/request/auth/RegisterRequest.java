@@ -1,8 +1,8 @@
 package com.spring.app.customers.payload.request.auth;
 
-import com.spring.app.customers.payload.Address;
-import com.spring.app.customers.payload.Customer;
-import com.spring.app.customers.payload.ForControl;
+import com.spring.app.customers.payload.AddressData;
+import com.spring.app.customers.payload.CustomerData;
+import com.spring.app.customers.payload.ForControlData;
 
 import javax.validation.constraints.*;
 
@@ -12,11 +12,11 @@ public class RegisterRequest {
     @NotNull(message = "Password is required!")
     private String password;
     @NotNull(message = "Customer address is required!")
-    private Address customerAddress;
+    private AddressData customerAddress;
     @NotNull(message = "Customer information is required!")
-    private Customer customer;
+    private CustomerData customer;
     @NotNull(message = "Customer for control information is required!")
-    private ForControl forControl;
+    private ForControlData forControl;
 
     public String getUsername() {
         return username;
@@ -34,27 +34,27 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public Address getCustomerAddress() {
+    public AddressData getCustomerAddress() {
         return customerAddress;
     }
 
-    public void setCustomerAddress(Address customerAddress) {
+    public void setCustomerAddress(AddressData customerAddress) {
         this.customerAddress = customerAddress;
     }
 
-    public Customer getCustomer() {
+    public CustomerData getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerData customer) {
         this.customer = customer;
     }
 
-    public ForControl getForControl() {
+    public ForControlData getForControl() {
         return forControl;
     }
 
-    public void setForControl(ForControl forControl) {
+    public void setForControl(ForControlData forControl) {
         this.forControl = forControl;
     }
 }

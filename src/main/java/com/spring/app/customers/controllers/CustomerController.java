@@ -1,6 +1,7 @@
 package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.User;
+import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Address;
@@ -63,7 +64,7 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody com.spring.app.customers.payload.Customer customerData) {
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerData customerData) {
         User user = userRepository.findByUsername(customerData.getUserName())
                 .orElse(null);
 
@@ -99,16 +100,17 @@ public class CustomerController {
         if (customer == null)
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
-        Address address = new Address(
-                addressRequest.getAddress().getProvince(),
-                addressRequest.getAddress().getProvinceId(),
-                addressRequest.getAddress().getDistrict(),
-                addressRequest.getAddress().getDistrictId(),
-                addressRequest.getAddress().getWard(),
-                addressRequest.getAddress().getWardId(),
-                addressRequest.getAddress().getStreet(),
-                addressRequest.getAddress().getPrimary()
-        );
+        Address address = new Address();
+
+//        address.setProvince(addressRequest.getAddress().getProvince())
+//                        .setPro
+//                addressRequest.getAddress().getProvinceId(),
+//                addressRequest.getAddress().getDistrict(),
+//                addressRequest.getAddress().getDistrictId(),
+//                addressRequest.getAddress().getWard(),
+//                addressRequest.getAddress().getWardId(),
+//                addressRequest.getAddress().getStreet(),
+//                addressRequest.getAddress().getPrimary()
 
         customer.addAddress(address);
         customerRepository.saveAndFlush(customer);

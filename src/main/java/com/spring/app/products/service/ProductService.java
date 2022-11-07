@@ -3,9 +3,13 @@ package com.spring.app.products.service;
 import com.spring.app.fileManager.services.FilesStorageServiceImpl;
 import com.spring.app.products.models.Product;
 import com.spring.app.products.payload.response.ProductDetailResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProductService {
-    FilesStorageServiceImpl storageService = new FilesStorageServiceImpl();
+    @Autowired
+    FilesStorageServiceImpl storageService;
 
     public ProductDetailResponse processProductDataResponse(Product product) {
         ProductDetailResponse pD = new ProductDetailResponse(

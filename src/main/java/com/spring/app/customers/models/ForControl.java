@@ -39,12 +39,14 @@ public class ForControl {
         String holderName,
         String cardNumber,
         String bank,
-        String address
+        String address,
+        Customer customer
     ) {
         this.holderName = holderName;
         this.cardNumber = cardNumber;
         this.bank = bank;
         this.address = address;
+        this.customer = customer;
     }
 
     public Long getId() {

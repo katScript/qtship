@@ -2,7 +2,6 @@ package com.spring.app.customers.payload.request.auth;
 
 public class ResetPasswordRequest {
     String token;
-
     String password;
 
     public String getToken() {

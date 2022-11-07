@@ -1,21 +1,21 @@
 package com.spring.app.customers.payload.response.customer;
 
-import com.spring.app.customers.payload.Customer;
+import com.spring.app.customers.payload.CustomerData;
 
 public class DetailResponse {
-    private Customer customer;
+    private CustomerData customer;
 
     public DetailResponse (
             com.spring.app.customers.models.Customer customer
     ) {
-        this.customer = new Customer(customer);
+        this.customer = new CustomerData(customer);
     }
 
-    public Customer getCustomer() {
+    public CustomerData getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerData customer) {
         this.customer = customer;
     }
 }
