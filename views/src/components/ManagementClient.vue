@@ -111,13 +111,23 @@
                 <div class="col-md-6">
                   <h5>Tổng quan đơn hàng</h5>
                   <br />
-                  <VueChartPie />
+                  <VueChartPie
+                    :numberOrderSuccess="numberOrderSuccess"
+                    :numberOrderCancel="numberOrderCancel"
+                    :numberOrderOccurred="numberOrderOccurred"
+                    :numberOrderDelivery="numberOrderDelivery"
+                  />
                   <br /><br />
                 </div>
                 <div class="col-md-6">
                   <h5>Tổng quan dòng tiền</h5>
                   <br />
-                  <VueChartColumn />
+                  <VueChartColumn
+                    :totalPriceOrderSuccess="totalPriceOrderSuccess"
+                    :totalPriceOrderCancel="totalPriceOrderCancel"
+                    :totalPriceOrderOccurred="totalPriceOrderOccurred"
+                    :totalPriceOrderDelivery="totalPriceOrderDelivery"
+                  />
                   <br /><br />
                 </div>
               </div>
@@ -232,6 +242,10 @@ export default {
       numberOrderDelivery: 0,
       numberOrderOccurred: 0,
       numberOrderCancel: 0,
+      totalPriceOrderSuccess: 0,
+      totalPriceOrderDelivery: 0,
+      totalPriceOrderOccurred: 0,
+      totalPriceOrderCancel: 0,
       idRequest: "",
       configRequestApi: {},
       listOrderByCustomer: [],
@@ -326,6 +340,28 @@ export default {
         self.numberOrderCancel = self.listOrderByCustomer.filter(
           (e) => e.status == commonFunction.typeOrderCancel
         ).length;
+
+        //price
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderSuccess) {
+            self.totalPriceOrderSuccess += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderDelivery) {
+            self.totalPriceOrderDelivery += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderOccurred) {
+            self.totalPriceOrderOccurred += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderCancel) {
+            self.totalPriceOrderCancel += element.subtotal;
+          }
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -425,6 +461,7 @@ export default {
       const self = this;
       self.isLoading = true;
       self.listOrderByCustomer = self.listOrderByCustomerBk;
+      self.resetTotalPrice();
       axios
         .get(
           commonFunction.DOMAIN_URL +
@@ -440,6 +477,8 @@ export default {
           let respronseData = response.data;
           self.listOrderByCustomer = respronseData;
           console.log(self.listOrderByCustomer);
+
+          //count
           self.totalOrderByDate = self.listOrderByCustomer.length;
           self.numberOrderSuccess = self.listOrderByCustomer.filter(
             (e) => e.status == commonFunction.typeOrderSuccess
@@ -453,12 +492,41 @@ export default {
           self.numberOrderCancel = self.listOrderByCustomer.filter(
             (e) => e.status == commonFunction.typeOrderCancel
           ).length;
+
+          //price
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderSuccess) {
+              self.totalPriceOrderSuccess += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderDelivery) {
+              self.totalPriceOrderDelivery += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderOccurred) {
+              self.totalPriceOrderOccurred += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderCancel) {
+              self.totalPriceOrderCancel += element.subtotal;
+            }
+          });
+
           self.isLoading = false;
         })
         .catch((e) => {
           console.log(e);
           self.isLoading = false;
         });
+    },
+    resetTotalPrice() {
+      this.totalPriceOrderSuccess = 0;
+      this.totalPriceOrderDelivery = 0;
+      this.totalPriceOrderOccurred = 0;
+      this.totalPriceOrderCancel = 0;
     },
   },
 };
