@@ -8,19 +8,23 @@ public class ForControlData {
     private String cardNumber;
     private String bank;
     private String address;
-    private Date createdAt;
-    private Date updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     public ForControlData() {}
 
-    public ForControlData(com.spring.app.customers.models.ForControl forControl) {
-        this.id = forControl.getId();
-        this.holderName = forControl.getHolderName();
-        this.cardNumber = forControl.getCardNumber();
-        this.bank = forControl.getBank();
-        this.address = forControl.getAddress();
-        this.createdAt = forControl.getCreatedAt();
-        this.updatedAt = forControl.getUpdatedAt();
+    public ForControlData(
+            Long id,
+            String holderName,
+            String cardNumber,
+            String bank,
+            String address
+    ) {
+        this.id = id;
+        this.holderName = holderName;
+        this.cardNumber = cardNumber;
+        this.bank = bank;
+        this.address = address;
     }
 
     public Long getId() {
@@ -58,11 +62,19 @@ public class ForControlData {
         this.address = address;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

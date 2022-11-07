@@ -82,6 +82,7 @@ public class AuthController {
             Customer customer = customerService
                     .processCustomerData(registerRequest.getCustomer());
 
+            registerRequest.getCustomerAddress().setPrimary(true);
             Address address = customerService
                     .processAddressData(registerRequest.getCustomerAddress());
 

@@ -11,24 +11,32 @@ public class AddressData {
     private String districtId;
     private String wardId;
     private String street;
-    private boolean primary;
-    private Date createdAt;
-    private Date updatedAt;
+    private Boolean primary = false;
+    private String createdAt;
+    private String updatedAt;
 
     public AddressData() {}
 
-    public AddressData(com.spring.app.customers.models.Address address) {
-        this.id = address.getId();
-        this.province = address.getProvince();
-        this.provinceId = address.getProvinceId();
-        this.district = address.getDistrict();
-        this.districtId = address.getDistrictId();
-        this.ward = address.getWard();
-        this.wardId = address.getWardId();
-        this.street = address.getStreet();
-        this.primary = address.getPrimary();
-        this.createdAt = address.getCreatedAt();
-        this.updatedAt = address.getCreatedAt();
+    public AddressData(
+            Long id,
+            String province,
+            String provinceId,
+            String district,
+            String districtId,
+            String ward,
+            String wardId,
+            String street,
+            Boolean primary
+    ) {
+        this.id = id;
+        this.province = province;
+        this.provinceId = provinceId;
+        this.district = district;
+        this.districtId = districtId;
+        this.ward = ward;
+        this.wardId = wardId;
+        this.street = street;
+        this.primary = primary;
     }
 
     public Long getId() {
@@ -91,19 +99,27 @@ public class AddressData {
         this.street = street;
     }
 
-    public boolean getPrimary() {
+    public Boolean getPrimary() {
         return primary;
     }
 
-    public void setPrimary(boolean primary) {
+    public void setPrimary(Boolean primary) {
         this.primary = primary;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -2,12 +2,12 @@ package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.User;
 import com.spring.app.customers.payload.CustomerData;
+import com.spring.app.customers.service.CustomerService;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Address;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.payload.request.customer.SaveAddressRequest;
-import com.spring.app.customers.payload.response.customer.DetailResponse;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +25,16 @@ public class CustomerController {
     CustomerRepository customerRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    CustomerService customerService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCustomer() {
         List<Customer> customerList = customerRepository.findAll();
-        List<DetailResponse> responses = new ArrayList<>();
+        List<CustomerData> responses = new ArrayList<>();
 
         for (Customer c: customerList) {
-            responses.add(new DetailResponse(c));
+            responses.add(customerService.processCustomerResponse(c));
         }
 
         return ResponseEntity.ok(responses);
@@ -52,12 +54,13 @@ public class CustomerController {
         if (customer == null)
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
 
-        return ResponseEntity.ok(new DetailResponse(customer));
+        return ResponseEntity.ok(customerService.processCustomerResponse(customer));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCustomer(@Valid @PathVariable Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         customerRepository.delete(customer);
         return ResponseEntity.ok(new MessageResponse("Delete customer success!"));
@@ -71,22 +74,7 @@ public class CustomerController {
         if (user == null)
             return ResponseEntity.badRequest().body(new MessageResponse("Error: User account is not exists."));
 
-        Customer customer = customerRepository.findByUser(user)
-                .orElse(null);
-
-        if (customer == null)
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
-
-        customer.setFullName(customerData.getFullName())
-                .setGender(customerData.getGender())
-                .setDob(customerData.getDob())
-                .setPhone(customerData.getPhone())
-                .setCompanyName(customerData.getCompanyName())
-                .setEmail(customerData.getEmail())
-                .setCidFront(customerData.getCidFront())
-                .setCidBack(customerData.getCidBack())
-                .setSubscription(customerData.getSubscription());
-
+        Customer customer = customerService.processCustomerData(customerData);
         customerRepository.save(customer);
 
         return ResponseEntity.ok(new MessageResponse("Save success!"));
