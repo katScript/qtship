@@ -15,6 +15,7 @@ import java.util.Set;
 public class Customer {
     public static final String ROLE = "customer";
     public static final String PREFIX = "CTM";
+    public static final String GUEST_CODE = "GUEST";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)

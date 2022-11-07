@@ -1,7 +1,5 @@
 package com.spring.app.price.models;
 
-import com.spring.app.customers.models.Customer;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -33,7 +31,10 @@ public class Coupon {
     public static String BASE = "base";
     public static String PERCENT = "percent";
 
-    public Coupon() {}
+    public Coupon() {
+        this.validFrom = new Date();
+        this.validTo = new Date();
+    }
 
     public Coupon(
             String code,

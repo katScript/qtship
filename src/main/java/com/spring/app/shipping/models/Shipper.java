@@ -1,14 +1,18 @@
 package com.spring.app.shipping.models;
 
 import com.spring.app.authentication.models.User;
+import com.spring.app.orders.models.Order;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="shippers")
 public class Shipper {
     public static final String ROLE = "shipper";
+    public static final String PREFIX = "SPC";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
@@ -30,8 +34,13 @@ public class Shipper {
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
+    @OneToMany(mappedBy = "shipper",
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Order> orders;
 
-    public Shipper() {}
+    public Shipper() {
+        this.orders = new HashSet<>();
+    }
 
     public Shipper(
         String fullName,
@@ -122,6 +131,15 @@ public class Shipper {
     }
 
     public String getShipperCode() {
-        return "SPC" + String.format("%06d", id);
+        return PREFIX + String.format("%06d", id);
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public Shipper setOrders(Set<Order> orders) {
+        this.orders = orders;
+        return this;
     }
 }

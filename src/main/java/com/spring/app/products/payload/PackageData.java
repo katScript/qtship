@@ -2,7 +2,8 @@ package com.spring.app.products.payload;
 
 public class PackageData {
     private Long id;
-    private ProductData productData;
+    private ProductData product;
+    private Integer qty;
     private String createdAt;
     private String updatedAt;
 
@@ -10,10 +11,12 @@ public class PackageData {
 
     public PackageData(
             Long id,
+            Integer qty,
             ProductData productData
     ) {
         this.id = id;
-        this.productData = productData;
+        this.qty = qty;
+        this.product = productData;
     }
 
     public Long getId() {
@@ -24,12 +27,12 @@ public class PackageData {
         this.id = id;
     }
 
-    public ProductData getProductData() {
-        return productData;
+    public ProductData getProduct() {
+        return product;
     }
 
-    public void setProductData(ProductData productData) {
-        this.productData = productData;
+    public void setProduct(ProductData product) {
+        this.product = product;
     }
 
     public String getCreatedAt() {
@@ -46,5 +49,13 @@ public class PackageData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
     }
 }

@@ -9,7 +9,7 @@ import com.spring.app.customers.models.repository.ForControlRepository;
 import com.spring.app.customers.payload.AddressData;
 import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.ForControlData;
-import com.spring.app.helper.services.DateFormatService;
+import com.spring.app.helper.services.DateFormatHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class CustomerService {
         customer.setFullName(data.getFullName())
                 .setGender(data.getGender())
                 .setDob(
-                        DateFormatService.stringToDate(data.getDob())
+                        DateFormatHelper.stringToDate(data.getDob())
                 )
                 .setPhone(data.getPhone())
                 .setCompanyName(data.getCompanyName())
@@ -103,10 +103,10 @@ public class CustomerService {
             );
 
             aD.setCreatedAt(
-                    DateFormatService.dateToString(address.getCreatedAt())
+                    DateFormatHelper.dateToString(address.getCreatedAt())
             );
             aD.setUpdatedAt(
-                    DateFormatService.dateToString(address.getUpdatedAt())
+                    DateFormatHelper.dateToString(address.getUpdatedAt())
             );
 
             addressDataSet.add(aD);
@@ -122,10 +122,10 @@ public class CustomerService {
             );
 
             fD.setCreatedAt(
-                    DateFormatService.dateToString(forControl.getCreatedAt())
+                    DateFormatHelper.dateToString(forControl.getCreatedAt())
             );
             fD.setUpdatedAt(
-                    DateFormatService.dateToString(forControl.getUpdatedAt())
+                    DateFormatHelper.dateToString(forControl.getUpdatedAt())
             );
 
             forControlDataSet.add(fD);
@@ -137,7 +137,7 @@ public class CustomerService {
                 customer.getUser().getUsername(),
                 customer.getFullName(),
                 customer.getGender(),
-                DateFormatService.dateToString(customer.getDob()),
+                DateFormatHelper.dateToString(customer.getDob()),
                 customer.getPhone(),
                 customer.getCompanyName(),
                 customer.getEmail(),
@@ -149,11 +149,11 @@ public class CustomerService {
         );
 
         res.setCreatedAt(
-                DateFormatService.dateToString(customer.getCreatedAt())
+                DateFormatHelper.dateToString(customer.getCreatedAt())
         );
 
         res.setUpdatedAt(
-                DateFormatService.dateToString(customer.getUpdatedAt())
+                DateFormatHelper.dateToString(customer.getUpdatedAt())
         );
 
         return res;

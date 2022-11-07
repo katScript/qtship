@@ -1,20 +1,19 @@
 package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
-import com.spring.app.helper.services.FilesStorageServiceImpl;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.products.models.Product;
+import com.spring.app.products.payload.ProductData;
 import com.spring.app.products.payload.request.ProductDataRequest;
-import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -29,14 +28,12 @@ public class ProductController {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    FilesStorageServiceImpl storageService;
-    @Autowired
     ProductService productService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct() {
         List<Product> products = productRepository.findAll();
-        List<ProductDetailResponse> productList = new ArrayList<>();
+        List<ProductData> productList = new ArrayList<>();
 
         for (Product p : products) {
             productList.add(this.productService.processProductDataResponse(p));
@@ -45,66 +42,39 @@ public class ProductController {
         return ResponseEntity.ok(productList);
     }
 
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getProductById(@Valid @PathVariable Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found!"));
+        return ResponseEntity.ok(productService.processProductDataResponse(product));
+    }
+
     @PostMapping(value = "/save",
             consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> saveProduct(@Valid ProductDataRequest productDataRequest) {
-        Customer customer = customerRepository.findById(productDataRequest.getCustomerId())
-                .orElse(null);
+        ProductData productData = new ProductData(
+                productDataRequest.getId(),
+                productDataRequest.getCustomerId(),
+                productDataRequest.getCustomerCode(),
+                productDataRequest.getCustomerName(),
+                productDataRequest.getSku(),
+                productDataRequest.getQty(),
+                productDataRequest.getName(),
+                productDataRequest.getWeight(),
+                productDataRequest.getBasePrice(),
+                productDataRequest.getPublicPrice(),
+                productDataRequest.getDescription()
+        );
 
-        if (customer != null) {
-            try {
-                Product product;
-                Resource resource = null;
+        if (productData.getCustomerId() == null)
+            productService.saveProduct(productData, productDataRequest.getFile());
+        else
+            productService.saveProduct(productData, productDataRequest.getFile(), productData.getCustomerId());
 
-                if (productDataRequest.getFile() != null) {
-                    resource = storageService.save(productDataRequest.getFile(), customer.getCustomerId());
-                }
-
-                if (productDataRequest.getId() == null) {
-                    product = new Product(
-                            productDataRequest.getSku(),
-                            productDataRequest.getName(),
-                            productDataRequest.getQty(),
-                            productDataRequest.getWeight(),
-                            productDataRequest.getBasePrice(),
-                            productDataRequest.getPublicPrice(),
-                            productDataRequest.getDescription(),
-                            resource != null ? resource.getFilename() : null,
-                            customer
-                    );
-                } else {
-                    product = productRepository.findById(productDataRequest.getId()).orElse(null);
-
-                    if (product == null)
-                        return ResponseEntity.badRequest().body(new MessageResponse("Error: Product is not found."));
-
-                    if (!product.getCustomer().getId().equals(customer.getId()))
-                        return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
-
-                    product.setSku(productDataRequest.getSku())
-                            .setName(productDataRequest.getName())
-                            .setQty(productDataRequest.getQty())
-                            .setWeight(productDataRequest.getWeight())
-                            .setBasePrice(productDataRequest.getBasePrice())
-                            .setPublicPrice(productDataRequest.getPublicPrice())
-                            .setDescription(productDataRequest.getDescription());
-
-                    product.setImage(resource != null ? resource.getFilename() : null);
-                }
-
-                productRepository.save(product);
-                return ResponseEntity.ok(new MessageResponse("Product save success"));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
+        return ResponseEntity.ok(new MessageResponse("Product save success"));
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteProduct(@Valid @RequestBody DeleteRequest deleteRequest) {
         Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
                 .orElse(null);
@@ -116,7 +86,7 @@ public class ProductController {
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Product is not found."));
 
             if (!product.getCustomer().getId().equals(customer.getId()))
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not save product! Customer not valid!!"));
+                return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not delete product! Customer not valid!!"));
 
             productRepository.delete(product);
             return ResponseEntity.ok(new MessageResponse("Product deleted successfully!"));
@@ -131,7 +101,7 @@ public class ProductController {
                 .orElse(null);
 
         if (customer != null) {
-            List<ProductDetailResponse> productList = new ArrayList<>();
+            List<ProductData> productList = new ArrayList<>();
 
             for (Product p : customer.getProducts()) {
                 productList.add(this.productService.processProductDataResponse(p));

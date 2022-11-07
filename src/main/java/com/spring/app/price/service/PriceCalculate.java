@@ -13,25 +13,19 @@ public class PriceCalculate {
     @Autowired
     private CouponRepository couponRepository;
 
-//    public PriceCalculate(
-//            CouponRepository couponRepository
-//    ) {
-//        this.couponRepository = couponRepository;
-//    }
-
     public void processSubtotal(Order order) {
         Double subtotal = 0.0;
         Coupon coupon = couponRepository.findByCode(order.getCoupon()).orElse(null);
 
-        for (OrderItem i : order.getOrderItemSet()) {
+        for (OrderItem item : order.getOrderItemSet()) {
             Double price = 0.0;
 
-            for (Package p: i.getPackages()) {
+            for (Package p: item.getPackages()) {
                 price += p.getQty() * p.getProduct().getPublicPrice();
             }
 
             subtotal += price;
-            i.setPrice(price);
+            item.setPrice(price);
         }
 
         if (coupon != null && coupon.isValid()) {

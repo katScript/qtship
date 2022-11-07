@@ -11,6 +11,7 @@ import com.spring.app.authentication.security.jwt.JwtUtils;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.request.RegisterRequest;
+import com.spring.app.shipping.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,8 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    ShippingService shippingService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerShipper(@Valid @RequestBody RegisterRequest registerRequest) {
@@ -50,15 +53,8 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
             user.addRole(userRole);
-
-            Shipper shipper = new Shipper(
-                    registerRequest.getData().getFullName(),
-                    registerRequest.getData().getEmail(),
-                    registerRequest.getData().getPhone(),
-                    registerRequest.getData().getAddress(),
-                    registerRequest.getData().getCurrentAddress(),
-                    user
-            );
+            Shipper shipper = shippingService.processShipperData(registerRequest.getData());
+            shipper.setUser(user);
 
             this.shipperRepository.save(shipper);
         } catch (RuntimeException e) {
@@ -71,14 +67,12 @@ public class AuthController {
     @PostMapping("/reset")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(resetPasswordRequest.getToken());
-
         User user = userRepository.findByUsername(username).orElse(null);
 
         if (user == null)
             return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists."));
 
-        Shipper shipper = shipperRepository.findByUser(user)
-                .orElse(null);
+        Shipper shipper = shipperRepository.findByUser(user).orElse(null);
 
         if (shipper == null)
             return ResponseEntity.badRequest().body(new MessageResponse("Shipper is not found."));

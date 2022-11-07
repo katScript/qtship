@@ -1,9 +1,6 @@
 package com.spring.app.orders.models;
 
-
-import com.spring.app.customers.models.Customer;
 import com.spring.app.products.models.Package;
-import com.spring.app.products.models.Product;
 import com.spring.app.shipping.models.ShippingAddress;
 
 import javax.persistence.*;
