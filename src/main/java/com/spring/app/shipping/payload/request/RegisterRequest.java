@@ -1,9 +1,11 @@
 package com.spring.app.shipping.payload.request;
 
+import com.spring.app.shipping.payload.ShipperData;
+
 public class RegisterRequest {
     private String username;
     private String password;
-    private ShipperRequest data;
+    private ShipperData data;
 
     public String getUsername() {
         return username;
@@ -21,11 +23,11 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public ShipperRequest getData() {
+    public ShipperData getData() {
         return data;
     }
 
-    public void setData(ShipperRequest data) {
+    public void setData(ShipperData data) {
         this.data = data;
     }
 }

@@ -1,7 +1,5 @@
 package com.spring.app.customers.payload.response;
 
-import java.util.List;
-
 public class ForgotPasswordResponse {
     private String token;
     private String username;

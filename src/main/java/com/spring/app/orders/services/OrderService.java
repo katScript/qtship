@@ -2,39 +2,33 @@ package com.spring.app.orders.services;
 
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
+import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.OrderItem;
 import com.spring.app.orders.models.OrderStatus;
 import com.spring.app.orders.models.repository.OrderItemRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
-import com.spring.app.orders.payload.request.OrderDataRequest;
-import com.spring.app.orders.payload.request.OrderItemRequest;
-import com.spring.app.orders.payload.request.OrderStatusRequest;
+import com.spring.app.orders.payload.OrderData;
+import com.spring.app.orders.payload.OrderItemData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
-import com.spring.app.orders.payload.response.OrderItemResponse;
-import com.spring.app.orders.payload.response.OrderListResponse;
-import com.spring.app.price.models.repository.CouponRepository;
 import com.spring.app.price.service.PriceCalculate;
 import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
 import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
-import com.spring.app.products.payload.request.PackageDataRequest;
-import com.spring.app.products.payload.response.PackageResponse;
-import com.spring.app.products.payload.response.ProductDetailResponse;
+import com.spring.app.products.payload.PackageData;
+import com.spring.app.products.payload.ProductData;
 import com.spring.app.products.service.ProductService;
 import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
-import com.spring.app.shipping.payload.request.ShippingAddressRequest;
-import com.spring.app.shipping.payload.response.ShippingAddressResponse;
+import com.spring.app.shipping.payload.ShippingAddressData;
+import com.spring.app.shipping.service.ShippingService;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
-import com.spring.app.warehouse.payload.response.WarehouseListResponse;
+import com.spring.app.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -59,6 +53,10 @@ public class OrderService {
     public PriceCalculate priceCalculate;
     @Autowired
     public ProductService productService;
+    @Autowired
+    public WarehouseService warehouseService;
+    @Autowired
+    public ShippingService shippingService;
 
     public void updateStatus(OrderStatusUpdateRequest order) {
         Order _order = this.orderRepository.findById(order.getId())
@@ -72,12 +70,12 @@ public class OrderService {
         this.orderRepository.save(_order);
     }
 
-    public void saveGuestOrder(OrderDataRequest order) {
+    public void saveGuestOrder(OrderData order) {
         Order _order = this.processOrder(order);
         this.orderRepository.save(_order);
     }
 
-    public void saveCustomerOrder(OrderDataRequest order) {
+    public void saveCustomerOrder(OrderData order) {
         Customer customer = this.customerRepository.findById(order.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
@@ -87,46 +85,47 @@ public class OrderService {
         this.orderRepository.save(_order);
     }
 
-    public Order processOrder(OrderDataRequest order) {
+    public Order processOrder(OrderData data) {
         Order _order;
-        if (order.getId() != null) {
-            _order = this.orderRepository.findById(order.getId())
+        if (data.getId() != null) {
+            _order = this.orderRepository.findById(data.getId())
                     .orElseThrow(() -> new RuntimeException("Order not found!"));
         } else {
             _order = new Order();
         }
 
-        _order.setCoupon(order.getCoupon())
-                .setFeedback(order.getFeedback())
-                .setNote(order.getNote())
-                .setNotification(order.getNotification())
-                .setSenderName(order.getSenderName())
-                .setSenderPhone(order.getSenderName())
-                .setSenderPhone(order.getSenderPhone())
-                .setSenderAddress(order.getSenderAddress())
-                .setShippingFee(order.getShippingFee())
-                .setShippingType(order.getShippingType())
-                .setReturnCode(order.getReturnCode())
-                .setShippingTime(Date.from(order.getShippingDate().atZone(ZoneId.systemDefault()).toInstant()))
-                .setWarehouse(
-                        this.warehouseRepository.findById(order.getWarehouseId())
+        _order.setCoupon(data.getCoupon())
+                .setFeedback(data.getFeedback())
+                .setNote(data.getNote())
+                .setNotification(data.getNotification())
+                .setSenderName(data.getSenderName())
+                .setSenderPhone(data.getSenderName())
+                .setSenderPhone(data.getSenderPhone())
+                .setSenderAddress(data.getSenderAddress())
+                .setShippingFee(data.getShippingFee())
+                .setShippingType(data.getShippingType())
+                .setReturnCode(data.getReturnCode())
+                .setShippingTime(
+                        DateFormatHelper.stringToDate(data.getShippingTime())
+                ).setWarehouse(
+                        this.warehouseRepository.findById(data.getWarehouse().getId())
                                 .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
                 );
 
-        Set<OrderItem> orderItems = this.processOrderItem(order.getOrderItem(), _order);
+        Set<OrderItem> orderItems = this.processOrderItem(data.getOrderItem(), _order);
         _order.setOrderItemSet(orderItems);
         priceCalculate.processSubtotal(_order);
 
-        OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
+        OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
         _order.setStatus(status.getCode());
 
         return _order;
     }
 
-    public Set<OrderItem> processOrderItem(List<OrderItemRequest> orderItems, Order order) {
+    public Set<OrderItem> processOrderItem(List<OrderItemData> orderItems, Order order) {
         Set<OrderItem> orderItemSet = new HashSet<>();
 
-        for (OrderItemRequest od: orderItems) {
+        for (OrderItemData od: orderItems) {
             OrderItem orderItem;
 
             if (od.getId() != null) {
@@ -147,16 +146,7 @@ public class OrderService {
         return orderItemSet;
     }
 
-    public Double processPrice(Set<Package> packages) {
-        double price = 0.0;
-
-        for (Package p: packages)
-            price += p.getQty() * p.getProduct().getPublicPrice();
-
-        return price;
-    }
-
-    public ShippingAddress processShippingAddress(ShippingAddressRequest shippingAddress) {
+    public ShippingAddress processShippingAddress(ShippingAddressData shippingAddress) {
         ShippingAddress _shippingAddress;
 
         if (shippingAddress.getId() != null) {
@@ -179,16 +169,18 @@ public class OrderService {
         return _shippingAddress;
     }
 
-    public Set<Package> processPackage(List<PackageDataRequest> products, OrderItem orderItem) {
+    public Set<Package> processPackage(List<PackageData> products, OrderItem orderItem) {
         Set<Package> packages = new HashSet<>();
         HashMap<Long, Boolean> map = new HashMap<>();
 
-        for (PackageDataRequest p: products) {
-            if (map.get(p.getProductId()) != null)
+        for (PackageData p: products) {
+            ProductData productData = p.getProduct();
+
+            if (map.get(productData.getId()) != null)
                 throw new RuntimeException("Not valid Product principle!");
 
-            map.put(p.getProductId(), true);
-            Product product = this.productRepository.findById(p.getProductId())
+            map.put(productData.getId(), true);
+            Product product = this.productRepository.findById(productData.getId())
                     .orElseThrow(() -> new RuntimeException("Product not found!"));
 
             Package pkage;
@@ -201,15 +193,15 @@ public class OrderService {
                 curQty += pkage.getQty();
             } else {
                 pkage = new Package();
-                pkage.setProduct(product);
             }
 
             if (curQty > 0 && curQty < p.getQty())
                 throw new RuntimeException("Not enough quantity!");
 
             product.setQty(curQty - p.getQty());
-            pkage.setQty(p.getQty());
-            pkage.setOrderItem(orderItem);
+            pkage.setQty(p.getQty())
+                    .setOrderItem(orderItem)
+                    .setProduct(product);
 
             packages.add(pkage);
         }
@@ -217,40 +209,31 @@ public class OrderService {
         return packages;
     }
 
-    public OrderListResponse getOrderDetail(Order order) {
-        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+    public OrderData getOrderDetail(Order order) {
+        List<OrderItemData> orderItemResponses = new ArrayList<>();
 
         for (OrderItem i : order.getOrderItemSet()) {
-            List<PackageResponse> productDetailResponses = new ArrayList<>();
+            List<PackageData> productDetailResponses = new ArrayList<>();
 
             for (Package itemPackage : i.getPackages()) {
-                PackageResponse pD = this.productService.
+                PackageData pD = this.productService.
                         processPackageProductResponse(itemPackage);
                 
                 productDetailResponses.add(pD);
             }
 
-            orderItemResponses.add(new OrderItemResponse(
+            orderItemResponses.add(new OrderItemData(
                     i.getId(),
                     i.getPrice(),
-                    new ShippingAddressResponse(
-                            i.getShippingAddress().getId(),
-                            i.getShippingAddress().getName(),
-                            i.getShippingAddress().getPhone(),
-                            i.getShippingAddress().getProvince(),
-                            i.getShippingAddress().getDistrict(),
-                            i.getShippingAddress().getWard(),
-                            i.getShippingAddress().getProvinceId(),
-                            i.getShippingAddress().getDistrictId(),
-                            i.getShippingAddress().getWardId(),
-                            i.getShippingAddress().getStreet()
-                    ),
+                    shippingService.processShippingAddressResponse(i.getShippingAddress()),
                     productDetailResponses
             ));
         }
 
-        return new OrderListResponse(
+        OrderData orderData = new OrderData(
+                order.getId(),
                 order.getOrderCode(),
+                order.getCustomer().getId(),
                 order.getCustomer().getCustomerId(),
                 order.getStatus(),
                 order.getFeedback(),
@@ -262,24 +245,20 @@ public class OrderService {
                 order.getNotification(),
                 order.getShippingFee(),
                 order.getShippingType(),
-                order.getShippingTime().toInstant()
-                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                DateFormatHelper.dateToString(order.getShippingTime()),
                 order.getCoupon(),
-                order.getCreatedAt().toInstant()
-                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                order.getUpdatedAt().toInstant()
-                        .atZone(ZoneId.systemDefault()).toLocalDateTime()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                orderItemResponses,
-                new WarehouseListResponse(
-                        order.getWarehouse().getId(),
-                        order.getWarehouse().getName(),
-                        order.getWarehouse().getAddress(),
-                        order.getWarehouse().getPhone()
-                ),
-                order.getReturnCode()
+                warehouseService.processWarehouseDataResponse(order.getWarehouse()),
+                order.getReturnCode(),
+                orderItemResponses
         );
+
+        orderData.setCreatedAt(
+                DateFormatHelper.dateToString(order.getCreatedAt())
+        );
+        orderData.setUpdateAt(
+                DateFormatHelper.dateToString(order.getUpdatedAt())
+        );
+
+        return orderData;
     }
 }

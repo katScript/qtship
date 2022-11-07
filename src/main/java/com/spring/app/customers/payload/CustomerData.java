@@ -1,8 +1,5 @@
 package com.spring.app.customers.payload;
 
-import com.spring.app.customers.models.Customer;
-
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 

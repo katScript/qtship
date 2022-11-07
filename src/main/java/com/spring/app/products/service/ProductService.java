@@ -1,21 +1,90 @@
 package com.spring.app.products.service;
 
+import com.spring.app.customers.models.Customer;
+import com.spring.app.customers.models.repository.CustomerRepository;
+import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.helper.services.FilesStorageServiceImpl;
 import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
-import com.spring.app.products.payload.response.PackageResponse;
-import com.spring.app.products.payload.response.ProductDetailResponse;
+import com.spring.app.products.models.repository.ProductRepository;
+import com.spring.app.products.payload.PackageData;
+import com.spring.app.products.payload.ProductData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductService {
     @Autowired
     FilesStorageServiceImpl storageService;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
-    public ProductDetailResponse processProductDataResponse(Product product) {
-        ProductDetailResponse pD = new ProductDetailResponse(
+    public void saveProduct(ProductData productData, MultipartFile file) {
+        Product product = processProductData(productData);
+
+        product.setImage(processUploadProductImage(
+                        file,
+                        Customer.GUEST_CODE,
+                        product.getImage())
+                );
+
+        productRepository.save(product);
+    }
+    public void saveProduct(ProductData productData, MultipartFile file, Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        Product product = processProductData(productData);
+        product.setCustomer(customer)
+                .setImage(processUploadProductImage(
+                        file,
+                        customer.getCustomerId(),
+                        product.getImage())
+                );
+
+        productRepository.save(product);
+
+    }
+    public Product processProductData(ProductData productData) {
+        Product product;
+
+        if (productData.getId() != null) {
+            product = productRepository.findById(productData.getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found!"));
+        } else {
+            product = new Product();
+        }
+
+        product.setSku(productData.getSku())
+                .setName(productData.getName())
+                .setQty(productData.getQty())
+                .setWeight(productData.getWeight())
+                .setBasePrice(productData.getBasePrice())
+                .setPublicPrice(productData.getPublicPrice())
+                .setDescription(productData.getDescription());
+
+
+        return product;
+    }
+
+    public String processUploadProductImage(MultipartFile file, String customerCode, String currentImg) {
+        Resource resource = null;
+
+        if (file != null) {
+            resource = storageService.save(file, customerCode);
+        }
+
+        return resource != null ? resource.getFilename() : currentImg;
+    }
+
+    public ProductData processProductDataResponse(Product product) {
+        ProductData pD = new ProductData(
                 product.getId(),
+                product.getCustomer().getId(),
                 product.getCustomer().getCustomerId(),
                 product.getCustomer().getFullName(),
                 product.getSku(),
@@ -24,42 +93,42 @@ public class ProductService {
                 product.getWeight(),
                 product.getBasePrice(),
                 product.getPublicPrice(),
-                product.getDescription(),
-                product.getCreatedAt(),
-                product.getUpdatedAt()
+                product.getDescription()
         );
 
-        pD.setImage(
-                product.getImage() != null ?
-                        storageService.getImageUrl(product.getCustomer().getCustomerId() + "/" + product.getImage()) :
-                        storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT)
+        pD.setImage(processProductImage(product));
+        pD.setCreatedAt(
+                DateFormatHelper.dateToString(product.getCreatedAt())
+        );
+        pD.setUpdatedAt(
+                DateFormatHelper.dateToString(product.getUpdatedAt())
         );
 
         return pD;
     }
 
-    public PackageResponse processPackageProductResponse(Package data) {
+    public PackageData processPackageProductResponse(Package data) {
         Product product = data.getProduct();
-        PackageResponse pk = new PackageResponse(
+
+        PackageData pD = new PackageData(
                 data.getId(),
-                product.getId(),
-                product.getCustomer().getCustomerId(),
-                product.getCustomer().getFullName(),
-                product.getSku(),
                 data.getQty(),
-                product.getName(),
-                product.getWeight(),
-                product.getBasePrice(),
-                product.getPublicPrice(),
-                product.getDescription()
+                this.processProductDataResponse(product)
         );
 
-        pk.setImage(
-                data.getProduct().getImage() != null ?
-                        storageService.getImageUrl(product.getCustomer().getCustomerId() + "/" + product.getImage()) :
-                        storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT)
+        pD.setCreatedAt(
+                DateFormatHelper.dateToString(data.getCreatedAt())
+        );
+        pD.setUpdatedAt(
+                DateFormatHelper.dateToString(data.getUpdatedAt())
         );
 
-        return pk;
+        return pD;
+    }
+
+    public String processProductImage(Product product) {
+        return product.getImage() != null ?
+                storageService.getImageUrl(product.getCustomer().getCustomerId() + "/" + product.getImage()) :
+                storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT);
     }
 }

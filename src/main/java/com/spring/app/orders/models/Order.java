@@ -1,6 +1,7 @@
 package com.spring.app.orders.models;
 
 import com.spring.app.customers.models.Customer;
+import com.spring.app.shipping.models.Shipper;
 import com.spring.app.warehouse.models.Warehouse;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name="orders")
 public class Order {
+    public static final String PREFIX = "ORD";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
@@ -53,6 +55,9 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id")
     private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="shipper_id", referencedColumnName = "id")
+    private Shipper shipper;
 
     public Order() {}
 
@@ -101,7 +106,7 @@ public class Order {
     }
 
     public String getOrderCode() {
-        return String.format("%09d", id);
+        return PREFIX + String.format("%06d", id);
     }
 
     public Customer getCustomer() {

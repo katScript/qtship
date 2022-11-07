@@ -1,9 +1,5 @@
 package com.spring.app.authentication.payload.request;
 
-import java.util.Set;
-
-import javax.validation.constraints.*;
-
 public class SignupRequest {
     private String username;
     private String password;

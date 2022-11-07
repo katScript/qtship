@@ -1,7 +1,5 @@
 package com.spring.app.customers.payload;
 
-import java.util.Date;
-
 public class AddressData {
     private Long id;
     private String province;

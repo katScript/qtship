@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +59,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 this.init(path);
 
             Files.deleteIfExists(this.getRoot(path).resolve(file.getOriginalFilename()));
-            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
 
             return this.load(path + "/" + file.getOriginalFilename());
         } catch (Exception e) {

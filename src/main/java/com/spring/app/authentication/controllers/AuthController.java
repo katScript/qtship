@@ -66,6 +66,8 @@ public class AuthController {
                 roles));
     }
 
+    // update password function //
+
     @PostMapping("/forget")
     public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
         User user = userRepository.findByUsername(forgotPasswordRequest.getUsername()).orElse(null);

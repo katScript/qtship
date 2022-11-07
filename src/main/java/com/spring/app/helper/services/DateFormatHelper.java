@@ -6,7 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class DateFormatService {
+public class DateFormatHelper {
     public static String FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static String dateToString(Date date) {
         if (date == null)

@@ -1,6 +1,6 @@
-package com.spring.app.price.payload.response;
+package com.spring.app.price.payload;
 
-public class CouponDetailResponse {
+public class CouponData {
     private Long id;
     private String code;
     private Boolean enable;
@@ -12,9 +12,9 @@ public class CouponDetailResponse {
     private String createdAt;
     private String updateAt;
 
-    public CouponDetailResponse() {}
+    public CouponData() {}
 
-    public CouponDetailResponse(
+    public CouponData(
             Long id,
             String code,
             Boolean enable,
@@ -22,20 +22,16 @@ public class CouponDetailResponse {
             Double value,
             String validFrom,
             String validTo,
-            String validRoles,
-            String createdAt,
-            String updateAt
+            String validRoles
     ) {
         this.id = id;
         this.code = code;
+        this.enable = enable;
         this.rule = rule;
         this.value = value;
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.validRoles = validRoles;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-        this.enable = enable;
     }
 
     public Long getId() {
@@ -52,6 +48,14 @@ public class CouponDetailResponse {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 
     public String getRule() {
@@ -108,13 +112,5 @@ public class CouponDetailResponse {
 
     public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public Boolean getEnable() {
-        return enable;
-    }
-
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
     }
 }

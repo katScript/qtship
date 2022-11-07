@@ -3,8 +3,8 @@ package com.spring.app.orders.controllers;
 import com.spring.app.orders.models.OrderStatus;
 import com.spring.app.orders.models.repository.OrderItemRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
-import com.spring.app.orders.payload.request.OrderDataRequest;
-import com.spring.app.orders.payload.request.OrderStatusRequest;
+import com.spring.app.orders.payload.OrderData;
+import com.spring.app.orders.payload.OrderStatusData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
 import com.spring.app.orders.services.OrderService;
 import com.spring.app.payload.MessageResponse;
@@ -12,7 +12,6 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
-import com.spring.app.orders.payload.response.OrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderDataRequest order) {
+    public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderData order) {
         if (order.getCustomerId() != null) {
             this.orderService.saveCustomerOrder(order);
         } else {
@@ -64,7 +63,7 @@ public class OrderController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrder() {
         List<Order> orders = orderRepository.findAll();
-        List<OrderListResponse> listOrder = new ArrayList<>();
+        List<OrderData> listOrder = new ArrayList<>();
 
         for (Order o : orders) {
             listOrder.add(this.orderService.getOrderDetail(o));
@@ -83,7 +82,7 @@ public class OrderController {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
 
-        List<OrderListResponse> listOrder = new ArrayList<>();
+        List<OrderData> listOrder = new ArrayList<>();
 
         if (customer != null) {
             List<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, status,
@@ -101,7 +100,7 @@ public class OrderController {
     }
 
     @PostMapping("/status/save")
-    public ResponseEntity<?> saveOrderStatus(@Valid @RequestBody OrderStatusRequest orderStatus) {
+    public ResponseEntity<?> saveOrderStatus(@Valid @RequestBody OrderStatusData orderStatus) {
         OrderStatus status = orderStatusRepository.findByCode(orderStatus.getCode())
                 .orElse(new OrderStatus(orderStatus.getCode()));
 

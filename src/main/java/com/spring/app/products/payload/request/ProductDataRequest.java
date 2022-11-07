@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductDataRequest {
     private Long id;
     private Long customerId;
+    private String customerCode;
+    private String customerName;
     private String sku;
     private Integer qty;
     private String name;
@@ -13,6 +15,14 @@ public class ProductDataRequest {
     private Double publicPrice;
     private String description;
     private MultipartFile file;
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public Long getId() {
         return id;
@@ -28,6 +38,22 @@ public class ProductDataRequest {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getSku() {
@@ -84,13 +110,5 @@ public class ProductDataRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    public void setFile(MultipartFile file) {
-        this.file = file;
     }
 }

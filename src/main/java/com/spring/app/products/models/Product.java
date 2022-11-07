@@ -28,8 +28,6 @@ public class Product {
     private String description;
     @Column(name = "image")
     private String image;
-    @Column(name = "is_guest")
-    private Boolean isGuest = false;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
@@ -47,9 +45,7 @@ public class Product {
         Double weight,
         Double basePrice,
         Double publicPrice,
-        String description,
-        String image,
-        Customer customer
+        String description
     ) {
         this.sku = sku;
         this.qty = qty;
@@ -58,8 +54,6 @@ public class Product {
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;
         this.description = description;
-        this.image = image;
-        this.customer = customer;
     }
 
     public Long getId() {
@@ -150,15 +144,8 @@ public class Product {
         return image;
     }
 
-    public void setImage(String image) {
+    public Product setImage(String image) {
         this.image = image;
-    }
-
-    public Boolean getGuest() {
-        return isGuest;
-    }
-
-    public void setGuest(Boolean guest) {
-        isGuest = guest;
+        return this;
     }
 }

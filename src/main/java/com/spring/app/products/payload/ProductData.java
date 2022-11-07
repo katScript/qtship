@@ -1,10 +1,9 @@
 package com.spring.app.products.payload;
 
-import java.util.Date;
-
 public class ProductData {
     private Long id;
-    private String customerId;
+    private Long customerId;
+    private String customerCode;
     private String customerName;
     private String sku;
     private Integer qty;
@@ -21,7 +20,8 @@ public class ProductData {
 
     public ProductData(
             Long id,
-            String customerId,
+            Long customerId,
+            String customerCode,
             String customerName,
             String sku,
             Integer qty,
@@ -29,13 +29,12 @@ public class ProductData {
             Double weight,
             Double basePrice,
             Double publicPrice,
-            String description,
-            String createdAt,
-            String updatedAt
+            String description
     ) {
         this.id = id;
         this.customerId = customerId;
         this.customerName = customerName;
+        this.customerCode = customerCode;
         this.sku = sku;
         this.qty = qty;
         this.name = name;
@@ -43,8 +42,6 @@ public class ProductData {
         this.basePrice = basePrice;
         this.publicPrice = publicPrice;
         this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -55,11 +52,11 @@ public class ProductData {
         this.id = id;
     }
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -149,5 +146,13 @@ public class ProductData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
     }
 }

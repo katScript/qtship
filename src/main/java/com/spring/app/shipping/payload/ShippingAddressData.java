@@ -1,20 +1,23 @@
-package com.spring.app.shipping.payload.request;
+package com.spring.app.shipping.payload;
 
-public class ShippingAddressRequest {
+public class ShippingAddressData {
     private Long id;
     private String name;
     private String phone;
     private String province;
-    private String district;
-    private String ward;
-    private String street;
     private String provinceId;
+    private String district;
     private String districtId;
+    private String ward;
     private String wardId;
+    private String street;
+    private String createdAt;
+    private String updatedAt;
 
-    public ShippingAddressRequest() {}
+    public ShippingAddressData() {}
 
-    public ShippingAddressRequest(
+    public ShippingAddressData(
+            Long id,
             String name,
             String phone,
             String province,
@@ -25,6 +28,9 @@ public class ShippingAddressRequest {
             String wardId,
             String street
     ) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
         this.province = province;
         this.provinceId = provinceId;
         this.district = district;
@@ -32,8 +38,14 @@ public class ShippingAddressRequest {
         this.ward = ward;
         this.wardId = wardId;
         this.street = street;
-        this.name = name;
-        this.phone = phone;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -68,22 +80,6 @@ public class ShippingAddressRequest {
         this.provinceId = provinceId;
     }
 
-    public String getWard() {
-        return ward;
-    }
-
-    public void setWard(String ward) {
-        this.ward = ward;
-    }
-
-    public String getWardId() {
-        return wardId;
-    }
-
-    public void setWardId(String wardId) {
-        this.wardId = wardId;
-    }
-
     public String getDistrict() {
         return district;
     }
@@ -100,6 +96,22 @@ public class ShippingAddressRequest {
         this.districtId = districtId;
     }
 
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getWardId() {
+        return wardId;
+    }
+
+    public void setWardId(String wardId) {
+        this.wardId = wardId;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -108,11 +120,19 @@ public class ShippingAddressRequest {
         this.street = street;
     }
 
-    public Long getId() {
-        return id;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
