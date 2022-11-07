@@ -21,6 +21,7 @@ import com.spring.app.products.models.Product;
 import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.request.PackageDataRequest;
+import com.spring.app.products.payload.response.PackageResponse;
 import com.spring.app.products.payload.response.ProductDetailResponse;
 import com.spring.app.products.service.ProductService;
 import com.spring.app.shipping.models.ShippingAddress;
@@ -133,13 +134,13 @@ public class OrderService {
                         .orElseThrow(() -> new RuntimeException("Process order error!"));
             } else {
                 orderItem = new OrderItem();
+                orderItem.setOrder(order);
             }
 
             Set<Package> packageSet = this.processPackage(od.getProducts(), orderItem);
 
             orderItem.setPackages(packageSet);
             orderItem.setShippingAddress(this.processShippingAddress(od.getShippingAddress()));
-            orderItem.setOrder(order);
             orderItemSet.add(orderItem);
         }
 
@@ -220,18 +221,20 @@ public class OrderService {
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
 
         for (OrderItem i : order.getOrderItemSet()) {
-            List<ProductDetailResponse> productDetailResponses = new ArrayList<>();
+            List<PackageResponse> productDetailResponses = new ArrayList<>();
 
             for (Package itemPackage : i.getPackages()) {
-                productDetailResponses.add(
-                        this.productService.
-                                processProductDataResponse(itemPackage.getProduct())
-                );
+                PackageResponse pD = this.productService.
+                        processPackageProductResponse(itemPackage);
+                
+                productDetailResponses.add(pD);
             }
 
             orderItemResponses.add(new OrderItemResponse(
+                    i.getId(),
                     i.getPrice(),
                     new ShippingAddressResponse(
+                            i.getShippingAddress().getId(),
                             i.getShippingAddress().getName(),
                             i.getShippingAddress().getPhone(),
                             i.getShippingAddress().getProvince(),

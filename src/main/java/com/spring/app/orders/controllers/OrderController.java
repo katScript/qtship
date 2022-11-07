@@ -42,20 +42,6 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-//    public OrderController() {
-//        this.orderService = new OrderService(
-//                this.orderRepository,
-//                this.orderItemRepository,
-//                this.orderStatusRepository,
-//                this.customerRepository,
-//                this.productRepository,
-//                this.packageRepository,
-//                this.shippingAddressRepository,
-//                this.warehouseRepository,
-//                this.couponRepository
-//        );
-//    }
-
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderDataRequest order) {
         if (order.getCustomerId() != null) {
