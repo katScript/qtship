@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.payload.request.LoginRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
-import com.spring.app.customers.payload.request.auth.ForgotPasswordRequest;
+import com.spring.app.authentication.payload.request.ForgotPasswordRequest;
 import com.spring.app.customers.payload.response.ForgotPasswordResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;

@@ -1,7 +1,7 @@
 package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
-import com.spring.app.fileManager.services.FilesStorageServiceImpl;
+import com.spring.app.helper.services.FilesStorageServiceImpl;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -30,7 +30,8 @@ public class ProductController {
     ProductRepository productRepository;
     @Autowired
     FilesStorageServiceImpl storageService;
-    ProductService productService = new ProductService();
+    @Autowired
+    ProductService productService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct() {

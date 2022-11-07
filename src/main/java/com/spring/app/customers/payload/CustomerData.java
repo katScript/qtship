@@ -12,15 +12,15 @@ public class CustomerData {
     private String username;
     private String customerId;
     private String gender;
-    private Date dob;
+    private String dob;
     private String phone;
     private String companyName;
     private String email;
     private String cidFront;
     private String cidBack;
     private Boolean subscription;
-    private Date createdAt;
-    private Date updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private Set<AddressData> addressSet;
     private Set<ForControlData> forControls;
 
@@ -29,36 +29,36 @@ public class CustomerData {
         this.forControls = new HashSet<>();
     }
 
-//    public CustomerData(
-//            Long id,
-//            String fullName,
-//            String gender,
-//            Date
-//    ) {
-//
-//    }
-
-    public CustomerData(Customer customer) {
-        this.id = customer.getId();
-        this.fullName = customer.getFullName();
-        this.gender = customer.getGender();
-        this.dob = customer.getDob();
-        this.phone = customer.getPhone();
-        this.companyName = customer.getCompanyName();
-        this.email = customer.getEmail();
-        this.cidFront = customer.getCidFront();
-        this.cidBack = customer.getCidBack();
-        this.subscription = customer.getSubscription();
-        this.createdAt = customer.getCreatedAt();
-        this.updatedAt = customer.getUpdatedAt();
-        this.username = customer.getUser().getUsername();
-        this.customerId = customer.getCustomerId();
-
-        for (com.spring.app.customers.models.Address address : customer.getAddressSet())
-            this.addAddress(new AddressData(address));
-
-        for (com.spring.app.customers.models.ForControl forControl : customer.getForControls())
-            this.addForControl(new ForControlData(forControl));
+    public CustomerData(
+            Long id,
+            String customerId,
+            String username,
+            String fullName,
+            String gender,
+            String dob,
+            String phone,
+            String companyName,
+            String email,
+            String cidFront,
+            String cidBack,
+            Boolean subscription,
+            Set<AddressData> addressSet,
+            Set<ForControlData> forControls
+    ) {
+        this.id = id;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.dob = dob;
+        this.phone = phone;
+        this.companyName = companyName;
+        this.email = email;
+        this.cidBack = cidBack;
+        this.cidFront = cidFront;
+        this.subscription = subscription;
+        this.addressSet = addressSet;
+        this.forControls = forControls;
+        this.customerId = customerId;
+        this.username = username;
     }
 
     public Long getId() {
@@ -83,14 +83,6 @@ public class CustomerData {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
     }
 
     public String getUserName() {
@@ -158,10 +150,6 @@ public class CustomerData {
     }
 
     public void addAddress(AddressData address) {
-        if (this.addressSet == null) {
-            this.addressSet = new HashSet<>();
-        }
-
         this.addressSet.add(address);
     }
 
@@ -174,18 +162,38 @@ public class CustomerData {
     }
 
     public void addForControl(ForControlData forControl) {
-        if (this.forControls == null) {
-            this.forControls = new HashSet<>();
-        }
-
         this.forControls.add(forControl);
     }
 
-    public Date getCreatedAt() {
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

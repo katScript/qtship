@@ -9,8 +9,12 @@ import com.spring.app.customers.models.repository.ForControlRepository;
 import com.spring.app.customers.payload.AddressData;
 import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.ForControlData;
+import com.spring.app.helper.services.DateFormatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CustomerService {
@@ -22,12 +26,18 @@ public class CustomerService {
     private ForControlRepository forControlRepository;
 
     public Customer processCustomerData(CustomerData data) {
-        Customer customer = customerRepository.findById(data.getId())
-                .orElse(new Customer());
+        Customer customer;
+        if (data.getId() != null) {
+            customer = customerRepository.findById(data.getId()).orElseThrow(() -> new RuntimeException("Customer not exists!"));
+        } else {
+            customer = new Customer();
+        }
 
         customer.setFullName(data.getFullName())
                 .setGender(data.getGender())
-                .setDob(data.getDob())
+                .setDob(
+                        DateFormatService.stringToDate(data.getDob())
+                )
                 .setPhone(data.getPhone())
                 .setCompanyName(data.getCompanyName())
                 .setEmail(data.getEmail())
@@ -39,8 +49,12 @@ public class CustomerService {
     }
 
     public Address processAddressData(AddressData data) {
-        Address address = addressRepository.findById(data.getId())
-                .orElse(new Address());
+        Address address;
+        if (data.getId() != null) {
+            address = addressRepository.findById(data.getId()).orElseThrow(() -> new RuntimeException("Address not exists!"));
+        } else {
+            address = new Address();
+        }
 
         address.setPrimary(data.getPrimary())
                 .setProvince(data.getProvince())
@@ -55,8 +69,13 @@ public class CustomerService {
     }
 
     public ForControl processForControlData(ForControlData data) {
-        ForControl forControl = forControlRepository.findById(data.getId())
-                .orElse(new ForControl());
+        ForControl forControl;
+
+        if (data.getId() != null) {
+            forControl = forControlRepository.findById(data.getId()).orElseThrow(() -> new RuntimeException("For control not exists!"));
+        } else {
+            forControl = new ForControl();
+        }
 
         forControl.setHolderName(data.getHolderName())
                 .setCardNumber(data.getCardNumber())
@@ -67,7 +86,75 @@ public class CustomerService {
     }
 
     public CustomerData processCustomerResponse(Customer customer) {
-        CustomerData res = new CustomerData();
+        Set<AddressData> addressDataSet = new HashSet<>();
+        Set<ForControlData> forControlDataSet = new HashSet<>();
+
+        for (Address address : customer.getAddressSet()) {
+            AddressData aD = new AddressData(
+                    address.getId(),
+                    address.getProvince(),
+                    address.getProvinceId(),
+                    address.getDistrict(),
+                    address.getDistrictId(),
+                    address.getWard(),
+                    address.getWardId(),
+                    address.getStreet(),
+                    address.getPrimary()
+            );
+
+            aD.setCreatedAt(
+                    DateFormatService.dateToString(address.getCreatedAt())
+            );
+            aD.setUpdatedAt(
+                    DateFormatService.dateToString(address.getUpdatedAt())
+            );
+
+            addressDataSet.add(aD);
+        }
+
+        for (ForControl forControl : customer.getForControls()) {
+            ForControlData fD = new ForControlData(
+                    forControl.getId(),
+                    forControl.getHolderName(),
+                    forControl.getCardNumber(),
+                    forControl.getBank(),
+                    forControl.getAddress()
+            );
+
+            fD.setCreatedAt(
+                    DateFormatService.dateToString(forControl.getCreatedAt())
+            );
+            fD.setUpdatedAt(
+                    DateFormatService.dateToString(forControl.getUpdatedAt())
+            );
+
+            forControlDataSet.add(fD);
+        }
+
+        CustomerData res = new CustomerData(
+                customer.getId(),
+                customer.getCustomerId(),
+                customer.getUser().getUsername(),
+                customer.getFullName(),
+                customer.getGender(),
+                DateFormatService.dateToString(customer.getDob()),
+                customer.getPhone(),
+                customer.getCompanyName(),
+                customer.getEmail(),
+                customer.getCidFront(),
+                customer.getCidBack(),
+                customer.getSubscription(),
+                addressDataSet,
+                forControlDataSet
+        );
+
+        res.setCreatedAt(
+                DateFormatService.dateToString(customer.getCreatedAt())
+        );
+
+        res.setUpdatedAt(
+                DateFormatService.dateToString(customer.getUpdatedAt())
+        );
 
         return res;
     }

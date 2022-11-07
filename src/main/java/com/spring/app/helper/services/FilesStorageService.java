@@ -1,4 +1,4 @@
-package com.spring.app.fileManager.services;
+package com.spring.app.helper.services;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
