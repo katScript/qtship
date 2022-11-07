@@ -40,31 +40,21 @@ public class OrderController {
     @Autowired
     OrderStatusRepository orderStatusRepository;
     @Autowired
-    ProductRepository productRepository;
-    @Autowired
-    PackageRepository packageRepository;
-    @Autowired
-    ShippingAddressRepository shippingAddressRepository;
-    @Autowired
-    WarehouseRepository warehouseRepository;
-    @Autowired
-    CouponRepository couponRepository;
-
     OrderService orderService;
 
-    public OrderController() {
-        this.orderService = new OrderService(
-                this.orderRepository,
-                this.orderItemRepository,
-                this.orderStatusRepository,
-                this.customerRepository,
-                this.productRepository,
-                this.packageRepository,
-                this.shippingAddressRepository,
-                this.warehouseRepository,
-                this.couponRepository
-        );
-    }
+//    public OrderController() {
+//        this.orderService = new OrderService(
+//                this.orderRepository,
+//                this.orderItemRepository,
+//                this.orderStatusRepository,
+//                this.customerRepository,
+//                this.productRepository,
+//                this.packageRepository,
+//                this.shippingAddressRepository,
+//                this.warehouseRepository,
+//                this.couponRepository
+//        );
+//    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderDataRequest order) {

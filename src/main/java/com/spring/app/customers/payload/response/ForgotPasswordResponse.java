@@ -1,4 +1,4 @@
-package com.spring.app.customers.payload.response.customer;
+package com.spring.app.customers.payload.response;
 
 import java.util.List;
 

@@ -2,36 +2,24 @@ package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.Role;
 import com.spring.app.authentication.models.User;
-import com.spring.app.authentication.payload.request.LoginRequest;
-import com.spring.app.authentication.payload.response.JwtResponse;
+import com.spring.app.customers.service.CustomerService;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.RoleRepository;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
-import com.spring.app.authentication.security.services.UserDetailsImpl;
 import com.spring.app.customers.models.Address;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.ForControl;
-import com.spring.app.customers.payload.request.auth.ForgotPasswordRequest;
 import com.spring.app.customers.payload.request.auth.RegisterRequest;
 import com.spring.app.customers.payload.request.auth.ResetPasswordRequest;
-import com.spring.app.customers.payload.response.customer.ForgotPasswordResponse;
-import com.spring.app.customers.models.repository.AddressRepository;
 import com.spring.app.customers.models.repository.CustomerRepository;
-import com.spring.app.customers.models.repository.ForControlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController("CustomerAuthController")
@@ -49,6 +37,8 @@ public class AuthController {
     PasswordEncoder encoder;
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    CustomerService customerService;
 
     @PostMapping("/reset")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
@@ -89,30 +79,14 @@ public class AuthController {
 
             user.addRole(userRole);
 
-            Customer customer = new Customer(
-                    registerRequest.getCustomer().getFullName(),
-                    registerRequest.getCustomer().getPhone(),
-                    registerRequest.getCustomer().getCompanyName(),
-                    registerRequest.getCustomer().getEmail()
-            );
+            Customer customer = customerService
+                    .processCustomerData(registerRequest.getCustomer());
 
-            Address address = new Address(
-                    registerRequest.getCustomerAddress().getProvince(),
-                    registerRequest.getCustomerAddress().getProvinceId(),
-                    registerRequest.getCustomerAddress().getDistrict(),
-                    registerRequest.getCustomerAddress().getDistrictId(),
-                    registerRequest.getCustomerAddress().getWard(),
-                    registerRequest.getCustomerAddress().getWardId(),
-                    registerRequest.getCustomerAddress().getStreet(),
-                    true
-            );
+            Address address = customerService
+                    .processAddressData(registerRequest.getCustomerAddress());
 
-            ForControl forControl = new ForControl(
-                    registerRequest.getForControl().getHolderName(),
-                    registerRequest.getForControl().getCardNumber(),
-                    registerRequest.getForControl().getBank(),
-                    registerRequest.getForControl().getAddress()
-            );
+            ForControl forControl = customerService
+                    .processForControlData(registerRequest.getForControl());
 
             address.setCustomer(customer);
             forControl.setCustomer(customer);

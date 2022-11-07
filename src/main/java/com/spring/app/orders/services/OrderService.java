@@ -29,48 +29,35 @@ import com.spring.app.shipping.payload.request.ShippingAddressRequest;
 import com.spring.app.shipping.payload.response.ShippingAddressResponse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
 import com.spring.app.warehouse.payload.response.WarehouseListResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Service
 public class OrderService {
+    @Autowired
     public OrderRepository orderRepository;
+    @Autowired
     public OrderItemRepository orderItemRepository;
+    @Autowired
     public OrderStatusRepository orderStatusRepository;
+    @Autowired
     public CustomerRepository customerRepository;
+    @Autowired
     public PackageRepository packageRepository;
+    @Autowired
     public ProductRepository productRepository;
+    @Autowired
     public ShippingAddressRepository shippingAddressRepository;
+    @Autowired
     public WarehouseRepository warehouseRepository;
+    @Autowired
     public PriceCalculate priceCalculate;
+    @Autowired
     public ProductService productService;
-
-    public OrderService() {}
-
-    public OrderService(
-            OrderRepository orderRepository,
-            OrderItemRepository orderItemRepository,
-            OrderStatusRepository orderStatusRepository,
-            CustomerRepository customerRepository,
-            ProductRepository productRepository,
-            PackageRepository packageRepository,
-            ShippingAddressRepository shippingAddressRepository,
-            WarehouseRepository warehouseRepository,
-            CouponRepository couponRepository
-    ) {
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.orderStatusRepository = orderStatusRepository;
-        this.customerRepository = customerRepository;
-        this.productRepository = productRepository;
-        this.packageRepository = packageRepository;
-        this.shippingAddressRepository = shippingAddressRepository;
-        this.warehouseRepository = warehouseRepository;
-        this.productService = new ProductService();
-        this.priceCalculate = new PriceCalculate(couponRepository);
-
-    }
 
     public void updateStatus(OrderStatusUpdateRequest order) {
         Order _order = this.orderRepository.findById(order.getId())

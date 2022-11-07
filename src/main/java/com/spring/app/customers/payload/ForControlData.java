@@ -2,7 +2,7 @@ package com.spring.app.customers.payload;
 
 import java.util.Date;
 
-public class ForControl {
+public class ForControlData {
     private Long id;
     private String holderName;
     private String cardNumber;
@@ -11,9 +11,9 @@ public class ForControl {
     private Date createdAt;
     private Date updatedAt;
 
-    public ForControl() {}
+    public ForControlData() {}
 
-    public ForControl(com.spring.app.customers.models.ForControl forControl) {
+    public ForControlData(com.spring.app.customers.models.ForControl forControl) {
         this.id = forControl.getId();
         this.holderName = forControl.getHolderName();
         this.cardNumber = forControl.getCardNumber();

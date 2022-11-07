@@ -1,14 +1,8 @@
 package com.spring.app.customers.payload;
 
-import com.spring.app.customers.models.Customer;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Date;
 
-public class Address {
+public class AddressData {
     private Long id;
     private String province;
     private String district;
@@ -21,9 +15,9 @@ public class Address {
     private Date createdAt;
     private Date updatedAt;
 
-    public Address() {}
+    public AddressData() {}
 
-    public Address(com.spring.app.customers.models.Address address) {
+    public AddressData(com.spring.app.customers.models.Address address) {
         this.id = address.getId();
         this.province = address.getProvince();
         this.provinceId = address.getProvinceId();

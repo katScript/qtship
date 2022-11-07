@@ -1,12 +1,15 @@
 package com.spring.app.customers.payload;
 
+import com.spring.app.customers.models.Customer;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Customer {
+public class CustomerData {
     private Long id;
     private String fullName;
+    private String username;
     private String customerId;
     private String gender;
     private Date dob;
@@ -18,14 +21,24 @@ public class Customer {
     private Boolean subscription;
     private Date createdAt;
     private Date updatedAt;
-    private Set<Address> addressSet;
-    private Set<ForControl> forControls;
+    private Set<AddressData> addressSet;
+    private Set<ForControlData> forControls;
 
-    private String username;
+    public CustomerData() {
+        this.addressSet = new HashSet<>();
+        this.forControls = new HashSet<>();
+    }
 
-    public Customer() {}
+//    public CustomerData(
+//            Long id,
+//            String fullName,
+//            String gender,
+//            Date
+//    ) {
+//
+//    }
 
-    public Customer(com.spring.app.customers.models.Customer customer) {
+    public CustomerData(Customer customer) {
         this.id = customer.getId();
         this.fullName = customer.getFullName();
         this.gender = customer.getGender();
@@ -42,10 +55,10 @@ public class Customer {
         this.customerId = customer.getCustomerId();
 
         for (com.spring.app.customers.models.Address address : customer.getAddressSet())
-            this.addAddress(new Address(address));
+            this.addAddress(new AddressData(address));
 
         for (com.spring.app.customers.models.ForControl forControl : customer.getForControls())
-            this.addForControl(new ForControl(forControl));
+            this.addForControl(new ForControlData(forControl));
     }
 
     public Long getId() {
@@ -136,15 +149,15 @@ public class Customer {
         this.subscription = subscription;
     }
 
-    public Set<Address> getAddressSet() {
+    public Set<AddressData> getAddressSet() {
         return addressSet;
     }
 
-    public void setAddressSet(Set<Address> addressSet) {
+    public void setAddressSet(Set<AddressData> addressSet) {
         this.addressSet = addressSet;
     }
 
-    public void addAddress(Address address) {
+    public void addAddress(AddressData address) {
         if (this.addressSet == null) {
             this.addressSet = new HashSet<>();
         }
@@ -152,15 +165,15 @@ public class Customer {
         this.addressSet.add(address);
     }
 
-    public Set<ForControl> getForControls() {
+    public Set<ForControlData> getForControls() {
         return forControls;
     }
 
-    public void setForControls(Set<ForControl> forControls) {
+    public void setForControls(Set<ForControlData> forControls) {
         this.forControls = forControls;
     }
 
-    public void addForControl(ForControl forControl) {
+    public void addForControl(ForControlData forControl) {
         if (this.forControls == null) {
             this.forControls = new HashSet<>();
         }

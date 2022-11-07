@@ -1,15 +1,15 @@
 package com.spring.app.customers.payload.request.customer;
 
-import com.spring.app.customers.payload.Customer;
+import com.spring.app.customers.payload.CustomerData;
 
 public class SaveCustomerRequest {
-    private Customer customer;
+    private CustomerData customer;
 
-    public Customer getCustomer() {
+    public CustomerData getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerData customer) {
         this.customer = customer;
     }
 }

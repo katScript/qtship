@@ -14,6 +14,7 @@ import java.util.Set;
 @Table(name = "customers")
 public class Customer {
     public static final String ROLE = "customer";
+    public static final String PREFIX = "CTM";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
@@ -42,37 +43,63 @@ public class Customer {
     private Date updatedAt;
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Address> addressSet = new HashSet<>();
+    private Set<Address> addressSet;
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ForControl> forControls = new HashSet<>();
+    private Set<ForControl> forControls;
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Order> orders = new HashSet<>();
+    private Set<Order> orders;
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products;
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private Set<Warehouse> warehouses = new HashSet<>();
+    private Set<Warehouse> warehouses;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Customer() {}
+    public Customer() {
+        this.addressSet = new HashSet<>();
+        this.forControls = new HashSet<>();
+        this.orders = new HashSet<>();
+        this.products = new HashSet<>();
+        this.warehouses = new HashSet<>();
+    }
 
     public Customer(
             String fullName,
+            String gender,
+            Date dob,
             String phone,
             String companyName,
-            String email
+            String email,
+            String cidFront,
+            String cidBack,
+            Boolean subscription,
+            Set<Address> addressSet,
+            Set<ForControl> forControls,
+            Set<Order> orders,
+            Set<Product> products,
+            Set<Warehouse> warehouses
     ) {
         this.fullName = fullName;
         this.phone = phone;
         this.companyName = companyName;
         this.email = email;
+        this.gender = gender;
+        this.dob = dob;
+        this.cidFront = cidFront;
+        this.cidBack = cidBack;
+        this.subscription = subscription;
+        this.addressSet = addressSet;
+        this.forControls = forControls;
+        this.orders = orders;
+        this.products = products;
+        this.warehouses = warehouses;
     }
 
     public Long getId() {
@@ -80,7 +107,7 @@ public class Customer {
     }
 
     public String getCustomerId() {
-        return "CTM" + String.format("%06d", id);
+        return PREFIX + String.format("%06d", id);
     }
 
     public Set<Order> getOrders() {

@@ -5,15 +5,19 @@ import com.spring.app.orders.models.OrderItem;
 import com.spring.app.price.models.Coupon;
 import com.spring.app.price.models.repository.CouponRepository;
 import com.spring.app.products.models.Package;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PriceCalculate {
+    @Autowired
     private CouponRepository couponRepository;
 
-    public PriceCalculate(
-            CouponRepository couponRepository
-    ) {
-        this.couponRepository = couponRepository;
-    }
+//    public PriceCalculate(
+//            CouponRepository couponRepository
+//    ) {
+//        this.couponRepository = couponRepository;
+//    }
 
     public void processSubtotal(Order order) {
         Double subtotal = 0.0;

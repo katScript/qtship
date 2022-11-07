@@ -10,38 +10,27 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
-
     @Column(name="province")
     private String province;
-
     @Column(name="district")
     private String district;
-
     @Column(name="ward")
     private String ward;
-
     @Column(name="province_id")
     private String provinceId;
-
     @Column(name="district_id")
     private String districtId;
-
     @Column(name="ward_id")
     private String wardId;
-
     @Column(name="street")
     private String street;
-
     @Column(name="`primary`")
-    private boolean primary;
-
+    private Boolean primary;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
-
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
-
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
 
@@ -55,7 +44,8 @@ public class Address {
         String ward,
         String wardId,
         String street,
-        boolean primary
+        Boolean primary,
+        Customer customer
     ) {
         this.province = province;
         this.provinceId = provinceId;
@@ -65,6 +55,7 @@ public class Address {
         this.wardId = wardId;
         this.street = street;
         this.primary = primary;
+        this.customer = customer;
     }
 
     public Long getId() {
@@ -134,11 +125,11 @@ public class Address {
         return this;
     }
 
-    public boolean getPrimary() {
+    public Boolean getPrimary() {
         return primary;
     }
 
-    public Address setPrimary(boolean primary) {
+    public Address setPrimary(Boolean primary) {
         this.primary = primary;
         return this;
     }
