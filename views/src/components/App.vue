@@ -15,11 +15,11 @@
 </script>
 
 <style scoped>
-  @import "./style/css/login.css";
-  @import "./style/css/register.css";
-  @import "./style/css/navbar-client.css";
-  @import "./style/css/client-management.css";
-  @import "./style/css/client-orders.css";
-  @import "./style/css/global.css";
+  @import "@/style/css/login.css";
+  @import "@/style/css/register.css";
+  @import "@/style/css/navbar-client.css";
+  @import "@/style/css/client-management.css";
+  @import "@/style/css/client-orders.css";
+  @import "@/style/css/global.css";
   @import 'vue3-easy-data-table/dist/style.css';
 </style>

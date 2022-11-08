@@ -1,0 +1,12 @@
+ul li {
+    list-style: none;
+}
+
+.nav-link {
+    color: black;
+}
+
+.nav-tabs .nav-link.active {
+    color: #bf1e2d;
+    font-weight: 600;
+}
