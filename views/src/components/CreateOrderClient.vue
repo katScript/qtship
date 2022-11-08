@@ -382,7 +382,7 @@
     import ActionLoading from "./common/ActionLoading.vue";
 
     import moment from "moment";
-    import { commonFunction } from "../scripts/ulti";
+    import { commonFunction } from "@/scripts/ulti";
     import { useCookies } from "vue3-cookies";
     import axios from "axios";
     // import $ from "jquery"

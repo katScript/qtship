@@ -8,8 +8,8 @@ import CreateOrderClient from '@/components/CreateOrderClient.vue'
 import warehouseProductClient from '@/components/WarehouseProductClient.vue'
 import ManagementCashClient from '@/components/ManagementCashClient.vue'
 import ManageAccountInfo from '@/components/ManageAccountInfo.vue'
-import ManagementShipper from '@/components/ManagementShipper.vue'
-import ManageAccountShipperInfo from '@/components/ManageAccountShipperInfo.vue'
+import ShipperOrder from '@/components/shipper/ShipperOrder.vue'
+import ManageAccountShipperInfo from '@/components/shipper/ShipperDetail.vue'
 import ManagementAdmin from '@/components/ManagementAdmin.vue'
 
 const history = createWebHistory();
@@ -25,7 +25,7 @@ const router = createRouter({
         {path: '/client/warehouse-product', component: warehouseProductClient},
         {path: '/client/management-cash', component: ManagementCashClient},
         {path: '/client/account-info', component: ManageAccountInfo},
-        {path: '/shipper/management', component: ManagementShipper},
+        {path: '/shipper/management', component: ShipperOrder},
         {path: '/shipper/account-info', component: ManageAccountShipperInfo},
         {path: '/admin/management', component: ManagementAdmin},
        

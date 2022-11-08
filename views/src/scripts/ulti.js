@@ -1,6 +1,7 @@
 import { sha256 } from "js-sha256";
 import md5 from "md5";
-import $ from "jquery"
+import $ from "jquery";
+import { useCookies } from "vue3-cookies";
 
 const commonFunction = {
     redirect: function(url) { window.location.href = url; },
@@ -83,6 +84,16 @@ const commonFunction = {
     typeOrderDelivery: "DELiVERY",
     typeOrderOccurred: "OCCURRED",
     typeOrderCancel: "CANCEL",
+    cookiesManager: useCookies(),
+    setCookies: function (key, value) {
+        this.cookiesManager.cookies.set(key, value, this.EXPIRED_TIME_COOKIES);
+    },
+    getCookies: function (key) {
+        return this.cookiesManager.cookies.get(key);
+    },
+    removeCookies: function (key) {
+        this.cookiesManager.cookies.remove(key);
+    }
 }
 
 export { commonFunction };
