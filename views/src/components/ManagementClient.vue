@@ -1,5 +1,6 @@
 <template>
   <div class="management-client-page">
+    <div :class="isLoading ? 'show' : 'hide'"><ActionLoading /></div>
     <NavbarClient />
     <div class="container-fluid">
       <div class="row">
@@ -24,6 +25,7 @@
                         id="select-box-filter-time"
                         v-model="filterTime"
                       >
+                        <option value="all">Tất cả</option>
                         <option value="today">Hôm nay</option>
                         <option value="1week">1 tuần</option>
                         <option value="1month">1 tháng</option>
@@ -43,6 +45,9 @@
                         </td>
                         <td>
                           <label for="start">Đến ngày ngày:</label>
+                          <small class="text-danger">{{
+                            msgValidationTimeFromTo
+                          }}</small>
                           <input
                             type="date"
                             id="to-time-filter"
@@ -70,12 +75,12 @@
                   <h2 id="number-orders">{{ totalProductByDate }}</h2>
                 </div>
                 <div class="col-3">
-                  <h5>Tổng sản phẩm</h5>
-                  <h2 id="number-orders">{{ totalProductAll }}</h2>
+                  <h5>Tổng số đơn hàng</h5>
+                  <h2 id="number-orders">{{ totalOrderAll }}</h2>
                 </div>
                 <div class="col-3">
-                  <h5>Tổng số kho</h5>
-                  <h2 id="number-orders">1</h2>
+                  <h5>Tổng sản phẩm</h5>
+                  <h2 id="number-orders">{{ totalProductAll }}</h2>
                 </div>
               </div>
               <br />
@@ -106,13 +111,23 @@
                 <div class="col-md-6">
                   <h5>Tổng quan đơn hàng</h5>
                   <br />
-                  <VueChartPie />
+                  <VueChartPie
+                    :numberOrderSuccess="numberOrderSuccess"
+                    :numberOrderCancel="numberOrderCancel"
+                    :numberOrderOccurred="numberOrderOccurred"
+                    :numberOrderDelivery="numberOrderDelivery"
+                  />
                   <br /><br />
                 </div>
                 <div class="col-md-6">
                   <h5>Tổng quan dòng tiền</h5>
                   <br />
-                  <VueChartColumn />
+                  <VueChartColumn
+                    :totalPriceOrderSuccess="totalPriceOrderSuccess"
+                    :totalPriceOrderCancel="totalPriceOrderCancel"
+                    :totalPriceOrderOccurred="totalPriceOrderOccurred"
+                    :totalPriceOrderDelivery="totalPriceOrderDelivery"
+                  />
                   <br /><br />
                 </div>
               </div>
@@ -198,8 +213,9 @@ import VueChartPie from "./common/VueChartPie.vue";
 import VueChartColumn from "./common/VueChartColumn.vue";
 import ToolbarRight from "./common/ToolbarRight.vue";
 import NotficationClient from "./common/NotficationClient.vue";
-import axios from "axios";
+import ActionLoading from "./common/ActionLoading.vue";
 
+import axios from "axios";
 import moment from "moment";
 import { useCookies } from "vue3-cookies";
 import { commonFunction } from "../scripts/ulti";
@@ -212,26 +228,35 @@ export default {
     VueChartColumn,
     ToolbarRight,
     NotficationClient,
+    ActionLoading,
   },
   data() {
     return {
-      filterTime: "today",
+      filterTime: "all",
       classFilterTimeAbout: "d-none",
       customerInfo: null,
       filterTimeFrom: "",
       filterTimeTo: "",
+      msgValidationTimeFromTo: "",
       numberOrderSuccess: 0,
       numberOrderDelivery: 0,
       numberOrderOccurred: 0,
       numberOrderCancel: 0,
+      totalPriceOrderSuccess: 0,
+      totalPriceOrderDelivery: 0,
+      totalPriceOrderOccurred: 0,
+      totalPriceOrderCancel: 0,
       idRequest: "",
       configRequestApi: {},
       listOrderByCustomer: [],
+      listOrderByCustomerBk: [],
       listProductByCustomer: [],
+      totalOrderAll: 0,
       totalOrderByDate: 0,
       totalProductByDate: 0,
       totalProductAll: 0,
       dateFilter: "",
+      isLoading: false,
     };
   },
 
@@ -299,36 +324,44 @@ export default {
       .then((response) => {
         let respronseData = response.data;
         self.listOrderByCustomer = respronseData;
-        self.totalOrderByDate = self.listOrderByCustomer.filter(
-          (e) =>
-            moment(e.createdAt).format("YYYY-MM-DD") ==
-            moment(self.dateFilter).format("YYYY-MM-DD")
-        ).length;
+        self.listOrderByCustomerBk = respronseData;
+        self.totalOrderAll = respronseData.length;
+        self.totalOrderByDate = self.listOrderByCustomer.length;
 
         self.numberOrderSuccess = self.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderSuccess &&
-            moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(self.dateFilter).format("YYYY-MM-DD")
+          (e) => e.status == commonFunction.typeOrderSuccess
         ).length;
         self.numberOrderDelivery = self.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderDelivery &&
-            moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(self.dateFilter).format("YYYY-MM-DD")
+          (e) => e.status == commonFunction.typeOrderDelivery
         ).length;
         self.numberOrderOccurred = self.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderOccurred &&
-            moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(self.dateFilter).format("YYYY-MM-DD")
+          (e) => e.status == commonFunction.typeOrderOccurred
         ).length;
         self.numberOrderCancel = self.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderCancel &&
-            moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(self.dateFilter).format("YYYY-MM-DD")
+          (e) => e.status == commonFunction.typeOrderCancel
         ).length;
+
+        //price
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderSuccess) {
+            self.totalPriceOrderSuccess += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderDelivery) {
+            self.totalPriceOrderDelivery += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderOccurred) {
+            self.totalPriceOrderOccurred += element.subtotal;
+          }
+        });
+        self.listOrderByCustomer.forEach((element) => {
+          if (element.status == commonFunction.typeOrderCancel) {
+            self.totalPriceOrderCancel += element.subtotal;
+          }
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -343,266 +376,76 @@ export default {
           : (self.classFilterTimeAbout = "d-none");
 
         if (self.filterTime == "today") {
-          self.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
-          self.totalOrderByDate = self.listOrderByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.numberOrderSuccess = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderSuccess &&
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderDelivery = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderDelivery &&
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderOccurred = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderOccurred &&
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderCancel = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderCancel &&
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.totalProductByDate = self.listProductByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") ==
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
+          let timeFrom = new Date(),
+            timeTo = new Date();
+          self.axiosGetOrdersByTime(timeFrom, timeTo);
         } else if (self.filterTime == "1week") {
-          self.dateFilter = moment()
-            .subtract(1, "weeks")
-            .format("YYYY-MM-DD HH:MM:SS");
-
-          self.totalOrderByDate = self.listOrderByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.numberOrderSuccess = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderSuccess &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderDelivery = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderDelivery &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderOccurred = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderOccurred &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderCancel = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderCancel &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.totalProductByDate = self.listProductByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
+          let timeFrom = moment(new Date()).subtract(1, "weeks"),
+            timeTo = new Date();
+          self.axiosGetOrdersByTime(timeFrom, timeTo);
         } else if (self.filterTime == "1month") {
-          self.dateFilter = moment()
-            .subtract(1, "months")
-            .format("YYYY-MM-DD HH:MM:SS");
-
-          self.totalOrderByDate = self.listOrderByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.numberOrderSuccess = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderSuccess &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderDelivery = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderDelivery &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderOccurred = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderOccurred &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderCancel = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderCancel &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.totalProductByDate = self.listProductByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
+          let timeFrom = moment(new Date()).subtract(1, "months"),
+            timeTo = new Date();
+          self.axiosGetOrdersByTime(timeFrom, timeTo);
         } else if (self.filterTime == "1year") {
-          self.dateFilter = moment()
-            .subtract(1, "years")
-            .format("YYYY-MM-DD HH:MM:SS");
-
-          self.totalOrderByDate = self.listOrderByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
+          let timeFrom = moment(new Date()).subtract(1, "years"),
+            timeTo = new Date();
+          self.axiosGetOrdersByTime(timeFrom, timeTo);
+        } else if (self.filterTime == "all") {
+          self.listOrderByCustomer = self.listOrderByCustomerBk;
+          self.totalOrderByDate = self.listOrderByCustomer.length;
 
           self.numberOrderSuccess = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderSuccess &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
+            (e) => e.status == commonFunction.typeOrderSuccess
           ).length;
           self.numberOrderDelivery = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderDelivery &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
+            (e) => e.status == commonFunction.typeOrderDelivery
           ).length;
           self.numberOrderOccurred = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderOccurred &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
+            (e) => e.status == commonFunction.typeOrderOccurred
           ).length;
           self.numberOrderCancel = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderCancel &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.totalProductByDate = self.listProductByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
+            (e) => e.status == commonFunction.typeOrderCancel
           ).length;
         } else if (self.filterTime == "timeAbout") {
-          self.filterTimeFrom = moment(self.filterTimeFrom).format(
-            "YYYY-MM-DD HH:MM:SS"
-          );
-          self.filterTimeTo = moment(self.filterTimeTo).format(
-            "YYYY-MM-DD HH:MM:SS"
-          );
-        } else {
-          self.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
-          self.totalOrderByDate = self.listOrderByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.numberOrderSuccess = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderSuccess &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderDelivery = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderDelivery &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderOccurred = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderOccurred &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-          self.numberOrderCancel = self.listOrderByCustomer.filter(
-            (e) =>
-              e.status == commonFunction.typeOrderCancel &&
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-                moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
-
-          self.totalProductByDate = self.listProductByCustomer.filter(
-            (e) =>
-              moment(e.createdAt).format("YYYY-MM-DD") >=
-              moment(this.dateFilter).format("YYYY-MM-DD")
-          ).length;
+          let timeFrom = moment(self.filterTimeFrom),
+            timeTo = moment(self.filterTimeTo);
+          self.axiosGetOrdersByTime(timeFrom, timeTo);
         }
+      },
+    },
+    filterTimeFrom: {
+      handler: function () {
+        const self = this;
+        if (
+          self.filterTime == "timeAbout" &&
+          (self.filterTimeFrom == "" || self.timeTo == "")
+        ) {
+          self.msgValidationTimeFromTo = "Vui lòng chọn từ ngày - đến ngày!";
+        }
+
+        let timeFrom = moment(self.filterTimeFrom),
+          timeTo = moment(self.filterTimeTo);
+        self.axiosGetOrdersByTime(timeFrom, timeTo);
       },
     },
     filterTimeTo: {
       handler: function () {
-        this.totalOrderByDate = this.listOrderByCustomer.filter(
-          (e) =>
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
-        this.numberOrderSuccess = this.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderSuccess &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
-        this.numberOrderDelivery = this.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderDelivery &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
-        this.numberOrderOccurred = this.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderOccurred &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
-        this.numberOrderCancel = this.listOrderByCustomer.filter(
-          (e) =>
-            e.status == commonFunction.typeOrderCancel &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
-        this.totalProductByDate = this.listProductByCustomer.filter(
-          (e) =>
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") >=
-              this.filterTimeFrom &&
-            moment(e.createdAt).format("YYYY-MM-DD HH:MM:SS") <=
-              this.filterTimeTo
-        ).length;
+        const self = this;
+        if (
+          self.filterTime == "timeAbout" &&
+          (self.filterTimeFrom == "" || self.timeTo == "")
+        ) {
+          self.msgValidationTimeFromTo = "Vui lòng chọn từ ngày - đến ngày!";
+        }
+
+        let timeFrom = moment(self.filterTimeFrom),
+          timeTo = moment(self.filterTimeTo);
+        self.axiosGetOrdersByTime(timeFrom, timeTo);
       },
     },
   },
-  method: {
+  methods: {
     debouncer(fn, delay) {
       var timeoutID = null;
       return function () {
@@ -614,9 +457,87 @@ export default {
         }, delay);
       };
     },
+    axiosGetOrdersByTime(timeFrom, timeTo) {
+      const self = this;
+      self.isLoading = true;
+      self.listOrderByCustomer = self.listOrderByCustomerBk;
+      self.resetTotalPrice();
+      axios
+        .get(
+          commonFunction.DOMAIN_URL +
+            "v1/order/all/customer/" +
+            self.idRequest +
+            "?from=" +
+            moment(timeFrom).format("YYYY-MM-DD HH:MM:SS") +
+            "&to=" +
+            moment(timeTo).format("YYYY-MM-DD HH:MM:SS"),
+          self.configRequestApi
+        )
+        .then((response) => {
+          let respronseData = response.data;
+          self.listOrderByCustomer = respronseData;
+          console.log(self.listOrderByCustomer);
+
+          //count
+          self.totalOrderByDate = self.listOrderByCustomer.length;
+          self.numberOrderSuccess = self.listOrderByCustomer.filter(
+            (e) => e.status == commonFunction.typeOrderSuccess
+          ).length;
+          self.numberOrderDelivery = self.listOrderByCustomer.filter(
+            (e) => e.status == commonFunction.typeOrderDelivery
+          ).length;
+          self.numberOrderOccurred = self.listOrderByCustomer.filter(
+            (e) => e.status == commonFunction.typeOrderOccurred
+          ).length;
+          self.numberOrderCancel = self.listOrderByCustomer.filter(
+            (e) => e.status == commonFunction.typeOrderCancel
+          ).length;
+
+          //price
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderSuccess) {
+              self.totalPriceOrderSuccess += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderDelivery) {
+              self.totalPriceOrderDelivery += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderOccurred) {
+              self.totalPriceOrderOccurred += element.subtotal;
+            }
+          });
+          self.listOrderByCustomer.forEach((element) => {
+            if (element.status == commonFunction.typeOrderCancel) {
+              self.totalPriceOrderCancel += element.subtotal;
+            }
+          });
+
+          self.isLoading = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          self.isLoading = false;
+        });
+    },
+    resetTotalPrice() {
+      this.totalPriceOrderSuccess = 0;
+      this.totalPriceOrderDelivery = 0;
+      this.totalPriceOrderOccurred = 0;
+      this.totalPriceOrderCancel = 0;
+    },
   },
 };
 </script>
 
 <style scoped>
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
 </style>

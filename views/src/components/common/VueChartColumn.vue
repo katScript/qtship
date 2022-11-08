@@ -17,7 +17,7 @@
         Đơn phát sinh <a href="#" class="a-detail-right">Chi tiết</a>
       </li>
       <li class="list-group-item">
-        Đơn hoàn <a href="#" class="a-detail-right">Chi tiết</a>
+        Đơn hủy <a href="#" class="a-detail-right">Chi tiết</a>
       </li>
     </ul>
   </div>
@@ -25,6 +25,12 @@
 
 <script>
 export default {
+  props: [
+    "totalPriceOrderSuccess",
+    "totalPriceOrderDelivery",
+    "totalPriceOrderOccurred",
+    "totalPriceOrderCancel",
+  ],
   data() {
     return {
       chartOptions: {
@@ -43,16 +49,53 @@ export default {
           },
         },
         xaxis: {
-          categories: ["Đơn thành công", "Đơn đang giao", "Đơn phát sinh", "Đơn hoàn"],
+          categories: [
+            "Đơn thành công",
+            "Đơn đang giao",
+            "Đơn phát sinh",
+            "Đơn hủy",
+          ],
         },
       },
       series: [
         {
           name: "VNĐ",
-          data: [30, 40, 45, 30],
+          data: [],
         },
       ],
     };
+  },
+  watch: {
+    totalPriceOrderSuccess: {
+      handler: function () {
+        this.applyDataChart();
+      },
+    },
+    totalPriceOrderDelivery: {
+      handler: function () {
+        this.applyDataChart();
+      },
+    },
+    totalPriceOrderOccurred: {
+      handler: function () {
+        this.applyDataChart();
+      },
+    },
+    totalPriceOrderCancel: {
+      handler: function () {
+        this.applyDataChart();
+      },
+    },
+  },
+  methods: {
+    applyDataChart() {
+      this.series[0].data = [
+        this.totalPriceOrderSuccess,
+        this.totalPriceOrderDelivery,
+        this.totalPriceOrderOccurred,
+        this.totalPriceOrderCancel,
+      ];
+    },
   },
 };
 </script>
