@@ -22,4 +22,23 @@ export default class WarehouseData {
     getData () {
         return this.data;
     }
+
+    validate(data, isValid, msgValidationFor) {
+        if (data.name == "") {
+            isValid += 1;
+            msgValidationFor.warehouse.name =
+                "Vui lòng nhập thông tin kho/cửa hàng!";
+        }
+        if (data.phone == "") {
+            isValid += 1;
+            msgValidationFor.warehouse.phone =
+                "Vui lòng nhập thông tin liên hệ!";
+        }
+        if (data.address == "") {
+            isValid += 1;
+            msgValidationFor.warehouse.address =
+                "Vui lòng nhập địa chỉ cụ thể: Số nhà/thôn, xã/phường, quận/huyện, tỉnh/thành phố!";
+        }
+        return isValid == 0 ? true : false;
+    }
 }

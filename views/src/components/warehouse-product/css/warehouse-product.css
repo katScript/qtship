@@ -1,0 +1,32 @@
+a {
+  text-decoration: none;
+}
+
+table tr td a {
+  /* font-size: 5px; */
+  padding: 2px;
+  margin: 0px 3px;
+}
+
+.easy-data-table-customize {
+  --easy-table-header-font-size: 14px;
+  --easy-table-body-row-font-size: 14px;
+}
+
+table tr td a i {
+  font-size: 16px;
+  padding: 2px 2px 2px 2px;
+}
+
+.btn-function-crud {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
