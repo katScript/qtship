@@ -27,7 +27,7 @@ export default class OrderData {
         updateAt: null
     };
 
-    constructor(data) {
+    setData(data) {
         this.data.id = data.id;
         this.data.orderCode = data.orderCode;
         this.data.customerId = data.customerId;
