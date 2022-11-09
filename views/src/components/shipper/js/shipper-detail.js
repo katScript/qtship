@@ -22,7 +22,7 @@ export default {
     data() {
         return {
             isShipper: true,
-            shipperData: this.shipperModel.getData()
+            shipperData: {}
         };
     },
     mounted() {

@@ -36,4 +36,48 @@ export default class ProductData {
     getData () {
         return this.data;
     }
+
+    validate (productData, isValid, msgValidationFor, refFile) {
+        msgValidationFor.product = {};
+        if (productData.name == "" || productData.name == undefined) {
+            isValid += 1;
+            msgValidationFor.product.name = "Vui lòng nhập tên sản phẩm!";
+        }
+
+        if (productData.sku == "" || productData.sku == undefined) {
+            isValid += 1;
+            msgValidationFor.product.sku = "Vui lòng nhập mã SKU!";
+        }
+
+        if (productData.basePrice == "" || productData.basePrice == undefined) {
+            isValid += 1;
+            msgValidationFor.product.basePrice =
+                "Vui lòng nhập giá gốc của sản phẩm!";
+        }
+
+        if (productData.publicPrice == "" || productData.publicPrice == undefined) {
+            isValid += 1;
+            msgValidationFor.product.publicPrice =
+                "Vui lòng nhập giá bán của sản phẩm!";
+        }
+
+        if (productData.qty == "" || productData.qty == undefined) {
+            isValid += 1;
+            msgValidationFor.product.qty =
+                "Vui lòng nhập số lượng sản phẩm!";
+        }
+
+        if (productData.weight == "" || productData.weight == undefined) {
+            isValid += 1;
+            msgValidationFor.product.weight =
+                "Vui lòng nhập trọng lượng của sản phẩm!";
+        }
+
+        if (refFile == null || productData.image == "") {
+            isValid += 1;
+            msgValidationFor.product.image =
+                "Vui lòng upload ảnh cho sản phẩm!";
+        }
+        return isValid == 0 ? true : false;
+    }
 }
