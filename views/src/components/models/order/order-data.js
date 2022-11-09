@@ -2,7 +2,6 @@ import WarehouseData from "@/components/models/warehouse/warehouse-data";
 
 export default class OrderData {
     warehouse = new WarehouseData();
-
     data = {
         id: null,
         orderCode: "",
