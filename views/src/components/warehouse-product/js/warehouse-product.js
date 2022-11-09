@@ -38,7 +38,8 @@ export default {
             productData: {},
             listWarehouseByCustomer: [],
             listProductByCustomer: [],
-
+            listProductByCustomerBk: [],
+            conditionFilter: "",
             isLoading: false,
             isValid: 0,
             msgValidationFor: {
@@ -142,6 +143,7 @@ export default {
                     let product = new ProductData();
                     product.setData(element);
                     this.listProductByCustomer.push(product);
+                    this.listProductByCustomerBk.push(product);
                 });
             })
             .catch((e) => {
@@ -351,5 +353,12 @@ export default {
         formatDateYYYYMMDD(value) {
             return moment(value).format("YYYY-MM-DD");
         },
+        filterProduct() {
+            let conditionString = this.conditionFilter.toString().toLowerCase();
+            this.listProductByCustomer = this.listProductByCustomerBk;
+            this.listProductByCustomer = this.listProductByCustomer.filter(
+                p => p.data.sku.toLowerCase().includes(conditionString) || p.data.name.toLowerCase().includes(conditionString)
+            )
+        }
     },
 };
