@@ -135,6 +135,8 @@
                 </div>
               </div>
               <hr />
+
+              <!-- Product -->
               <div class="create-product-management">
                 <div class="col-12">
                   <h4>Tạo Sản phẩm mới</h4>
@@ -150,7 +152,7 @@
                         type="text"
                         class="form-control"
                         id=""
-                        v-model="formDataProduct.name"
+                        v-model="productData.name"
                         placeholder="Nhập tên sản phẩm"
                       />
                     </div>
@@ -172,7 +174,7 @@
                         type="text"
                         class="form-control"
                         id=""
-                        v-model="formDataProduct.sku"
+                        v-model="productData.sku"
                         placeholder="Mã SKU Sản phẩm"
                       />
                     </div>
@@ -182,70 +184,47 @@
                   <div class="row">
                     <div class="col-sm-5">
                       <div class="form-group">
-                        <label for="">Giá gốc</label>
-                        <table class="w-100">
-                          <tr>
-                            <td>
-                              <small class="text-danger">
-                                {{ msgValidationFor.product.basePrice }}</small
-                              >
-                              <input
-                                type="text"
-                                class="form-control"
-                                id=""
-                                v-model="formDataProduct.basePrice"
-                                placeholder="Giá gốc sản phẩm"
-                              />
-                            </td>
-                            <td>(VNĐ)</td>
-                          </tr>
-                        </table>
+                        <label for="">Giá gốc (VNĐ)</label>
+                        <small class="text-danger">
+                          {{ msgValidationFor.product.basePrice }}</small
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id=""
+                          v-model="productData.basePrice"
+                          placeholder="Giá gốc sản phẩm"
+                        />
                       </div>
                     </div>
                     <div class="col-sm-5">
                       <div class="form-group">
-                        <label for="">Giá bán</label>
-                        <table class="w-100">
-                          <tr>
-                            <td>
-                              <small class="text-danger">
-                                {{
-                                  msgValidationFor.product.publicPrice
-                                }}</small
-                              >
-                              <input
-                                type="text"
-                                class="form-control"
-                                id=""
-                                v-model="formDataProduct.publicPrice"
-                                placeholder="Giá bán sản phẩm"
-                              />
-                            </td>
-                            <td>(VNĐ)</td>
-                          </tr>
-                        </table>
+                        <label for="">Giá bán (VNĐ)</label>
+                        <small class="text-danger">
+                          {{ msgValidationFor.product.publicPrice }}</small
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id=""
+                          v-model="productData.publicPrice"
+                          placeholder="Giá bán sản phẩm"
+                        />
                       </div>
                     </div>
                     <div class="col-sm-2">
                       <div class="form-group">
-                        <label for="">Khối lượng</label>
-                        <table class="w-100">
-                          <tr>
-                            <td>
-                              <small class="text-danger">
-                                {{ msgValidationFor.product.weight }}</small
-                              >
-                              <input
-                                type="text"
-                                class="form-control"
-                                id=""
-                                v-model="formDataProduct.weight"
-                                placeholder="Khối lượng sản phẩm"
-                              />
-                            </td>
-                            <td>(kg)</td>
-                          </tr>
-                        </table>
+                        <label for="">Khối lượng (kg) </label>
+                        <small class="text-danger">
+                          {{ msgValidationFor.product.weight }}</small
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id=""
+                          v-model="productData.weight"
+                          placeholder="Khối lượng sản phẩm"
+                        />
                       </div>
                     </div>
                   </div>
@@ -264,7 +243,7 @@
                               <input
                                 type="text"
                                 class="form-control"
-                                v-model="formDataProduct.qty"
+                                v-model="productData.qty"
                                 placeholder="Số lượng"
                               />
                             </div>
@@ -275,9 +254,12 @@
                               <small class="text-danger">
                                 {{ msgValidationFor.product.image }}</small
                               >
-                              <span v-if="!urlImgProductUpload">{{
-                                formDataProduct.image
-                              }}</span>
+                              <small
+                                class="text-success"
+                                v-if="productData.image"
+                              >
+                                Ảnh sản phẩm đã được tải lên trước đó!</small
+                              >
                               <input
                                 type="file"
                                 class="form-control"
@@ -295,7 +277,7 @@
                           <textarea
                             name=""
                             id=""
-                            v-model="formDataProduct.description"
+                            v-model="productData.description"
                             cols="30"
                             rows="5"
                             class="form-control"
@@ -317,7 +299,7 @@
                           width="200"
                           height="200"
                           class=""
-                          v-if="!urlImgProductUpload && !formDataProduct.image"
+                          v-if="!urlImgProductUpload && !productData.image"
                           src="@/images/img-default.jpg"
                         />
                         <img
@@ -333,8 +315,8 @@
                           width="200"
                           height="200"
                           class=""
-                          v-else-if="formDataProduct.image"
-                          :src="formDataProduct.image"
+                          v-else-if="productData.image"
+                          :src="productData.image"
                         />
                       </div>
                     </div>
@@ -377,9 +359,7 @@
                   />
                 </div>
                 <div class="col-md-2">
-                  <button class="btn btn-success w-100">
-                    <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-                  </button>
+                  <button class="btn btn-success w-100">Tìm kiếm</button>
                 </div>
               </div>
             </div>
@@ -401,7 +381,10 @@
                     {{ formatDateYYYYMMDD(item.createdAt) }}
                   </template>
                   <template #item-image="item">
-                    <img :src="item.image" style="width: 80px; height: 80px" />
+                    <img
+                      :src="item.data.image"
+                      style="width: 80px; height: 80px"
+                    />
                   </template>
                   <template #item-btn-function="item">
                     <!-- #item-btn-function="item"  item: valua of row-->

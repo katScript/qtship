@@ -24,17 +24,18 @@ export default class WarehouseData {
     }
 
     validate(data, isValid, msgValidationFor) {
-        if (data.name == "") {
+        msgValidationFor.warehouse = {};
+        if (data.name == "" || data.name == undefined) {
             isValid += 1;
             msgValidationFor.warehouse.name =
                 "Vui lòng nhập thông tin kho/cửa hàng!";
         }
-        if (data.phone == "") {
+        if (data.phone == "" || data.phone == undefined) {
             isValid += 1;
             msgValidationFor.warehouse.phone =
                 "Vui lòng nhập thông tin liên hệ!";
         }
-        if (data.address == "") {
+        if (data.address == "" || data.address == undefined) {
             isValid += 1;
             msgValidationFor.warehouse.address =
                 "Vui lòng nhập địa chỉ cụ thể: Số nhà/thôn, xã/phường, quận/huyện, tỉnh/thành phố!";

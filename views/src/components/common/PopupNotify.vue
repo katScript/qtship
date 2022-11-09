@@ -110,7 +110,9 @@ export default {
               alert(`"SUCCESS: Xóa ${dataNotify.data.data.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
-              alert(`"FAIL: Xóa ${dataNotify.data.data.name} không thành công!"`);
+              alert(
+                `"FAIL: Xóa ${dataNotify.data.data.name} không thành công!"`
+              );
               commonFunction.reloadPage();
             }
           })
@@ -123,20 +125,21 @@ export default {
           });
       } else if (typeComponent == "PRODUCT") {
         axios
-          .post(
-            commonFunction.DOMAIN_URL + "v1/product/delete",
-            {
-              customerId: dataNotify.idRequest,
-              id: dataNotify.data.id,
+          .delete(commonFunction.DOMAIN_URL + "v1/product/delete", {
+            headers: {
+              Authorization: this.configRequestApi.headers.Authorization,
             },
-            this.configRequestApi
-          )
+            data: {
+              customerId: dataNotify.idRequest,
+              id: dataNotify.data.data.id,
+            },
+          })
           .then((response) => {
             if (response.status == 200) {
-              alert(`"SUCCESS: Xóa ${dataNotify.name} thành công!"`);
+              alert(`"SUCCESS: Xóa ${dataNotify.data.data.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
-              alert(`"FAIL: Xóa ${dataNotify.name} không thành công!"`);
+              alert(`"FAIL: Xóa ${dataNotify.data.data.name} không thành công!"`);
               commonFunction.reloadPage();
             }
           })
