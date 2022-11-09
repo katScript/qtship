@@ -23,10 +23,10 @@
                                 <div class="row">
                                     <div class="col-1"><i class="fa-solid fa-phone"></i></div>
                                     <div class="form-group col-11">
-                                        <small class="text-danger">{{msgValidationFor.shippingAddress.phone}}</small>
+                                        <small class="text-danger">{{msgValidationFor.shippingAddress.senderPhone}}</small>
                                         <input type="text" class="form-control" id=""
                                             placeholder="Số điện thoại người nhận"
-                                            v-model="formDataOrder.orderItem[0].shippingAddress.phone" />
+                                            v-model="shippingData.phone" />
                                         <br />
                                     </div>
                                 </div>
@@ -35,7 +35,7 @@
                                     <div class="form-group col-11">
                                         <small class="text-danger">{{msgValidationFor.shippingAddress.phone}}</small>
                                         <input type="text" class="form-control" id="" placeholder="Tên người nhận"
-                                            v-model="formDataOrder.orderItem[0].shippingAddress.name" />
+                                            v-model="shippingData.senderName" />
                                         <br />
                                     </div>
                                 </div>
@@ -46,8 +46,7 @@
                                     <div class="col-11">
                                         <span v-if="idOrderUpdateQuery"><b>Địa chỉ hiện tại: </b> {{ addressOrderUpdated
                                             }}</span>
-                                        <LocationPicker @updateCustomerAddress="updateCustomerAddress"
-                                            :customerAddress="customerAddress" :msgValidationFor="msgValidationFor" />
+                                        <LocationPicker @updateReceiverAddress="updateReceiverAddress" :shippingData="shippingData" :msgValidationFor="msgValidationFor" />
                                     </div>
                                 </div>
                                 <hr />
@@ -56,7 +55,7 @@
                                     <div class="col-1"><i class="fa-solid fa-phone"></i></div>
                                     <div class="form-group col-11">
                                         <input type="text" class="form-control" id=""
-                                            placeholder="Số điện thoại người gửi" v-model="formDataOrder.senderPhone" />
+                                            placeholder="Số điện thoại người gửi" v-model="orderData.senderPhone"/>
                                         <br />
                                     </div>
                                 </div>
@@ -64,7 +63,7 @@
                                     <div class="col-1"><i class="fa-solid fa-user"></i></div>
                                     <div class="form-group col-11">
                                         <input type="text" class="form-control" id="" placeholder="Thông tin người gửi"
-                                            v-model="formDataOrder.senderName" />
+                                            v-model="orderData.senderName"/>
                                         <br />
                                     </div>
                                 </div>
@@ -74,7 +73,7 @@
                                     </div>
                                     <div class="col-11">
                                         <input type="text" class="form-control" id="" placeholder="Địa chỉ người gửi"
-                                            v-model="formDataOrder.senderAddress" />
+                                            v-model="orderData.senderAddress"/>
                                         <br />
                                     </div>
                                 </div>
@@ -87,7 +86,7 @@
                                     <div class="col-11">
                                         <small class="text-danger">{{msgValidationFor.shippingType}}</small>
                                         <select class="form-select" aria-label="Default select example"
-                                            v-model="formDataOrder.shippingType">
+                                            v-model="orderData.shippingType">
                                             <option value="" selected>- Chọn phương thức giao hàng -</option>
                                             <option v-for="(type, index) in listTypeShipping" :key="index">
                                                 {{ generateCodeToText(type) }}
@@ -137,16 +136,8 @@
                                                 hàng</label>
                                         </div>
                                         <div class="col-8">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <input type="date" id="datetimepicker-take-order"
-                                                        class="form-control" name="" v-model="shippingDateFullDate" />
-                                                </div>
-                                                <div class="col-5">
-                                                    <input type="time" id="datetimepicker-take-order"
-                                                        class="form-control" name="" v-model="shippingDateHHMM" />
-                                                </div>
-                                            </div>
+                                            <input type="datetime-local"
+                                            class="form-control" name="" v-model="shippingDateTime"/>
                                             <br />
                                         </div>
                                     </div>
@@ -184,29 +175,27 @@
                                                                 <option :value="p"
                                                                     v-for="(p, index) in listProductByCustomer"
                                                                     :key="index">
-                                                                    {{ p.name }}
+                                                                    {{ p.data.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
                                                         <div class="col-2">
                                                             <input type="number" class="form-control mb-1" min="0"
-                                                                v-model="formDataOrder.orderItem[0].products[index].qty"
+                                                                v-model="productSelected[index].data.qty"
                                                                 placeholder="SL" />
                                                         </div>
                                                         <div class="col-6">
                                                             <input type="text"
                                                                 class="form-control product-select-weight"
-                                                                v-model="productSelected[index].weight"
+                                                                v-model="productSelected[index].data.weight"
                                                                 placeholder="Trọng lượng (kg)" disabled readonly />
                                                         </div>
                                                         <div class="col-6">
                                                             <input type="text"
                                                                 class="form-control product-select-public-price"
-                                                                v-model="productSelected[index].publicPrice"
+                                                                v-model="productSelected[index].data.publicPrice"
                                                                 placeholder="Giá bán (VNĐ)" disabled readonly />
                                                         </div>
-                                                        <input type="hidden" class="product-selected-id"
-                                                            v-model="productSelected[index].id" disabled readonly />
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,7 +225,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <select class="form-select" aria-label="Default select example"
-                                                    v-model="formDataOrder.shippingFee">
+                                                    v-model="orderData.shippingFee">
                                                     <option value="true">Shop trả ship</option>
                                                     <option value="false">Người nhận trả ship</option>
                                                 </select>
@@ -246,7 +235,7 @@
                                                     <label for="">Ghi chú đơn hàng</label>
                                                     <textarea type="" class="form-control" id=""
                                                         aria-describedby="emailHelp" rows="4"
-                                                        v-model="formDataOrder.note"
+                                                        v-model="orderData.note"
                                                         placeholder="Nhập ghi chú của đơn hàng" />
                                                     <br />
                                                 </div>
@@ -258,7 +247,7 @@
                                         <div class="row">
                                             <div class="col-8">
                                                 <input type="text" class="form-control" placeholder="Mã giảm giá"
-                                                    v-model="formDataOrder.coupon" />
+                                                    v-model="orderData.coupon" />
                                             </div>
                                             <div class="col-4">
                                                 <button class="btn btn-danger w-100" v-on:click="
@@ -324,7 +313,7 @@
                                     <div class="col-sm-8">
                                         <small class="text-danger">{{msgValidationFor.returnCode}}</small>
                                         <select class="form-select" aria-label="Default select example"
-                                            v-model="this.formDataOrder.returnCode">
+                                            v-model="orderData.returnCode">
                                             <option :value="item" v-for="(item, index) in listTypeReturnOrder"
                                                 :key="index">
                                                 {{ generateCodeToText(item) }}

@@ -5,8 +5,11 @@ import NotficationClient from "@/components/common/NotficationClient.vue";
 import LocationPicker from "@/components/common/LocationPicker.vue";
 import ActionLoading from "@/components/common/ActionLoading.vue";
 import OrderData from "@/components/models/order/order-data";
+import OrderItemData from "@/components/models/order/order-item-data";
 import WarehouseData from "@/components/models/warehouse/warehouse-data";
 import ProductData from "@/components/models/product/product-data";
+import ShippingData from "@/components/models/shipping/shipping-data";
+import CustomerData from "@/components/models/customer/customer-data";
 
 import moment from "moment";
 import { commonFunction } from "@/scripts/ulti";
@@ -23,17 +26,23 @@ export default {
         LocationPicker,
         ActionLoading,
     },
-    
+
     setup() {
         const { cookies } = useCookies();
         const orderModel = new OrderData();
         const warehouseModel = new WarehouseData();
         const productModel = new ProductData();
+        const orderItemModel = new OrderItemData();
+        const shippingModel = new ShippingData();
+        const customerModel = new CustomerData();
         return {
             cookies,
             orderModel,
             warehouseModel,
-            productModel
+            productModel,
+            orderItemModel,
+            shippingModel,
+            customerModel
         };
     },
     data() {
@@ -41,7 +50,9 @@ export default {
             orderData: {},
             warehouseData: {},
             productData: {},
-
+            orderItemModel: {},
+            shippingData: {},
+            customerData: {},
 
             isLoading: false,
             isAccepted: false,
@@ -52,7 +63,7 @@ export default {
             addressOrderUpdated: "",
             numberProduct: 3,
             productSelected: [
-                { sku: "default", name: "- Chọn sản phẩm -", weight: "", publicPrice: "", qty: "" },
+                {data: { sku: "default", name: "- Chọn sản phẩm -", weight: "", publicPrice: "", qty: "" }},
             ],
             listProducts: [],
             customerAddress: {
@@ -86,8 +97,7 @@ export default {
             listWarehouseByCustomer: [],
             listProductByCustomer: [],
             listOrderByCustomer: [],
-            shippingDateFullDate: "",
-            shippingDateHHMM: "",
+            shippingDateTime: "",
             formDataOrder: {
                 id: "",
                 customerId: "",
@@ -132,6 +142,7 @@ export default {
         this.orderData = this.orderModel.getData();
         this.listTypeShipping = commonFunction.typeShipping;
         this.listTypeReturnOrder = commonFunction.typeReturnOrder;
+
         let auth = commonFunction.getCookies("authenication_cookies"),
             role = commonFunction.getCookies("authenrole_cookies"),
             id = commonFunction.getCookies("idrequest_cookies"),
@@ -144,8 +155,8 @@ export default {
         this.configRequestApi = {
             headers: { Authorization: "Bearer " + token },
         };
-
         this.idRequest = id;
+
 
         commonFunction.disableInput(".product-select-weight");
         commonFunction.disableInput(".product-select-public-price");
@@ -178,19 +189,8 @@ export default {
             )
             .then((response) => {
                 let respronseData = response.data;
-                this.formDataOrder.senderName =
-                    respronseData.customer.companyName +
-                    " - " +
-                    respronseData.customer.fullName;
-                this.formDataOrder.senderPhone = respronseData.customer.phone;
-                this.formDataOrder.senderAddress =
-                    respronseData.customer.addressSet[0].street +
-                    ", " +
-                    respronseData.customer.addressSet[0].ward +
-                    ", " +
-                    respronseData.customer.addressSet[0].district +
-                    ", " +
-                    respronseData.customer.addressSet[0].province;
+                this.customerModel.setData(respronseData);
+                this.customerData = this.customerModel.getData();
             })
             .catch((e) => {
                 console.log(e);
@@ -204,7 +204,11 @@ export default {
             )
             .then((response) => {
                 let respronseData = response.data;
-                this.listProductByCustomer = respronseData;
+                respronseData.forEach(element => {
+                    let product = new ProductData();
+                    product.setData(element);
+                    this.listProductByCustomer.push(product);
+                });
             })
             .catch((e) => {
                 console.log(e);
@@ -248,67 +252,54 @@ export default {
         //     return sum + p.weight;
         // }, 0);
     },
-    watch: {},
+    watch: {
+        shippingDateTime: {
+            handler: function () {
+                this.autoSetOrderShippingTime();
+            }
+        }
+    },
     methods: {
-        updateCustomerAddress(data, type) {
+        updateReceiverAddress(data, type) {
             switch (type) {
                 case "PROVINCE":
-                    this.customerAddress.provinceId = data.code;
-                    this.customerAddress.province = data.label;
+                    this.shippingData.provinceId = data.code;
+                    this.shippingData.province = data.label;
                     break;
                 case "DISTRICT":
-                    this.customerAddress.districtId = data.code;
-                    this.customerAddress.district = data.label;
+                    this.shippingData.districtId = data.code;
+                    this.shippingData.district = data.label;
                     break;
                 case "WARD":
-                    this.customerAddress.wardId = data.code;
-                    this.customerAddress.ward = data.label;
+                    this.shippingData.wardId = data.code;
+                    this.shippingData.ward = data.label;
                     break;
                 case "STREET":
-                    this.customerAddress.street = data;
+                    this.shippingData.street = data;
                     break;
                 default:
                     break;
             }
-
-            //mapping data to formData
-            this.formDataOrder.orderItem[0].shippingAddress.province =
-                this.customerAddress.province;
-            this.formDataOrder.orderItem[0].shippingAddress.district =
-                this.customerAddress.district;
-            this.formDataOrder.orderItem[0].shippingAddress.ward =
-                this.customerAddress.ward;
-            this.formDataOrder.orderItem[0].shippingAddress.street =
-                this.customerAddress.street;
-            this.formDataOrder.orderItem[0].shippingAddress.provinceId =
-                this.customerAddress.provinceId;
-            this.formDataOrder.orderItem[0].shippingAddress.districtId =
-                this.customerAddress.districtId;
-            this.formDataOrder.orderItem[0].shippingAddress.wardId =
-                this.customerAddress.wardId;
         },
 
         addItemProductList: function (index) {
             console.log(index);
 
-            if (this.productSelected[index].sku != "default") {
+            if (this.productSelected[index].data.sku != "default") {
                 this.productSelected.push({
-                    sku: "default",
-                    weight: "",
-                    publicPrice: "",
-                    qty: "",
-                });
-
-                this.formDataOrder.orderItem[0].products.push({
-                    productId: "",
-                    qty: "",
+                    data: {
+                        sku: "default",
+                        weight: "",
+                        publicPrice: "",
+                        qty: "",
+                    }
                 });
             }
         },
         removeItemProductList: function (product) {
             if (product) {
                 this.productSelected = this.productSelected.filter(
-                    (p) => p.sku !== product.sku
+                    (p) => p.data.sku !== product.data.sku
                 );
             }
         },
@@ -320,11 +311,25 @@ export default {
         },
         //order
         createOrder: function () {
+            let objOrderItem = [{
+                shippingAddress: this.shippingData,
+                products: []
+            }]
 
-            //mapping id product
+            //mapping productSelected to products
             this.productSelected.forEach((element, index) => {
-                this.formDataOrder.orderItem[0].products[index].productId = element.id;
+                let objProduct = {
+                    qty: element[index].data.qty,
+                    product: {
+                        id: element[index].data.id
+                    }
+                }
+                objOrderItem.products.push(objProduct);
+             //mapping shippingData to product.orderItem
+            
             });
+
+            this.order.orderItem[0].push(objOrderItem)
 
             //validation
             this.isValid = 0;
@@ -355,11 +360,10 @@ export default {
                     ],
                 };
 
-                if (this.isSelectedTypeLH == "LHTN") {
-                    (bodyRequest.warehouseId = this.formDataOrder.warehouseId),
-                        (bodyRequest.shippingDate =
-                            this.shippingDateFullDate + " " + this.shippingDateHHMM + ":00");
+                if (this.isSelectedTypeLH == "GHTBC") {
+                    this.orderData.shippingTime = "";
                 }
+
                 console.log(bodyRequest);
                 axios
                     .post(
@@ -431,10 +435,8 @@ export default {
                 ],
             };
 
-            if (this.isSelectedTypeLH == "LHTN") {
-                (bodyRequest.warehouseId = this.formDataOrder.warehouseId),
-                    (bodyRequest.shippingDate =
-                        this.shippingDateFullDate + " " + this.shippingDateHHMM + ":00");
+            if (this.isSelectedTypeLH == "GHTBC") {
+                this.orderData.shippingTime = "";
             }
             console.log(bodyRequest);
             axios
@@ -527,6 +529,8 @@ export default {
                 alert("Vui lòng đọc và đồng ý với Chính sách bảo mật thông tin!");
             }
         },
-
+        autoSetOrderShippingTime() {
+            this.orderData.shippingTime = moment(this.shippingDateTime).format("YYYY-MM-DD HH:mm:ss");
+        }
     },
 };

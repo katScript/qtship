@@ -70,7 +70,7 @@
         watch: {
             ttpSelected: {
                 handler: function () {
-                    this.$emit('updateCustomerAddress', this.ttpSelected, 'PROVINCE');
+                    this.$emit('updateReceiverAddress', this.ttpSelected, 'PROVINCE');
                     this.qhList = [];
                     this.qhSelected = '';
                     if(this.ttpSelected){
@@ -86,7 +86,7 @@
             },
             qhSelected: {
                 handler: function () {
-                    this.$emit('updateCustomerAddress', this.qhSelected, 'DISTRICT');
+                    this.$emit('updateReceiverAddress', this.qhSelected, 'DISTRICT');
                     this.pxList = [];
                     this.pxSelected = '';
                     if(this.qhSelected){
@@ -102,12 +102,12 @@
             },
             pxSelected: {
                 handler: function () {
-                    this.$emit('updateCustomerAddress', this.pxSelected, 'WARD');
+                    this.$emit('updateReceiverAddress', this.pxSelected, 'WARD');
                 }
             },
             addressDetail: {
                 handler: function () {
-                    this.$emit('updateCustomerAddress', this.addressDetail, 'STREET');
+                    this.$emit('updateReceiverAddress', this.addressDetail, 'STREET');
                 }
             }
         },
