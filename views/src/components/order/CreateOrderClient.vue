@@ -171,7 +171,7 @@
                                                 <div class="col-sm-2">
                                                     <img v-if="ps.image" :src="ps.image" alt="" class="img-fluid mb-1"
                                                         width="" height="" />
-                                                    <img v-else src="../images/img-default.jpg" alt="" class="mb-1"
+                                                    <img v-else src="../../images/img-default.jpg" alt="" class="mb-1"
                                                         width="" height="" style="width: 90%;" />
                                                 </div>
                                                 <div class="col-sm-10">
@@ -374,12 +374,12 @@
 </template>
 
 <script>
-    import NavbarClient from "./common/NavbarClient.vue";
-    import FooterClient from "./common/FooterClient.vue";
-    import ToolbarRight from "./common/ToolbarRight.vue";
-    import NotficationClient from "./common/NotficationClient.vue";
-    import LocationPicker from "./common/LocationPicker.vue";
-    import ActionLoading from "./common/ActionLoading.vue";
+    import NavbarClient from "@/components/common/NavbarClient.vue";
+    import FooterClient from "@/components/common/FooterClient.vue";
+    import ToolbarRight from "@/components/common/ToolbarRight.vue";
+    import NotficationClient from "@/components/common/NotficationClient.vue";
+    import LocationPicker from "@/components/common/LocationPicker.vue";
+    import ActionLoading from "@/components/common/ActionLoading.vue";
 
     import moment from "moment";
     import { commonFunction } from "@/scripts/ulti";

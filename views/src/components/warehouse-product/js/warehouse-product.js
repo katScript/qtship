@@ -291,7 +291,7 @@ export default {
                 this.isLoading = true;
                 let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
                 let formData = new FormData();
-                formData.append("file", this.productImg);
+                formData.append("file", this.productImg == "" ? null : this.productImg);
                 formData.append("id", this.productData.id);
                 formData.append("customerId", this.idRequest);
                 formData.append("sku", this.productData.sku);
