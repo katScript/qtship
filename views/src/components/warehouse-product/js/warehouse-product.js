@@ -32,7 +32,10 @@ export default {
     },
     data() {
         return {
-            warehouseData: "  ",
+            warehouseData: {},
+
+
+
             isLoading: false,
             isValid: 0,
             filterTime: "label",
@@ -205,18 +208,14 @@ export default {
         },
         updateWarehouse: function () {
             this.isValid = 0;
-            this.validationFormWarehouse();
-            if (this.isValid == 0) {
+            if (this.warehouseModel.validate(this.warehouseData, this.isValid, this.msgValidationFor)) {
                 this.isLoading = true;
                 axios
                     .post(
                         commonFunction.DOMAIN_URL + "v1/warehouse/save",
                         {
-                            id: this.formDataWarehouse.id,
                             customerId: this.idRequest,
-                            name: this.formDataWarehouse.name,
-                            address: this.formDataWarehouse.address,
-                            phone: this.formDataWarehouse.phone,
+                            data: this.warehouseData
                         },
                         this.configRequestApi
                     )
@@ -238,27 +237,21 @@ export default {
             }
         },
         selectWareHouseForUpdate: function (item) {
-            this.warehouseModel.setData(item);
+            let modelUpdate = new WarehouseData();
+            modelUpdate.setData(item.data);
+            this.warehouseData = modelUpdate.getData();
             this.isUpdateWarehouseAction = true;
         },
         cancelUpdateWarehouse: function () {
-            this.formDataWarehouse = {
-                id: "",
-                name: "",
-                address: "",
-                phone: "",
-            };
+            this.warehouseData = new WarehouseData().getData();
             this.isUpdateWarehouseAction = false;
         },
         deleteWareHouse: function (item) {
             this.typeNotify = commonFunction.typeNotifyDelete;
             this.typeComponent = "WAREHOUSE";
             this.dataNotify = {
-                name: item.name,
                 idRequest: this.idRequest,
-                data: {
-                    id: item.id,
-                },
+                data: item,
             };
             this.isShowNotify = true;
         },
@@ -268,7 +261,6 @@ export default {
             this.typeNotify = "";
             this.typeComponent = "";
             this.dataNotify = {
-                name: "",
                 idRequest: 0,
                 data: {},
             };
