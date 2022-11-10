@@ -356,10 +356,11 @@
                     type="text"
                     class="form-control"
                     placeholder="Nhập Tên sản phẩm hoặc Mã sản phẩm"
+                    v-model="conditionFilter"
                   />
                 </div>
                 <div class="col-md-2">
-                  <button class="btn btn-success w-100">Tìm kiếm</button>
+                  <button class="btn btn-success w-100" v-on:click="filterProduct">Tìm kiếm</button>
                 </div>
               </div>
             </div>

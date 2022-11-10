@@ -73,7 +73,7 @@ export default class ProductData {
                 "Vui lòng nhập trọng lượng của sản phẩm!";
         }
 
-        if (refFile == null || productData.image == "") {
+        if (refFile == null && productData.image == "") {
             isValid += 1;
             msgValidationFor.product.image =
                 "Vui lòng upload ảnh cho sản phẩm!";

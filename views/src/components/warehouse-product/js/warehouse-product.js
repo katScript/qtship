@@ -38,7 +38,8 @@ export default {
             productData: {},
             listWarehouseByCustomer: [],
             listProductByCustomer: [],
-
+            listProductByCustomerBk: [],
+            conditionFilter: "",
             isLoading: false,
             isValid: 0,
             msgValidationFor: {
@@ -142,6 +143,7 @@ export default {
                     let product = new ProductData();
                     product.setData(element);
                     this.listProductByCustomer.push(product);
+                    this.listProductByCustomerBk.push(product);
                 });
             })
             .catch((e) => {
@@ -289,7 +291,7 @@ export default {
                 this.isLoading = true;
                 let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
                 let formData = new FormData();
-                formData.append("file", this.productImg);
+                formData.append("file", this.productImg == "" ? null : this.productImg);
                 formData.append("id", this.productData.id);
                 formData.append("customerId", this.idRequest);
                 formData.append("sku", this.productData.sku);
@@ -351,5 +353,12 @@ export default {
         formatDateYYYYMMDD(value) {
             return moment(value).format("YYYY-MM-DD");
         },
+        filterProduct() {
+            let conditionString = this.conditionFilter.toString().toLowerCase();
+            this.listProductByCustomer = this.listProductByCustomerBk;
+            this.listProductByCustomer = this.listProductByCustomer.filter(
+                p => p.data.sku.toLowerCase().includes(conditionString) || p.data.name.toLowerCase().includes(conditionString)
+            )
+        }
     },
 };

@@ -151,67 +151,28 @@ export default {
             commonFunction.reloadPage();
           });
       } else if (typeComponent == "ORDER") {
-        let bodyRequestproducts = [];
-        dataNotify.data.orderSelected.orderItem[0].products.forEach(
-          (element, index) => {
-            bodyRequestproducts.push({
-              productId:
-                dataNotify.data.orderSelected.orderItem[0].products[index].id,
-              qty: dataNotify.data.orderSelected.orderItem[0].products[index]
-                .qty,
-            });
-          }
-        );
-        console.log(bodyRequestproducts);
-        let bodyRequest = {
-          id: dataNotify.data.orderSelected.id.replaceAll("0", ""),
-          customerId: dataNotify.data.orderSelected.customerId
-            .replace(/[^0-9\\.]+/g, "")
-            .replaceAll("0", ""),
-          senderName: dataNotify.data.orderSelected.senderName,
-          senderPhone: dataNotify.data.orderSelected.senderPhone,
-          senderAddress: dataNotify.data.orderSelected.senderAddress,
-          note: dataNotify.data.orderSelected.note,
-          status: commonFunction.typeOrderCancel,
-          feedback: dataNotify.data.orderSelected.feedback,
-          notification: false,
-          shippingFee: dataNotify.data.orderSelected.shippingFee,
-          coupon: dataNotify.data.orderSelected.coupon,
-          warehouseId: dataNotify.data.orderSelected.warehouse.id,
-          shippingType: dataNotify.data.orderSelected.shippingType,
-          shippingDate: dataNotify.data.orderSelected.shippingTime,
-          returnCode: dataNotify.data.orderSelected.returnCode,
-          orderItem: [
-            {
-              shippingAddress:
-                dataNotify.data.orderSelected.orderItem[0].shippingAddress,
-              products: bodyRequestproducts,
-            },
-          ],
-        };
-        console.log(bodyRequest);
         axios
-          .post(
-            commonFunction.DOMAIN_URL + "v1/order/save",
-            bodyRequest,
+          .post(commonFunction.DOMAIN_URL + "v1/order/update/status", {
+              id: dataNotify.data.id,
+              status: commonFunction.typeOrderCancel
+            },
             this.configRequestApi
           )
           .then((response) => {
             if (response.status == 200) {
-              this.isLoading = false;
-              alert("SUCCESS: Cập nhật thành công - " + response.data.message);
-              commonFunction.redirect("/client/orders");
+              alert(`"SUCCESS: Hủy ${dataNotify.name} thành công!"`);
+              commonFunction.reloadPage();
             } else {
-              this.isLoading = false;
-              alert("FAIL: Cập nhật không thành công! Vui lòng thử lại!");
-              commonFunction.redirect("/client/orders");
+              alert(`"FAIL: Hủy ${dataNotify.name} không thành công!"`);
+              commonFunction.reloadPage();
             }
           })
           .catch((e) => {
-            this.isLoading = false;
-            alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
+            alert(
+              "ERROR: Có lỗi xảy ra! Vui lòng thử lại hoặc liên hệ với quản trị viên!"
+            );
             console.log(e);
-            commonFunction.redirect("/client/orders");
+            commonFunction.reloadPage();
           });
       }
     },
