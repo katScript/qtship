@@ -5,6 +5,8 @@ import ToolbarRight from "@/components/common/ToolbarRight.vue";
 import NotficationClient from "@/components/common/NotficationClient.vue";
 import ActionLoading from "@/components/common/ActionLoading.vue";
 import PopupNotify from "@/components/common/PopupNotify.vue";
+import BillOrder from "@/components/common/BillOrder.vue";
+
 import OrderData from "@/components/models/order/order-data";
 
 import moment from "moment";
@@ -20,6 +22,7 @@ export default {
         NotficationClient,
         ActionLoading,
         PopupNotify,
+        BillOrder,
     },
     setup() {
         const { cookies } = useCookies();

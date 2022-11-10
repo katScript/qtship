@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <hr />
-                                <h5>Phương thức giao & lấy hàng</h5>
+                                <h5>Phương thức giao</h5>
                                 <div class="form-group row">
                                     <div class="col-1">
                                         <i class="fa-solid fa-truck-fast"></i>
@@ -95,6 +95,7 @@
                                         <br />
                                     </div>
                                 </div>
+                                <h5>Phương thức lấy hàng</h5>
                                 <div class="form-group row">
                                     <small class="text-danger">{{msgValidationFor.isSelectedTypeLH}}</small>
                                     <div class="form-check">

@@ -14,6 +14,9 @@
     <div :class="isLoading ? 'show' : 'hide'">
       <ActionLoading />
     </div>
+    <div class="bill-order">
+      <BillOrder />
+    </div>
     <NavbarClient />
     <div class="container-fluid">
       <div class="row">
@@ -303,5 +306,13 @@ table tr td a {
 table tr td a i {
   font-size: 18px;
   padding: 2px 2px 2px 2px;
+}
+
+.bill-order {
+  width: 200vw;
+  height: 200vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.356);
+  z-index: 100;
 }
 </style>
