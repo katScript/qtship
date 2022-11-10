@@ -88,7 +88,12 @@ public class ProductController {
             if (!product.getCustomer().getId().equals(customer.getId()))
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not delete product! Customer not valid!!"));
 
+            String image = product.getImage(),
+                    customerCode = product.getCustomer().getCustomerId();
+
             productRepository.delete(product);
+            productService.processDeleteProductImage(customerCode, image);
+
             return ResponseEntity.ok(new MessageResponse("Product deleted successfully!"));
         }
 

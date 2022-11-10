@@ -1,5 +1,7 @@
 package com.spring.app.helper.services;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.imageio.ImageIO;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -26,12 +31,27 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     public static final String DEFAULT = "img-default.jpg";
 
-    public Path getRoot() {
-        return Paths.get(basePath + "/views/src/images/product");
+    private String path;
+
+    public String getPath() {
+        return path;
     }
 
-    public Path getRoot(String path) {
-        return Paths.get(basePath + "/views/src/images/product/" + path);
+    public FilesStorageServiceImpl setPath(String path) {
+        this.path = path;
+        return this;
+    }
+
+    public FilesStorageServiceImpl clearPath() {
+        this.path = null;
+        return this;
+    }
+
+    public Path getRoot() {
+        if (this.path != null)
+            return Paths.get(basePath + "/views/src/images/product/" + path);
+
+        return Paths.get(basePath + "/views/src/images/product");
     }
 
     @Override
@@ -44,41 +64,50 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public void init(String path) {
-        try {
-            Files.createDirectory(this.getRoot(path));
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
-    }
-
-    @Override
-    public Resource save(MultipartFile file, String path) {
-        try {
-            if (!Files.exists(this.getRoot(path)))
-                this.init(path);
-
-            Files.deleteIfExists(this.getRoot(path).resolve(file.getOriginalFilename()));
-            Files.copy(file.getInputStream(), this.getRoot(path).resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-
-            return this.load(path + "/" + file.getOriginalFilename());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public Resource save(MultipartFile file) {
+    public Resource save(MultipartFile file, String name) {
         try {
             if (!Files.exists(this.getRoot()))
                 this.init();
 
-            Files.deleteIfExists(this.getRoot().resolve(file.getOriginalFilename()));
-            Files.copy(file.getInputStream(), this.getRoot().resolve(file.getOriginalFilename()), REPLACE_EXISTING);
+            String filename = name + ".png";
 
-            return this.load(file.getOriginalFilename());
+            Path fileResolve = this.getRoot().resolve(filename);
+
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_DEFAULT);
+            ImageIO.write(
+                    this.convertToBufferedImage(scaledImage),
+                    "png",
+                    new File(fileResolve.toString())
+            );
+
+            return this.load(filename);
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+        }
+    }
+
+    private BufferedImage convertToBufferedImage(Image img) {
+        if (img instanceof BufferedImage)
+            return (BufferedImage) img;
+
+        BufferedImage bi = new BufferedImage(
+                img.getWidth(null), img.getHeight(null),
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D graphics2D = bi.createGraphics();
+        graphics2D.drawImage(img, 0, 0, null);
+        graphics2D.dispose();
+
+        return bi;
+    }
+
+    @Override
+    public void deleteByName(String filename) {
+        try {
+            Files.deleteIfExists(this.getRoot().resolve(filename));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -113,7 +142,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-        return Files.readAllBytes(new File(basePath + "/views/src/images/product/" + fileName).toPath());
+        return Files.readAllBytes(new File(
+                this.getRoot().resolve(fileName).toString()
+        ).toPath());
     }
 
     public String getImageUrl(String path) {

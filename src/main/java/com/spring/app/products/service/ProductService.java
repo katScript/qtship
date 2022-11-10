@@ -14,6 +14,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+
 @Service
 public class ProductService {
     @Autowired
@@ -29,11 +31,12 @@ public class ProductService {
         product.setImage(processUploadProductImage(
                         file,
                         Customer.GUEST_CODE,
-                        product.getImage())
+                        product)
                 );
 
         productRepository.save(product);
     }
+
     public void saveProduct(ProductData productData, MultipartFile file, Long customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
@@ -43,7 +46,7 @@ public class ProductService {
                 .setImage(processUploadProductImage(
                         file,
                         customer.getCustomerId(),
-                        product.getImage())
+                        product)
                 );
 
         productRepository.save(product);
@@ -71,14 +74,15 @@ public class ProductService {
         return product;
     }
 
-    public String processUploadProductImage(MultipartFile file, String customerCode, String currentImg) {
+    public String processUploadProductImage(MultipartFile file, String customerCode, Product product) {
         Resource resource = null;
 
-        if (file != null) {
-            resource = storageService.save(file, customerCode);
+        if (!file.isEmpty()) {
+            storageService.setPath(customerCode);
+            resource = storageService.save(file, product.getSku());
         }
 
-        return resource != null ? resource.getFilename() : currentImg;
+        return resource != null ? resource.getFilename() : product.getImage();
     }
 
     public ProductData processProductDataResponse(Product product) {
@@ -128,7 +132,11 @@ public class ProductService {
 
     public String processProductImage(Product product) {
         return product.getImage() != null ?
-                storageService.getImageUrl(product.getCustomer().getCustomerId() + "/" + product.getImage()) :
+                storageService.getImageUrl(product.getCustomer().getCustomerId() + File.separator + product.getImage()) :
                 storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT);
+    }
+
+    public void processDeleteProductImage(String customerCode, String image) {
+        storageService.setPath(customerCode).deleteByName(image);
     }
 }
