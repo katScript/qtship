@@ -1,21 +1,15 @@
 <template>
   <div class="management-client-page">
     <div>
-      <PopupNotify
-        :class="isShowNotify ? 'show' : 'hide'"
-        @closePopupNotify="closePopupNotify"
-        @updateTypeNotify="updateTypeNotify"
-        :typeNotify="typeNotify"
-        :dataNotify="dataNotify"
-        :typeComponent="typeComponent"
-        :configRequestApi="configRequestApi"
-      />
+      <PopupNotify :class="isShowNotify ? 'show' : 'hide'" @closePopupNotify="closePopupNotify"
+        @updateTypeNotify="updateTypeNotify" :typeNotify="typeNotify" :dataNotify="dataNotify"
+        :typeComponent="typeComponent" :configRequestApi="configRequestApi" />
     </div>
     <div :class="isLoading ? 'show' : 'hide'">
       <ActionLoading />
     </div>
-    <div class="bill-order">
-      <BillOrder />
+    <div>
+      <BillOrder :isDisplayBill="isDisplayBill" @closePopUpBillOrder="closePopUpBillOrder" />
     </div>
     <NavbarClient />
     <div class="container-fluid">
@@ -34,29 +28,16 @@
                   <br />
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <input
-                    v-model="filterOderCondition.orderId"
-                    type="text"
-                    class="form-control form-search-control"
-                    id=""
-                    placeholder="Mã đơn hàng"
-                  />
+                  <input v-model="filterOderCondition.orderId" type="text" class="form-control form-search-control"
+                    id="" placeholder="Mã đơn hàng" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <input
-                    v-model="filterOderCondition.phoneReceiver"
-                    type="text"
-                    class="form-control form-search-control"
-                    id=""
-                    placeholder="Số điện thoại người nhận"
-                  />
+                  <input v-model="filterOderCondition.phoneReceiver" type="text"
+                    class="form-control form-search-control" id="" placeholder="Số điện thoại người nhận" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-2 form-group">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    v-model="filterOderCondition.orderStatus"
-                  >
+                  <select class="form-select" aria-label="Default select example"
+                    v-model="filterOderCondition.orderStatus">
                     <option value="" disabled hidden selected>
                       Trạng thái đơn hàng
                     </option>
@@ -76,11 +57,7 @@
                   <table class="w-100">
                     <tr>
                       <td>
-                        <select
-                          class="form-select"
-                          id="select-box-filter-time"
-                          v-model="filterTime"
-                        >
+                        <select class="form-select" id="select-box-filter-time" v-model="filterTime">
                           <option value="" hidden>Thời gian tạo đơn</option>
                           <option value="timeCOToday">Hôm nay</option>
                           <option value="timeCO1week">1 tuần</option>
@@ -89,27 +66,19 @@
                           <option value="timeCOAll">Tất cả</option>
                           <option value="timeCOTimeAbout">Tùy chỉnh</option>
                         </select>
-                        <tr :class="classFilterTimeAbout">
-                          <td>
-                            <label for="start">Từ ngày:</label>
-                            <input
-                              type="date"
-                              id="from-time-filter"
-                              class="form-control"
-                              v-model="filterOderCondition.timeFrom"
-                            />
-                          </td>
-                          <td>
-                            <label for="start">Đến ngày ngày:</label>
-                            <input
-                              type="date"
-                              id="to-time-filter"
-                              class="form-control"
-                              v-model="filterOderCondition.timeTo"
-                            />
-                          </td>
-                        </tr>
+                    <tr :class="classFilterTimeAbout">
+                      <td>
+                        <label for="start">Từ ngày:</label>
+                        <input type="date" id="from-time-filter" class="form-control"
+                          v-model="filterOderCondition.timeFrom" />
                       </td>
+                      <td>
+                        <label for="start">Đến ngày ngày:</label>
+                        <input type="date" id="to-time-filter" class="form-control"
+                          v-model="filterOderCondition.timeTo" />
+                      </td>
+                    </tr>
+                    </td>
                     </tr>
                   </table>
                 </div>
@@ -147,18 +116,12 @@
                   </table>
                 </div> -->
                 <div class="col-12 col-sm-6 col-md-3 form-group">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    v-model="filterOderCondition.shippingType"
-                  >
+                  <select class="form-select" aria-label="Default select example"
+                    v-model="filterOderCondition.shippingType">
                     <option value="" disabled hidden selected>
                       Dịch vụ giao hàng
                     </option>
-                    <option
-                      v-for="(type, index) in listTypeShipping"
-                      :key="index"
-                    >
+                    <option v-for="(type, index) in listTypeShipping" :key="index">
                       {{ generateCodeToText(type) }}
                     </option>
                   </select>
@@ -179,17 +142,12 @@
                   <div class="row">
                     <div class="col-8">
                       <button class="btn btn-danger" v-on:click="filterOrder">
-                        <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
                         Tìm kiếm đơn hàng
                       </button>
                     </div>
                     <div class="col-4">
-                      <button
-                        class="btn btn-secondary"
-                        v-on:click="resetFormSearch()"
-                        style="margin: 0px -5px"
-                      >
-                        <i class="fa-solid fa-eraser"></i> Reset
+                      <button class="btn btn-secondary" v-on:click="resetFormSearch()" style="margin: 0px -5px">
+                        Bỏ lọc
                       </button>
                     </div>
                   </div>
@@ -202,11 +160,8 @@
                 Số đơn hàng:
                 <span class="count-orders-filtered">{{ countOrder }}</span> ĐH
               </h5>
-              <easy-data-table
-                :headers="headersOrder"
-                :items="listOrderByCustomer"
-                table-class-name="easy-data-table-customize"
-              >
+              <easy-data-table :headers="headersOrder" :items="listOrderByCustomer"
+                table-class-name="easy-data-table-customize">
                 <!-- #item-btn-function="item"  item: valua of row-->
                 <template #item-name-receiver="item">
                   {{ item.orderItem[0].shippingAddress.name }}
@@ -218,43 +173,24 @@
                   <table class="w-100" v-if="item.status != 'CANCEL'">
                     <tr>
                       <td>
-                        <a
-                          href=""
-                          class="btn btn-primary a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Chi tiết đơn hàng"
-                          ><i class="fa-solid fa-circle-info"></i
-                        ></a>
+                        <a class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                          title="Chi tiết đơn hàng" v-on:click="isDisplayBill = true"><i
+                            class="fa-solid fa-circle-info"></i></a>
                       </td>
                       <td>
-                        <a
-                          :href="'/client/orders/create#_' + item.id"
-                          class="btn btn-success a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Cập nhật đơn hàng"
-                          ><i class="fa-solid fa-file-pen"></i
-                        ></a>
+                        <a :href="'/client/orders/create#_' + item.id" class="btn btn-success a-function a-detail"
+                          data-bs-toggle="tooltip" data-bs-placement="top" title="Cập nhật đơn hàng"><i
+                            class="fa-solid fa-file-pen"></i></a>
                       </td>
                       <td>
-                        <a
-                          href=""
-                          class="btn btn-dark a-function a-detail"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Lịch sử cập nhật"
-                          ><i class="fa-solid fa-clock-rotate-left"></i
-                        ></a>
+                        <a href="" class="btn btn-dark a-function a-detail" data-bs-toggle="tooltip"
+                          data-bs-placement="top" title="Lịch sử cập nhật"><i
+                            class="fa-solid fa-clock-rotate-left"></i></a>
                       </td>
                       <td>
-                        <a 
-                          v-on:click="cancelOrder(item)"
-                          class="btn btn-danger a-function a-detail"
-                          title="Hủy đơn hàng"
-                        >
-                          <i class="fa-solid fa-trash"></i
-                        ></a>
+                        <a v-on:click="cancelOrder(item)" class="btn btn-danger a-function a-detail"
+                          title="Hủy đơn hàng">
+                          <i class="fa-solid fa-trash"></i></a>
                       </td>
                     </tr>
                   </table>
@@ -276,43 +212,34 @@
   </div>
 </template>
 
-<script src="@/components/order/js/order-management.js"/>
+<script src="@/components/order/js/order-management.js" />
 
 <style scoped>
-.show {
-  display: block;
-}
+  .show {
+    display: block;
+  }
 
-.hide {
-  display: none;
-}
+  .hide {
+    display: none;
+  }
 
-.form-search-control {
-  margin-bottom: 10px;
-}
+  .form-search-control {
+    margin-bottom: 10px;
+  }
 
-a {
-  text-decoration: none;
-}
+  a {
+    text-decoration: none;
+  }
 
-table tr td {
-}
+  table tr td {}
 
-table tr td a {
-  /* font-size: 5px; */
-  padding: 2px;
-}
+  table tr td a {
+    /* font-size: 5px; */
+    padding: 2px;
+  }
 
-table tr td a i {
-  font-size: 18px;
-  padding: 2px 2px 2px 2px;
-}
-
-.bill-order {
-  width: 200vw;
-  height: 200vh;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.356);
-  z-index: 100;
-}
+  table tr td a i {
+    font-size: 18px;
+    padding: 2px 2px 2px 2px;
+  }
 </style>

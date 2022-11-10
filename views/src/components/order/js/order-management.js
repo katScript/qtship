@@ -49,6 +49,7 @@ export default {
             countOrder: 0,
             idRequest: "",
             isLoading: false,
+            isDisplayBill: false,
             configRequestApi: {},
             headersOrder: [
                 { text: "Mã ĐH", value: "orderCode", sortable: true },
@@ -268,5 +269,8 @@ export default {
         fomartDateYYYYMMDD(date) {
             return moment(date).format("YYYY-MM-DD");
         },
+        closePopUpBillOrder(value) {
+            this.isDisplayBill = value;
+        }
     },
 };
