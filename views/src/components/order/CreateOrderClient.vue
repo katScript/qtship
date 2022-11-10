@@ -35,7 +35,7 @@
                                     <div class="form-group col-11">
                                         <small class="text-danger">{{msgValidationFor.shippingAddress.phone}}</small>
                                         <input type="text" class="form-control" id="" placeholder="Tên người nhận"
-                                            v-model="shippingData.senderName" />
+                                            v-model="shippingData.name" />
                                         <br />
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
                                             <small class="text-danger">{{msgValidationFor.products}}</small>
                                             <div class="row">
                                                 <div class="col-sm-2">
-                                                    <img v-if="ps.image" :src="ps.image" alt="" class="img-fluid mb-1"
+                                                    <img v-if="ps.data.image" :src="ps.data.image" alt="" class="img-fluid mb-1"
                                                         width="" height="" />
                                                     <img v-else src="../../images/img-default.jpg" alt="" class="mb-1"
                                                         width="" height="" style="width: 90%;" />
@@ -180,7 +180,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-2">
-                                                            <input type="number" class="form-control mb-1" min="0"
+                                                            <input type="number" class="form-control mb-1" min="0" :max="productSelected[index].data.qty"
                                                                 v-model="productSelected[index].data.qty"
                                                                 placeholder="SL" />
                                                         </div>

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import { commonFunction } from '../../scripts/ulti'
+    import { commonFunction } from '@/scripts/ulti'
 
     export default {
         props: ['msgValidationFor'],

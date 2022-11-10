@@ -191,6 +191,13 @@ export default {
                 let respronseData = response.data;
                 this.customerModel.setData(respronseData);
                 this.customerData = this.customerModel.getData();
+                this.orderData.senderName = this.customerData.companyName;
+                this.orderData.senderPhone = this.customerData.phone;
+                this.orderData.senderAddress = this.customerData.addressSet[0].street + ", " 
+                                                + this.customerData.addressSet[0].ward + ", " 
+                                                + this.customerData.addressSet[0].district + ", " 
+                                                + this.customerData.addressSet[0].province;
+
             })
             .catch((e) => {
                 console.log(e);
@@ -307,88 +314,87 @@ export default {
             return commonFunction.generateCodeToText(text);
         },
         applySaleCode: function (code) {
-            this.formDataOrder.coupon = code;
+            this.orderData.coupon = code;
         },
         //order
         createOrder: function () {
+            this.orderData.status = commonFunction.typeOrderWatingConfirm;
+            this.orderData.customerId = this.idRequest;
             let objOrderItem = [{
                 shippingAddress: this.shippingData,
                 products: []
             }]
 
             //mapping productSelected to products
-            this.productSelected.forEach((element, index) => {
+            this.productSelected.forEach((element) => {
                 let objProduct = {
-                    qty: element[index].data.qty,
-                    product: {
-                        id: element[index].data.id
-                    }
+                    qty: element.data.qty,
+                    product: element.data
                 }
-                objOrderItem.products.push(objProduct);
-             //mapping shippingData to product.orderItem
+                objOrderItem[0].products.push(objProduct);
             
             });
 
-            this.order.orderItem[0].push(objOrderItem)
-
+            this.orderData.orderItem = objOrderItem;
+            console.log(this.orderData);
             //validation
-            this.isValid = 0;
-            this.validationForm();
-            if (this.isValid == 0) {
-                this.isLoading = true;
+            // this.isValid = 0;
+            // this.validationForm();
+            // if (this.isValid == 0) {
+            //     this.isLoading = true;
 
-                let bodyRequest = {
-                    customerId: this.idRequest,
-                    senderName: this.formDataOrder.senderName,
-                    senderPhone: this.formDataOrder.senderPhone,
-                    senderAddress: this.formDataOrder.senderAddress,
-                    note: this.formDataOrder.note,
-                    status: "default",
-                    feedback: this.formDataOrder.feedback,
-                    notification: false,
-                    shippingFee: this.formDataOrder.shippingFee,
-                    coupon: this.formDataOrder.coupon,
-                    warehouseId: 1,
-                    shippingType: this.formDataOrder.shippingType,
-                    shippingDate: moment(new Date()).format("YYYY-MM-DD HH:MM:SS"),
-                    returnCode: this.formDataOrder.returnCode,
-                    orderItem: [
-                        {
-                            shippingAddress: this.formDataOrder.orderItem[0].shippingAddress,
-                            products: this.formDataOrder.orderItem[0].products,
-                        },
-                    ],
-                };
+            //     let bodyRequest = {
+            //         customerId: this.idRequest,
+            //         senderName: this.formDataOrder.senderName,
+            //         senderPhone: this.formDataOrder.senderPhone,
+            //         senderAddress: this.formDataOrder.senderAddress,
+            //         note: this.formDataOrder.note,
+            //         status: "default",
+            //         feedback: this.formDataOrder.feedback,
+            //         notification: false,
+            //         shippingFee: this.formDataOrder.shippingFee,
+            //         coupon: this.formDataOrder.coupon,
+            //         warehouseId: 1,
+            //         shippingType: this.formDataOrder.shippingType,
+            //         shippingDate: moment(new Date()).format("YYYY-MM-DD HH:MM:SS"),
+            //         returnCode: this.formDataOrder.returnCode,
+            //         orderItem: [
+            //             {
+            //                 shippingAddress: this.formDataOrder.orderItem[0].shippingAddress,
+            //                 products: this.formDataOrder.orderItem[0].products,
+            //             },
+            //         ],
+            //     };
 
-                if (this.isSelectedTypeLH == "GHTBC") {
-                    this.orderData.shippingTime = "";
-                }
+            //     if (this.isSelectedTypeLH == "GHTBC") {
+            //         this.orderData.shippingTime = "";
+            //     }
 
-                console.log(bodyRequest);
-                axios
-                    .post(
-                        commonFunction.DOMAIN_URL + "v1/order/save",
-                        bodyRequest,
-                        this.configRequestApi
-                    )
-                    .then((response) => {
-                        if (response.status == 200) {
-                            this.isLoading = false;
-                            alert("SUCCESS: Tạo mới thành công - " + response.data.message);
-                            commonFunction.reloadPage();
-                        } else {
-                            this.isLoading = false;
-                            alert("FAIL: Tạo mới không thành công! Vui lòng thử lại!");
-                            commonFunction.reloadPage();
-                        }
-                    })
-                    .catch((e) => {
-                        this.isLoading = false;
-                        alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
-                        console.log(e);
-                        commonFunction.reloadPage();
-                    });
-            }
+            //     console.log(bodyRequest);
+            //     axios
+            //         .post(
+            //             commonFunction.DOMAIN_URL + "v1/order/save",
+            //             bodyRequest,
+            //             this.configRequestApi
+            //         )
+            //         .then((response) => {
+            //             if (response.status == 200) {
+            //                 this.isLoading = false;
+            //                 alert("SUCCESS: Tạo mới thành công - " + response.data.message);
+            //                 commonFunction.reloadPage();
+            //             } else {
+            //                 this.isLoading = false;
+            //                 alert("FAIL: Tạo mới không thành công! Vui lòng thử lại!");
+            //                 commonFunction.reloadPage();
+            //             }
+            //         })
+            //         .catch((e) => {
+            //             this.isLoading = false;
+            //             alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
+            //             console.log(e);
+            //             commonFunction.reloadPage();
+            //         });
+            // }
         },
 
         //update

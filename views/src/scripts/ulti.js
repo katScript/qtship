@@ -80,6 +80,7 @@ const commonFunction = {
         }
     },
     currentURL: function(){ return location.href;},
+    typeOrderWatingConfirm: "WAITINGCONFIRM",
     typeOrderSuccess: "DONE",
     typeOrderDelivery: "DELiVERY",
     typeOrderOccurred: "OCCURRED",
