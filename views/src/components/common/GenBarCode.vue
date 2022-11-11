@@ -1,3 +1,9 @@
 <template>
-  <vue-barcode value="OR000001" :width="2" :height="40"></vue-barcode>
+  <vue-barcode :value="orderCode" :width="2" :height="39"></vue-barcode>
 </template>
+
+<script>
+export default {
+  props: ['orderCode']
+}
+</script>

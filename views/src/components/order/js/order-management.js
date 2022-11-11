@@ -5,8 +5,7 @@ import ToolbarRight from "@/components/common/ToolbarRight.vue";
 import NotficationClient from "@/components/common/NotficationClient.vue";
 import ActionLoading from "@/components/common/ActionLoading.vue";
 import PopupNotify from "@/components/common/PopupNotify.vue";
-import BillOrder from "@/components/common/BillOrder.vue";
-
+import BillOrder from "@/components/order/OrderDetail.vue";
 import OrderData from "@/components/models/order/order-data";
 
 import moment from "moment";
@@ -49,7 +48,6 @@ export default {
             countOrder: 0,
             idRequest: "",
             isLoading: false,
-            isDisplayBill: false,
             configRequestApi: {},
             headersOrder: [
                 { text: "Mã ĐH", value: "orderCode", sortable: true },
@@ -88,7 +86,7 @@ export default {
             id = commonFunction.getCookies("idrequest_cookies"),
             token = commonFunction.getCookies("accesstoken_cookies");
 
-        if (auth == null && role !== "shipper") {
+        if (auth == null && role !== "customer") {
             commonFunction.redirect("/");
         }
 
@@ -269,8 +267,5 @@ export default {
         fomartDateYYYYMMDD(date) {
             return moment(date).format("YYYY-MM-DD");
         },
-        closePopUpBillOrder(value) {
-            this.isDisplayBill = value;
-        }
     },
 };

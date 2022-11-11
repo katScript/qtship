@@ -8,9 +8,6 @@
     <div :class="isLoading ? 'show' : 'hide'">
       <ActionLoading />
     </div>
-    <div>
-      <BillOrder :isDisplayBill="isDisplayBill" @closePopUpBillOrder="closePopUpBillOrder" />
-    </div>
     <NavbarClient />
     <div class="container-fluid">
       <div class="row">
@@ -173,8 +170,8 @@
                   <table class="w-100" v-if="item.status != 'CANCEL'">
                     <tr>
                       <td>
-                        <a class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
-                          title="Chi tiết đơn hàng" v-on:click="isDisplayBill = true"><i
+                        <a :href="'/client/orders/detail/' + idRequest +'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                          title="Chi tiết đơn hàng"><i
                             class="fa-solid fa-circle-info"></i></a>
                       </td>
                       <td>
