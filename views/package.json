@@ -31,6 +31,7 @@
     "vue3-cookies": "^1.0.6",
     "vue3-easy-data-table": "^1.5.10",
     "vue3-select2-component": "^0.1.7",
+    "vue3-timeline": "^1.2.3",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
