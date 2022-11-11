@@ -10,6 +10,7 @@ import OrderData from "@/components/models/order/order-data";
 import { useCookies } from "vue3-cookies";
 import { commonFunction } from "@/scripts/ulti";
 import axios from "axios";
+
 export default {
     setup() {
         const { cookies } = useCookies();
@@ -23,7 +24,7 @@ export default {
     data() {
         return {
             orderData: {},
-            isShowBill: false
+            isShowBill: false,
         }
     },
     components: {        
@@ -31,7 +32,7 @@ export default {
         FooterClient,
         ToolbarRight,
         NotficationClient,
-        BillOrder
+        BillOrder,
     },
     created() {
         let auth = commonFunction.getCookies("authenication_cookies"),
