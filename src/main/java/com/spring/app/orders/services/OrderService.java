@@ -113,7 +113,9 @@ public class OrderService {
                 );
 
         Set<OrderItem> orderItems = this.processOrderItem(data.getOrderItem(), _order);
-        _order.setOrderItemSet(orderItems);
+
+        _order.getOrderItemSet().clear();
+        _order.getOrderItemSet().addAll(orderItems);
         priceCalculate.processSubtotal(_order);
 
         OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
@@ -138,7 +140,9 @@ public class OrderService {
 
             Set<Package> packageSet = this.processPackage(od.getProducts(), orderItem);
 
-            orderItem.setPackages(packageSet);
+            orderItem.getPackages().clear();
+            orderItem.getPackages().addAll(packageSet);
+
             orderItem.setShippingAddress(this.processShippingAddress(od.getShippingAddress()));
             orderItemSet.add(orderItem);
         }

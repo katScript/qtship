@@ -28,7 +28,7 @@ public class OrderItem {
     @JoinColumn(name = "shipping_id", referencedColumnName = "id")
     private ShippingAddress shippingAddress;
     @OneToMany(mappedBy = "orderItem",
-            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Package> packages = new HashSet<>();
 
     public OrderItem() {}
