@@ -114,7 +114,7 @@ export default {
         this.listTypeReturnOrder = commonFunction.typeReturnOrder;
 
         this.customerModel.setData(
-            JSON.parse(localStorage.getItem('customer'))
+            JSON.parse(commonFunction.getCustomerStorage())
         );
 
         let customerId = this.customerModel.getData().id;

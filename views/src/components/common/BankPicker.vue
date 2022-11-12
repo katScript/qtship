@@ -25,15 +25,11 @@
 </template>
 
 <script>
-    import { commonFunction } from '../../scripts/ulti'
+    import { commonFunction } from '@/scripts/ulti'
     export default {
         props: ['msgValidationFor'],
-        components: {
-        },
         data() {
             return {
-                //{code: 'CA', country: 'Canada'}
-                apiBanksURL: '',
                 holderName: '',
                 bankSelected: '',
                 cardNumber: '',
@@ -44,9 +40,8 @@
         },
         mounted() {
             const self = this;
-            // Banks
-            self.apiBanksURL = commonFunction.apiBanksURL;
-            self.axios.get(self.apiBanksURL).then((response) => {
+
+            self.axios.get(commonFunction.apiBanksURL).then((response) => {
                 let dataBanks = response.data.data;
                 for (let bank in dataBanks) {
                     this.bankList.push({ label: dataBanks[bank].shortName + ' - ' + dataBanks[bank].name, code: dataBanks[bank].code });
@@ -57,7 +52,7 @@
             bankSelected: {
                 handler: function () {
                     this.$emit('updateForControl', this.bankSelected, 'BANK');
-                    if (this.bankSelected.code == 'VBA') {
+                    if (this.bankSelected.code === 'VBA') {
                         this.isDisabledBranchBank = false;
                     }
                 }
@@ -65,7 +60,7 @@
             holderName: {
                 handler: function () {this.$emit('updateForControl', this.holderName, 'HOLDER');}},
             cardNumber: {
-                handler: function () {this.$emit('updateForControl', this.cardNumber, 'CARDNUMBER');}},
+                handler: function () {this.$emit('updateForControl', this.cardNumber, 'CARD_NUMBER');}},
             branchBank:{
                 handler: function () {this.$emit('updateForControl', this.branchBank, 'ADDRESS');}},
         }

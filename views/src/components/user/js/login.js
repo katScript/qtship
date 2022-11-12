@@ -76,7 +76,7 @@ export default {
             ).then((response) => {
                 // handle not found
                 this.customerModel.setData(response.data);
-                localStorage.setItem('customer', JSON.stringify(this.customerModel.getData()));
+                commonFunction.setCustomerStorage(this.customerModel.getData());
             }).catch((e) => {
                 console.log(e);
             });
