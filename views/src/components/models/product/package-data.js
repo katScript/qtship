@@ -13,12 +13,17 @@ export default class PackageData {
 
     setData (data) {
         this.data.id = data.id;
-        this.data.price = data.price;
-        this.data.shippingAddress = data.shippingAddress;
-        this.data.products = data.products;
+        this.data.product = data.product;
+        this.data.qty = data.qty;
+        this.data.createdAt = data.createdAt;
+        this.data.updatedAt = data.updatedAt;
     }
 
     getData () {
         return this.data;
+    }
+
+    setProduct(product) {
+        this.data.product = product;
     }
 }

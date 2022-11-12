@@ -1,13 +1,15 @@
 import WarehouseData from "@/components/models/warehouse/warehouse-data";
+import { commonFunction } from "@/scripts/ulti";
 
 export default class OrderData {
     warehouse = new WarehouseData();
+
     data = {
         id: null,
         orderCode: "",
         customerId: null,
         customerCode: "",
-        status: "",
+        status: commonFunction.typeOrderWaitingConfirm,
         feedback: "",
         note: "",
         subtotal: null,
@@ -15,7 +17,7 @@ export default class OrderData {
         senderPhone: "",
         senderAddress: "",
         notification: false,
-        shippingFee: false,
+        shippingFee: true,
         shippingType: "",
         shippingTime: "",
         coupon: "",
@@ -25,6 +27,18 @@ export default class OrderData {
         createdAt: null,
         updateAt: null
     };
+
+    errors = {
+        shippingAddress: {
+            phone: "",
+            name: ""
+        },
+        shippingType: "",
+        isSelectedTypeLH: "",
+        warehouse: "",
+        products: "",
+        returnCode: ""
+    }
 
     setData(data) {
         this.data.id = data.id;
@@ -52,5 +66,21 @@ export default class OrderData {
 
     getData() {
         return this.data;
+    }
+
+    getErrors() {
+        return this.errors;
+    }
+
+    validate() {
+
+    }
+
+    setOrderItem(orderItem) {
+        this.data.orderItem = orderItem;
+    }
+
+    setWarehouse(warehouse) {
+        this.data.warehouse = warehouse;
     }
 }

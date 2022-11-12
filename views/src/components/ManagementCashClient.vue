@@ -162,7 +162,7 @@
     // <data, methods...>
 
     mounted() {
-      let authenication_cookies = this.cookies.get("authenication_cookies");
+      let authenication_cookies = this.cookies.get(commonFunction.userCookies.username);
       if (authenication_cookies == null) {
         commonFunction.redirect('/');
       }

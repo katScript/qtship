@@ -12,23 +12,23 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="!isShipper">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/management"><i class="fa-solid fa-chart-pie"></i> Tổng
+                        <a class="nav-link" href="/customer/management"><i class="fa-solid fa-chart-pie"></i> Tổng
                             quan</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn
+                        <a class="nav-link" href="/customer/orders"><i class="fa-solid fa-clipboard-list"></i> Đơn
                             hàng</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/warehouse-product"><i class="fa-solid fa-boxes-stacked"></i> QL
+                        <a class="nav-link" href="/customer/warehouse-product"><i class="fa-solid fa-boxes-stacked"></i> QL
                             kho & sản phẩm</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/client/management-cash"><i
+                        <a class="nav-link" href="/customer/management-cash"><i
                                 class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>
                     </li>
                     <li class="nav-item nav-item-qt nav-item-qt-button">
-                        <a class="nav-link" href="/client/orders/create"><i class="fa-solid fa-circle-plus"></i> Tạo đơn
+                        <a class="nav-link" href="/customer/orders/save"><i class="fa-solid fa-circle-plus"></i> Tạo đơn
                             hàng</a>
                     </li>
                 </ul>
@@ -55,7 +55,7 @@
 
 <script>
     import { useCookies } from "vue3-cookies";
-    import { commonFunction } from '../../scripts/ulti'
+    import { commonFunction } from '@/scripts/ulti'
     export default {
         setup() {
             const { cookies } = useCookies();

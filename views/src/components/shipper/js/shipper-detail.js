@@ -26,23 +26,18 @@ export default {
         };
     },
     mounted() {
-        let auth = commonFunction.getCookies("authenication_cookies"),
-            role = commonFunction.getCookies("authenrole_cookies"),
-            id = commonFunction.getCookies("idrequest_cookies"),
-            token = commonFunction.getCookies("accesstoken_cookies");
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+            role = commonFunction.getCookies(commonFunction.userCookies.roles),
+            id = commonFunction.getCookies(commonFunction.userCookies.id);
 
-        if (auth == null && role !== "shipper") {
+        if (auth == null || role !== "shipper") {
             commonFunction.redirect("/");
         }
-
-        this.configRequestApi = {
-            headers: { Authorization: "Bearer " + token },
-        };
 
         axios.get(
             commonFunction.DOMAIN_URL +
             "v1/shipper/detail/" + id,
-            this.configRequestApi
+            commonFunction.configApi()
         )
             .then((response) => {
                 this.shipperModel.setData(response.data);

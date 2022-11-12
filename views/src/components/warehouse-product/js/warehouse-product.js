@@ -1,14 +1,13 @@
 import NavbarClient from "@/components/common/NavbarClient.vue";
 import FooterClient from "@/components/common/FooterClient.vue";
 import ToolbarRight from "@/components/common/ToolbarRight.vue";
-import NotficationClient from "@/components/common/NotficationClient.vue";
+import NotificationClient from "@/components/common/NotficationClient.vue";
 import PopupNotify from "@/components/common/PopupNotify.vue";
 import ActionLoading from "@/components/common/ActionLoading.vue";
 import WarehouseData from "@/components/models/warehouse/warehouse-data";
 import ProductData from "@/components/models/product/product-data";
 
 import moment from "moment";
-import { useCookies } from "vue3-cookies";
 import { commonFunction } from '@/scripts/ulti'
 import axios from "axios";
 
@@ -17,17 +16,15 @@ export default {
         NavbarClient,
         FooterClient,
         ToolbarRight,
-        NotficationClient,
+        NotificationClient,
         PopupNotify,
         ActionLoading,
     },
     setup() {
-        const { cookies } = useCookies();
         const warehouseModel = new WarehouseData();
         const productModel = new ProductData();
 
         return {
-            cookies,
             warehouseModel,
             productModel
         };
@@ -57,7 +54,7 @@ export default {
                     qty: "",
                     image: "",
                     description: "",
-                },
+                }
             },
             headersWarehouse: [
                 { text: "Tên kho", value: "data.name", sortable: true },
@@ -97,10 +94,10 @@ export default {
     // <data, methods...>
 
     mounted() {
-        let auth = commonFunction.getCookies("authenication_cookies"),
-            role = commonFunction.getCookies("authenrole_cookies"),
-            id = commonFunction.getCookies("idrequest_cookies"),
-            token = commonFunction.getCookies("accesstoken_cookies");
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+            role = commonFunction.getCookies(commonFunction.userCookies.roles),
+            id = commonFunction.getCookies(commonFunction.userCookies.id),
+            token = commonFunction.getCookies(commonFunction.userCookies.token);
 
         if (auth == null && role !== "shipper") {
             commonFunction.redirect("/");
@@ -112,16 +109,14 @@ export default {
 
         this.idRequest = id;
         //warehouse
-        axios
-            .get(
+        axios.get(
                 commonFunction.DOMAIN_URL +
                 "v1/warehouse/all/customer/" +
                 this.idRequest,
                 this.configRequestApi
             )
             .then((response) => {
-                let respronseData = response.data;
-                respronseData.forEach(element => {
+                response.data.forEach(element => {
                     let warehouse = new WarehouseData();
                     warehouse.setData(element);
                     this.listWarehouseByCustomer.push(warehouse);
@@ -155,8 +150,7 @@ export default {
     methods: {
         //warehouse
         createNewWarehouse: function () {
-            this.isValid = 0;
-            if (this.warehouseModel.validate(this.warehouseData, this.isValid, this.msgValidationFor)) {
+            if (this.warehouseModel.validate()) {
                 this.isLoading = true;
                 axios
                     .post(
@@ -168,7 +162,7 @@ export default {
                         this.configRequestApi
                     )
                     .then((response) => {
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             this.isLoading = false;
                             alert("SUCCESS: Tạo mới thành công - " + response.data.message);
                             commonFunction.reloadPage();
@@ -182,6 +176,8 @@ export default {
                         alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
                         console.log(e);
                     });
+            } else {
+                this.msgValidationFor = this.warehouseModel.error;
             }
         },
         updateWarehouse: function () {

@@ -9,6 +9,12 @@ export default class WarehouseData {
         updatedAt: null
     };
 
+    error = {
+        name: "",
+        address: "",
+        phone: "",
+    }
+
     setData (data) {
         this.data.id = data.id;
         this.data.name = data.name;
@@ -23,23 +29,29 @@ export default class WarehouseData {
         return this.data;
     }
 
-    validate(data, isValid, msgValidationFor) {
-        msgValidationFor.warehouse = {};
-        if (data.name == "" || data.name == undefined) {
-            isValid += 1;
-            msgValidationFor.warehouse.name =
+    validate() {
+        let isValid = true;
+
+        if (this.data.name === undefined || this.data.name === "") {
+            isValid = false;
+            this.error.name =
                 "Vui lòng nhập thông tin kho/cửa hàng!";
         }
-        if (data.phone == "" || data.phone == undefined) {
-            isValid += 1;
-            msgValidationFor.warehouse.phone =
+        if (this.data.phone === undefined || this.data.phone === "") {
+            isValid = false;
+            this.error.phone =
                 "Vui lòng nhập thông tin liên hệ!";
         }
-        if (data.address == "" || data.address == undefined) {
-            isValid += 1;
-            msgValidationFor.warehouse.address =
+        if (this.data.address === undefined || this.data.address === "" ) {
+            isValid = false;
+            this.error.address =
                 "Vui lòng nhập địa chỉ cụ thể: Số nhà/thôn, xã/phường, quận/huyện, tỉnh/thành phố!";
         }
-        return isValid == 0 ? true : false;
+
+        return isValid;
+    }
+
+    getError() {
+        return this.error;
     }
 }
