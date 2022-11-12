@@ -24,4 +24,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-.idea
+package-lock.json

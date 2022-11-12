@@ -4,6 +4,77 @@ import $ from "jquery";
 import { useCookies } from "vue3-cookies";
 
 const commonFunction = {
+    // cookies manager
+    userCookies: {
+        token: "gEZkA7zyDqT7ZcMVLVhA2dYdiNHmLQD4",
+        username: "jgT7Un46hLk4jBzyTGEq6j634H34jmU8",
+        id: "4qYbrSdRZSb2uYS4f58iBKmjRHFFaWmy",
+        roles: "4DFkgFzNb6eHkWw7SLzGCGvTwNN49pk3"
+    },
+    cookiesManager: useCookies(),
+    setCookies: function (key, value) {
+        this.cookiesManager.cookies.set(key, value, this.EXPIRED_TIME_COOKIES);
+    },
+    setListCookies: function (array) {
+        array.forEach(elm => this.setCookies(elm.key, elm.value));
+    },
+    getCookies: function (key) {
+        return this.cookiesManager.cookies.get(key);
+    },
+    removeCookies: function (key) {
+        this.cookiesManager.cookies.remove(key);
+    },
+    removeUserCookies: function () {
+        Object.values(this.userCookies).forEach(val => {
+            this.removeCookies(val);
+        });
+    },
+
+    // shipping type
+    shippingType: {
+        STANDARD: "Standard",
+        FAST: "Fast",
+        SUPER: "Super"
+    },
+
+    // config api
+    configApi: function () {
+        return {
+            headers: { Authorization: "Bearer " + this.getCookies(this.userCookies.token) },
+        };
+    },
+
+    // option shipping type
+    typeShipping: [
+        "STANDARD",
+        "FAST",
+        "SUPER"
+    ],
+
+    // option return type
+    typeReturnOrder: [
+        "SAVE_WARE_WAITING_CHECK",
+        "CAN_NOT_RETURN",
+        "DON_NOT_SAVE_RETURN_NOW"
+    ],
+
+    // package location
+    packageLocationConfig: {
+        POST_OFFICES: {
+            label: "Gửi hàng tại bưu cục",
+            value: "POST_OFFICES"
+        },
+        HOUSE_ADDRESS: {
+            label: "Lấy hàng tận nơi",
+            value: "HOUSE_ADDRESS"
+        }
+    },
+
+
+
+    // ======================================================================================
+
+    // code cua anh Duong :D
     redirect: function(url) { window.location.href = url; },
     reloadPage: function() {location.reload(true);},
     apiProvincesURL: 'https://vapi.vnappmob.com/api/province/',
@@ -50,16 +121,6 @@ const commonFunction = {
     typeNotifySuccess: 'SUCCESS',
     typeNotifyFail: 'FAIL',
     typeNotifyCancel: 'CANCEL',
-    typeShipping: [
-        "STANDARD",
-        "FAST",
-        "SUPER"
-    ],
-    typeReturnOrder: [
-        "SAVE_WARE_WAITING_CHECK",
-        "CAN_NOT_RETURN",
-        "DON_NOT_SAVE_RETURN_NOW"
-    ],
     generateCodeToText(text) {
         switch(text){
             case "SAVE_WARE_WAITING_CHECK": return "Lưu kho chờ check";
@@ -80,21 +141,11 @@ const commonFunction = {
         }
     },
     currentURL: function(){ return location.href;},
-    typeOrderWatingConfirm: "WAITINGCONFIRM",
+    typeOrderWaitingConfirm: "WAITING_CONFIRM",
     typeOrderSuccess: "DONE",
     typeOrderDelivery: "DELIVERY",
     typeOrderOccurred: "OCCURRED",
     typeOrderCancel: "CANCEL",
-    cookiesManager: useCookies(),
-    setCookies: function (key, value) {
-        this.cookiesManager.cookies.set(key, value, this.EXPIRED_TIME_COOKIES);
-    },
-    getCookies: function (key) {
-        return this.cookiesManager.cookies.get(key);
-    },
-    removeCookies: function (key) {
-        this.cookiesManager.cookies.remove(key);
-    }
 }
 
 export { commonFunction };

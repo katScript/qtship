@@ -10,7 +10,7 @@
           <i class="fa-solid fa-circle" style="color: #4cd137; font-size: 10px; padding-top: 3px"></i></a>
       </ul>
       <div class="list-group">
-        <a href="/client/account-info" class="list-group-item list-group-item-action list-group-page-qt">
+        <a href="/customer/account-info" class="list-group-item list-group-item-action list-group-page-qt">
           Quản lí thông tin tài khoản <i class="fa-solid fa-chevron-right"></i>
         </a>
       </div>

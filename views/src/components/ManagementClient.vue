@@ -268,9 +268,9 @@ export default {
 
   mounted() {
     const self = this;
-    let authenication_cookies = self.cookies.get("authenication_cookies");
-    let accesstoken_cookies = self.cookies.get("accesstoken_cookies");
-    self.idRequest = self.cookies.get("idrequest_cookies");
+    let authenication_cookies = self.cookies.get(commonFunction.userCookies.username);
+    let accesstoken_cookies = self.cookies.get(commonFunction.userCookies.token);
+    self.idRequest = self.cookies.get(commonFunction.userCookies.id);
     self.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
 
     if (authenication_cookies == null) {
@@ -288,7 +288,7 @@ export default {
         self.configRequestApi
       )
       .then((response) => {
-        self.customerInfo = response.data.customer;
+        self.customerInfo = response.data;
         localStorage.setItem("id_customer_request", self.customerInfo.id);
       })
       .catch((e) => {
