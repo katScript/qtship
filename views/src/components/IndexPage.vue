@@ -3,37 +3,26 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status">
-                  <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Loading...</span>
                 </div>
-              </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { useCookies } from "vue3-cookies";
-    import { commonFunction } from '../scripts/ulti'
-  
-    export default {
-        setup() {
-            const { cookies } = useCookies();
-            return { cookies };
-        },
-  
-        // <data, methods...>
-  
-        mounted() {
-            let authenication_cookies = this.cookies.get("authenication_cookies");
-            let authenrole_cookies = this.cookies.get("authenrole_cookies");
-            if(authenication_cookies == null || authenrole_cookies == null){
-              commonFunction.redirect('/login-page');
-            } else if(authenication_cookies && authenrole_cookies == 'customer' ) {
-                commonFunction.redirect('/client/management');
-            } else if(authenication_cookies && authenrole_cookies == 'shipper' ) {
-                commonFunction.redirect('/shipper/management');
-            } else if(authenication_cookies && authenrole_cookies == 'admin' ) {
-                commonFunction.redirect('/admin/management');
-            }
+import {commonFunction} from '@/scripts/ulti';
+
+export default {
+    mounted() {
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+            role = commonFunction.getCookies(commonFunction.userCookies.roles);
+
+        if (auth == null || role == null) {
+            commonFunction.redirect('/login-page');
+        } else if (auth) {
+            commonFunction.redirect("/" + role + "/management");
         }
-    };
-  </script>
+    }
+};
+</script>

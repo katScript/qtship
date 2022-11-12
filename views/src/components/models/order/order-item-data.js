@@ -20,4 +20,12 @@ export default class OrderItemData {
     getData () {
         return this.data;
     }
+
+    setShippingAddress(shippingAddress) {
+        this.data.shippingAddress = shippingAddress;
+    }
+
+    setProduct(products) {
+        this.data.products = products;
+    }
 }

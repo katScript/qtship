@@ -81,10 +81,10 @@ export default {
     // <data, methods...>
 
     mounted() {
-        let auth = commonFunction.getCookies("authenication_cookies"),
-            role = commonFunction.getCookies("authenrole_cookies"),
-            id = commonFunction.getCookies("idrequest_cookies"),
-            token = commonFunction.getCookies("accesstoken_cookies");
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+            role = commonFunction.getCookies(commonFunction.userCookies.roles),
+            id = commonFunction.getCookies(commonFunction.userCookies.id),
+            token = commonFunction.getCookies(commonFunction.userCookies.token);
 
         if (auth == null && role !== "customer") {
             commonFunction.redirect("/");
@@ -161,7 +161,7 @@ export default {
             console.log(item);
         },
         genUrlUpdateOrder(item) {
-            return "/client/orders/create#" + item.id;
+            return "/customer/orders/save#" + item.id;
         },
         closePopupNotify: function () {
             this.isShowNotify = false;
