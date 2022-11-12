@@ -21,7 +21,6 @@ export default {
 
     data() {
         return {
-            isShowNav: true,
         };
     },
 
@@ -31,10 +30,5 @@ export default {
 
     },
     watch: {
-    },
-    methods: {
-        toggleCollapseNavbarLeft() {
-            this.isShowNav = !this.isShowNav;
-        },
     },
 };

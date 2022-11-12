@@ -15,9 +15,7 @@ export default {
         };
     },
     data() {
-        return {
-            isShowNav: true,
-            
+        return {           
         };
     },
     components: {
@@ -34,8 +32,5 @@ export default {
         // }
     },
     methods: {
-        toggleCollapseNavbarLeft() {
-            this.isShowNav = !this.isShowNav;
-        },
     },
 };
