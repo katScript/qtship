@@ -1,12 +1,18 @@
 <template>
-  <div class="navbar-right-admin">
+  <div class="navbar-left-admin">
     <div class="branch-logo d-inline">
-      <img src="../../images/logo-branch.png" alt="Logo branch" width="150" />
-      <button class="btn btn-collapse-nav-left text-rotate" v-on:click="toggleCollapseNavbarLeft">
-        Thu gọn
-      </button>
+      <table class="w-100">
+        <tr>
+          <td><a href="/admin/management"><img src="@/images/logo-branch.png" alt="Logo branch" width="150" /></a></td>
+          <td>
+            <button class="btn btn-collapse-nav-left-small" v-on:click="toggleCollapseNavbarLeft">
+              <i class="fa-solid fa-caret-left"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
     </div>
-    <div class="list-item-nav" width="250">
+    <div class="list-item-nav">
       <!-- group 0-->
       <a class="list-group-item list-group-item-action group-title" style="font-size: 13px">
         <i class="fa-solid fa-user"></i>: <span>{{usernameSession}}</span>
@@ -16,14 +22,20 @@
         </p>
       </a>
 
+      <a href="/admin/management" class="list-group-item list-group-item-action group-title">
+        Trang chủ
+      </a>
+
       <!-- group 1-->
       <a class="list-group-item list-group-item-action group-title" v-on:click="isShowItemNav1 = !isShowItemNav1">
         Quản lí Đơn hàng
       </a>
       <div class="list-group" :class="isShowItemNav1 ? 'show' : 'hide'">
-        <a href="#" class="list-group-item list-group-item-action">Tất cả</a>
-        <a href="#" class="list-group-item list-group-item-action">Đơn hàng đang xử lí</a>
-        <a href="#" class="list-group-item list-group-item-action">Đơn đã xử lí</a>
+        <a href="/admin/management/order/ALL" class="list-group-item list-group-item-action">Tất cả</a>
+        <a href="/admin/management/order/DELIVERY" class="list-group-item list-group-item-action">Đơn hàng đang xử lí</a>
+        <a href="/admin/management/order/SUCCESS" class="list-group-item list-group-item-action">Đơn đã xử lí</a>
+        <a href="/admin/management/order/DELAY" class="list-group-item list-group-item-action">Đơn phát sinh</a>
+        <a href="/admin/management/order/CANCEL" class="list-group-item list-group-item-action">Đơn hủy</a>
       </div>
 
       <!-- group 1-->
@@ -31,7 +43,7 @@
         Tạo đơn hàng tại bưu cục
       </a>
       <div class="list-group" :class="isShowItemNav7 ? 'show' : 'hide'">
-        <a href="#" class="list-group-item list-group-item-action">Tạo mới</a>
+        <a href="/admin/management/create-order" class="list-group-item list-group-item-action">Tạo mới</a>
       </div>
 
       <!-- group 2-->
@@ -71,6 +83,7 @@
         <a href="#" class="list-group-item list-group-item-action">Thông tin Shipper</a>
       </div>
 
+
       <!-- group dx-->
       <a class="
           list-group-item list-group-item-action
@@ -95,7 +108,7 @@
     },
     data() {
       return {
-        isShowItemNav1: true,
+        isShowItemNav1: false,
         isShowItemNav2: false,
         isShowItemNav3: false,
         isShowItemNav4: false,
@@ -106,7 +119,7 @@
       };
     },
     mounted() {
-      this.usernameSession =  this.cookies.get("authenication_cookies");
+      this.usernameSession = this.cookies.get("authenication_cookies");
     },
     methods: {
       toggleCollapseNavbarLeft() {
@@ -123,18 +136,21 @@
 </script>
 
 <style scoped>
-  .btn-collapse-nav-left {
+  .btn-collapse-nav-left-small {
     background-color: #bf1e2d;
     color: #ffffff;
     float: right;
-    border-left: none;
-    position: relative;
-    margin-right: -104px;
-    margin-top: 60px;
+    border-radius: 0 !important;
+    height: 50px;
+    border-bottom-left-radius: 25px !important;
+    border-top-left-radius: 25px !important;
   }
 
-  .navbar-right-admin {
+  .navbar-left-admin {
     border-right: 3px solid #bf1e2d;
+    height: 100vh;
+    position: fixed;
+    width: 200px;
   }
 
   .group-title {
@@ -168,6 +184,8 @@
 
   .item-sign-out {
     padding-top: 15px;
+    position: absolute;
+    bottom: 0;
   }
 
   .item-sign-out:hover {

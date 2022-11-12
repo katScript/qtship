@@ -1,0 +1,37 @@
+* {
+    overflow: hidden;
+  }
+
+  .show {
+    display: block;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .content-management {
+    margin-left: 40px;
+  }
+
+  .btn-collapse-nav-left {
+    background-color: #bf1e2d;
+    color: #ffff;
+    width: 30px;
+    height: 100vh;
+    position: absolute;
+    margin-right: 10px;
+  }
+
+  .title-managenent-type {
+    margin-left: 60px;
+  }
+
+  .text-rotate {
+    width: max-content;
+    -moz-transform: translateX(-50%) translateY(-50%) rotate(90deg);
+    -webkit-transform: translateX(-50%) translateY(-50%) rotate(90deg);
+    transform: translateX(-50%) translateY(-50%) rotate(90deg);
+  }
+
+//   sass src/style/scss/admin.scss src/style/css/admin.css
