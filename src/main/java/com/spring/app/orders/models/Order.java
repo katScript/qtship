@@ -47,7 +47,7 @@ public class Order {
     private Date updatedAt;
     private String status;
     @OneToMany(mappedBy = "order",
-            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItemSet = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
