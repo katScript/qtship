@@ -4,6 +4,7 @@ import NavbarLeftAdmin from "@/components/common/NavbarLeftAdmin.vue";
 // import moment from "moment";
 // import { commonFunction } from "@/scripts/ulti";
 // import axios from "axios";
+import { useCookies } from "vue3-cookies";
 
 export default {
     components: {
@@ -11,8 +12,9 @@ export default {
     },
     setup() {
         const orderModel = new OrderData();
-
+        const cookies = useCookies();
         return {
+            cookies,
             orderModel
         };
     },

@@ -43,7 +43,7 @@
         Tạo đơn hàng tại bưu cục
       </a>
       <div class="list-group" :class="isShowItemNav7 ? 'show' : 'hide'">
-        <a href="#" class="list-group-item list-group-item-action">Tạo mới</a>
+        <a href="/admin/management/create-order" class="list-group-item list-group-item-action">Tạo mới</a>
       </div>
 
       <!-- group 2-->

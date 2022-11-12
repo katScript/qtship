@@ -21,16 +21,16 @@
                                         </h4>
                                         <br />
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-3 form-group">
+                                    <div class="col-12 col-sm-6 col-md-3 form-group pt-2 ps-3">
                                         <input v-model="filterOderCondition.orderId" type="text"
                                             class="form-control form-search-control" id="" placeholder="Mã đơn hàng" />
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-3 form-group">
+                                    <div class="col-12 col-sm-6 col-md-3 form-group pt-2">
                                         <input v-model="filterOderCondition.phoneReceiver" type="text"
                                             class="form-control form-search-control" id=""
                                             placeholder="Số điện thoại người nhận" />
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-2 form-group">
+                                    <div class="col-12 col-sm-6 col-md-2 form-group pt-2">
                                         <select class="form-select" aria-label="Default select example"
                                             v-model="filterOderCondition.orderStatus">
                                             <option value="" disabled hidden selected>
@@ -48,7 +48,7 @@
                                             <option value="CANCEL">Đã hủy</option>
                                         </select>
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-4 form-group">
+                                    <div class="col-12 col-sm-6 col-md-4 form-group pt-2">
                                         <table class="w-100">
                                             <tr>
                                                 <td>
@@ -111,7 +111,7 @@
                                   </tr>
                                 </table>
                               </div> -->
-                                    <div class="col-12 col-sm-6 col-md-3 form-group">
+                                    <div class="col-12 col-sm-6 col-md-3 form-group pt-2 ps-3">
                                         <select class="form-select" aria-label="Default select example"
                                             v-model="filterOderCondition.shippingType">
                                             <option value="" disabled hidden selected>
@@ -134,8 +134,8 @@
                                   </option>
                                 </select>
                               </div> -->
-                                    <div class="col-12 col-sm-6 col-md-3 form-group">
-                                        <button class="btn btn-danger pe-2" v-on:click="filterOrder">
+                                    <div class="col-12 col-sm-6 col-md-3 form-group pt-2">
+                                        <button class="btn btn-danger me-2" v-on:click="filterOrder">
                                             Tìm kiếm đơn hàng
                                         </button>
                                         <button class="btn btn-secondary" v-on:click="resetFormSearch()"

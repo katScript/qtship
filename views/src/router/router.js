@@ -13,7 +13,7 @@ import ManageAccountShipperInfo from '@/components/shipper/ShipperDetail.vue'
 import OrderDetailCustomer from '@/components/order/OrderDetail.vue'
 import ManagementAdmin from '@/components/admin/ManagementAdmin.vue'
 import ManagementOrderAdmin from '@/components/admin/order/ManagementOrderAdmin.vue'
-
+import CreateOrderAdmin from '@/components/admin/create-order/CreateOrderAdmin.vue'
 
 const history = createWebHistory();
 const router = createRouter({
@@ -33,6 +33,7 @@ const router = createRouter({
         {path: '/client/orders/detail/:customerId/:orderId', component: OrderDetailCustomer},
         {path: '/admin/management', component: ManagementAdmin},
         {path: '/admin/management/order/:status', component: ManagementOrderAdmin},
+        {path: '/admin/management/create-order', component: CreateOrderAdmin}
     ]
 });
 
