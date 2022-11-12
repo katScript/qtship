@@ -1,6 +1,6 @@
 import {createWebHistory, createRouter} from 'vue-router'
 import LoginComponent from '@/components/user/LoginComponent'
-import RegisterPage from '@/components/RegisterPage.vue'
+import RegisterPage from '@/components/user/RegisterComponent.vue'
 import ManagementClientPage from '@/components/ManagementClient.vue'
 import OrdersClient from '@/components/order/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
