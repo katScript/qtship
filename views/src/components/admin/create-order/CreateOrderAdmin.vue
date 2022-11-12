@@ -3,7 +3,10 @@
         <div class="container-fluid d-flex m-0 p-0">
             <NavbarLeftAdmin />
             <div class="content-managment">
-                <h1>Create order</h1>
+                <h4 class="title-management">
+                    Tạo đơn hàng mới
+                </h4>
+                <hr>
             </div>
         </div>
     </div>
