@@ -21,7 +21,6 @@ export default {
 
     data() {
         return {
-            isShowNav: true,
             orderData: {},
             listOrderByCustomer: [],
             listOrderByCustomerBk: [],
@@ -80,8 +79,5 @@ export default {
         },
     },
     methods: {
-        toggleCollapseNavbarLeft() {
-            this.isShowNav = !this.isShowNav;
-        },
     },
 };
