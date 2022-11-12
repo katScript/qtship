@@ -51,7 +51,7 @@
         Khách hàng
       </a>
       <div class="list-group" :class="isShowItemNav2 ? 'show' : 'hide'">
-        <a href="#" class="list-group-item list-group-item-action">Thông tin Khách hàng</a>
+        <a href="/admin/management/customer" class="list-group-item list-group-item-action">Thông tin Khách hàng</a>
       </div>
 
       <!-- group 5-->

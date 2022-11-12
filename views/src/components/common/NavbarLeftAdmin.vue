@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar-admin d-inline">
+    <div class="navbar-admin d-inline" :class="isShowNav ? 'default' : 'me-5'">
         <button class="btn btn-collapse-nav-left" :class="isShowNav ? 'hide' : 'show'"
             v-on:click="toggleCollapseNavbarLeft">
             <i class="fa-solid fa-caret-right"></i>
