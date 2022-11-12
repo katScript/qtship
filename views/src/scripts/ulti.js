@@ -82,7 +82,7 @@ const commonFunction = {
     currentURL: function(){ return location.href;},
     typeOrderWatingConfirm: "WAITINGCONFIRM",
     typeOrderSuccess: "DONE",
-    typeOrderDelivery: "DELiVERY",
+    typeOrderDelivery: "DELIVERY",
     typeOrderOccurred: "OCCURRED",
     typeOrderCancel: "CANCEL",
     cookiesManager: useCookies(),
