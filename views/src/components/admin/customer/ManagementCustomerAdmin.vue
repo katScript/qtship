@@ -11,23 +11,23 @@
                 <div class="form-filter-customer">
                     <div class="row">
                         <div class="col-md-2">
-                            <input type="text" class="form-control" placeholder="Mã Khách hàng">
+                            <input type="text" class="form-control mt-1 mb-1" placeholder="Mã Khách hàng" v-model="conditionFilter.customerId">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" placeholder="Tên Khách hàng">
+                            <input type="text" class="form-control mt-1 mb-1" placeholder="Tên Khách hàng" v-model="conditionFilter.fullName">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" placeholder="Tên Công ty">
+                            <input type="text" class="form-control mt-1 mb-1" placeholder="Tên Shop/Cửa hàng/Công ty" v-model="conditionFilter.companyName">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" placeholder="Email">
+                            <input type="text" class="form-control mt-1 mb-1" placeholder="Email" v-model="conditionFilter.phone">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" placeholder="Số điện thoại">
+                            <input type="text" class="form-control mt-1 mb-1" placeholder="Số điện thoại" v-model="conditionFilter.email">
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-danger me-1">Tìm kiếm</button> <button
-                                class="btn btn-secondary">Reset</button>
+                            <button class="btn btn-danger mt-1  me-1" v-on:click="filter()">Tìm kiếm</button>
+                            <button class="btn btn-secondary mt-1" v-on:click="resetFilter()">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,15 @@
         data() {
             return {
                 customerList: [],
+                customerListBk: [],
                 countCustomers: 0,
+                conditionFilter: {
+                    customerId: "",
+                    fullName: "",
+                    companyName: "",
+                    phone: "",
+                    email: ""
+                },
                 hearderCustomer: [
                     { text: "Mã KH", value: "customerId", sortable: true },
                     { text: "Tên Khách hàng", value: "fullName", sortable: true },
@@ -149,6 +157,7 @@
                         newCustomer.setData(element);
                         this.customerList.push(newCustomer.getData());
                     });
+                    this.customerListBk = this.customerList;
                     this.countCustomers = this.customerList.length;
                 })
                 .catch((e) => {
@@ -156,6 +165,27 @@
                 });
         },
         watch: {
+        },
+        methods: {
+            filter: function () {
+                this.customerList = this.customerList.filter(
+                    e => e.customerId.includes(this.conditionFilter.customerId == '' ? e.customerId : this.conditionFilter.customerId)
+                        && e.fullName.includes(this.conditionFilter.fullName == '' ? e.fullName : this.conditionFilter.fullName)
+                        && e.companyName.includes(this.conditionFilter.companyName == '' ? e.companyName : this.conditionFilter.companyName)
+                        && e.phone.includes(this.conditionFilter.phone == '' ? e.phone : this.conditionFilter.phone)
+                        && e.email.includes(this.conditionFilter.email == '' ? e.email : this.conditionFilter.email)
+                );
+            },
+            resetFilter: function() {
+                this.conditionFilter = {
+                    customerId: "",
+                    fullName: "",
+                    companyName: "",
+                    phone: "",
+                    email: ""
+                }
+                this.customerList = this.customerListBk;
+            }
         },
     };
 </script>
