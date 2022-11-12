@@ -44,43 +44,47 @@
 </template>
 
 <style scoped>
-a {
-  text-decoration: none;
-}
+  * {
+    overflow: hidden;
+  }
 
-a:hover .box-data {
-  color: #ffffff;
-}
+  a {
+    text-decoration: none;
+  }
 
-.box-data {
-  /* width: 100%; */
-  margin: auto;
-  height: 150px;
-  color: black;
-  padding-top: 10px;
-  text-align: center;
-}
+  a:hover .box-data {
+    color: #ffffff;
+  }
 
-.box-data1 {
-  background-color: #ff7675;
-}
+  .box-data {
+    /* width: 100%; */
+    margin: auto;
+    height: 150px;
+    color: black;
+    padding-top: 10px;
+    text-align: center;
+  }
 
-.box-data2 {
-  background-color: #74b9ff;
-}
+  .box-data1 {
+    background-color: #ff7675;
+  }
 
-.box-data3 {
-  background-color: #2ecc71;
-}
+  .box-data2 {
+    background-color: #74b9ff;
+  }
 
-.box-data4 {
-  background-color: #95afc0;
-}
+  .box-data3 {
+    background-color: #2ecc71;
+  }
 
-.box-data i {
-  position: relative;
-  font-size: 30px;
-  color: #ffff;
-  padding-bottom: 10px;
-}
+  .box-data4 {
+    background-color: #95afc0;
+  }
+
+  .box-data i {
+    position: relative;
+    font-size: 30px;
+    color: #ffff;
+    padding-bottom: 10px;
+  }
 </style>

@@ -35,7 +35,7 @@
 <script src="@/components/admin/js/admin-management" />
 
 <style scoped>
-  * {
-    overflow: hidden;
+  *{
+    overflow-x: hidden;
   }
 </style>

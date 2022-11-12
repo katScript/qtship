@@ -15,14 +15,15 @@ import {commonFunction} from '@/scripts/ulti';
 
 export default {
     mounted() {
-        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
-            role = commonFunction.getCookies(commonFunction.userCookies.roles);
+        // let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+        //     role = commonFunction.getCookies(commonFunction.userCookies.roles);
 
-        if (auth == null || role == null) {
-            commonFunction.redirect('/login-page');
-        } else if (auth) {
-            commonFunction.redirect("/" + role + "/management");
-        }
+        // if (auth == null || role == null) {
+        //     commonFunction.redirect('/login-page');
+        // } else if (auth) {
+        //     commonFunction.redirect("/" + role + "/management");
+        // }
+        commonFunction.redirect("/admin/management");
     }
 };
 </script>

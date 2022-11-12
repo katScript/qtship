@@ -1,23 +1,28 @@
 <template>
     <div id="chart" class="me-4">
         <div class="toolbar">
-            <button id="one_month" @click="updateData('one_month')" :class="{active: selection==='one_month'}" class="btn btn-outline-primary me-2">
+            <button id="one_month" @click="updateData('one_month')" :class="{active: selection==='one_month'}"
+                class="btn btn-outline-primary me-2">
                 1 Tháng
             </button>
 
-            <button id="six_months" @click="updateData('six_months')" :class="{active: selection==='six_months'}" class="btn btn-outline-primary me-2">
+            <button id="six_months" @click="updateData('six_months')" :class="{active: selection==='six_months'}"
+                class="btn btn-outline-primary me-2">
                 6 Tháng
             </button>
 
-            <button id="one_year" @click="updateData('one_year')" :class="{active: selection==='one_year'}" class="btn btn-outline-primary me-2">
+            <button id="one_year" @click="updateData('one_year')" :class="{active: selection==='one_year'}"
+                class="btn btn-outline-primary me-2">
                 1 Năm
             </button>
 
-            <button id="ytd" @click="updateData('ytd')" :class="{active: selection==='ytd'}" class="btn btn-outline-primary me-2">
+            <button id="ytd" @click="updateData('ytd')" :class="{active: selection==='ytd'}"
+                class="btn btn-outline-primary me-2">
                 Đầu năm đến giờ
             </button>
 
-            <button id="all" @click="updateData('all')" :class="{active: selection==='all'}" class="btn btn-outline-primary">
+            <button id="all" @click="updateData('all')" :class="{active: selection==='all'}"
+                class="btn btn-outline-primary">
                 Tất cả
             </button>
         </div>
@@ -322,10 +327,10 @@
                     },
                     annotations: {
                         yaxis: [{
-                            
+
                         }],
                         xaxis: [{
-                            
+
                         }]
                     },
                     dataLabels: {
@@ -400,3 +405,9 @@
         }
     }
 </script>
+
+<style scoped>
+    * {
+        overflow: hidden;
+    }
+</style>
