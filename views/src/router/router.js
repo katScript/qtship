@@ -1,6 +1,8 @@
 import {createWebHistory, createRouter} from 'vue-router'
 import LoginComponent from '@/components/user/LoginComponent'
 import RegisterPage from '@/components/user/RegisterComponent.vue'
+import ForgetPasswordComponent from '@/components/user/ForgetPasswordComponent.vue'
+import ResetPasswordComponent from '@/components/user/ResetPasswordComponent.vue'
 import ManagementClientPage from '@/components/customer/ManagementClient.vue'
 import OrdersClient from '@/components/order/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
@@ -16,6 +18,8 @@ import ManagementOrderAdmin from '@/components/admin/order/ManagementOrderAdmin.
 import CreateOrderAdmin from '@/components/admin/create-order/CreateOrderAdmin.vue'
 import ManagementCustomerAdmin from '@/components/admin/customer/ManagementCustomerAdmin.vue'
 
+
+
 const history = createWebHistory();
 const router = createRouter({
     history,
@@ -23,6 +27,8 @@ const router = createRouter({
         {path: '/', component: IndexPage},
         {path: '/login-page', component: LoginComponent},
         {path: '/register-page', component: RegisterPage},
+        {path: '/forget-password', component: ForgetPasswordComponent},
+        {path: '/reset-password/:token', component: ResetPasswordComponent},
         {path: '/customer/management', component: ManagementClientPage},
         {path: '/customer/orders', component: OrdersClient},
         {path: '/customer/orders/save/:id?', component: SaveOrderClient},

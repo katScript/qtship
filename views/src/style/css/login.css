@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 .login-page .branch-logo {
   padding-top: 30vh;
 }
