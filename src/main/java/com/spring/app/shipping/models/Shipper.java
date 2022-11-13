@@ -35,7 +35,7 @@ public class Shipper {
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
     @OneToMany(mappedBy = "shipper",
-            fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;
 
     public Shipper() {

@@ -116,6 +116,7 @@ public class OrderService {
 
         _order.getOrderItemSet().clear();
         _order.getOrderItemSet().addAll(orderItems);
+        this.processOrderWeight(_order);
         priceCalculate.processSubtotal(_order);
 
         OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
@@ -253,7 +254,8 @@ public class OrderService {
                 order.getCoupon(),
                 warehouseService.processWarehouseDataResponse(order.getWarehouse()),
                 order.getReturnCode(),
-                orderItemResponses
+                orderItemResponses,
+                order.getTotalWeight()
         );
 
         orderData.setCreatedAt(
@@ -264,5 +266,17 @@ public class OrderService {
         );
 
         return orderData;
+    }
+
+    private void processOrderWeight(Order order) {
+        Double weight = 0.0;
+
+        for (OrderItem item: order.getOrderItemSet()) {
+            for (Package p: item.getPackages()) {
+                weight += p.getProduct().getWeight();
+            }
+        }
+
+        order.setTotalWeight(weight);
     }
 }

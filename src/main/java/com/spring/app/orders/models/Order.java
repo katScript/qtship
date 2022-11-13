@@ -25,6 +25,8 @@ public class Order {
     private Boolean notification;
     @Column(name = "subtotal")
     private Double subtotal;
+    @Column(name = "total_weight")
+    private Double totalWeight;
     @Column(name = "sender_name")
     private String senderName;
     @Column(name = "sender_phone")
@@ -250,5 +252,13 @@ public class Order {
     public Order setReturnCode(String returnCode) {
         this.returnCode = returnCode;
         return this;
+    }
+
+    public Double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(Double totalWeight) {
+        this.totalWeight = totalWeight;
     }
 }
