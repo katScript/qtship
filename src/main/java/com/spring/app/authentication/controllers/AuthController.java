@@ -68,16 +68,7 @@ public class AuthController {
         if (user == null)
             return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists!"));
 
-        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user),
-                url = "site.dcodetest.com/customer/reset_password/" + jwt;
-
-        Mail mail = new Mail();
-        mail.setMailFrom("qt.shop@gmail.com");
-        mail.setMailTo("katforscript@gmail.com");
-        mail.setMailSubject("Reset password");
-        mail.setMailContent("<h1> Reset password link </h1> <br> <a href=\"" + url + "\">Reset Link</a>");
-
-        this.mailServiceImp.sendEmail(mail);
+        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
 
         return ResponseEntity.ok(new ForgotPasswordResponse(jwt,
                 user.getUsername(),
