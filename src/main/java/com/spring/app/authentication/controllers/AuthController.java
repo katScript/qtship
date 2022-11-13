@@ -11,6 +11,8 @@ import com.spring.app.authentication.payload.request.LoginRequest;
 import com.spring.app.authentication.payload.response.JwtResponse;
 import com.spring.app.authentication.payload.request.ForgotPasswordRequest;
 import com.spring.app.customers.payload.response.ForgotPasswordResponse;
+import com.spring.app.email.models.Mail;
+import com.spring.app.email.service.MailServiceImp;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
@@ -21,10 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import com.spring.app.authentication.models.repository.RoleRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController("UserAuthController")
@@ -32,18 +31,12 @@ import com.spring.app.authentication.models.repository.RoleRepository;
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
-
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    MailServiceImp mailServiceImp;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -75,7 +68,16 @@ public class AuthController {
         if (user == null)
             return ResponseEntity.badRequest().body(new MessageResponse("User account is not exists!"));
 
-        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user);
+        String jwt = jwtUtils.generateJwtTokenWithoutAuth(user),
+                url = "site.dcodetest.com/customer/reset_password/" + jwt;
+
+        Mail mail = new Mail();
+        mail.setMailFrom("qt.shop@gmail.com");
+        mail.setMailTo("katforscript@gmail.com");
+        mail.setMailSubject("Reset password");
+        mail.setMailContent("<h1> Reset password link </h1> <br> <a href=\"" + url + "\">Reset Link</a>");
+
+        this.mailServiceImp.sendEmail(mail);
 
         return ResponseEntity.ok(new ForgotPasswordResponse(jwt,
                 user.getUsername(),

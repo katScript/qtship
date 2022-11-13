@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class DateFormatHelper {
     public static String FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static String START_DATE = "2020-01-01 00:00:00";
     public static String dateToString(Date date) {
         if (date == null)
             return null;

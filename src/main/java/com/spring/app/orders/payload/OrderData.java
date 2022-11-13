@@ -13,6 +13,7 @@ public class OrderData {
     private String feedback;
     private String note;
     private Double subtotal;
+    private Double totalWeight;
     private String senderName;
     private String senderPhone;
     private String senderAddress;
@@ -48,7 +49,8 @@ public class OrderData {
         String coupon,
         WarehouseData warehouse,
         String returnCode,
-        List<OrderItemData> orderItem
+        List<OrderItemData> orderItem,
+        Double totalWeight
     ) {
         this.id = id;
         this.customerId = customerId;
@@ -69,6 +71,7 @@ public class OrderData {
         this.warehouse = warehouse;
         this.returnCode = returnCode;
         this.orderItem = orderItem;
+        this.totalWeight = totalWeight;
     }
 
     public Long getId() {
@@ -237,5 +240,13 @@ public class OrderData {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(Double totalWeight) {
+        this.totalWeight = totalWeight;
     }
 }

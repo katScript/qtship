@@ -1,7 +1,7 @@
 package com.spring.app.orders.controllers;
 
+import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.OrderStatus;
-import com.spring.app.orders.models.repository.OrderItemRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
 import com.spring.app.orders.payload.OrderStatusData;
@@ -12,13 +12,14 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
+import com.spring.app.shipping.models.Shipper;
+import com.spring.app.shipping.models.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,11 +31,11 @@ public class OrderController {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    OrderItemRepository orderItemRepository;
-    @Autowired
     OrderStatusRepository orderStatusRepository;
     @Autowired
     OrderService orderService;
+    @Autowired
+    ShipperRepository shipperRepository;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderData order) {
@@ -86,8 +87,35 @@ public class OrderController {
 
         if (customer != null) {
             List<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, status,
-                    from != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(from) : customer.getCreatedAt(),
-                    to != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(to) : new Date());
+                    from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    to != null ? DateFormatHelper.stringToDate(to) : new Date());
+
+            for (Order o : orders) {
+                listOrder.add(this.orderService.getOrderDetail(o));
+            }
+
+            return ResponseEntity.ok(listOrder);
+        }
+
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
+    }
+
+    @GetMapping("/all/shipper/{id}")
+    public ResponseEntity<?> getOrderByShipperId(
+        @Valid @PathVariable Long id,
+        @RequestParam(value = "status", required = false) String status,
+        @RequestParam(value = "from", required = false) String from,
+        @RequestParam(value = "to", required = false) String to
+    ) throws ParseException {
+        Shipper shipper = shipperRepository.findById(id)
+                .orElse(null);
+
+        List<OrderData> listOrder = new ArrayList<>();
+
+        if (shipper != null) {
+            List<Order> orders = orderRepository.findByShipperAndStatusAndCreatedAtBetween(shipper, status,
+                    from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    to != null ? DateFormatHelper.stringToDate(to) : new Date());
 
             for (Order o : orders) {
                 listOrder.add(this.orderService.getOrderDetail(o));
