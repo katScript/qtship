@@ -170,7 +170,8 @@
                   <table class="w-100" v-if="item.status != 'CANCEL'">
                     <tr>
                       <td>
-                        <a :href="'/client/orders/detail/' + idRequest +'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                        <!-- + idRequest +'/' add to url detail whent api updated -->
+                        <a :href="'/client/orders/detail/' +item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
                           title="Chi tiết đơn hàng"><i
                             class="fa-solid fa-circle-info"></i></a>
                       </td>

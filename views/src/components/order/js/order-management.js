@@ -7,6 +7,7 @@ import ActionLoading from "@/components/common/ActionLoading.vue";
 import PopupNotify from "@/components/common/PopupNotify.vue";
 import BillOrder from "@/components/order/OrderDetail.vue";
 import OrderData from "@/components/models/order/order-data";
+import CustomerData from "@/components/models/customer/customer-data";
 
 import moment from "moment";
 import { useCookies } from "vue3-cookies";
@@ -26,10 +27,12 @@ export default {
     setup() {
         const { cookies } = useCookies();
         const orderModel = new OrderData();
+        const customerModel = new CustomerData();
 
         return {
             cookies,
-            orderModel
+            orderModel,
+            customerModel
         };
     },
 
@@ -83,7 +86,6 @@ export default {
     mounted() {
         let auth = commonFunction.getCookies(commonFunction.userCookies.username),
             role = commonFunction.getCookies(commonFunction.userCookies.roles),
-            id = commonFunction.getCookies(commonFunction.userCookies.id),
             token = commonFunction.getCookies(commonFunction.userCookies.token);
 
         if (auth == null && role !== "customer") {
@@ -94,7 +96,13 @@ export default {
             headers: { Authorization: "Bearer " + token },
         };
         
-        this.idRequest = id;
+        this.customerModel.setData(
+            JSON.parse(commonFunction.getCustomerStorage())
+        );
+
+        let customerId = this.customerModel.getData().id;
+
+        this.idRequest = customerId;
 
         axios
             .get(
