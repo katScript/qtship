@@ -25,13 +25,13 @@
                                id="input-register-email-shop" placeholder="Địa chỉ email">
                     </div>
                     <div class="col-md-4">
-                        <small class="text-danger">{{ customerData.data.password }}</small>
+                        <small class="text-danger">{{ customerData.errors.password }}</small>
                         <input v-model="customerData.data.password" type="password"
                                class="form-control input-password-register"
                                id="input-register-password-shop" placeholder="Mật khẩu" style="margin-bottom: 28px;">
                     </div>
                     <div class="col-md-4">
-                        <small class="text-danger">{{ customerData.data.confirmPassword }}</small>
+                        <small class="text-danger">{{ customerData.errors.confirmPassword }}</small>
                         <input v-model="customerData.data.confirmPassword" type="password"
                                class="form-control input-confirm-password-register"
                                id="input-register-confirm-password-shop" placeholder="Nhập lại mật khẩu"
@@ -39,8 +39,8 @@
                     </div>
                     <!-- line 3 -->
                     <div class="col-md-12">
-                        <LocationPicker @updateData="updateAddress"
-                                        :dataValidate="shippingData.errors"
+                        <LocationPicker @updateAddress="updateAddress"
+                                        :dataValidate="customerData.errors.customerAddress"
                                         ref="locationPicker"
                         />
                     </div>

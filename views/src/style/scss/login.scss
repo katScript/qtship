@@ -1,4 +1,4 @@
-// Complie scss to css :       sass src/style/scss/main.scss src/style/css/main.css
+// Complie scss to css :       sass src/style/scss/login.scss src/style/css/login.css
 // @import 'name file scss (not contains .scss)'
 $color_red_qt: #BF1E2D;
 $color_red_qt_hover: #ff0019;
@@ -7,6 +7,10 @@ $color_link_blue: #0097E6;
 * {
     margin: 0;
     padding: 0;
+}
+
+a {
+    text-decoration: none !important;
 }
 
 //authenication

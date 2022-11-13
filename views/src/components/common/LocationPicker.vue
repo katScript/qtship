@@ -1,5 +1,5 @@
 <template>
-    <div class="row location-picker w-100">
+    <div class="row location-picker">
         <div class="col-md-4">
             <small class="text-danger">{{ dataValidate.provinceId }}</small>
             <v-select v-model="province" :options="provinceList" placeholder="Chọn Tỉnh/Thành phố"
@@ -17,7 +17,7 @@
                       class="form-control-location"></v-select>
         </div>
 
-        <div class="col-md-12 p-0">
+        <div class="col-md-12">
             <br/>
             <small class="text-danger">{{ dataValidate.street }}</small>
             <input type="text" class="form-control input-form-register" id="input-address-detail-shop"
@@ -68,7 +68,7 @@ export default {
     watch: {
         province: {
             handler: function () {
-                this.$emit('updateData', this.province, 'PROVINCE');
+                this.$emit('updateAddress', this.province, 'PROVINCE');
 
                 let districtList = [],
                     district = {};
@@ -94,7 +94,7 @@ export default {
         },
         district: {
             handler: function () {
-                this.$emit('updateData', this.district, 'DISTRICT');
+                this.$emit('updateAddress', this.district, 'DISTRICT');
 
                 let wardList = [],
                     ward = {};
@@ -120,12 +120,12 @@ export default {
         },
         ward: {
             handler: function () {
-                this.$emit('updateData', this.ward, 'WARD');
+                this.$emit('updateAddress', this.ward, 'WARD');
             }
         },
         street: {
             handler: function () {
-                this.$emit('updateData', this.street, 'STREET');
+                this.$emit('updateAddress', this.street, 'STREET');
             }
         }
     },
@@ -159,5 +159,9 @@ export default {
     .form-control-location {
         margin-bottom: 28px;
     }
+}
+
+.form-control{
+    /* border: none; */
 }
 </style>

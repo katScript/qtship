@@ -77,19 +77,19 @@ export default {
         updateAddress(data, type) {
             switch (type) {
                 case "PROVINCE":
-                    this.shippingData.data.provinceId = data?.code;
-                    this.shippingData.data.province = data?.label;
+                    this.customerData.data.customerAddress.provinceId = data?.code;
+                    this.customerData.data.customerAddress.province = data?.label;
                     break;
                 case "DISTRICT":
-                    this.shippingData.data.districtId = data?.code;
-                    this.shippingData.data.district = data?.label;
+                    this.customerData.data.customerAddress.districtId = data?.code;
+                    this.customerData.data.customerAddress.district = data?.label;
                     break;
                 case "WARD":
-                    this.shippingData.data.wardId = data?.code;
-                    this.shippingData.data.ward = data?.label;
+                    this.customerData.data.customerAddress.wardId = data?.code;
+                    this.customerData.data.customerAddress.ward = data?.label;
                     break;
                 case "STREET":
-                    this.shippingData.data.street = data;
+                    this.customerData.data.customerAddress.street = data;
                     break;
                 default:
                     break;
@@ -214,8 +214,6 @@ export default {
                 this.customerData.errors.isAccepted = "Vui lòng đồng ý với Chính sách bảo mật thông tin!";
                 isValid = false;
             }
-
-            isValid = true;
 
             return isValid;
         }
