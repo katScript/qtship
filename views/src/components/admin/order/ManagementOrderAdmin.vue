@@ -2,7 +2,7 @@
     <div class="admin-management">
         <div class="container-fluid d-flex m-0 p-0">
             <NavbarLeftAdmin />
-            <div class="content-management w-100">
+            <div class="content-management w-100 me-2">
                 <div class="orders-filter-form">
                     <div class="row">
                         <div class="col-12">
@@ -17,8 +17,7 @@
                         </div>
                         <div class="col-12 col-sm-6 col-md-3 form-group pt-2">
                             <input v-model="filterOderCondition.phoneReceiver" type="text"
-                                class="form-control form-search-control" id=""
-                                placeholder="Số điện thoại người nhận" />
+                                class="form-control form-search-control" id="" placeholder="Số điện thoại người nhận" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-2 form-group pt-2">
                             <select class="form-select" aria-label="Default select example"
@@ -42,8 +41,7 @@
                             <table class="w-100">
                                 <tr>
                                     <td>
-                                        <select class="form-select" id="select-box-filter-time"
-                                            v-model="filterTime">
+                                        <select class="form-select" id="select-box-filter-time" v-model="filterTime">
                                             <option value="" hidden>Thời gian tạo đơn</option>
                                             <option value="timeCOToday">Hôm nay</option>
                                             <option value="timeCO1week">1 tuần</option>
@@ -128,8 +126,7 @@
                             <button class="btn btn-danger me-2" v-on:click="filterOrder">
                                 Tìm kiếm đơn hàng
                             </button>
-                            <button class="btn btn-secondary" v-on:click="resetFormSearch()"
-                                style="margin: 0px -5px">
+                            <button class="btn btn-secondary" v-on:click="resetFormSearch()" style="margin: 0px -5px">
                                 Bỏ lọc
                             </button>
                         </div>
@@ -141,7 +138,7 @@
                         Số đơn hàng:
                         <span class="count-orders-filtered">{{ countOrder }}</span> ĐH
                     </h5>
-                    <easy-data-table :headers="headersOrder" :items="listOrderByCustomer"
+                    <easy-data-table :headers="headersOrder" :items="orderList"
                         table-class-name="easy-data-table-customize">
                         <!-- #item-btn-function="item"  item: valua of row-->
                         <template #item-name-receiver="item">
@@ -150,35 +147,8 @@
                         <template #item-phone-receiver="item">
                             {{ item.orderItem[0].shippingAddress.phone }}
                         </template>
-                        <template #item-btn-function-order="item">
-                            <table class="w-100" v-if="item.status != 'CANCEL'">
-                                <tr>
-                                    <td>
-                                        <a :href="'/client/orders/detail/' + idRequest +'/'+item.id"
-                                            class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" title="Chi tiết đơn hàng"><i
-                                                class="fa-solid fa-circle-info"></i></a>
-                                    </td>
-                                    <td>
-                                        <a :href="'/client/orders/create#_' + item.id"
-                                            class="btn btn-success a-function a-detail" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" title="Cập nhật đơn hàng"><i
-                                                class="fa-solid fa-file-pen"></i></a>
-                                    </td>
-                                    <td>
-                                        <a href="" class="btn btn-dark a-function a-detail"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Lịch sử cập nhật"><i
-                                                class="fa-solid fa-clock-rotate-left"></i></a>
-                                    </td>
-                                    <td>
-                                        <a v-on:click="cancelOrder(item)"
-                                            class="btn btn-danger a-function a-detail" title="Hủy đơn hàng">
-                                            <i class="fa-solid fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <span class="bg-danger" v-if="item.status == 'CANCEL'" disabled>CANCLED</span>
+                        <template #item-btn-function-order="">
+
                         </template>
                     </easy-data-table>
                 </div>
@@ -208,5 +178,10 @@
     table tr td a i {
         font-size: 18px;
         padding: 2px 2px 2px 2px;
+    }
+
+    * {
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 </style>

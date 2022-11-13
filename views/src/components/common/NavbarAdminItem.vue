@@ -65,11 +65,10 @@
 
       <!-- group 6-->
       <a class="list-group-item list-group-item-action group-title" v-on:click="isShowItemNav6 = !isShowItemNav6">
-        Danh sách các loại phí
+        Các loại phí và mã KM
       </a>
       <div class="list-group" :class="isShowItemNav6 ? 'show' : 'hide'">
-        <a href="#" class="list-group-item list-group-item-action">Tất cả</a>
-        <a href="#" class="list-group-item list-group-item-action">Tạo mã khuyến mại</a>
+        <a href="/admin/management/fee-code" class="list-group-item list-group-item-action">Tất cả</a>
       </div>
 
       <!-- group 4-->

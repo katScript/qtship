@@ -170,12 +170,12 @@
                   <table class="w-100" v-if="item.status != 'CANCEL'">
                     <tr>
                       <td>
-                        <a :href="'/client/orders/detail/' + idRequest +'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                        <a :href="'/customer/orders/detail/' + idRequest +'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
                           title="Chi tiết đơn hàng"><i
                             class="fa-solid fa-circle-info"></i></a>
                       </td>
                       <td>
-                        <a :href="'/client/orders/create#_' + item.id" class="btn btn-success a-function a-detail"
+                        <a :href="'/customer/orders/create/' + item.id" class="btn btn-success a-function a-detail"
                           data-bs-toggle="tooltip" data-bs-placement="top" title="Cập nhật đơn hàng"><i
                             class="fa-solid fa-file-pen"></i></a>
                       </td>

@@ -15,6 +15,7 @@ import ManagementAdmin from '@/components/admin/ManagementAdmin.vue'
 import ManagementOrderAdmin from '@/components/admin/order/ManagementOrderAdmin.vue'
 import CreateOrderAdmin from '@/components/admin/create-order/CreateOrderAdmin.vue'
 import ManagementCustomerAdmin from '@/components/admin/customer/ManagementCustomerAdmin.vue'
+import ManagementFeeAdmin from '@/components/admin/fee/ManagementFeeAdmin.vue'
 
 const history = createWebHistory();
 const router = createRouter({
@@ -36,6 +37,8 @@ const router = createRouter({
         {path: '/admin/management/order/:status', component: ManagementOrderAdmin},
         {path: '/admin/management/create-order', component: CreateOrderAdmin},
         {path: '/admin/management/customer', component: ManagementCustomerAdmin},
+        {path: '/admin/management/fee-code', component: ManagementFeeAdmin},
+        
     ]
 });
 
