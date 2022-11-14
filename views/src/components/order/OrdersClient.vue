@@ -170,7 +170,7 @@
                     <tr>
                       <td>
                         <!-- + idRequest +'/' add to url detail whent api updated -->
-                        <a :href="'/client/orders/detail/' +item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                        <a :href="'/client/orders/detail/'+idRequest+'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
                           title="Chi tiết đơn hàng"><i
                             class="fa-solid fa-circle-info"></i></a>
                       </td>
@@ -191,7 +191,7 @@
                       </td>
                     </tr>
                   </table>
-                  <span class="bg-danger" v-if="item.status == 'CANCEL'" disabled>CANCLED</span>
+                  <span class="text-danger" v-if="item.status == 'CANCEL'" disabled>CANCLED</span>
                 </template>
               </easy-data-table>
             </div>
