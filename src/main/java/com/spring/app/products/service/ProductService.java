@@ -80,7 +80,7 @@ public class ProductService {
     public String processUploadProductImage(MultipartFile file, String customerCode, Product product) {
         Resource resource = null;
 
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             storageService.setPath(getImageScope(customerCode));
             resource = storageService.save(file, product.getSku());
         }
