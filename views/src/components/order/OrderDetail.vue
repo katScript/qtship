@@ -71,7 +71,7 @@
                     </p>
                     <br />
                   </div>
-                  <button v-if="orderData.status == 'WAITINGCONFIRM'" class="btn btn-primary" v-on:click="isShowBill = true">Xuất hóa đơn</button>
+                  <button v-if="orderData.status == 'WAITING_CONFIRM'" class="btn btn-primary" v-on:click="isShowBill = true">Xuất hóa đơn</button>
                 </div>
               </div>
             </div>

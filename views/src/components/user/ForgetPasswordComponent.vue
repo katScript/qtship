@@ -77,13 +77,13 @@
                         { username: this.username }
                     ).then((response) => {
                         this.isLoading = false;
-                        this.token = response.data.token;
+                        this.token = response.data.accessToken;
                         //send maill
                         this.isLoading = true;
                         axios.post(commonFunction.DOMAIN_URL + "v1/email/auth/customer/reset",
                             {
                                 token: this.token,
-                                url: "http://localhost:8080/reset-password",
+                                url: "http://localhost:8080/reset-password/",
                                 email: this.username
                             }
                         ).then((response) => {

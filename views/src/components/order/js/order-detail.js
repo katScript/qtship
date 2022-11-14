@@ -56,8 +56,8 @@ export default {
         }
 
         axios.get(
-            commonFunction.DOMAIN_URL + "v1/order/detail/"
-            //  + id + "/" 
+            commonFunction.DOMAIN_URL + "v1/order/customer/"
+                + this.$route.params.customerId + '/detail/'
              + this.$route.params.orderId,
              commonFunction.configApi()
         )
