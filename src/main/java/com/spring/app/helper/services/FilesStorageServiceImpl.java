@@ -49,9 +49,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     public Path getRoot() {
         if (this.path != null)
-            return Paths.get(basePath + "/views/src/images/product/" + path);
+            return Paths.get(basePath + "/views/src/images/" + path);
 
-        return Paths.get(basePath + "/views/src/images/product");
+        return Paths.get(basePath + "/views/src/images");
     }
 
     @Override
@@ -145,12 +145,5 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         return Files.readAllBytes(new File(
                 this.getRoot().resolve(fileName).toString()
         ).toPath());
-    }
-
-    public String getImageUrl(String path) {
-        return ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .build().toUriString()
-                + "/image/product/" + path;
     }
 }

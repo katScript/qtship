@@ -9,21 +9,30 @@ import com.spring.app.customers.models.repository.ForControlRepository;
 import com.spring.app.customers.payload.AddressData;
 import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.ForControlData;
+import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
 import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.services.FilesStorageServiceImpl;
+import com.spring.app.products.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class CustomerService {
+    public static final String SCOPE = "customer";
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
     private ForControlRepository forControlRepository;
+    @Autowired
+    FilesStorageServiceImpl storageService;
 
     public Customer processCustomerData(CustomerData data) {
         Customer customer;
@@ -41,8 +50,6 @@ public class CustomerService {
                 .setPhone(data.getPhone())
                 .setCompanyName(data.getCompanyName())
                 .setEmail(data.getEmail())
-                .setCidBack(data.getCidBack())
-                .setCidFront(data.getCidFront())
                 .setSubscription(data.getSubscription());
 
         return customer;
@@ -159,4 +166,30 @@ public class CustomerService {
         return res;
     }
 
+    public void saveCustomerCid(UpdateCidRequest cid) {
+        Customer customer = customerRepository.findById(cid.getId()).orElseThrow(() -> new RuntimeException("Customer not exists!"));
+
+        customer.setCidFront(
+                processUploadCustomerImage(cid.getCidFront(), customer.getCustomerId(), "cidFront", customer.getCidFront())
+        ).setCidBack(
+                processUploadCustomerImage(cid.getCidBack(), customer.getCustomerId(), "cidBack", customer.getCidBack())
+        );
+
+        customerRepository.save(customer);
+    }
+
+    public String processUploadCustomerImage(MultipartFile file, String customerCode, String name, String current) {
+        Resource resource = null;
+
+        if (!file.isEmpty()) {
+            storageService.setPath(getImageScope(customerCode));
+            resource = storageService.save(file, name);
+        }
+
+        return resource != null ? resource.getFilename() : current;
+    }
+
+    public String getImageScope(String path) {
+        return SCOPE + File.separator + path;
+    }
 }

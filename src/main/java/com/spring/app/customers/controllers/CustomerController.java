@@ -2,6 +2,7 @@ package com.spring.app.customers.controllers;
 
 import com.spring.app.authentication.models.User;
 import com.spring.app.customers.payload.CustomerData;
+import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
 import com.spring.app.customers.service.CustomerService;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
@@ -10,6 +11,7 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.payload.request.customer.SaveAddressRequest;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +80,18 @@ public class CustomerController {
         customerRepository.save(customer);
 
         return ResponseEntity.ok(new MessageResponse("Save success!"));
+    }
+
+    @PostMapping(value ="/cid/save",
+            consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> saveCustomerCid(@Valid UpdateCidRequest updateCidRequest) {
+        try {
+            customerService.saveCustomerCid(updateCidRequest);
+            return ResponseEntity.ok(new MessageResponse("Save customer identity success!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping("/address/save")
