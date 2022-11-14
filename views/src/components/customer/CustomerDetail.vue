@@ -2,6 +2,9 @@
     <div class="management-client-page">
         <NavbarClient />
         <div class="container-fluid">
+            <div :class="isLoading ? 'show' : 'hide'">
+                <ActionLoading/>
+              </div>
             <div class="row">
                 <div class="col-md-2">
                     <NotficationClient />
@@ -66,12 +69,12 @@
                                 <p>Chứng minh nhân dân</p>
                                 <div class="row">
                                     <div class="col-md-6 form-group" v-if="!customerData.data.cidFront">
-                                        <label for="">Mặt trước</label>
+                                        <label for="">Mặt trước</label> <small class="text-danger">{{msgValidate.cid.front}}</small>
                                         <input type="file" ref="cidFrontImgUpload" class="form-control"
                                             placeholder="CMND mặt trước">
                                     </div>
                                     <div class="col-md-6 form-group" v-if="!customerData.data.cidBack">
-                                        <label for="">Mặt sau</label>
+                                        <label for="">Mặt sau</label> <small class="text-danger">{{msgValidate.cid.back}}</small>
                                         <input type="file" ref="cidBackImgUpload" class="form-control"
                                             placeholder="CMND mặt sau">
                                     </div>
@@ -80,17 +83,22 @@
                                                 bộ phận CSKH. Để được hỗ trợ, gửi mail tới cskh@ghtk.vn hoặc Chat với
                                                 CSKH</i></span>
                                         <label for="">Mặt trước</label>
-                                        <img src="@/images/img-default.jpg" alt="CMND mặt trước">
+                                        <img src="@/images/img-default.jpg" ref="cidFrontImgUpload"
+                                            alt="CMND mặt trước">
                                     </div>
                                     <div class="col-md-6 form-group" v-if="customerData.data.cidBack">
                                         <label for="">Mặt sau</label>
-                                        <img src="@/images/img-default.jpg" alt="CMND mặt sau">
+                                        <img src="@/images/img-default.jpg" ref="cidBackImgUpload" alt="CMND mặt sau">
                                     </div>
+                                    <center v-if="!customerData.data.cidFront || !customerData.data.cidBack">
+                                        <br>
+                                        <button class="btn btn-danger" v-on:click="uploadCID()">Upload</button>
+                                    </center>
                                 </div>
                                 <br>
                                 <br>
                             </div>
-
+                            <hr>
                             <div class="d-flex justify-content-center">
                                 <button class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Lưu thông
                                     tin</button>
@@ -115,6 +123,7 @@
     import FooterClient from "@/components/common/FooterClient.vue";
     import ToolbarRight from "@/components/common/ToolbarRight.vue";
     import NotficationClient from "@/components/common/NotficationClient.vue";
+    import ActionLoading from "@/components/common/ActionLoading.vue";
     import CustomerData from "@/components/models/customer/customer-data";
 
     import { useCookies } from "vue3-cookies";
@@ -143,19 +152,26 @@
             NavbarClient,
             FooterClient,
             ToolbarRight,
-            NotficationClient
+            NotficationClient,
+            ActionLoading
         },
         data() {
             return {
                 isDisplayFormChangePass: false,
                 customerData: {},
+                idRequest: '',
+                isLoading: false,
                 passwordObj: {
                     oldPassword: "",
                     newPassword: "",
                     confirmNewPassword: ""
                 },
                 msgValidate: {
-                    newPassword: ""
+                    newPassword: "",
+                    cid: {
+                        front: "",
+                        back: ""
+                    }
                 },
                 configRequestApi: {},
             };
@@ -172,7 +188,7 @@
 
             let customerId = this.customerModel.getData().id;
             console.log(customerId);
-
+            this.idRequest = customerId;
             // can update
             if (this.auth == null || this.role !== "customer") {
                 commonFunction.redirect("/");
@@ -185,6 +201,34 @@
         watch: {
         },
         methods: {
+            uploadCID: function () {
+                if (this.validateCid()) {
+                    this.isLoading = true;
+                    let accesstoken_cookies = commonFunction.getCookies(commonFunction.userCookies.token);
+                    let formData = new FormData();
+                    formData.append("id", this.idRequest)
+                    formData.append("cidFront", this.$refs.cidFrontImgUpload.files[0]);
+                    formData.append("cidBack", this.$refs.cidBackImgUpload.files[0]);
+                    axios
+                        .post(commonFunction.DOMAIN_URL + "v1/product/save", formData, {
+                            headers: {
+                                Authorization: "Bearer " + accesstoken_cookies,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .then((response) => {
+                            this.isLoading = false;
+                            alert("SUCCESS: " + response.data.message + " - Upload thành công!");
+                            commonFunction.signOut();
+                        })
+                        .catch((e) => {
+                            this.isLoading = false;
+                            alert("ERROR: " + e.response.data.message + " - Upload không thành công! Vui lòng kiểm tra lại!");
+                            console.log(e);
+                        });
+                }
+
+            },
             changePassword: function () {
                 if (this.passwordObj.newPassword == "" || this.passwordObj.confirmNewPassword == "" || this.passwordObj.oldPassword == "") {
                     this.msgValidate.newPassword = "Vui lòng điền đầy đủ thông tin!"
@@ -213,17 +257,30 @@
                         });
                 }
             },
-            cancelChangePassword: function() {
+            cancelChangePassword: function () {
                 this.passwordObj = {
                     oldPassword: "",
                     newPassword: "",
                     confirmNewPassword: ""
                 },
-                this.msgValidate = {
-                    newPassword: ""
-                },
-                this.isDisplayFormChangePass = false;
-            }
+                    this.msgValidate = {
+                        newPassword: ""
+                    },
+                    this.isDisplayFormChangePass = false;
+            },
+            validateCid: function () {
+                let isValid = true;
+                if (this.$refs.cidBackImgUpload.files[0] == null) {
+                    isValid = false;
+                    this.msgValidate.cid.front = "Vui lòng upload ảnh CMND/CCCD!"
+                }
+
+                if (this.$refs.cidBackImgUpload.files[0] == null) {
+                    isValid = false;
+                    this.msgValidate.cid.back = "Vui lòng upload ảnh CMND/CCCD!"
+                }
+                return isValid;
+            },
         },
     };
 </script>
