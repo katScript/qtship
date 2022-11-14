@@ -38,12 +38,11 @@
                     <option value="" disabled hidden selected>
                       Trạng thái đơn hàng
                     </option>
-                    <option value="WAITINGTAKE">Chờ lấy</option>
-                    <option value="TAKED">Đã lấy</option>
+                    <option value="WAITING_CONFIRM">Chờ xác nhận</option>
                     <option value="DELIVERING">Đang giao</option>
-                    <option value="DELAYDELIVERY">Delay giao hàng</option>
+                    <option value="DELAY">Delay giao hàng</option>
                     <option value="SUCCESS">Giao thành công</option>
-                    <option value="PAYMENT">Đã thanh toán</option>
+                    <option value="PAYMENTED">Đã thanh toán</option>
                     <option value="RETURN">Đơn hoàn</option>
 
                     <!-- <option value="DOISOAT">Đã đối soát</option> -->

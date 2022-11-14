@@ -95,7 +95,7 @@ export default {
         this.configRequestApi = {
             headers: { Authorization: "Bearer " + token },
         };
-        
+
         this.customerModel.setData(
             JSON.parse(commonFunction.getCustomerStorage())
         );
@@ -107,7 +107,7 @@ export default {
         axios
             .get(
                 commonFunction.DOMAIN_URL + "v1/order/all/customer/" + this.idRequest,
-                this.configRequestApi
+                commonFunction.configApi()
             )
             .then((response) => {
                 let respronseData = response.data;
@@ -118,10 +118,41 @@ export default {
                     this.listOrderByCustomerBk.push(newOrderModel.getData());
                 });
                 this.countOrder = this.listOrderByCustomer.length;
+
+                switch (this.$route.params.status.toUpperCase()) {
+                    case commonFunction.typeOrderSuccess:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderSuccess);
+                        break;
+                    case commonFunction.typeOrderDelivery:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelivery);
+                        break;
+                    case commonFunction.typeOrderDelay:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelay);
+                        break;
+                    case commonFunction.typeOrderCancel:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderCancel);
+                        break;
+                    case commonFunction.typeOrderOccurred:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderOccurred);
+                        break;
+                    case commonFunction.typeOrderReturn:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderReturn);
+                        break;
+                    case commonFunction.typeOrderUpdated:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderUpdated);
+                        break;
+                    case commonFunction.typeOrderWaitingConfirm:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderWaitingConfirm);
+                        break;
+                    default:
+                        break;
+                }
             })
             .catch((e) => {
                 console.log(e);
             });
+
+
     },
     watch: {
         filterTime: {

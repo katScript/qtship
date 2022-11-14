@@ -161,10 +161,14 @@ const commonFunction = {
     },
     currentURL: function(){ return location.href;},
     typeOrderWaitingConfirm: "WAITING_CONFIRM",
-    typeOrderSuccess: "DONE",
+    typeOrderSuccess: "SUCCESS",
+    typeOrderPayment: "PAYMENTED",
     typeOrderDelivery: "DELIVERY",
     typeOrderOccurred: "OCCURRED",
     typeOrderCancel: "CANCEL",
+    typeOrderDelay: "DELAY",
+    typeOrderReturn: "RETURN",
+    typeOrderUpdated: "UPDATED",
 }
 
 export { commonFunction };

@@ -30,7 +30,7 @@ const router = createRouter({
         {path: '/forget-password', component: ForgetPasswordComponent},
         {path: '/reset-password/:token', component: ResetPasswordComponent},
         {path: '/customer/management', component: ManagementClientPage},
-        {path: '/customer/orders', component: OrdersClient},
+        {path: '/customer/orders/:status?', component: OrdersClient},
         {path: '/customer/orders/save/:id?', component: SaveOrderClient},
         {path: '/customer/warehouse-product', component: warehouseProductClient},
         {path: '/customer/management-cash', component: ManagementCashClient},
