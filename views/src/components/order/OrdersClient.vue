@@ -38,12 +38,11 @@
                     <option value="" disabled hidden selected>
                       Trạng thái đơn hàng
                     </option>
-                    <option value="WAITINGTAKE">Chờ lấy</option>
-                    <option value="TAKED">Đã lấy</option>
+                    <option value="WAITING_CONFIRM">Chờ xác nhận</option>
                     <option value="DELIVERING">Đang giao</option>
-                    <option value="DELAYDELIVERY">Delay giao hàng</option>
+                    <option value="DELAY">Delay giao hàng</option>
                     <option value="SUCCESS">Giao thành công</option>
-                    <option value="PAYMENT">Đã thanh toán</option>
+                    <option value="PAYMENTED">Đã thanh toán</option>
                     <option value="RETURN">Đơn hoàn</option>
 
                     <!-- <option value="DOISOAT">Đã đối soát</option> -->
@@ -170,7 +169,8 @@
                   <table class="w-100" v-if="item.status != 'CANCEL'">
                     <tr>
                       <td>
-                        <a :href="'/client/orders/detail/' + idRequest +'/'+item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
+                        <!-- + idRequest +'/' add to url detail whent api updated -->
+                        <a :href="'/client/orders/detail/' +item.id" class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip" data-bs-placement="top"
                           title="Chi tiết đơn hàng"><i
                             class="fa-solid fa-circle-info"></i></a>
                       </td>

@@ -7,6 +7,7 @@ import ActionLoading from "@/components/common/ActionLoading.vue";
 import PopupNotify from "@/components/common/PopupNotify.vue";
 import BillOrder from "@/components/order/OrderDetail.vue";
 import OrderData from "@/components/models/order/order-data";
+import CustomerData from "@/components/models/customer/customer-data";
 
 import moment from "moment";
 import { useCookies } from "vue3-cookies";
@@ -26,10 +27,12 @@ export default {
     setup() {
         const { cookies } = useCookies();
         const orderModel = new OrderData();
+        const customerModel = new CustomerData();
 
         return {
             cookies,
-            orderModel
+            orderModel,
+            customerModel
         };
     },
 
@@ -83,7 +86,6 @@ export default {
     mounted() {
         let auth = commonFunction.getCookies(commonFunction.userCookies.username),
             role = commonFunction.getCookies(commonFunction.userCookies.roles),
-            id = commonFunction.getCookies(commonFunction.userCookies.id),
             token = commonFunction.getCookies(commonFunction.userCookies.token);
 
         if (auth == null && role !== "customer") {
@@ -93,13 +95,19 @@ export default {
         this.configRequestApi = {
             headers: { Authorization: "Bearer " + token },
         };
-        
-        this.idRequest = id;
+
+        this.customerModel.setData(
+            JSON.parse(commonFunction.getCustomerStorage())
+        );
+
+        let customerId = this.customerModel.getData().id;
+
+        this.idRequest = customerId;
 
         axios
             .get(
                 commonFunction.DOMAIN_URL + "v1/order/all/customer/" + this.idRequest,
-                this.configRequestApi
+                commonFunction.configApi()
             )
             .then((response) => {
                 let respronseData = response.data;
@@ -110,10 +118,41 @@ export default {
                     this.listOrderByCustomerBk.push(newOrderModel.getData());
                 });
                 this.countOrder = this.listOrderByCustomer.length;
+
+                switch (this.$route.params.status.toUpperCase()) {
+                    case commonFunction.typeOrderSuccess:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderSuccess);
+                        break;
+                    case commonFunction.typeOrderDelivery:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelivery);
+                        break;
+                    case commonFunction.typeOrderDelay:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelay);
+                        break;
+                    case commonFunction.typeOrderCancel:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderCancel);
+                        break;
+                    case commonFunction.typeOrderOccurred:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderOccurred);
+                        break;
+                    case commonFunction.typeOrderReturn:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderReturn);
+                        break;
+                    case commonFunction.typeOrderUpdated:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderUpdated);
+                        break;
+                    case commonFunction.typeOrderWaitingConfirm:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderWaitingConfirm);
+                        break;
+                    default:
+                        break;
+                }
             })
             .catch((e) => {
                 console.log(e);
             });
+
+
     },
     watch: {
         filterTime: {

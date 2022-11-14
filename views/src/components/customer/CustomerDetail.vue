@@ -15,19 +15,19 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Mã người dùng</label>
-                                <p>U0010001</p>
+                                <p>{{ customerData.data.customerId }}</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Họ và tên</label>
-                                <input type="text" class="form-control" id=" " value="Duong Pham Huu">
+                                <input type="text" class="form-control" id=" " v-model="customerData.data.fullName">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Email</label>
-                                <p>duongph@gmail.com</p>
+                                <p>{{customerData.data.email}}</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Số điện thoại</label>
-                                <input type="text" class="form-control" id=" " value="123123123">
+                                <input type="text" class="form-control" id=" " v-model="customerData.data.phone">
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
@@ -42,35 +42,49 @@
                                             khẩu</button>
                                         <button class="btn btn-danger"
                                             :class="isDisplayFormChangePass ? 'show' : 'hide'"
-                                            v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Hủy
+                                            v-on:click="cancelChangePassword">Hủy
                                             bỏ</button>
                                     </div>
                                     <div class="col-9 form-change-passwword"
                                         :class="isDisplayFormChangePass ? 'show' : 'hide'">
+                                        <small class="text-danger">{{msgValidate.newPassword}}</small>
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu cũ"
-                                            style="margin-bottom: 3px;">
+                                            v-model="passwordObj.oldPassword" style="margin-bottom: 3px;">
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu mới"
-                                            value="" style="margin-bottom: 3px">
+                                            v-model="passwordObj.newPassword" style="margin-bottom: 3px">
                                         <input type="password" class="form-control" id=" "
-                                            placeholder="Xác nhận mật khẩu mới" style="margin-bottom: 3px">
-                                        <button class="btn btn-danger">Xác nhận đổi</button>
+                                            v-model="passwordObj.confirmNewPassword" placeholder="Xác nhận mật khẩu mới"
+                                            style="margin-bottom: 3px">
+                                        <button class="btn btn-danger" v-on:click="changePassword">Xác nhận đổi</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <br><br>
-
                                 <h5>Giấy tờ xác minh</h5>
                                 <p>Chứng minh nhân dân</p>
                                 <div class="row">
-                                    <div class="col-md-6 form-group">
+                                    <div class="col-md-6 form-group" v-if="!customerData.data.cidFront">
                                         <label for="">Mặt trước</label>
-                                        <input type="file" class="form-control" id="" placeholder="CMND mặt trước">
+                                        <input type="file" ref="cidFrontImgUpload" class="form-control"
+                                            placeholder="CMND mặt trước">
                                     </div>
-                                    <div class="col-md-6 form-group">
+                                    <div class="col-md-6 form-group" v-if="!customerData.data.cidBack">
                                         <label for="">Mặt sau</label>
-                                        <input type="file" class="form-control" id=" " value="CMND mặt sau">
+                                        <input type="file" ref="cidBackImgUpload" class="form-control"
+                                            placeholder="CMND mặt sau">
+                                    </div>
+                                    <div class="col-md-6 form-group" v-if="customerData.data.cidFront">
+                                        <span> <i>(*) Để thay đổi hình ảnh CMND/CCCD, bạn cần liên hệ
+                                                bộ phận CSKH. Để được hỗ trợ, gửi mail tới cskh@ghtk.vn hoặc Chat với
+                                                CSKH</i></span>
+                                        <label for="">Mặt trước</label>
+                                        <img src="@/images/img-default.jpg" alt="CMND mặt trước">
+                                    </div>
+                                    <div class="col-md-6 form-group" v-if="customerData.data.cidBack">
+                                        <label for="">Mặt sau</label>
+                                        <img src="@/images/img-default.jpg" alt="CMND mặt sau">
                                     </div>
                                 </div>
                                 <br>
@@ -101,11 +115,30 @@
     import FooterClient from "@/components/common/FooterClient.vue";
     import ToolbarRight from "@/components/common/ToolbarRight.vue";
     import NotficationClient from "@/components/common/NotficationClient.vue";
+    import CustomerData from "@/components/models/customer/customer-data";
 
     import { useCookies } from "vue3-cookies";
     import { commonFunction } from '@/scripts/ulti'
+    import axios from "axios";
 
     export default {
+        setup() {
+            let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+                role = commonFunction.getCookies(commonFunction.userCookies.roles),
+                id = commonFunction.getCookies(commonFunction.userCookies.id),
+                token = commonFunction.getCookies(commonFunction.userCookies.token);
+            const { cookies } = useCookies();
+            const customerModel = new CustomerData();
+            return {
+                customerModel,
+                cookies,
+                auth,
+                role,
+                id,
+                token,
+            };
+        },
+
         components: {
             NavbarClient,
             FooterClient,
@@ -114,26 +147,83 @@
         },
         data() {
             return {
-                isDisplayFormChangePass: false
+                isDisplayFormChangePass: false,
+                customerData: {},
+                passwordObj: {
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmNewPassword: ""
+                },
+                msgValidate: {
+                    newPassword: ""
+                },
+                configRequestApi: {},
             };
-        },
-
-        setup() {
-            const { cookies } = useCookies();
-            return { cookies };
         },
 
         // <data, methods...>
 
-        mounted() {
-            let authenication_cookies = this.cookies.get(commonFunction.userCookies.username);
-            if (authenication_cookies == null) {
-                commonFunction.redirect('/');
+        created() {
+            this.customerModel.setData(
+                JSON.parse(commonFunction.getCustomerStorage())
+            );
+
+            this.customerData = this.customerModel;
+
+            let customerId = this.customerModel.getData().id;
+            console.log(customerId);
+
+            // can update
+            if (this.auth == null || this.role !== "customer") {
+                commonFunction.redirect("/");
             }
+
+            this.configRequestApi = {
+                headers: { Authorization: "Bearer " + this.token },
+            };
         },
         watch: {
         },
-        method: {
+        methods: {
+            changePassword: function () {
+                if (this.passwordObj.newPassword == "" || this.passwordObj.confirmNewPassword == "" || this.passwordObj.oldPassword == "") {
+                    this.msgValidate.newPassword = "Vui lòng điền đầy đủ thông tin!"
+                } else if (this.passwordObj.newPassword != this.passwordObj.confirmNewPassword) {
+                    this.msgValidate.newPassword = "Mật khẩu mới và Xác nhận mật khẩu mới không khớp!"
+                } else {
+                    axios
+                        .post(
+                            commonFunction.DOMAIN_URL + "api/auth/reset/password",
+                            {
+                                username: this.customerData.data.userName,
+                                password: this.passwordObj.oldPassword,
+                                newPassword: this.passwordObj.newPassword
+                            },
+                            this.configRequestApi
+                        )
+                        .then((response) => {
+                            this.isLoading = false;
+                            alert("SUCCESS: " + response.data.message + " - Đổi mật khẩu thành công!");
+                            commonFunction.signOut();
+                        })
+                        .catch((e) => {
+                            this.isLoading = false;
+                            this.msgValidate.newPassword = "Đổi mật khẩu không thành công! Vui lòng kiểm tra lại thông tin!"
+                            console.log(e);
+                        });
+                }
+            },
+            cancelChangePassword: function() {
+                this.passwordObj = {
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmNewPassword: ""
+                },
+                this.msgValidate = {
+                    newPassword: ""
+                },
+                this.isDisplayFormChangePass = false;
+            }
         },
     };
 </script>

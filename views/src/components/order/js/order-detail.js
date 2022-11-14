@@ -5,6 +5,7 @@ import ToolbarRight from "@/components/common/ToolbarRight.vue";
 import NotficationClient from "@/components/common/NotficationClient.vue";
 import BillOrder from "@/components/common/BillOrder.vue";
 import OrderData from "@/components/models/order/order-data";
+import CustomerData from "@/components/models/customer/customer-data";
 
 // import moment from "moment";
 import { useCookies } from "vue3-cookies";
@@ -15,10 +16,18 @@ export default {
     setup() {
         const { cookies } = useCookies();
         const orderModel = new OrderData();
+        const customerModel = new CustomerData();
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username),
+            role = commonFunction.getCookies(commonFunction.userCookies.roles),
+            id = commonFunction.getCookies(commonFunction.userCookies.id);
 
         return {
             cookies,
-            orderModel
+            orderModel,
+            customerModel,
+            auth,
+            role,
+            id,
         };
     },
     data() {
@@ -35,25 +44,22 @@ export default {
         BillOrder,
     },
     created() {
-        let auth = commonFunction.getCookies("authenication_cookies"),
-            role = commonFunction.getCookies("authenrole_cookies"),
-            // id = commonFunction.getCookies("idrequest_cookies"),
-            token = commonFunction.getCookies("accesstoken_cookies");
+        this.customerModel.setData(
+            JSON.parse(commonFunction.getCustomerStorage())
+        );
 
-        if (auth == null && role !== "customer") {
+        // let customerId = this.customerModel.getData().id;
+
+        // can update
+        if (this.auth == null || this.role !== "customer") {
             commonFunction.redirect("/");
         }
 
-        this.configRequestApi = {
-            headers: { Authorization: "Bearer " + token },
-        };
-
-        axios
-        .get(
+        axios.get(
             commonFunction.DOMAIN_URL + "v1/order/detail/"
             //  + id + "/" 
              + this.$route.params.orderId,
-            this.configRequestApi
+             commonFunction.configApi()
         )
         .then((response) => {
             this.orderModel.setData(response.data)

@@ -23,37 +23,41 @@
           ">Quản lí đơn hàng</a>
             </ul>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Giao thành công <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/success" class="list-group-item list-group-item-action list-group-page-qt">
+                    Giao thành công <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Đã lấy/Đang giao <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/delivery" class="list-group-item list-group-item-action list-group-page-qt">
+                    Đã lấy/Đang giao <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Delay & Hủy lấy <span class="number-item-span">(10ĐH | 10ĐH)</span>
+                <a href="/customer/orders/delay" class="list-group-item list-group-item-action list-group-page-qt">
+                    Delay <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Không giao được/Lưu kho <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/cancel" class="list-group-item list-group-item-action list-group-page-qt">
+                    Đơn hủy <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Đơn đổi trả (Đơn hoàn) <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/occurred" class="list-group-item list-group-item-action list-group-page-qt">
+                    Không giao được/Lưu kho <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
+                <a href="/customer/orders/return" class="list-group-item list-group-item-action list-group-page-qt">
+                    Đơn đổi trả (Đơn hoàn) <span class="number-item-span"></span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a href="/customer/orders/delay" class="list-group-item list-group-item-action list-group-page-qt">
                     Delay do sai thông tin ĐH & chờ kiểm tra
-                    <span class="number-item-span">(10ĐH)</span>
+                    <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Đã chỉnh sửa thông tin <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/updated" class="list-group-item list-group-item-action list-group-page-qt">
+                    Đã chỉnh sửa thông tin <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Chưa xử lý <span class="number-item-span">(10ĐH)</span>
+                <a href="/customer/orders/waiting_confirm" class="list-group-item list-group-item-action list-group-page-qt">
+                    Chưa xử lý <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </div>
@@ -76,25 +80,25 @@
             </ul>
             <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Nhập <span class="number-item-span">(+ 10SP)</span>
+                    Nhập <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Xuất <span class="number-item-span">(+ 10SP)</span>
+                    Xuất <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
-                    Tồn <span class="number-item-span">(+ 10SP)</span>
+                    Tồn <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
                     Số lượng đơn hàng/Sản phẩm
-                    <span class="number-item-span">(10ĐH | 12SP)</span>
+                    <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action list-group-page-qt">
                     Đơn hàng chưa xử lí/Sản phẩm
-                    <span class="number-item-span">(10ĐH | 12SP)</span>
+                    <span class="number-item-span"></span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </div>
@@ -150,6 +154,11 @@ export default {
         };
     },
     mounted() {
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username);
+        if (auth == null) {
+            commonFunction.redirect("/");
+        }
+        
         this.customerModel.setData(
             JSON.parse(commonFunction.getCustomerStorage())
         );
