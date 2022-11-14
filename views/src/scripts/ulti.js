@@ -32,9 +32,9 @@ const commonFunction = {
 
     // shipping type
     shippingType: {
-        STANDARD: "Standard",
-        FAST: "Fast",
-        SUPER: "Super"
+        STANDARD: "Giao hàng thường",
+        FAST: "Giao 24h",
+        SUPER: "Giao hàng 1h"
     },
 
     // config api
