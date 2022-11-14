@@ -6,6 +6,7 @@ import PopupNotify from "@/components/common/PopupNotify.vue";
 import ActionLoading from "@/components/common/ActionLoading.vue";
 import WarehouseData from "@/components/models/warehouse/warehouse-data";
 import ProductData from "@/components/models/product/product-data";
+import CustomerData from "@/components/models/customer/customer-data";
 
 import moment from "moment";
 import { commonFunction } from '@/scripts/ulti'
@@ -23,10 +24,12 @@ export default {
     setup() {
         const warehouseModel = new WarehouseData();
         const productModel = new ProductData();
+        const customerModel = new CustomerData();
 
         return {
             warehouseModel,
-            productModel
+            productModel,
+            customerModel
         };
     },
     data() {
@@ -96,7 +99,6 @@ export default {
     mounted() {
         let auth = commonFunction.getCookies(commonFunction.userCookies.username),
             role = commonFunction.getCookies(commonFunction.userCookies.roles),
-            id = commonFunction.getCookies(commonFunction.userCookies.id),
             token = commonFunction.getCookies(commonFunction.userCookies.token);
 
         if (auth == null && role !== "shipper") {
@@ -107,7 +109,14 @@ export default {
             headers: { Authorization: "Bearer " + token },
         };
 
-        this.idRequest = id;
+        this.customerModel.setData(
+            JSON.parse(commonFunction.getCustomerStorage())
+        );
+
+        let customerId = this.customerModel.getData().id;
+
+        this.idRequest = customerId;
+
         //warehouse
         axios.get(
                 commonFunction.DOMAIN_URL +
@@ -150,6 +159,7 @@ export default {
     methods: {
         //warehouse
         createNewWarehouse: function () {
+            this.warehouseModel.setData(this.warehouseData);
             if (this.warehouseModel.validate()) {
                 this.isLoading = true;
                 axios
@@ -157,7 +167,7 @@ export default {
                         commonFunction.DOMAIN_URL + "v1/warehouse/save",
                         {
                             customerId: this.idRequest,
-                            data: this.warehouseData
+                            data: this.warehouseModel.getData()
                         },
                         this.configRequestApi
                     )
@@ -181,6 +191,7 @@ export default {
             }
         },
         updateWarehouse: function () {
+            this.warehouseModel.setData(this.warehouseData);
             this.isValid = 0;
             if (this.warehouseModel.validate(this.warehouseData, this.isValid, this.msgValidationFor)) {
                 this.isLoading = true;
@@ -245,7 +256,7 @@ export default {
             this.isValid = 0;
             if (this.productModel.validate(this.productData, this.isValid, this.msgValidationFor, this.$refs.productImgUpload.files[0])) {
                 this.isLoading = true;
-                let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
+                let accesstoken_cookies = commonFunction.getCookies(commonFunction.userCookies.token);
                 let formData = new FormData();
                 formData.append("file", this.productImg);
                 // formData.append("id", this.formDataProduct.id);
@@ -285,7 +296,7 @@ export default {
             this.isValid = 0;
             if (this.productModel.validate(this.productData, this.isValid, this.msgValidationFor, this.$refs.productImgUpload.files[0])) {
                 this.isLoading = true;
-                let accesstoken_cookies = this.cookies.get("accesstoken_cookies");
+                let accesstoken_cookies = commonFunction.getCookies(commonFunction.userCookies.token);
                 let formData = new FormData();
                 formData.append("file", this.productImg == "" ? null : this.productImg);
                 formData.append("id", this.productData.id);
