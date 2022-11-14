@@ -18,24 +18,21 @@
                     <div class="row">
                         <div class="col-6 text-center">
                             <h3>Tổng số đơn hàng:</h3>
-                            <h1>100</h1>
+                            <h1>{{ listOrder.total }}</h1>
                         </div>
                         <div class="col-6">
                             <ul class="list-group">
                                 <li class="list-group-item border-0 border-bottom">
-                                    Số đơn đã lấy: <span>12</span>
+                                    Số đơn đang giao: <span>{{ listOrderByStatus.DELIVERY.total }}</span>
                                 </li>
                                 <li class="list-group-item border-0 border-bottom">
-                                    Số đơn đang giao: <span>12</span>
+                                    Số đơn đã giao/thanh toán: <span>{{ listOrderByStatus.SUCCESS.total }}</span>
                                 </li>
                                 <li class="list-group-item border-0 border-bottom">
-                                    Số đơn đã giao/thanh toán: <span>12</span>
+                                    Số đơn hoàn trả: <span>{{ listOrderByStatus.RETURN.total }}</span>
                                 </li>
                                 <li class="list-group-item border-0 border-bottom">
-                                    Số đơn hoàn trả: <span>12</span>
-                                </li>
-                                <li class="list-group-item border-0 border-bottom">
-                                    Số đơn delay: <span>12</span>
+                                    Số đơn delay: <span>{{ listOrderByStatus.DELAY.total }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -51,7 +48,7 @@
                                     <small>(*) Tổng giá trị các đơn hàng đã nhận bàn giao</small>
                                 </div>
                                 <div class="col-12">
-                                    <h3>10.500.000 <span style="font-size: 15px">(VNĐ)</span></h3>
+                                    <h3> {{totalPrice}} <span style="font-size: 15px">(VNĐ)</span></h3>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +60,7 @@
                                     <small>(*) Tổng giá trị các đơn hàng đã giao và thu COD</small>
                                 </div>
                                 <div class="col-12">
-                                    <h3>6.500.000 <span style="font-size: 15px">(VNĐ)</span></h3>
+                                    <h3> {{totalSuccessPrice}} <span style="font-size: 15px">(VNĐ)</span></h3>
                                 </div>
                             </div>
                         </div>

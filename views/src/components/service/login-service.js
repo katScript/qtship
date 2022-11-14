@@ -1,3 +1,8 @@
+import axios from "axios";
+import {commonFunction} from "@/scripts/ulti";
+import CustomerData from "@/components/models/customer/customer-data";
+import ShipperData from "@/components/models/shipping/shipper-data";
+
 export default class LoginService {
     model = {
         username: "",
@@ -14,6 +19,39 @@ export default class LoginService {
     }
 
     errors = []
+
+    storeUserData = {
+        customer: async function (data) {
+            await axios.get(
+                commonFunction.DOMAIN_URL +
+                "v1/customer/detail/" + data.id,
+                commonFunction.configApi()
+            ).then((response) => {
+                // handle not found
+                let customerModel = new CustomerData();
+
+                customerModel.setData(response.data);
+                commonFunction.setCustomerStorage(customerModel.getData());
+            }).catch((e) => {
+                console.log(e);
+            });
+        },
+        shipper: async function (data) {
+            await axios.get(
+                commonFunction.DOMAIN_URL +
+                "v1/shipper/detail/" + data.id,
+                commonFunction.configApi()
+            ).then((response) => {
+                // handle not found
+                let shipperModel = new ShipperData();
+
+                shipperModel.setData(response.data);
+                commonFunction.setShipperStorage(shipperModel.getData());
+            }).catch((e) => {
+                console.log(e);
+            });
+        }
+    }
 
     setModel(data) {
         this.model.username = data.username;
@@ -55,5 +93,9 @@ export default class LoginService {
         }
 
         return valid;
+    }
+
+    storeUserDataFunction() {
+        return this.storeUserData;
     }
 }

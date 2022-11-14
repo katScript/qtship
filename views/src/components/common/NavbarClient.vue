@@ -74,9 +74,7 @@
         props: ['isShipper'],
         methods: {
             signOut: function () {
-                commonFunction.removeAllCookiesClient(this.cookies);
-                localStorage.clear();
-                commonFunction.redirect("/");
+                commonFunction.signOut();
             },
         },
     }
