@@ -53,7 +53,7 @@
                                         </div>
                                         <div class="col-11">
                                         <span><b>Địa chỉ hiện tại: </b></span>
-                                            <LocationPicker @updateData="updateAddress"
+                                            <LocationPicker @updateAddress="updateAddress"
                                                             :dataValidate="shippingData.errors"
                                                             ref="locationPicker"
                                             />
