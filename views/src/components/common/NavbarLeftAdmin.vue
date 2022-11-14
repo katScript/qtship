@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar-admin d-inline" :class="isShowNav ? 'default' : 'me-5'">
+    <div class="navbar-admin d-inline" :class="isShowNav ? 'me-220' : 'me-5'">
         <button class="btn btn-collapse-nav-left" :class="isShowNav ? 'hide' : 'show'"
             v-on:click="toggleCollapseNavbarLeft">
             <i class="fa-solid fa-caret-right"></i>
@@ -38,3 +38,9 @@
         },
     };
 </script>
+
+<style>
+    .me-220 {
+        margin-right: 220px;
+    }
+</style>

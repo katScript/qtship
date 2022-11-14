@@ -22,8 +22,9 @@ export default {
     data() {
         return {
             orderData: {},
-            listOrderByCustomer: [],
-            listOrderByCustomerBk: [],
+            orderList: [
+            ],
+            orderListBk: [],
             filterTime: "",
             // filterTimeDS: "",
             classFilterTimeAbout: "d-none",

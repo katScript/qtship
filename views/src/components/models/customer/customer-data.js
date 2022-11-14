@@ -40,7 +40,7 @@ export default class CustomerData {
         this.data.addressSet = data.addressSet;
         this.data.forControls = data.forControls;
         this.data.createdAt = data.createdAt;
-        this.data.updateAt = data.updateAt;
+        this.data.updatedAt = data.updatedAt;
     }
 
     getData () {
