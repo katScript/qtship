@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.util.HashSet;
@@ -163,6 +164,8 @@ public class CustomerService {
                 DateFormatHelper.dateToString(customer.getUpdatedAt())
         );
 
+        processCustomerCid(customer, res);
+
         return res;
     }
 
@@ -191,5 +194,25 @@ public class CustomerService {
 
     public String getImageScope(String path) {
         return SCOPE + File.separator + path;
+    }
+
+    public void processCustomerCid(Customer customer, CustomerData customerData) {
+        String cidFront = customer.getCidFront() == null ?
+                getImageUrl(FilesStorageServiceImpl.DEFAULT) :
+                getImageUrl(customer.getCustomerId() + File.separator + customer.getCidFront());
+
+        String cidBack = customer.getCidBack() == null ?
+                getImageUrl(FilesStorageServiceImpl.DEFAULT) :
+                getImageUrl(customer.getCustomerId() + File.separator + customer.getCidBack());
+
+        customerData.setCidFront(cidFront);
+        customerData.setCidBack(cidBack);
+    }
+
+    public String getImageUrl(String path) {
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .build().toUriString()
+                + "/image/customer/" + path;
     }
 }

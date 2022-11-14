@@ -5,6 +5,7 @@ node_modules
 src/images/customer/*
 src/images/product/*
 !src/images/product/img-default.jpg
+!src/images/customer/img-default.jpg
 
 # local env files
 .env.local
