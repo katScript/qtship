@@ -298,7 +298,8 @@ export default {
                 this.isLoading = true;
                 let accesstoken_cookies = commonFunction.getCookies(commonFunction.userCookies.token);
                 let formData = new FormData();
-                formData.append("file", this.productImg == "" ? null : this.productImg);
+                if(this.productImg !== "")
+                    formData.append("file", this.productImg);
                 formData.append("id", this.productData.id);
                 formData.append("customerId", this.idRequest);
                 formData.append("sku", this.productData.sku);
