@@ -2,6 +2,7 @@ import { sha256 } from "js-sha256";
 import md5 from "md5";
 import $ from "jquery";
 import { useCookies } from "vue3-cookies";
+import moment from "moment/moment";
 
 const commonFunction = {
     // cookies manager
@@ -77,6 +78,7 @@ const commonFunction = {
         });
 
         this.removeCustomerStorage();
+        this.removeShipperStorage();
         this.redirect("/");
     },
 
@@ -89,6 +91,26 @@ const commonFunction = {
     },
     removeCustomerStorage: function () {
         localStorage.removeItem('customer');
+    },
+
+    // shipper data
+    setShipperStorage: function (object) {
+        localStorage.setItem('shipper', JSON.stringify(object));
+    },
+    getShipperStorage: function () {
+        return localStorage.getItem('shipper');
+    },
+    removeShipperStorage: function () {
+        localStorage.removeItem('shipper');
+    },
+
+    // datetime
+    getDateTimeFormat: function (date = null, format = "YYYY-MM-DD HH:mm:ss") {
+        if (date != null) {
+            return moment(date).format(format);
+        }
+
+        return moment().format(format);
     },
 
     // ======================================================================================

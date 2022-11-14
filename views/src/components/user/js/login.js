@@ -54,7 +54,7 @@ export default {
                             ]
                         );
 
-                        await this.setCustomerData(response.data);
+                        await this.loginService.storeUserDataFunction()[response.data.roles](response.data);
                         commonFunction.redirect("/");
                     }
                 }).catch((error) => {
@@ -67,19 +67,5 @@ export default {
                 alert("Vui lòng điền đầy đủ thông tin đăng nhập!");
             }
         },
-
-        setCustomerData: async function (data) {
-            await axios.get(
-                commonFunction.DOMAIN_URL +
-                "v1/customer/detail/" + data.id,
-                commonFunction.configApi()
-            ).then((response) => {
-                // handle not found
-                this.customerModel.setData(response.data);
-                commonFunction.setCustomerStorage(this.customerModel.getData());
-            }).catch((e) => {
-                console.log(e);
-            });
-        }
     },
 };
