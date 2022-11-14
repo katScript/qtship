@@ -150,6 +150,7 @@ const commonFunction = {
         return valid;
     },
     DOMAIN_URL: 'https://api.dcodetest.com/',
+    ORIGIN_URL: window.location.origin,
     EXPIRED_TIME_COOKIES: "1d",
     removeAllCookiesClient: function(cookies){
         cookies.remove("authenication_cookies");

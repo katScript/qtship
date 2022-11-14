@@ -3,8 +3,8 @@
         <NavbarClient />
         <div class="container-fluid">
             <div :class="isLoading ? 'show' : 'hide'">
-                <ActionLoading/>
-              </div>
+                <ActionLoading />
+            </div>
             <div class="row">
                 <div class="col-md-2">
                     <NotficationClient />
@@ -18,19 +18,19 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Mã người dùng</label>
-                                <p>{{ customerData.data.customerId }}</p>
+                                <p>{{ customerData.customerId }}</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Họ và tên</label>
-                                <input type="text" class="form-control" id=" " v-model="customerData.data.fullName">
+                                <input type="text" class="form-control" id=" " v-model="customerData.fullName">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Email</label>
-                                <p>{{customerData.data.email}}</p>
+                                <p>{{customerData.email}}</p>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Số điện thoại</label>
-                                <input type="text" class="form-control" id=" " v-model="customerData.data.phone">
+                                <input type="text" class="form-control" id=" " v-model="customerData.phone">
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
@@ -67,30 +67,36 @@
                                 <br><br>
                                 <h5>Giấy tờ xác minh</h5>
                                 <p>Chứng minh nhân dân</p>
+                                <span v-if="customerData.cidFront"> <i>(*) Để thay đổi hình ảnh CMND/CCCD, bạn cần liên
+                                        hệ
+                                        bộ phận CSKH. Để được hỗ trợ, gửi mail tới cskh@ghtk.vn hoặc Chat với
+                                        CSKH</i></span>
                                 <div class="row">
-                                    <div class="col-md-6 form-group" v-if="!customerData.data.cidFront">
-                                        <label for="">Mặt trước</label> <small class="text-danger">{{msgValidate.cid.front}}</small>
+                                    <div class="col-md-6 form-group" v-if="!customerData.cidFront">
+                                        <label for="">Mặt trước</label> <small
+                                            class="text-danger">{{msgValidate.cid.front}}</small>
                                         <input type="file" ref="cidFrontImgUpload" class="form-control"
                                             placeholder="CMND mặt trước">
                                     </div>
-                                    <div class="col-md-6 form-group" v-if="!customerData.data.cidBack">
-                                        <label for="">Mặt sau</label> <small class="text-danger">{{msgValidate.cid.back}}</small>
+                                    <div class="col-md-6 form-group" v-if="!customerData.cidBack">
+                                        <label for="">Mặt sau</label> <small
+                                            class="text-danger">{{msgValidate.cid.back}}</small>
                                         <input type="file" ref="cidBackImgUpload" class="form-control"
                                             placeholder="CMND mặt sau">
                                     </div>
-                                    <div class="col-md-6 form-group" v-if="customerData.data.cidFront">
-                                        <span> <i>(*) Để thay đổi hình ảnh CMND/CCCD, bạn cần liên hệ
-                                                bộ phận CSKH. Để được hỗ trợ, gửi mail tới cskh@ghtk.vn hoặc Chat với
-                                                CSKH</i></span>
+                                    <div class="col-md-6 form-group" v-if="customerData.cidFront">
                                         <label for="">Mặt trước</label>
-                                        <img src="@/images/img-default.jpg" ref="cidFrontImgUpload"
+                                        <br>
+                                        <img :src="customerData.cidFront" class="w-75 h-50" ref="cidFrontImgUpload"
                                             alt="CMND mặt trước">
                                     </div>
-                                    <div class="col-md-6 form-group" v-if="customerData.data.cidBack">
+                                    <div class="col-md-6 form-group" v-if="customerData.cidBack">
                                         <label for="">Mặt sau</label>
-                                        <img src="@/images/img-default.jpg" ref="cidBackImgUpload" alt="CMND mặt sau">
+                                        <br>
+                                        <img :src="customerData.cidBack" class="w-75 h-50" ref="cidBackImgUpload"
+                                            alt="CMND mặt sau">
                                     </div>
-                                    <center v-if="!customerData.data.cidFront || !customerData.data.cidBack">
+                                    <center v-if="!customerData.cidFront || !customerData.cidBack">
                                         <br>
                                         <button class="btn btn-danger" v-on:click="uploadCID()">Upload</button>
                                     </center>
@@ -100,7 +106,7 @@
                             </div>
                             <hr>
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Lưu thông
+                                <button class="btn btn-success" v-on:click="update()"> Lưu thông
                                     tin</button>
                             </div>
                         </div>
@@ -184,7 +190,7 @@
                 JSON.parse(commonFunction.getCustomerStorage())
             );
 
-            this.customerData = this.customerModel;
+            this.customerData = this.customerModel.getData();
 
             let customerId = this.customerModel.getData().id;
             console.log(customerId);
@@ -201,6 +207,26 @@
         watch: {
         },
         methods: {
+            update: function () {
+                axios
+                    .post(
+                        commonFunction.DOMAIN_URL + "v1/customer/save",
+                        this.customerData,
+                        this.configRequestApi
+                    )
+                    .then((response) => {
+                        this.isLoading = false;
+                        alert("SUCCESS: " + response.data.message + " - Cập nhật thông tin thành công!");
+                        this.customerModel.setData(this.customerData);
+                        commonFunction.setCustomerStorage(this.customerModel.getData());
+                        commonFunction.reloadPage();
+                    })
+                    .catch((e) => {
+                        this.isLoading = false;
+                        alert("ERROR: " + e.response.data.message + "Cập nhật thông tin thành công!");
+                        console.log(e);
+                    });
+            },
             uploadCID: function () {
                 if (this.validateCid()) {
                     this.isLoading = true;
@@ -210,7 +236,7 @@
                     formData.append("cidFront", this.$refs.cidFrontImgUpload.files[0]);
                     formData.append("cidBack", this.$refs.cidBackImgUpload.files[0]);
                     axios
-                        .post(commonFunction.DOMAIN_URL + "v1/product/save", formData, {
+                        .post(commonFunction.DOMAIN_URL + "v1/customer/cid/save", formData, {
                             headers: {
                                 Authorization: "Bearer " + accesstoken_cookies,
                                 "Content-Type": "multipart/form-data",
@@ -239,7 +265,7 @@
                         .post(
                             commonFunction.DOMAIN_URL + "api/auth/reset/password",
                             {
-                                username: this.customerData.data.userName,
+                                username: this.customerData.userName,
                                 password: this.passwordObj.oldPassword,
                                 newPassword: this.passwordObj.newPassword
                             },

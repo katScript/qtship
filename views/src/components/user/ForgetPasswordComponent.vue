@@ -83,7 +83,7 @@
                         axios.post(commonFunction.DOMAIN_URL + "v1/email/auth/customer/reset",
                             {
                                 token: this.token,
-                                url: "http://localhost:8080/reset-password/",
+                                url: commonFunction.ORIGIN_URL+"/reset-password/",
                                 email: this.username
                             }
                         ).then((response) => {
