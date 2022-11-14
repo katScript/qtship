@@ -154,6 +154,11 @@ export default {
         };
     },
     mounted() {
+        let auth = commonFunction.getCookies(commonFunction.userCookies.username);
+        if (auth == null) {
+            commonFunction.redirect("/");
+        }
+        
         this.customerModel.setData(
             JSON.parse(commonFunction.getCustomerStorage())
         );

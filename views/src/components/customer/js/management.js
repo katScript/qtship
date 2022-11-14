@@ -64,16 +64,16 @@ export default {
     mounted() {
         const self = this;
         let auth = commonFunction.getCookies(commonFunction.userCookies.username);
-
+        if (auth == null) {
+            commonFunction.redirect("/");
+        }
+        
         this.customerModel.setData(
             JSON.parse(commonFunction.getCustomerStorage())
         );
 
         self.dateFilter = moment().format("YYYY-MM-DD HH:MM:SS");
 
-        if (auth == null) {
-            commonFunction.redirect("/");
-        }
 
         //product
         axios

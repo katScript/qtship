@@ -42,18 +42,20 @@
                                             khẩu</button>
                                         <button class="btn btn-danger"
                                             :class="isDisplayFormChangePass ? 'show' : 'hide'"
-                                            v-on:click="isDisplayFormChangePass = !isDisplayFormChangePass">Hủy
+                                            v-on:click="cancelChangePassword">Hủy
                                             bỏ</button>
                                     </div>
                                     <div class="col-9 form-change-passwword"
                                         :class="isDisplayFormChangePass ? 'show' : 'hide'">
+                                        <small class="text-danger">{{msgValidate.newPassword}}</small>
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu cũ"
-                                            style="margin-bottom: 3px;">
+                                            v-model="passwordObj.oldPassword" style="margin-bottom: 3px;">
                                         <input type="password" class="form-control" id=" " placeholder="Mật khẩu mới"
-                                            value="" style="margin-bottom: 3px">
+                                            v-model="passwordObj.newPassword" style="margin-bottom: 3px">
                                         <input type="password" class="form-control" id=" "
-                                            placeholder="Xác nhận mật khẩu mới" style="margin-bottom: 3px">
-                                        <button class="btn btn-danger">Xác nhận đổi</button>
+                                            v-model="passwordObj.confirmNewPassword" placeholder="Xác nhận mật khẩu mới"
+                                            style="margin-bottom: 3px">
+                                        <button class="btn btn-danger" v-on:click="changePassword">Xác nhận đổi</button>
                                     </div>
                                 </div>
                             </div>
@@ -117,12 +119,14 @@
 
     import { useCookies } from "vue3-cookies";
     import { commonFunction } from '@/scripts/ulti'
+    import axios from "axios";
 
     export default {
         setup() {
             let auth = commonFunction.getCookies(commonFunction.userCookies.username),
                 role = commonFunction.getCookies(commonFunction.userCookies.roles),
-                id = commonFunction.getCookies(commonFunction.userCookies.id);
+                id = commonFunction.getCookies(commonFunction.userCookies.id),
+                token = commonFunction.getCookies(commonFunction.userCookies.token);
             const { cookies } = useCookies();
             const customerModel = new CustomerData();
             return {
@@ -131,6 +135,7 @@
                 auth,
                 role,
                 id,
+                token,
             };
         },
 
@@ -144,6 +149,15 @@
             return {
                 isDisplayFormChangePass: false,
                 customerData: {},
+                passwordObj: {
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmNewPassword: ""
+                },
+                msgValidate: {
+                    newPassword: ""
+                },
+                configRequestApi: {},
             };
         },
 
@@ -163,10 +177,53 @@
             if (this.auth == null || this.role !== "customer") {
                 commonFunction.redirect("/");
             }
+
+            this.configRequestApi = {
+                headers: { Authorization: "Bearer " + this.token },
+            };
         },
         watch: {
         },
-        method: {
+        methods: {
+            changePassword: function () {
+                if (this.passwordObj.newPassword == "" || this.passwordObj.confirmNewPassword == "" || this.passwordObj.oldPassword == "") {
+                    this.msgValidate.newPassword = "Vui lòng điền đầy đủ thông tin!"
+                } else if (this.passwordObj.newPassword != this.passwordObj.confirmNewPassword) {
+                    this.msgValidate.newPassword = "Mật khẩu mới và Xác nhận mật khẩu mới không khớp!"
+                } else {
+                    axios
+                        .post(
+                            commonFunction.DOMAIN_URL + "api/auth/reset/password",
+                            {
+                                username: this.customerData.data.userName,
+                                password: this.passwordObj.oldPassword,
+                                newPassword: this.passwordObj.newPassword
+                            },
+                            this.configRequestApi
+                        )
+                        .then((response) => {
+                            this.isLoading = false;
+                            alert("SUCCESS: " + response.data.message + " - Đổi mật khẩu thành công!");
+                            commonFunction.signOut();
+                        })
+                        .catch((e) => {
+                            this.isLoading = false;
+                            this.msgValidate.newPassword = "Đổi mật khẩu không thành công! Vui lòng kiểm tra lại thông tin!"
+                            console.log(e);
+                        });
+                }
+            },
+            cancelChangePassword: function() {
+                this.passwordObj = {
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmNewPassword: ""
+                },
+                this.msgValidate = {
+                    newPassword: ""
+                },
+                this.isDisplayFormChangePass = false;
+            }
         },
     };
 </script>
