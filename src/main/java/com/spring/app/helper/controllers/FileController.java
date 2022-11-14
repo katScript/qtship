@@ -44,8 +44,18 @@ public class FileController {
     }
 
     @GetMapping("/customer/{path}/{fileName}")
-    public ResponseEntity<?> getCustomerImage(@Valid @PathVariable String path, @PathVariable String fileName) throws IOException {
+    public ResponseEntity<?> getCustomerImageByCustomerCode(@Valid @PathVariable String path, @PathVariable String fileName) throws IOException {
         service.setPath(customerService.getImageScope(path));
+        byte[] imageData = service.downloadImageFromFileSystem(fileName);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+    }
+
+    @GetMapping("/customer/{fileName}")
+    public ResponseEntity<?> getCustomerImage(@Valid @PathVariable String fileName) throws IOException {
+        service.setPath(CustomerService.SCOPE);
         byte[] imageData = service.downloadImageFromFileSystem(fileName);
 
         return ResponseEntity.status(HttpStatus.OK)
