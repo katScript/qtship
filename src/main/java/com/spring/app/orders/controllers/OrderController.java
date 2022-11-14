@@ -61,6 +61,17 @@ public class OrderController {
         return ResponseEntity.ok(this.orderService.getOrderDetail(o));
     }
 
+    @GetMapping("/customer/{customerId}/detail/{id}")
+    public ResponseEntity<?> getById(@Valid @PathVariable Long customerId,  @PathVariable Long id) {
+        Customer c = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not exists!"));
+        Order o = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (!c.getId().equals(o.getCustomer().getId()))
+            return ResponseEntity.badRequest().body("Customer not valid!");
+
+        return ResponseEntity.ok(this.orderService.getOrderDetail(o));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrder() {
         List<Order> orders = orderRepository.findAll();
