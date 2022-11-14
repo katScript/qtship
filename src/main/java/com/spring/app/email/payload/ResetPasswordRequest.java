@@ -2,9 +2,7 @@ package com.spring.app.email.payload;
 
 public class ResetPasswordRequest {
     private String url;
-
     private String token;
-
     private String email;
 
     public String getUrl() {

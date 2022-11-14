@@ -23,7 +23,7 @@ public class EmailController {
         mail.setMailFrom("qt.shop@gmail.com");
         mail.setMailTo(request.getEmail());
         mail.setMailSubject("Reset password");
-        mail.setMailContent("<h1> Reset password link </h1> <br> <a href=\"" + request.getUrl() + "/" + request.getToken() + "\">Reset Link</a>");
+        mail.setMailContent("<h1> Reset password link </h1> <br> <a href=\"" + request.getUrl() + request.getToken() + "\">Reset Link</a>");
         this.mailServiceImp.sendEmail(mail);
 
         return ResponseEntity.ok(new MessageResponse("Send email success!"));
