@@ -13,8 +13,7 @@
           <div class="row">
             <div class="title text-center">
               <h4>Chi tiết đơn hàng {{ orderData.orderCode }}</h4>
-              <label for="">Ngày tạo: </label>
-              <small> {{ orderData.createdAt }}</small>
+              <label for="">Ngày tạo: </label> <small> {{ orderData.createdAt }}</small>
               <hr />
             </div>
             <div class="col-md-8">
@@ -58,9 +57,11 @@
                     <label for="">Sản phẩm: </label>
                     <div class="products ps-2">
                       <small v-for="(item, index) in orderData.orderItem[0].products" :key="index"><label
-                          for="">{{index+1}}. </label> {{item.product.name}} - SL: {{item.qty}}</small>
+                          for="">{{index+1}}. </label> {{item.product.name}} - SL: {{item.qty}} <br></small>
                     </div>
-
+                    <br />
+                    <small><label for="">Khối lượng đơn hàng: </label> {{ orderData.totalWeight }}</small>
+                    <br>
                     <small><label for="">Ghi chú: </label> {{ orderData.note }}</small>
                     <br />
                     <small><label for="">Mã giảm giá đã áp dụng: </label> {{ orderData.coupon }}</small>

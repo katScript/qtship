@@ -70,7 +70,26 @@ const commonFunction = {
         }
     },
 
+    // user function
+    signOut: function () {
+        Object.values(this.userCookies).forEach(key => {
+            this.removeCookies(key);
+        });
 
+        this.removeCustomerStorage();
+        this.redirect("/");
+    },
+
+    // customer data
+    setCustomerStorage: function (object) {
+        localStorage.setItem('customer', JSON.stringify(object));
+    },
+    getCustomerStorage: function () {
+        return localStorage.getItem('customer');
+    },
+    removeCustomerStorage: function () {
+        localStorage.removeItem('customer');
+    },
 
     // ======================================================================================
 
@@ -142,10 +161,14 @@ const commonFunction = {
     },
     currentURL: function(){ return location.href;},
     typeOrderWaitingConfirm: "WAITING_CONFIRM",
-    typeOrderSuccess: "DONE",
+    typeOrderSuccess: "SUCCESS",
+    typeOrderPayment: "PAYMENTED",
     typeOrderDelivery: "DELIVERY",
     typeOrderOccurred: "OCCURRED",
     typeOrderCancel: "CANCEL",
+    typeOrderDelay: "DELAY",
+    typeOrderReturn: "RETURN",
+    typeOrderUpdated: "UPDATED",
 }
 
 export { commonFunction };

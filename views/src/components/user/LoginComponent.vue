@@ -21,7 +21,7 @@
               </div>
               <br>
               <div class="mb-3 text-center">
-                <a href="#" class="a-forget-password">Bạn quên mật khẩu?</a>
+                <a href="/forget-password" class="a-forget-password">Bạn quên mật khẩu?</a>
                 <br/>
                 <br/>
                 <button type="submit" class="btn btn-danger btn-login-qt" v-on:click="login()">

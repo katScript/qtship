@@ -13,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 
 @Service
 public class ProductService {
+    public static final String SCOPE = "product";
+
     @Autowired
     FilesStorageServiceImpl storageService;
     @Autowired
@@ -78,7 +81,7 @@ public class ProductService {
         Resource resource = null;
 
         if (!file.isEmpty()) {
-            storageService.setPath(customerCode);
+            storageService.setPath(getImageScope(customerCode));
             resource = storageService.save(file, product.getSku());
         }
 
@@ -132,11 +135,22 @@ public class ProductService {
 
     public String processProductImage(Product product) {
         return product.getImage() != null ?
-                storageService.getImageUrl(product.getCustomer().getCustomerId() + File.separator + product.getImage()) :
-                storageService.getImageUrl(FilesStorageServiceImpl.DEFAULT);
+                getImageUrl(product.getCustomer().getCustomerId() + File.separator + product.getImage()) :
+                getImageUrl(FilesStorageServiceImpl.DEFAULT);
     }
 
     public void processDeleteProductImage(String customerCode, String image) {
-        storageService.setPath(customerCode).deleteByName(image);
+        storageService.setPath(getImageScope(customerCode)).deleteByName(image);
+    }
+
+    public String getImageScope(String path) {
+        return SCOPE + File.separator + path;
+    }
+
+    public String getImageUrl(String path) {
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .build().toUriString()
+                + "/image/product/" + path;
     }
 }

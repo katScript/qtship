@@ -1,7 +1,9 @@
 import {createWebHistory, createRouter} from 'vue-router'
 import LoginComponent from '@/components/user/LoginComponent'
-import RegisterPage from '@/components/RegisterPage.vue'
-import ManagementClientPage from '@/components/ManagementClient.vue'
+import RegisterPage from '@/components/user/RegisterComponent.vue'
+import ForgetPasswordComponent from '@/components/user/ForgetPasswordComponent.vue'
+import ResetPasswordComponent from '@/components/user/ResetPasswordComponent.vue'
+import ManagementClientPage from '@/components/customer/ManagementClient.vue'
 import OrdersClient from '@/components/order/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
 import SaveOrderClient from '@/components/order/CreateOrderClient'
@@ -17,6 +19,8 @@ import CreateOrderAdmin from '@/components/admin/create-order/CreateOrderAdmin.v
 import ManagementCustomerAdmin from '@/components/admin/customer/ManagementCustomerAdmin.vue'
 import ManagementFeeAdmin from '@/components/admin/fee/ManagementFeeAdmin.vue'
 
+
+
 const history = createWebHistory();
 const router = createRouter({
     history,
@@ -24,15 +28,18 @@ const router = createRouter({
         {path: '/', component: IndexPage},
         {path: '/login-page', component: LoginComponent},
         {path: '/register-page', component: RegisterPage},
+        {path: '/forget-password', component: ForgetPasswordComponent},
+        {path: '/reset-password/:token', component: ResetPasswordComponent},
         {path: '/customer/management', component: ManagementClientPage},
-        {path: '/customer/orders', component: OrdersClient},
+        {path: '/customer/orders/:status?', component: OrdersClient},
         {path: '/customer/orders/save/:id?', component: SaveOrderClient},
         {path: '/customer/warehouse-product', component: warehouseProductClient},
         {path: '/customer/management-cash', component: ManagementCashClient},
         {path: '/customer/account-info', component: ManageAccountCustomerInfo},
         {path: '/shipper/management', component: ShipperOrder},
         {path: '/shipper/account-info', component: ManageAccountShipperInfo},
-        {path: '/client/orders/detail/:customerId/:orderId', component: OrderDetailCustomer},
+        // {path: '/client/orders/detail/:customerId/:orderId', component: OrderDetailCustomer},
+        {path: '/client/orders/detail/:orderId', component: OrderDetailCustomer},
         {path: '/admin/management', component: ManagementAdmin},
         {path: '/admin/management/order/:status', component: ManagementOrderAdmin},
         {path: '/admin/management/create-order', component: CreateOrderAdmin},
