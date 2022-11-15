@@ -14,7 +14,7 @@ import CouponData from "@/components/models/sales/coupon-data";
 import PackageData from "@/components/models/product/package-data";
 
 import moment from "moment";
-import {commonFunction} from "@/scripts/ulti";
+import { commonFunction } from "@/scripts/ulti";
 import axios from "axios";
 
 export default {
@@ -29,11 +29,11 @@ export default {
 
     setup() {
         let orderModel = new OrderData(),
-             warehouseModel = new WarehouseData(),
-             orderItemModel = new OrderItemData(),
-             shippingModel = new ShippingData(),
-             customerModel = new CustomerData(),
-             couponModel = new CouponData();
+            warehouseModel = new WarehouseData(),
+            orderItemModel = new OrderItemData(),
+            shippingModel = new ShippingData(),
+            customerModel = new CustomerData(),
+            couponModel = new CouponData();
 
         let auth = commonFunction.getCookies(commonFunction.userCookies.username),
             role = commonFunction.getCookies(commonFunction.userCookies.roles),
@@ -56,15 +56,15 @@ export default {
             // input data
             orderData: {
                 data: {
-                    senderAddress: null,
-                    senderName: null,
-                    senderPhone: null,
-                    coupon: null,
-                    note: null,
+                    senderAddress: "",
+                    senderName: "",
+                    senderPhone: "",
+                    coupon: "",
+                    note: "",
                     shippingFee: false,
-                    shippingTime: null,
-                    shippingType: null,
-                    returnCode: null
+                    shippingTime: "",
+                    shippingType: "",
+                    returnCode: ""
                 },
                 errors: {}
             },
@@ -119,7 +119,6 @@ export default {
 
         let customerId = this.customerModel.getData().id;
 
-        // can update
         if (this.auth == null || this.role !== "customer") {
             commonFunction.redirect("/");
         }
@@ -182,6 +181,7 @@ export default {
         } else {
             this.orderModel.getData().customerId = customerId;
             this.orderData.data = this.orderModel.getData();
+            this.setInfoSender();
         }
     },
     watch: {
@@ -192,7 +192,7 @@ export default {
         },
     },
     methods: {
-        processOrderData: function() {
+        processOrderData: function () {
             this.orderData.data = this.orderModel.getData();
 
             this.orderItemModel.setData(this.orderModel.getData().orderItem[0]);
@@ -282,7 +282,7 @@ export default {
         autoSetOrderShippingTime() {
             this.orderData.data.shippingTime = moment(this.shippingDateTime).format("YYYY-MM-DD HH:mm:ss");
         },
-        saveOrder: function() {
+        saveOrder: function () {
             let orderData = this.prepareOrderData();
 
             axios
@@ -309,7 +309,7 @@ export default {
                     commonFunction.redirect("/customer/orders");
                 });
         },
-        prepareOrderData: function() {
+        prepareOrderData: function () {
             let packageItems = [];
             Object.values(this.packageList).forEach(p => {
                 let packageModel = new PackageData(),
@@ -343,6 +343,17 @@ export default {
             orderModel.setWarehouse(warehouse);
 
             return orderModel.getData();
+        },
+        setInfoSender: function () {
+            this.orderData.data.senderAddress = this.customerModel.getData().addressSet[0].street
+                + ", "
+                + this.customerModel.getData().addressSet[0].ward
+                + ", "
+                + this.customerModel.getData().addressSet[0].district
+                + ", "
+                + this.customerModel.getData().addressSet[0].province;
+            this.orderData.data.senderPhone = this.customerModel.getData().phone;
+            this.orderData.data.senderName = this.customerModel.getData().fullName;
         }
     },
 };
