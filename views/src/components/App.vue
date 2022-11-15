@@ -1,15 +1,19 @@
 <template>
-    <div class="app-vue">
-        <router-view></router-view>
-    </div>
+  <AdminLayout v-if="isRouteAuth">
+    <RouterView />
+  </AdminLayout>
+  <div class="app-vue" v-else>
+    <router-view></router-view>
+  </div>
 </template>
-<script>
-import 'vue-select/dist/vue-select.css';
+<script setup>
+import { useRoute } from 'vue-router'
+import AdminLayout from "@/layouts/admin/AdminLayout.vue";
+import { computed } from "vue";
 
-export default {
-    name: 'App',
-    components: {}
-}
+const route = useRoute();
+
+const isRouteAuth = computed(() => route.meta.isAdmin);
 </script>
 
 <style scoped>
@@ -20,6 +24,4 @@ export default {
 @import "@/style/css/client-orders.css";
 @import "@/style/css/global.css";
 @import "@/style/css/admin.css";
-@import 'vue3-easy-data-table/dist/style.css';
-@import 'vue3-timeline/dist/style.css'
 </style>
