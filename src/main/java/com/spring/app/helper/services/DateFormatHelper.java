@@ -11,7 +11,7 @@ public class DateFormatHelper {
     public static String START_DATE = "2020-01-01 00:00:00";
     public static String dateToString(Date date) {
         if (date == null)
-            return null;
+            return "";
 
         return date.toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDateTime()
@@ -19,7 +19,7 @@ public class DateFormatHelper {
     }
 
     public static Date stringToDate(String date) {
-        if (date == null)
+        if (date == null || date.equals(""))
             return null;
 
         try {

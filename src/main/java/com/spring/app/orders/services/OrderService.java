@@ -25,6 +25,7 @@ import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.ShippingAddressData;
 import com.spring.app.shipping.service.ShippingService;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
+import com.spring.app.warehouse.payload.WarehouseData;
 import com.spring.app.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,13 +105,18 @@ public class OrderService {
                 .setSenderAddress(data.getSenderAddress())
                 .setShippingFee(data.getShippingFee())
                 .setShippingType(data.getShippingType())
-                .setReturnCode(data.getReturnCode())
-                .setShippingTime(
-                        DateFormatHelper.stringToDate(data.getShippingTime())
-                ).setWarehouse(
-                        this.warehouseRepository.findById(data.getWarehouse().getId())
-                                .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
-                );
+                .setReturnCode(data.getReturnCode());
+
+        if (data.getWarehouse().getId() != null) {
+            _order.setShippingTime(
+                    DateFormatHelper.stringToDate(data.getShippingTime())
+            ).setWarehouse(
+                    this.warehouseRepository.findById(data.getWarehouse().getId())
+                            .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
+            );
+        } else {
+            _order.setShippingTime(null).setWarehouse(null);
+        }
 
         Set<OrderItem> orderItems = this.processOrderItem(data.getOrderItem(), _order);
 
@@ -252,7 +258,7 @@ public class OrderService {
                 order.getShippingType(),
                 DateFormatHelper.dateToString(order.getShippingTime()),
                 order.getCoupon(),
-                warehouseService.processWarehouseDataResponse(order.getWarehouse()),
+                order.getWarehouse() == null ? new WarehouseData() : warehouseService.processWarehouseDataResponse(order.getWarehouse()),
                 order.getReturnCode(),
                 orderItemResponses,
                 order.getTotalWeight()
