@@ -279,7 +279,7 @@ public class OrderService {
 
         for (OrderItem item: order.getOrderItemSet()) {
             for (Package p: item.getPackages()) {
-                weight += p.getProduct().getWeight();
+                weight += p.getProduct().getWeight() * p.getQty();
             }
         }
 
