@@ -50,6 +50,9 @@ export default class LoginService {
             }).catch((e) => {
                 console.log(e);
             });
+        },
+        admin: async function (data) {
+            console.log(data);
         }
     }
 
