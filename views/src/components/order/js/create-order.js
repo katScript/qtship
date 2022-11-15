@@ -122,7 +122,7 @@ export default {
         if (this.auth == null || this.role !== "customer") {
             commonFunction.redirect("/");
         }
-
+        this.orderData.data.shippingTime = null;
         //warehouse
         axios.get(
             commonFunction.DOMAIN_URL +
@@ -294,11 +294,11 @@ export default {
                 .then((response) => {
                     if (response.status === 200) {
                         this.isLoading = false;
-                        alert("SUCCESS: Cập nhật thành công - " + response.data.message);
+                        alert("SUCCESS: Tạo mới thành công - " + response.data.message);
                         commonFunction.redirect("/customer/orders");
                     } else {
                         this.isLoading = false;
-                        alert("FAIL: Cập nhật không thành công! Vui lòng thử lại!");
+                        alert("FAIL: Tạo mới không thành công! Vui lòng thử lại!");
                         commonFunction.redirect("/customer/orders");
                     }
                 })
@@ -330,7 +330,8 @@ export default {
                 warehouseModel.setData(this.warehouseData.data);
                 warehouse = warehouseModel.getData();
             } else {
-                warehouse = null;
+                warehouse = {};
+                this.orderModel.getData().shippingTime = "";
             }
 
             this.shippingModel.setData(this.shippingData.data);
