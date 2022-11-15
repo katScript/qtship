@@ -7,12 +7,13 @@ export default class OrderData {
     data = {
         id: null,
         orderCode: "",
-        customerId: null,
+        customerId: "",
         customerCode: "",
         status: commonFunction.typeOrderWaitingConfirm,
         feedback: "",
         note: "",
-        subtotal: null,
+        subtotal: "",
+        totalWeight: "",
         senderName: "",
         senderPhone: "",
         senderAddress: "",
@@ -49,6 +50,7 @@ export default class OrderData {
         this.data.feedback = data.feedback;
         this.data.note = data.note;
         this.data.subtotal = data.subtotal;
+        this.data.totalWeight = data.totalWeight;
         this.data.senderName = data.senderName;
         this.data.senderPhone = data.senderPhone;
         this.data.senderAddress = data.senderAddress;

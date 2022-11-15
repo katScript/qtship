@@ -99,7 +99,7 @@
           </div>
           <div class="col-6 d-inline">
             <div class="col-12">
-              <label for="">Trọng lượng tối đa: </label> <small>500g</small>
+              <label for="">Trọng lượng đơn hàng: </label> <small>{{orderData.totalWeight}}</small>
             </div>
             <div class="col-12 text-center">
               <label for="">Chứ kí người nhận</label>
