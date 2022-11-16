@@ -154,7 +154,7 @@ export default {
         axios
           .post(commonFunction.DOMAIN_URL + "v1/order/update/status", {
               id: dataNotify.data.id,
-              status: commonFunction.typeOrderCancel
+              status: commonFunction.orderStatus.Cancel
             },
             this.configRequestApi
           )

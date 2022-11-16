@@ -163,6 +163,13 @@ const commonFunction = {
     typeNotifySuccess: 'SUCCESS',
     typeNotifyFail: 'FAIL',
     typeNotifyCancel: 'CANCEL',
+    typeNotify: {
+        Delete: 'DELETE',
+        Create: 'CREATE',
+        Success: 'SUCCESS',
+        Fail: 'FAIL',
+        Cancel: 'CANCEL',
+    },
     generateCodeToText(text) {
         switch(text){
             case "SAVE_WARE_WAITING_CHECK": return "Lưu kho chờ check";
@@ -183,15 +190,6 @@ const commonFunction = {
         }
     },
     currentURL: function(){ return location.href;},
-    typeOrderWaitingConfirm: "WAITING_CONFIRM",
-    typeOrderSuccess: "SUCCESS",
-    typeOrderPayment: "PAYMENTED",
-    typeOrderDelivery: "DELIVERY",
-    typeOrderOccurred: "OCCURRED",
-    typeOrderCancel: "CANCEL",
-    typeOrderDelay: "DELAY",
-    typeOrderReturn: "RETURN",
-    typeOrderUpdated: "UPDATED",
     orderStatus: {
         Pending: "PENDING",
         Success : "SUCCESS",

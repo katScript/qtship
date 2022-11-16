@@ -9,7 +9,7 @@ export default class OrderData {
         orderCode: "",
         customerId: "",
         customerCode: "",
-        status: commonFunction.typeOrderWaitingConfirm,
+        status: commonFunction.orderStatus.Pending,
         feedback: "",
         note: "",
         subtotal: "",

@@ -232,7 +232,7 @@ export default {
             this.isUpdateWarehouseAction = false;
         },
         deleteWareHouse: function (item) {
-            this.typeNotify = commonFunction.typeNotifyDelete;
+            this.typeNotify = commonFunction.typeNotify.Delete;
             this.typeComponent = "WAREHOUSE";
             this.dataNotify = {
                 idRequest: this.idRequest,

@@ -189,7 +189,7 @@ export default {
             this.listOrderByCustomer = this.listOrderByCustomerBk;
         },
         cancelOrder: function (item) {
-            this.typeNotify = commonFunction.typeNotifyCancel;
+            this.typeNotify = commonFunction.typeNotify.Cancel;
             this.typeComponent = "ORDER";
             this.dataNotify = {
                 name: item.orderCode,

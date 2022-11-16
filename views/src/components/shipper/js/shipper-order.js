@@ -32,6 +32,7 @@ export default {
                 total: 0,
                 data: []
             },
+            listOrderTransferForShipper: [],
             listOrderByStatus: this.orderStatusService.getListOrderStatusSupport(),
             totalPrice: "0",
             totalSuccessPrice: "0",
@@ -66,7 +67,7 @@ export default {
         });
 
         this.processListOrder();
-
+        this.listOrderTransferForShipper = this.listOrder.data.filter(e => e.status == commonFunction.orderStatus.TransferShipper)
     },
     methods: {
         processListOrder: function () {
@@ -100,6 +101,6 @@ export default {
             });
 
             this.totalSuccessPrice = currencyFormat.format(successOrderTotal);
-        }
+        },
     },
 };
