@@ -23,6 +23,7 @@ export default {
         } else if (auth) {
             commonFunction.redirect("/" + role + "/management");
         }
+        commonFunction.redirect("/admin/management");
     }
 };
 </script>

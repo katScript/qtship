@@ -1,7 +1,9 @@
 package com.spring.app.orders.models;
 
 import com.spring.app.customers.models.Customer;
+import com.spring.app.products.models.Package;
 import com.spring.app.shipping.models.Shipper;
+import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.warehouse.models.Warehouse;
 
 import javax.persistence.*;
@@ -10,100 +12,113 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
     public static final String PREFIX = "ORD";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
-    @Column(name = "note")
-    private String note;
-    @Column(name = "feedback")
-    private String feedback;
-    @Column(name = "notification")
-    private Boolean notification;
-    @Column(name = "subtotal")
-    private Double subtotal;
-    @Column(name = "total_weight")
-    private Double totalWeight;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
     @Column(name = "sender_name")
     private String senderName;
     @Column(name = "sender_phone")
     private String senderPhone;
     @Column(name = "sender_address")
     private String senderAddress;
+    @Column(name = "subtotal")
+    private Double subtotal;
+    @Column(name = "total_weight")
+    private Double totalWeight;
+    @Column(name = "note")
+    private String note;
+    @Column(name = "status")
+    private String status;
+    @Column(name = "feedback")
+    private String feedback;
+    @Column(name = "notification")
+    private Boolean notification;
+    @Column(name = "ship_payer")
+    private Boolean shipPayer;
     @Column(name = "shipping_fee")
-    private Boolean shippingFee;
-    @Column(name = "shipping_type")
-    private String shippingType;
-    @Column(name = "shipping_time")
-    private Date shippingTime;
+    private Double shippingFee;
     @Column(name = "coupon")
     private String coupon;
-    @Column(name = "return_code")
-    private String returnCode;
-    @Column(name = "created_at", insertable = false, updatable = false)
-    private Date createdAt;
-    @Column(name = "updated_at", insertable = false, updatable = false)
-    private Date updatedAt;
-    private String status;
-    @OneToMany(mappedBy = "order",
-            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderItem> orderItemSet = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
     private Warehouse warehouse;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="customer_id", referencedColumnName = "id")
-    private Customer customer;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="shipper_id", referencedColumnName = "id")
+    @JoinColumn(name = "shipper_id", referencedColumnName = "id")
     private Shipper shipper;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_id", referencedColumnName = "id")
+    private ShippingAddress shippingAddress;
+    @Column(name = "shipping_type")
+    private String shippingType;
+    @Column(name = "shipping_time")
+    private Date shippingTime;
+    @Column(name = "return_code")
+    private String returnCode;
+    @OneToMany(mappedBy = "order",
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Package> packages;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private Date createdAt;
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private Date updatedAt;
 
-    public Order() {}
+    public Order() {
+        this.packages = new HashSet<>();
+    }
 
-    public Order(
+    public Order (
+            Customer customer,
             String senderName,
             String senderPhone,
             String senderAddress,
             String note,
+            String status,
             String feedback,
             Boolean notification,
-            Boolean shippingFee,
+            Boolean shipPayer,
+            Double shippingFee,
             String coupon,
+            Warehouse warehouse,
+            Shipper shipper,
+            ShippingAddress shippingAddress,
             String shippingType,
             Date shippingTime,
-            String returnCode
+            String returnCode,
+            Set<Package> packages
     ) {
+        this.customer = customer;
         this.senderName = senderName;
         this.senderPhone = senderPhone;
         this.senderAddress = senderAddress;
         this.note = note;
+        this.status = status;
         this.feedback = feedback;
         this.notification = notification;
+        this.shipPayer = shipPayer;
         this.shippingFee = shippingFee;
         this.coupon = coupon;
+        this.warehouse = warehouse;
+        this.shipper = shipper;
+        this.shippingAddress = shippingAddress;
         this.shippingType = shippingType;
         this.shippingTime = shippingTime;
         this.returnCode = returnCode;
+        this.packages = packages;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Set<OrderItem> getOrderItemSet() {
-        return orderItemSet;
-    }
-
-    public Order setOrderItemSet(Set<OrderItem> orderItemSet) {
-        this.orderItemSet = orderItemSet;
-        return this;
-    }
-
-    public Order addOrderItem(OrderItem orderItem) {
-        this.orderItemSet.add(orderItem);
+    public Order setId(Long id) {
+        this.id = id;
         return this;
     }
 
@@ -119,6 +134,7 @@ public class Order {
         this.customer = customer;
         return this;
     }
+
     public String getSenderName() {
         return senderName;
     }
@@ -146,6 +162,23 @@ public class Order {
         return this;
     }
 
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public Order setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
+        return this;
+    }
+
+    public Double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public Order setTotalWeight(Double totalWeight) {
+        this.totalWeight = totalWeight;
+        return this;
+    }
 
     public String getNote() {
         return note;
@@ -183,28 +216,20 @@ public class Order {
         return this;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Boolean getShipPayer() {
+        return shipPayer;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public Double getSubtotal() {
-        return subtotal;
-    }
-
-    public Order setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
+    public Order setShipPayer(Boolean shipPayer) {
+        this.shipPayer = shipPayer;
         return this;
     }
 
-    public Boolean getShippingFee() {
+    public Double getShippingFee() {
         return shippingFee;
     }
 
-    public Order setShippingFee(Boolean shippingFee) {
+    public Order setShippingFee(Double shippingFee) {
         this.shippingFee = shippingFee;
         return this;
     }
@@ -224,6 +249,24 @@ public class Order {
 
     public Order setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+        return this;
+    }
+
+    public Shipper getShipper() {
+        return shipper;
+    }
+
+    public Order setShipper(Shipper shipper) {
+        this.shipper = shipper;
+        return this;
+    }
+
+    public ShippingAddress getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public Order setShippingAddress(ShippingAddress shippingAddress) {
+        this.shippingAddress = shippingAddress;
         return this;
     }
 
@@ -254,11 +297,20 @@ public class Order {
         return this;
     }
 
-    public Double getTotalWeight() {
-        return totalWeight;
+    public Set<Package> getPackages() {
+        return packages;
     }
 
-    public void setTotalWeight(Double totalWeight) {
-        this.totalWeight = totalWeight;
+    public Order setPackages(Set<Package> packages) {
+        this.packages = packages;
+        return this;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }

@@ -1,44 +1,97 @@
 package com.spring.app.products.models;
 
-import com.spring.app.orders.models.OrderItem;
+import com.spring.app.orders.models.Order;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="package")
+@Table(name="orders_package")
 public class Package {
+    public static final String PREFIX = "PCK";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="order_id", referencedColumnName = "id", nullable = false)
+    private Order order;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
+    @Column(name = "name")
+    private String name;
     @Column(name = "qty")
     private Integer qty;
+    @Column(name = "price")
+    private Double price;
+    @Column(name = "weight")
+    private Double weight;
+    @Column(name = "image_url")
+    private String imageUrl;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="order_items_id", referencedColumnName = "id", nullable = false)
-    private OrderItem orderItem;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
 
-    public Package () {}
+    public Package() {}
 
     public Package (
-        Integer qty,
-        OrderItem orderItem,
-        Product product
+            Order order,
+            Product product,
+            String name,
+            Integer qty,
+            Double price,
+            Double weight,
+            String imageUrl
     ) {
-        this.qty = qty;
-        this.orderItem = orderItem;
+        this.order = order;
         this.product = product;
+        this.name = name;
+        this.qty = qty;
+        this.price = price;
+        this.weight = weight;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getPackageCode() {
+        return PREFIX + String.format("%06d", id);
+    }
+
+    public Package setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public Package setOrder(Order order) {
+        this.order = order;
+        return this;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Package setProduct(Product product) {
+        this.product = product;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Package setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public Integer getQty() {
@@ -50,21 +103,30 @@ public class Package {
         return this;
     }
 
-    public OrderItem getOrderItem() {
-        return orderItem;
+    public Double getPrice() {
+        return price;
     }
 
-    public Package setOrderItem(OrderItem orderItem) {
-        this.orderItem = orderItem;
+    public Package setPrice(Double price) {
+        this.price = price;
         return this;
     }
 
-    public Product getProduct() {
-        return product;
+    public Double getWeight() {
+        return weight;
     }
 
-    public Package setProduct(Product product) {
-        this.product = product;
+    public Package setWeight(Double weight) {
+        this.weight = weight;
+        return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Package setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
         return this;
     }
 
