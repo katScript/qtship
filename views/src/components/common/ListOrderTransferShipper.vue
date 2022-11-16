@@ -9,11 +9,7 @@
       <div class="col-12">
         <div class="row d-flex justify-content-end">
           <div class="col-10">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Mã ĐH hoặc Sđt người nhận"
-            />
+            <input type="text" class="form-control" placeholder="Mã ĐH hoặc Sđt người nhận" />
           </div>
           <div class="col-2">
             <button class="btn btn-outline-danger">
@@ -56,13 +52,50 @@
   </div>
 </template>
 
-<style scoped>
-@media screen and (max-width: 992px) {
-  .btn-accept-order-all,
-  .btn-accept-order {
-    font-size: 10px;
-    padding-right: 1px;
-    padding-left: 1px;
+<script>
+  import OrderData from "@/components/models/order/order-data";
+  import ShipperData from "@/components/models/shipping/shipper-data";
+
+  import { commonFunction } from '@/scripts/ulti';
+  // import axios from "axios";
+
+  export default {
+    props: ["listOrderData"],
+    setup() {
+      const shipperModel = new ShipperData();
+      const orderModel = new OrderData();
+      return {
+        shipperModel,
+        orderModel
+      }
+    },
+    data() {
+      return {
+        idRequest: 0,
+        listOrderTransfer: []
+      }
+    },
+    mounted() {
+      this.shipperModel.setData(
+        JSON.parse(commonFunction.getShipperStorage())
+      );
+      this.idRequest = this.shipperModel.getData().id;
+      this.listOrderTransfer = this.listOrderData;
+    },
+    methods: {
+
+    },
   }
-}
+</script>
+
+<style scoped>
+  @media screen and (max-width: 992px) {
+
+    .btn-accept-order-all,
+    .btn-accept-order {
+      font-size: 10px;
+      padding-right: 1px;
+      padding-left: 1px;
+    }
+  }
 </style>

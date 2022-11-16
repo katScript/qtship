@@ -120,29 +120,29 @@ export default {
                 this.countOrder = this.listOrderByCustomer.length;
 
                 switch (this.$route.params.status.toUpperCase()) {
-                    case commonFunction.typeOrderSuccess:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderSuccess);
+                    case commonFunction.orderStatus.Success:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Success);
                         break;
-                    case commonFunction.typeOrderDelivery:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelivery);
+                    case commonFunction.orderStatus.Delivery:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Delivery);
                         break;
-                    case commonFunction.typeOrderDelay:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderDelay);
+                    case commonFunction.orderStatus.Delay:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Delay);
                         break;
-                    case commonFunction.typeOrderCancel:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderCancel);
+                    case commonFunction.orderStatus.Cancel:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Cancel);
                         break;
-                    case commonFunction.typeOrderOccurred:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderOccurred);
+                    case commonFunction.orderStatus.Occurred:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Occurred);
                         break;
-                    case commonFunction.typeOrderReturn:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderReturn);
+                    case commonFunction.orderStatus.Return:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Return);
                         break;
                     case commonFunction.typeOrderUpdated:
                         this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderUpdated);
                         break;
-                    case commonFunction.typeOrderWaitingConfirm:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderWaitingConfirm);
+                    case commonFunction.orderStatus.Pending:
+                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Pending);
                         break;
                     default:
                         break;

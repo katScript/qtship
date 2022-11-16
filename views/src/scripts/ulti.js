@@ -192,6 +192,21 @@ const commonFunction = {
     typeOrderDelay: "DELAY",
     typeOrderReturn: "RETURN",
     typeOrderUpdated: "UPDATED",
+    orderStatus: {
+        Pending: "PENDING",
+        Success : "SUCCESS",
+        Payment: "PAYMENTED",
+        Delivery: "DELIVERY",
+        Occurred: "OCCURRED",
+        Cancel: "CANCEL",
+        Delay: "DELAY",
+        Updated: "UPDATED",
+        Checking: "CHECKING",
+        Storage: "STORAGE",
+        TransferShipper: "TRANSFER_SHIPPER",
+        ShipperConfirm: "SHIPPER_CONFIRMED",
+        Done: "DONE"
+    }
 }
 
 export { commonFunction };
