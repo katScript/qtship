@@ -10,14 +10,16 @@ const handleOpenMenu = (value) => {
 </script>
 <template>
   <a-row style="min-height: 100vh;">
-    <a-col :span="openMenu ? 4 : 1.5" class="border-l border">
+    <a-col :span="openMenu ? 4 : 1" class="border-l border">
       <SidebarLeft
         :openMenu="openMenu"
         @on-click-menu="handleOpenMenu"
       />
     </a-col>
-    <a-col :span="!openMenu ? 22.5 : 20" class="content">
-      <slot></slot>
+    <a-col :span="!openMenu ? 23 : 20">
+      <div class="content">
+        <slot></slot>
+      </div>
     </a-col>
   </a-row>
 

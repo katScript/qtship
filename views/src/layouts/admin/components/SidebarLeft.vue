@@ -6,7 +6,9 @@ import {
   ShoppingCartOutlined
 } from '@ant-design/icons-vue';
 import { defineEmits, defineProps } from "vue";
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const emits = defineEmits(['on-click-menu']);
 
@@ -20,25 +22,30 @@ const toggleOpenMenu = () => {
 const orderList = [
   {
     name: 'Tất cả',
-    path: '/',
+    path: '/admin/order',
   },
   {
-    name: 'Đơn hàng đang xủ lý',
-    path: '/',
+    name: 'Đơn hàng đang xử lý',
+    path: '/admin/order?status=1',
   },
   {
-    name: 'Đơn hàng đã xủ lý',
-    path: '/',
+    name: 'Đơn hàng đã xử lý',
+    path: '/admin/order?status=2',
   },
   {
     name: 'Đơn hàng phát sinh',
-    path: '/',
+    path: '/admin/order?status=3',
   },
   {
     name: 'Đơn hàng bị hủy',
-    path: '/',
+    path: '/admin/order?status=4',
   }
 ]
+const handleClickItem = (inList = false, path) => {
+  if (inList) {
+    return router.push(path);
+  }
+}
 </script>
 
 <template>
@@ -63,7 +70,7 @@ const orderList = [
         <ShoppingCartOutlined />
       </template>
       <template #title>Quản lý đơn hàng</template>
-      <a-menu-item :key="'sub-1' + index" v-for="(option, index) in orderList">{{ option.name }}</a-menu-item>
+      <a-menu-item :key="'sub-1' + index" v-for="(option, index) in orderList" @click="handleClickItem(true, option.path)">{{ option.name }}</a-menu-item>
     </a-sub-menu>
     <a-sub-menu key="sub-2" style="background: #bf1e2d; color: #ffffff;">
       <template #icon>

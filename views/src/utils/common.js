@@ -9,7 +9,7 @@ const userCookies = {
   roles: "4DFkgFzNb6eHkWw7SLzGCGvTwNN49pk3"
 }
 
-export default common = {
+export default {
   TOKEN: () => cookiesManager.cookies.get(userCookies.token),
   DOMAIN_URL: 'https://api.dcodetest.com/v1/',
 }

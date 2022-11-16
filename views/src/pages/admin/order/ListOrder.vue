@@ -1,18 +1,25 @@
 <script setup>
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-  },
-]
+import { list } from "@/services/admin";
+import { ref, watch } from "vue";
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const listOrder = ref([]);
+
+const getListOrder = async () => {
+  if (route.query?.status) {
+    const { data } = await list({ status: route.query.status });
+    listOrder.value = data;
+  } else {
+    const { data } = await list();
+    listOrder.value = data;
+  }
+}
+
+//
+getListOrder();
+watch(() => route.query?.status, () => getListOrder());
 
 const columns = [
   {
@@ -33,9 +40,9 @@ const columns = [
 ]
 </script>
 <template>
-  <div class="px-4 ">
+  <div class="px-4">
     <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase">Tất cả đơn hàng</div>
-    <a-table :dataSource="dataSource" :columns="columns" class="border">
+    <a-table :dataSource="listOrder" :columns="columns" class="border">
       <template #bodyCell="{ column, text }">
         <template v-if="column.dataIndex === 'name'">
           <a href="javascript:;">{{ text }}</a>
