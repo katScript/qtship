@@ -139,10 +139,11 @@ public class ProductService {
             packageItem.setProduct(null)
                     .setImageUrl(getImageUrl(FilesStorageServiceImpl.DEFAULT));
         } else {
-            Product product = productRepository.findById(packageItem.getProduct().getId())
+            Product product = productRepository.findById(data.getProduct().getId())
                     .orElseThrow(() -> new RuntimeException("Product not found!"));
 
-            packageItem.setProduct(product).setImageUrl(product.getImage());
+            packageItem.setProduct(product)
+                    .setImageUrl(this.processProductImage(product));
         }
 
         packageItem.setPrice(data.getPrice())

@@ -108,7 +108,7 @@ public class OrderService {
     }
 
     public void processWarehouse(OrderData data, Order order) {
-        if (data.getId() == null) {
+        if (data.getWarehouse() == null || data.getWarehouse().getId() == null) {
             order.setShippingTime(null).setWarehouse(null);
         } else {
             order.setShippingTime(
@@ -158,6 +158,8 @@ public class OrderService {
                 packageItems.getProduct().setQty(curQty - p.getQty());
 
             }
+
+            packageItems.setOrder(order);
             packages.add(packageItems);
         }
 
@@ -167,9 +169,9 @@ public class OrderService {
 
     public OrderData getOrderDetail(Order order) {
         Customer customer = order.getCustomer();
-        WarehouseData warehouseData = order.getWarehouse().getId() == null ?
+        WarehouseData warehouseData = order.getWarehouse() == null ?
                 new WarehouseData() : warehouseService.processWarehouseDataResponse(order.getWarehouse());
-        ShipperData shipperData = order.getShipper().getId() == null ?
+        ShipperData shipperData = order.getShipper() == null ?
                 new ShipperData() : shippingService.processShipperDataResponse(order.getShipper());
 
         Set<PackageData> products = new HashSet<>();

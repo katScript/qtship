@@ -38,11 +38,13 @@ public class OrderController {
     ShipperRepository shipperRepository;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderData order) {
-        if (order.getCustomerId() != null) {
-            this.orderService.saveCustomerOrder(order);
-        } else {
-            this.orderService.saveGuestOrder(order);
+    public ResponseEntity<?> saveOrder(@Valid @RequestBody List<OrderData> data) {
+        for (OrderData order : data) {
+            if (order.getCustomerId() != null) {
+                this.orderService.saveCustomerOrder(order);
+            } else {
+                this.orderService.saveGuestOrder(order);
+            }
         }
 
         return ResponseEntity.ok(new MessageResponse("Save order successfully!"));
@@ -73,8 +75,17 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllOrder() {
-        List<Order> orders = orderRepository.findAll();
+    public ResponseEntity<?> getAllOrder(
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "from", required = false) String from,
+            @RequestParam(value = "to", required = false) String to
+    ) {
+        List<Order> orders = orderRepository.findAllByStatusAndCreatedAtBetween(
+                status,
+                from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                to != null ? DateFormatHelper.stringToDate(to) : new Date()
+        );
+
         List<OrderData> listOrder = new ArrayList<>();
 
         for (Order o : orders) {
