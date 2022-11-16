@@ -15,10 +15,10 @@
         <div class="row">
           <div class="col-md-4">
             <h5>Hiệu suất giao hàng</h5>
-            <DeliveryPerformanceChart />
+            <!-- <DeliveryPerformanceChart /> -->
           </div>
           <div class="col-md-4">
-            <OrderTypeAdminChart />
+            <!-- <OrderTypeAdminChart /> -->
           </div>
         </div>
       </div>
