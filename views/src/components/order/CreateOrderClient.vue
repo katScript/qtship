@@ -32,7 +32,7 @@
                                                 }}</small>
                                             <input type="text" class="form-control" id=""
                                                    placeholder="Số điện thoại người nhận"
-                                                   v-model="shippingData.data.phone"/>
+                                                   v-model="order.shippingAddress.phone"/>
                                             <br/>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                                                     shippingData.errors.name
                                                 }}</small>
                                             <input type="text" class="form-control" id="" placeholder="Tên người nhận"
-                                                   v-model="shippingData.data.name"/>
+                                                   v-model="order.shippingAddress.name"/>
                                             <br/>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@
                                         <div class="form-group col-11">
                                             <input type="text" class="form-control" id=""
                                                    placeholder="Số điện thoại người gửi"
-                                                   v-model="orderData.data.senderPhone"/>
+                                                   v-model="order.senderPhone"/>
                                             <br/>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
                                         <div class="col-1"><i class="fa-solid fa-user"></i></div>
                                         <div class="form-group col-11">
                                             <input type="text" class="form-control" id="" placeholder="Thông tin người gửi"
-                                                   v-model="orderData.data.senderName"/>
+                                                   v-model="order.senderName"/>
                                             <br/>
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
                                         </div>
                                         <div class="col-11">
                                             <input type="text" class="form-control" id="" placeholder="Địa chỉ người gửi"
-                                                   v-model="orderData.data.senderAddress"/>
+                                                   v-model="order.senderAddress"/>
                                             <br/>
                                         </div>
                                     </div>
@@ -107,9 +107,9 @@
                                             <div class="col-11">
                                                 <small class="text-danger">{{ orderData.errors.shippingType }}</small>
                                                 <select class="form-select" aria-label="Default select example"
-                                                        v-model="orderData.data.shippingType">
+                                                        v-model="order.shippingType">
                                                     <option value="" selected>- Chọn phương thức giao hàng -</option>
-                                                    <option v-for="(type, index) in listTypeShipping" :key="index">
+                                                    <option v-for="(type, index) in listTypeShipping" :key="index" :value="type">
                                                         {{ getShippingType(type) }}
                                                     </option>
                                                 </select>
@@ -137,7 +137,7 @@
                                                 <div class="col-8">
                                                     <small class="text-danger">{{ orderData.errors.warehouse }}</small>
                                                     <select class="form-select" aria-label="Default select example"
-                                                            v-model="warehouseData.data.id">
+                                                            v-model="order.warehouse.id">
                                                         <option value="">- Địa điểm lấy hàng -</option>
                                                         <option v-for="(w, index) in warehouseList"
                                                                 :value="w.data.id"
@@ -156,7 +156,7 @@
                                                     <input type="datetime-local"
                                                            class="form-control"
                                                            v-on:change="autoSetOrderShippingTime()"
-                                                           v-model="orderData.data.shippingTime"/>
+                                                           v-model="order.shippingTime"/>
                                                     <br/>
                                                 </div>
                                             </div>
@@ -183,7 +183,7 @@
                                                 <div class="col-11">
                                                     <div class="row">
                                                         <div class="col-sm-2 p-0">
-                                                            <img :src="ps.product.image" alt="" style="width: 100%;"/>
+                                                            <img :src="ps.image" alt="" style="width: 100%;"/>
                                                         </div>
                                                         <div class="col-sm-10">
                                                             <div class="row">
@@ -191,7 +191,7 @@
                                                                     <select class="form-select"
                                                                             aria-label="Default select example">
                                                                         <!-- index 0 is default -->
-                                                                        <option>{{ ps.product.name }}</option>
+                                                                        <option>{{ ps.name }}</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-2">
@@ -200,12 +200,12 @@
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <input type="text" class="form-control product-select-weight"
-                                                                           v-model="ps.product.weight"
+                                                                           v-model="ps.weight"
                                                                            placeholder="Trọng lượng (kg)" disabled readonly/>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <input type="text" class="form-control product-select-public-price"
-                                                                           v-model="ps.product.publicPrice"
+                                                                           v-model="ps.price"
                                                                            placeholder="Giá bán (VNĐ)" disabled readonly/>
                                                                 </div>
                                                             </div>
@@ -241,17 +241,17 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-2">
-                                                                    <input type="number" class="form-control mb-1" v-model="packageQtyInput"
+                                                                    <input type="number" class="form-control mb-1" v-model="productSelected.qty"
                                                                            min="0" placeholder="SL"/>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <input type="number" class="form-control product-select-weight"
-                                                                           placeholder="Trọng lượng (kg)"/>
+                                                                           placeholder="Trọng lượng (kg)" v-model="productSelected.weight"/>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <input type="number"
                                                                            class="form-control product-select-public-price"
-                                                                           placeholder="Giá bán (VNĐ)"/>
+                                                                           placeholder="Giá bán (VNĐ)" v-model="productSelected.publicPrice"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -276,12 +276,12 @@
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 <!-- phai tinh gia -->
-                                                Phí ship: <span class="feeShip">0 đ</span>
+                                                Phí ship: <span class="feeShip">{{ order.shippingFee }} đ</span>
                                                 <br/>
                                             </div>
                                             <div class="col-sm-8">
                                                 <select class="form-select" aria-label="Default select example"
-                                                        v-model="orderData.data.shippingFee">
+                                                        v-model="order.shipPayer">
                                                     <option value="true">Shop trả ship</option>
                                                     <option value="false">Người nhận trả ship</option>
                                                 </select>
@@ -291,7 +291,7 @@
                                                     <label for="">Ghi chú đơn hàng</label>
                                                     <textarea class="form-control" id=""
                                                               aria-describedby="emailHelp" rows="4"
-                                                              v-model="orderData.data.note"
+                                                              v-model="order.note"
                                                               placeholder="Nhập ghi chú của đơn hàng"/>
                                                     <br/>
                                                 </div>
@@ -303,7 +303,7 @@
                                         <div class="row">
                                             <div class="col-8">
                                                 <input type="text" class="form-control" placeholder="Mã giảm giá"
-                                                       v-model="orderData.data.coupon"/>
+                                                       v-model="order.coupon"/>
                                             </div>
                                             <div class="col-4">
                                                 <button class="btn btn-danger w-100" v-on:click="isDisplayListVoucher = !isDisplayListVoucher">

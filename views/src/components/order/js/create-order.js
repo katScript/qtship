@@ -53,6 +53,9 @@ export default {
     },
     data() {
         return {
+            // inputData
+            order: this.orderModel.getData(),
+            orderError: this.orderModel.getErrors(),
             // input data
             orderData: {
                 data: {
@@ -131,7 +134,7 @@ export default {
             commonFunction.configApi()
         ).then((response) => {
             // handle not found
-            this.getListWarehouseModel(response.data);
+            this.getListWarehouse(response.data);
         }).catch((e) => {
             console.log(e);
         });
@@ -158,7 +161,7 @@ export default {
                 commonFunction.DOMAIN_URL + "v1/product/customer/" + customerId,
                 commonFunction.configApi()
             ).then((response) => {
-                this.getListProductModel(response.data);
+                this.getListProduct(response.data);
             }).catch((e) => {
                 console.log(e);
             });
@@ -193,38 +196,29 @@ export default {
     },
     methods: {
         processOrderData: function () {
-            this.orderData.data = this.orderModel.getData();
+            this.$refs.locationPicker.updateSelectData(this.order.shippingAddress);
 
-            this.orderItemModel.setData(this.orderModel.getData().orderItem[0]);
-
-            this.warehouseModel.setData(this.orderModel.getData().warehouse);
-            this.warehouseData.data = this.warehouseModel.getData();
-
-            this.shippingModel.setData(this.orderItemModel.getData().shippingAddress);
-            this.shippingData.data = this.shippingModel.getData();
-
-            this.$refs.locationPicker.updateSelectData(this.shippingModel.getData());
-
-            this.packageLocation = this.warehouseModel.getData().id ?
+            this.packageLocation = this.order.warehouse.id ?
                 commonFunction.packageLocationConfig.HOUSE_ADDRESS.value :
                 commonFunction.packageLocationConfig.POST_OFFICES.value;
 
+            this.$refs.locationPicker.updateSelectData(this.order.shippingAddress);
 
-            this.orderItemModel.getData().products.forEach(e => {
+            this.order.products.forEach(e => {
                 let newPackage = new PackageData();
                 newPackage.setData(e);
 
                 this.packageList[e.product.sku] = newPackage.getData();
             });
         },
-        getListWarehouseModel: function (data) {
+        getListWarehouse: function (data) {
             data.forEach(element => {
                 let wm = new WarehouseData();
                 wm.setData(element);
                 this.warehouseList.push(wm);
             });
         },
-        getListProductModel: function (data) {
+        getListProduct: function (data) {
             data.forEach(element => {
                 let pm = new ProductData();
                 pm.setData(element);
@@ -235,19 +229,19 @@ export default {
         updateAddress(data, type) {
             switch (type) {
                 case "PROVINCE":
-                    this.shippingData.data.provinceId = data?.code;
-                    this.shippingData.data.province = data?.label;
+                    this.order.shippingAddress.provinceId = data?.code;
+                    this.order.shippingAddress.province = data?.label;
                     break;
                 case "DISTRICT":
-                    this.shippingData.data.districtId = data?.code;
-                    this.shippingData.data.district = data?.label;
+                    this.order.shippingAddress.districtId = data?.code;
+                    this.order.shippingAddress.district = data?.label;
                     break;
                 case "WARD":
-                    this.shippingData.data.wardId = data?.code;
-                    this.shippingData.data.ward = data?.label;
+                    this.order.shippingAddress.wardId = data?.code;
+                    this.order.shippingAddress.ward = data?.label;
                     break;
                 case "STREET":
-                    this.shippingData.data.street = data;
+                    this.order.shippingAddress.street = data;
                     break;
                 default:
                     break;
@@ -262,13 +256,16 @@ export default {
             newPackage.setData(
                 {
                     product: this.productSelected,
-                    qty: this.packageQtyInput
+                    qty: this.productSelected.qty,
+                    name: this.productSelected.name,
+                    price: this.productSelected.publicPrice,
+                    weight: this.productSelected.weight,
+                    image: this.productSelected.image
                 }
             );
 
             this.packageList[this.productSelected.sku] = newPackage.getData();
             this.productSelected = {};
-            this.packageQtyInput = 0;
         },
         removeProductInPackage: function (sku) {
             delete this.packageList[sku];
@@ -277,13 +274,13 @@ export default {
             return commonFunction.generateCodeToText(text);
         },
         applySaleCode: function (code) {
-            this.orderData.data.coupon = code;
+            this.order.coupon = code;
         },
         autoSetOrderShippingTime() {
-            this.orderData.data.shippingTime = moment(this.shippingDateTime).format("YYYY-MM-DD HH:mm:ss");
+            this.order.shippingTime = moment(this.shippingDateTime).format("YYYY-MM-DD HH:mm:ss");
         },
         saveOrder: function () {
-            let orderData = this.prepareOrderData();
+            let orderData = [this.prepareOrderData()];
 
             axios
                 .post(
@@ -324,24 +321,25 @@ export default {
             });
 
             let warehouse;
-
             if (this.packageLocation === this.packageLocationOption.HOUSE_ADDRESS.value) {
                 let warehouseModel = new WarehouseData();
-                warehouseModel.setData(this.warehouseData.data);
+                warehouseModel.setData(this.order.warehouse);
                 warehouse = warehouseModel.getData();
             } else {
                 warehouse = {};
                 this.orderModel.getData().shippingTime = "";
             }
 
-            this.shippingModel.setData(this.shippingData.data);
-            this.orderItemModel.setShippingAddress(this.shippingModel.getData());
-            this.orderItemModel.setProduct(packageItems);
+            let shippingAddress = new ShippingData();
+            shippingAddress.setData(this.order.shippingAddress);
 
             let orderModel = new OrderData();
-            orderModel.setData(this.orderData.data);
-            orderModel.setOrderItem([this.orderItemModel.getData()]);
+            orderModel.setData(this.order);
             orderModel.setWarehouse(warehouse);
+            orderModel.setProduct(packageItems);
+            orderModel.setShippingAddress(shippingAddress.getData());
+
+            console.log(orderModel.getData());
 
             return orderModel.getData();
         },
