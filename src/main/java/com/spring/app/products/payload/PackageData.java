@@ -3,7 +3,11 @@ package com.spring.app.products.payload;
 public class PackageData {
     private Long id;
     private ProductData product;
+    private String name;
     private Integer qty;
+    private Double price;
+    private Double weight;
+    private String image;
     private String createdAt;
     private String updatedAt;
 
@@ -11,12 +15,20 @@ public class PackageData {
 
     public PackageData(
             Long id,
+            ProductData product,
+            String name,
             Integer qty,
-            ProductData productData
+            Double price,
+            Double weight,
+            String image
     ) {
         this.id = id;
+        this.product = product;
+        this.name = name;
         this.qty = qty;
-        this.product = productData;
+        this.price = price;
+        this.weight = weight;
+        this.image = image;
     }
 
     public Long getId() {
@@ -31,8 +43,48 @@ public class PackageData {
         return product;
     }
 
-    public void setProduct(ProductData product) {
-        this.product = product;
+    public void setProduct(ProductData productId) {
+        this.product = productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCreatedAt() {
@@ -49,13 +101,5 @@ public class PackageData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Integer getQty() {
-        return qty;
-    }
-
-    public void setQty(Integer qty) {
-        this.qty = qty;
     }
 }

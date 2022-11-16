@@ -20,4 +20,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select o from Order o where o.shipper = :shipper and ( :status is null or o.status = :status ) and o.createdAt between :from and :to order by o.createdAt desc")
     List<Order> findByShipperAndStatusAndCreatedAtBetween (Shipper shipper, String status, Date from, Date to);
+    @Query("select o from Order o where ( :status is null or o.status = :status ) and o.createdAt between :from and :to order by o.createdAt desc")
+    List<Order> findAllByStatusAndCreatedAtBetween (String status, Date from, Date to);
 }
