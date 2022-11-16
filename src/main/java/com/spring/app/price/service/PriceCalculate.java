@@ -1,7 +1,6 @@
 package com.spring.app.price.service;
 
 import com.spring.app.orders.models.Order;
-import com.spring.app.orders.models.OrderItem;
 import com.spring.app.price.models.Coupon;
 import com.spring.app.price.models.repository.CouponRepository;
 import com.spring.app.products.models.Package;
@@ -17,15 +16,8 @@ public class PriceCalculate {
         Double subtotal = 0.0;
         Coupon coupon = couponRepository.findByCode(order.getCoupon()).orElse(null);
 
-        for (OrderItem item : order.getOrderItemSet()) {
-            Double price = 0.0;
-
-            for (Package p: item.getPackages()) {
-                price += p.getQty() * p.getProduct().getPublicPrice();
-            }
-
-            subtotal += price;
-            item.setPrice(price);
+        for (Package item : order.getPackages()) {
+            subtotal += item.getQty() * item.getPrice();
         }
 
         if (coupon != null && coupon.isValid()) {

@@ -4,8 +4,10 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.helper.services.FilesStorageServiceImpl;
+import com.spring.app.orders.models.Order;
 import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
+import com.spring.app.products.models.repository.PackageRepository;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.PackageData;
 import com.spring.app.products.payload.ProductData;
@@ -27,15 +29,17 @@ public class ProductService {
     ProductRepository productRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    PackageRepository packageRepository;
 
     public void saveProduct(ProductData productData, MultipartFile file) {
         Product product = processProductData(productData);
 
         product.setImage(processUploadProductImage(
-                        file,
-                        Customer.GUEST_CODE,
-                        product)
-                );
+                file,
+                Customer.GUEST_CODE,
+                product)
+        );
 
         productRepository.save(product);
     }
@@ -55,6 +59,7 @@ public class ProductService {
         productRepository.save(product);
 
     }
+
     public Product processProductData(ProductData productData) {
         Product product;
 
@@ -89,29 +94,63 @@ public class ProductService {
     }
 
     public ProductData processProductDataResponse(Product product) {
-        ProductData pD = new ProductData(
-                product.getId(),
-                product.getCustomer().getId(),
-                product.getCustomer().getCustomerId(),
-                product.getCustomer().getFullName(),
-                product.getSku(),
-                product.getQty(),
-                product.getName(),
-                product.getWeight(),
-                product.getBasePrice(),
-                product.getPublicPrice(),
-                product.getDescription()
-        );
+        ProductData pD;
 
-        pD.setImage(processProductImage(product));
-        pD.setCreatedAt(
-                DateFormatHelper.dateToString(product.getCreatedAt())
-        );
-        pD.setUpdatedAt(
-                DateFormatHelper.dateToString(product.getUpdatedAt())
-        );
+        if (product != null) {
+            pD = new ProductData(
+                    product.getId(),
+                    product.getCustomer().getId(),
+                    product.getCustomer().getCustomerId(),
+                    product.getCustomer().getFullName(),
+                    product.getSku(),
+                    product.getQty(),
+                    product.getName(),
+                    product.getWeight(),
+                    product.getBasePrice(),
+                    product.getPublicPrice(),
+                    product.getDescription()
+            );
+
+            pD.setImage(processProductImage(product));
+            pD.setCreatedAt(
+                    DateFormatHelper.dateToString(product.getCreatedAt())
+            );
+            pD.setUpdatedAt(
+                    DateFormatHelper.dateToString(product.getUpdatedAt())
+            );
+        } else {
+            pD = new ProductData();
+        }
 
         return pD;
+    }
+
+    public Package processPackage(PackageData data) {
+        Package packageItem;
+
+        if (data.getId() == null) {
+            packageItem = new Package();
+        } else {
+            packageItem = this.packageRepository.findById(data.getId())
+                    .orElseThrow(() -> new RuntimeException("Package not found!"));
+        }
+
+        if (data.getProduct() == null || data.getProduct().getId() == null) {
+            packageItem.setProduct(null)
+                    .setImageUrl(getImageUrl(FilesStorageServiceImpl.DEFAULT));
+        } else {
+            Product product = productRepository.findById(packageItem.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found!"));
+
+            packageItem.setProduct(product).setImageUrl(product.getImage());
+        }
+
+        packageItem.setPrice(data.getPrice())
+                .setName(data.getName())
+                .setQty(data.getQty())
+                .setWeight(data.getWeight());
+
+        return packageItem;
     }
 
     public PackageData processPackageProductResponse(Package data) {
@@ -119,8 +158,12 @@ public class ProductService {
 
         PackageData pD = new PackageData(
                 data.getId(),
+                this.processProductDataResponse(product),
+                data.getName(),
                 data.getQty(),
-                this.processProductDataResponse(product)
+                data.getPrice(),
+                data.getWeight(),
+                data.getImageUrl()
         );
 
         pD.setCreatedAt(

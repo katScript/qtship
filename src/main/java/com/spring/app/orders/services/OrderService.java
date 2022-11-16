@@ -4,24 +4,18 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
-import com.spring.app.orders.models.OrderItem;
 import com.spring.app.orders.models.OrderStatus;
-import com.spring.app.orders.models.repository.OrderItemRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
-import com.spring.app.orders.payload.OrderItemData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
 import com.spring.app.price.service.PriceCalculate;
 import com.spring.app.products.models.Package;
-import com.spring.app.products.models.Product;
-import com.spring.app.products.models.repository.PackageRepository;
-import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.payload.PackageData;
-import com.spring.app.products.payload.ProductData;
 import com.spring.app.products.service.ProductService;
 import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.shipping.models.repository.ShippingAddressRepository;
+import com.spring.app.shipping.payload.ShipperData;
 import com.spring.app.shipping.payload.ShippingAddressData;
 import com.spring.app.shipping.service.ShippingService;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
@@ -37,15 +31,9 @@ public class OrderService {
     @Autowired
     public OrderRepository orderRepository;
     @Autowired
-    public OrderItemRepository orderItemRepository;
-    @Autowired
     public OrderStatusRepository orderStatusRepository;
     @Autowired
     public CustomerRepository customerRepository;
-    @Autowired
-    public PackageRepository packageRepository;
-    @Autowired
-    public ProductRepository productRepository;
     @Autowired
     public ShippingAddressRepository shippingAddressRepository;
     @Autowired
@@ -87,74 +75,49 @@ public class OrderService {
     }
 
     public Order processOrder(OrderData data) {
-        Order _order;
+        Order order;
         if (data.getId() != null) {
-            _order = this.orderRepository.findById(data.getId())
+            order = this.orderRepository.findById(data.getId())
                     .orElseThrow(() -> new RuntimeException("Order not found!"));
         } else {
-            _order = new Order();
+            order = new Order();
         }
 
-        _order.setCoupon(data.getCoupon())
-                .setFeedback(data.getFeedback())
-                .setNote(data.getNote())
-                .setNotification(data.getNotification())
-                .setSenderName(data.getSenderName())
-                .setSenderPhone(data.getSenderName())
+        OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
+
+        order.setSenderName(data.getSenderName())
                 .setSenderPhone(data.getSenderPhone())
                 .setSenderAddress(data.getSenderAddress())
-                .setShippingFee(data.getShippingFee())
+                .setNote(data.getNote())
+                .setFeedback(data.getFeedback())
+                .setNotification(data.getNotification())
+                .setShipPayer(data.getShipPayer())
+                .setCoupon(data.getCoupon())
                 .setShippingType(data.getShippingType())
-                .setReturnCode(data.getReturnCode());
+                .setReturnCode(data.getReturnCode())
+                .setShippingAddress(
+                        this.processShippingAddress(data.getShippingAddress())
+                ).setStatus(status.getCode());
 
-        if (data.getWarehouse().getId() != null) {
-            _order.setShippingTime(
+        this.processWarehouse(data, order);
+        this.processPackage(data.getProducts(), order);
+        this.processOrderWeight(order);
+        this.priceCalculate.processSubtotal(order);
+
+        return order;
+    }
+
+    public void processWarehouse(OrderData data, Order order) {
+        if (data.getId() == null) {
+            order.setShippingTime(null).setWarehouse(null);
+        } else {
+            order.setShippingTime(
                     DateFormatHelper.stringToDate(data.getShippingTime())
             ).setWarehouse(
                     this.warehouseRepository.findById(data.getWarehouse().getId())
                             .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
             );
-        } else {
-            _order.setShippingTime(null).setWarehouse(null);
         }
-
-        Set<OrderItem> orderItems = this.processOrderItem(data.getOrderItem(), _order);
-
-        _order.getOrderItemSet().clear();
-        _order.getOrderItemSet().addAll(orderItems);
-        this.processOrderWeight(_order);
-        priceCalculate.processSubtotal(_order);
-
-        OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
-        _order.setStatus(status.getCode());
-
-        return _order;
-    }
-
-    public Set<OrderItem> processOrderItem(List<OrderItemData> orderItems, Order order) {
-        Set<OrderItem> orderItemSet = new HashSet<>();
-
-        for (OrderItemData od: orderItems) {
-            OrderItem orderItem;
-
-            if (od.getId() != null) {
-                orderItem = this.orderItemRepository.findById(od.getId())
-                        .orElseThrow(() -> new RuntimeException("Process order error!"));
-            } else {
-                orderItem = new OrderItem();
-                orderItem.setOrder(order);
-            }
-
-            Set<Package> packageSet = this.processPackage(od.getProducts(), orderItem);
-
-            orderItem.getPackages().clear();
-            orderItem.getPackages().addAll(packageSet);
-
-            orderItem.setShippingAddress(this.processShippingAddress(od.getShippingAddress()));
-            orderItemSet.add(orderItem);
-        }
-
-        return orderItemSet;
     }
 
     public ShippingAddress processShippingAddress(ShippingAddressData shippingAddress) {
@@ -180,94 +143,71 @@ public class OrderService {
         return _shippingAddress;
     }
 
-    public Set<Package> processPackage(List<PackageData> products, OrderItem orderItem) {
+    public void processPackage(Set<PackageData> products, Order order) {
         Set<Package> packages = new HashSet<>();
-        HashMap<Long, Boolean> map = new HashMap<>();
 
         for (PackageData p: products) {
-            ProductData productData = p.getProduct();
+            Package packageItems = productService.processPackage(p);
 
-            if (map.get(productData.getId()) != null)
-                throw new RuntimeException("Not valid Product principle!");
+            if (packageItems.getProduct() != null) {
+                Integer curQty = packageItems.getProduct().getQty();
 
-            map.put(productData.getId(), true);
-            Product product = this.productRepository.findById(productData.getId())
-                    .orElseThrow(() -> new RuntimeException("Product not found!"));
+                if (curQty > 0 && curQty < p.getQty())
+                    throw new RuntimeException("Not enough quantity!");
 
-            Package pkage;
-            Integer curQty = product.getQty();
+                packageItems.getProduct().setQty(curQty - p.getQty());
 
-            if (p.getId() != null) {
-                pkage = this.packageRepository.findById(p.getId())
-                        .orElseThrow(() -> new RuntimeException("Process package error!"));
-
-                curQty += pkage.getQty();
-            } else {
-                pkage = new Package();
             }
-
-            if (curQty > 0 && curQty < p.getQty())
-                throw new RuntimeException("Not enough quantity!");
-
-            product.setQty(curQty - p.getQty());
-            pkage.setQty(p.getQty())
-                    .setOrderItem(orderItem)
-                    .setProduct(product);
-
-            packages.add(pkage);
+            packages.add(packageItems);
         }
 
-        return packages;
+        order.getPackages().clear();
+        order.getPackages().addAll(packages);
     }
 
     public OrderData getOrderDetail(Order order) {
-        List<OrderItemData> orderItemResponses = new ArrayList<>();
+        Customer customer = order.getCustomer();
+        WarehouseData warehouseData = order.getWarehouse().getId() == null ?
+                new WarehouseData() : warehouseService.processWarehouseDataResponse(order.getWarehouse());
+        ShipperData shipperData = order.getShipper().getId() == null ?
+                new ShipperData() : shippingService.processShipperDataResponse(order.getShipper());
 
-        for (OrderItem i : order.getOrderItemSet()) {
-            List<PackageData> productDetailResponses = new ArrayList<>();
+        Set<PackageData> products = new HashSet<>();
 
-            for (Package itemPackage : i.getPackages()) {
-                PackageData pD = this.productService.
-                        processPackageProductResponse(itemPackage);
-                
-                productDetailResponses.add(pD);
-            }
-
-            orderItemResponses.add(new OrderItemData(
-                    i.getId(),
-                    i.getPrice(),
-                    shippingService.processShippingAddressResponse(i.getShippingAddress()),
-                    productDetailResponses
-            ));
+        for (Package item : order.getPackages()) {
+            products.add(productService.processPackageProductResponse(item));
         }
 
         OrderData orderData = new OrderData(
                 order.getId(),
                 order.getOrderCode(),
-                order.getCustomer().getId(),
-                order.getCustomer().getCustomerId(),
-                order.getStatus(),
-                order.getFeedback(),
-                order.getNote(),
-                order.getSubtotal(),
+                customer == null ? null : customer.getId(),
+                customer == null ? null : customer.getCustomerId(),
                 order.getSenderName(),
                 order.getSenderPhone(),
                 order.getSenderAddress(),
+                order.getSubtotal(),
+                order.getTotalWeight(),
+                order.getNote(),
+                order.getStatus(),
+                order.getFeedback(),
                 order.getNotification(),
+                order.getShipPayer(),
                 order.getShippingFee(),
+                order.getCoupon(),
+                warehouseData,
+                shipperData,
+                shippingService.processShippingAddressResponse(order.getShippingAddress()),
                 order.getShippingType(),
                 DateFormatHelper.dateToString(order.getShippingTime()),
-                order.getCoupon(),
-                order.getWarehouse() == null ? new WarehouseData() : warehouseService.processWarehouseDataResponse(order.getWarehouse()),
                 order.getReturnCode(),
-                orderItemResponses,
-                order.getTotalWeight()
+                products
         );
 
         orderData.setCreatedAt(
                 DateFormatHelper.dateToString(order.getCreatedAt())
         );
-        orderData.setUpdateAt(
+        orderData.setUpdatedAt(
                 DateFormatHelper.dateToString(order.getUpdatedAt())
         );
 
@@ -277,10 +217,8 @@ public class OrderService {
     private void processOrderWeight(Order order) {
         Double weight = 0.0;
 
-        for (OrderItem item: order.getOrderItemSet()) {
-            for (Package p: item.getPackages()) {
-                weight += p.getProduct().getWeight() * p.getQty();
-            }
+        for (Package item: order.getPackages()) {
+                weight += item.getWeight() * item.getQty();
         }
 
         order.setTotalWeight(weight);
