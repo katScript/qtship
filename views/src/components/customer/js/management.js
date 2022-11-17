@@ -106,36 +106,36 @@ export default {
                 self.totalOrderByDate = self.listOrderByCustomer.length;
 
                 self.numberOrderSuccess = self.listOrderByCustomer.filter(
-                    (e) => e.status === commonFunction.typeOrderSuccess
+                    (e) => e.status === commonFunction.orderStatus.Success
                 ).length;
                 self.numberOrderDelivery = self.listOrderByCustomer.filter(
-                    (e) => e.status === commonFunction.typeOrderDelivery
+                    (e) => e.status === commonFunction.orderStatus.Delivery
                 ).length;
                 self.numberOrderOccurred = self.listOrderByCustomer.filter(
-                    (e) => e.status === commonFunction.typeOrderOccurred
+                    (e) => e.status === commonFunction.orderStatus.Occurred
                 ).length;
                 self.numberOrderCancel = self.listOrderByCustomer.filter(
-                    (e) => e.status === commonFunction.typeOrderCancel
+                    (e) => e.status === commonFunction.orderStatus.Cancel
                 ).length;
 
                 //price
                 self.listOrderByCustomer.forEach((element) => {
-                    if (element.status === commonFunction.typeOrderSuccess) {
+                    if (element.status === commonFunction.orderStatus.Success) {
                         self.totalPriceOrderSuccess += element.subtotal;
                     }
                 });
                 self.listOrderByCustomer.forEach((element) => {
-                    if (element.status === commonFunction.typeOrderDelivery) {
+                    if (element.status === commonFunction.orderStatus.Delivery) {
                         self.totalPriceOrderDelivery += element.subtotal;
                     }
                 });
                 self.listOrderByCustomer.forEach((element) => {
-                    if (element.status === commonFunction.typeOrderOccurred) {
+                    if (element.status === commonFunction.orderStatus.Occurred) {
                         self.totalPriceOrderOccurred += element.subtotal;
                     }
                 });
                 self.listOrderByCustomer.forEach((element) => {
-                    if (element.status === commonFunction.typeOrderCancel) {
+                    if (element.status === commonFunction.orderStatus.Cancel) {
                         self.totalPriceOrderCancel += element.subtotal;
                     }
                 });
@@ -173,16 +173,16 @@ export default {
                     self.totalOrderByDate = self.listOrderByCustomer.length;
 
                     self.numberOrderSuccess = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderSuccess
+                        (e) => e.status === commonFunction.orderStatus.Success
                     ).length;
                     self.numberOrderDelivery = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderDelivery
+                        (e) => e.status === commonFunction.orderStatus.Delivery
                     ).length;
                     self.numberOrderOccurred = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderOccurred
+                        (e) => e.status === commonFunction.orderStatus.Occurred
                     ).length;
                     self.numberOrderCancel = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderCancel
+                        (e) => e.status === commonFunction.orderStatus.Cancel
                     ).length;
                 } else if (self.filterTime === "timeAbout") {
                     let timeFrom = moment(self.filterTimeFrom),
@@ -257,36 +257,36 @@ export default {
                     //count
                     self.totalOrderByDate = self.listOrderByCustomer.length;
                     self.numberOrderSuccess = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderSuccess
+                        (e) => e.status === commonFunction.orderStatus.Success
                     ).length;
                     self.numberOrderDelivery = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderDelivery
+                        (e) => e.status === commonFunction.orderStatus.Delivery
                     ).length;
                     self.numberOrderOccurred = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderOccurred
+                        (e) => e.status === commonFunction.orderStatus.Occurred
                     ).length;
                     self.numberOrderCancel = self.listOrderByCustomer.filter(
-                        (e) => e.status === commonFunction.typeOrderCancel
+                        (e) => e.status === commonFunction.orderStatus.Cancel
                     ).length;
 
                     //price
                     self.listOrderByCustomer.forEach((element) => {
-                        if (element.status === commonFunction.typeOrderSuccess) {
+                        if (element.status === commonFunction.orderStatus.Success) {
                             self.totalPriceOrderSuccess += element.subtotal;
                         }
                     });
                     self.listOrderByCustomer.forEach((element) => {
-                        if (element.status === commonFunction.typeOrderDelivery) {
+                        if (element.status === commonFunction.orderStatus.Delivery) {
                             self.totalPriceOrderDelivery += element.subtotal;
                         }
                     });
                     self.listOrderByCustomer.forEach((element) => {
-                        if (element.status === commonFunction.typeOrderOccurred) {
+                        if (element.status === commonFunction.orderStatus.Occurred) {
                             self.totalPriceOrderOccurred += element.subtotal;
                         }
                     });
                     self.listOrderByCustomer.forEach((element) => {
-                        if (element.status === commonFunction.typeOrderCancel) {
+                        if (element.status === commonFunction.orderStatus.Cancel) {
                             self.totalPriceOrderCancel += element.subtotal;
                         }
                     });

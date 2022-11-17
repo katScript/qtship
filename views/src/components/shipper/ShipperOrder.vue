@@ -82,7 +82,7 @@
                 <div class="">
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in active show" id="home">
-                            <ListOrderTransferShipper/>
+                            <ListOrderTransferShipper :listOrderData="listOrderTransferForShipper"/>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="contact">
                             <ListOrderShipper/>

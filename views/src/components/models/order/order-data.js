@@ -19,7 +19,7 @@ export default class OrderData {
         subtotal: 0,
         totalWeight: 0,
         note: "",
-        status: commonFunction.typeOrderWaitingConfirm,
+        status: commonFunction.orderStatus.Pending,
         feedback: "",
         notification: false,
         shipPayer: true,
