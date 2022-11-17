@@ -95,7 +95,7 @@ public class OrderStatusController {
                     DateFormatHelper.dateToString(orderStatus.getUpdatedAt())
             );
 
-            ResponseEntity.ok(orderStatusData);
+            return ResponseEntity.ok(orderStatusData);
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Order status not found!"));
@@ -127,7 +127,7 @@ public class OrderStatusController {
                     DateFormatHelper.dateToString(orderStatus.getUpdatedAt())
             );
 
-            ResponseEntity.ok(orderStatusData);
+            return ResponseEntity.ok(orderStatusData);
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Order status not found!"));
@@ -135,7 +135,12 @@ public class OrderStatusController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@Valid @PathVariable Long id) {
-        orderStatusRepository.findById(id).ifPresent(orderStatus -> orderStatusRepository.delete(orderStatus));
+        OrderStatus orderStatus = orderStatusRepository.findById(id).orElse(null);
+
+        if (orderStatus != null) {
+            orderStatusRepository.delete(orderStatus);
+            return ResponseEntity.ok(new MessageResponse("Delete order success!"));
+        }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Order status not found!"));
     }
