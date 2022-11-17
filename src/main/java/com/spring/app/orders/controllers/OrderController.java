@@ -101,7 +101,7 @@ public class OrderController {
         }
 
         pageResponse.setContent(listOrder);
-        return ResponseEntity.ok(listOrder);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/all/customer/{id}")
