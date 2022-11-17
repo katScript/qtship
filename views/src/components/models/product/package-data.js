@@ -6,7 +6,11 @@ export default class PackageData {
     data = {
         id : null,
         product : this.product.getData(),
+        name: "",
         qty : 0,
+        price: 0,
+        weight: 0,
+        image: "",
         createdAt : null,
         updatedAt : null
     };
@@ -15,6 +19,10 @@ export default class PackageData {
         this.data.id = data.id;
         this.data.product = data.product;
         this.data.qty = data.qty;
+        this.data.price = data.price;
+        this.data.name = data.name;
+        this.data.weight = data.weight;
+        this.data.image = data.image;
         this.data.createdAt = data.createdAt;
         this.data.updatedAt = data.updatedAt;
     }
