@@ -199,7 +199,7 @@ const commonFunction = {
         Cancel: "CANCEL",
         Delay: "DELAY",
         Updated: "UPDATED",
-        Checking: "CHECKING",
+        ReChecking: "RECHECKING",
         Storage: "STORAGE",
         TransferShipper: "TRANSFER_SHIPPER",
         ShipperConfirm: "SHIPPER_CONFIRMED",

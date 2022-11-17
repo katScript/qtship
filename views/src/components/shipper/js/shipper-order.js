@@ -1,7 +1,9 @@
 import NavbarClient from "@/components/common/NavbarClient";
 import FooterClient from "@/components/common/FooterClient.vue";
-import ListOrderShipper from "@/components/common/ListOrderShipper.vue";
+import ListOrderConfirmedShipper from "@/components/common/ListOrderConfirmedShipper.vue";
 import ListOrderTransferShipper from "@/components/common/ListOrderTransferShipper.vue";
+import ListOrderCompleteShipper from "@/components/common/ListOrderCompleteShipper.vue";
+import ListOrderProcessingShipper from "@/components/common/ListOrderProcessingShipper.vue";
 
 import ShipperData from "@/components/models/shipping/shipper-data";
 import OrderData from "@/components/models/order/order-data";
@@ -13,8 +15,10 @@ export default {
     components: {
         NavbarClient,
         FooterClient,
-        ListOrderShipper,
+        ListOrderConfirmedShipper,
         ListOrderTransferShipper,
+        ListOrderCompleteShipper,
+        ListOrderProcessingShipper
     },
     setup() {
         let shipperModel = new ShipperData(),
@@ -50,7 +54,7 @@ export default {
 
         await axios.get(
             commonFunction.DOMAIN_URL +
-            "v1/order/all/shipper/" +
+            "v1/shipper/order/assign/" +
             this.shipperModel.getData().id,
             commonFunction.configApi()
         ).then((response) => {
@@ -58,8 +62,7 @@ export default {
             this.listOrder.total = response.data.length;
             response.data.forEach(o => {
                 let order = new OrderData();
-                order.setData(o);
-
+                order.setData(o.order);
                 this.listOrder.data.push(order.getData());
             });
         }).catch((e) => {

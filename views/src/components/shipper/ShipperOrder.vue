@@ -72,20 +72,32 @@
                 <h4>Danh sách đơn hàng</h4>
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home">Chờ bàn giao</a>
+                        <a class="nav-link active" data-toggle="tab" href="#home">Bàn giao</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#contact">Đã bàn giao</a>
+                        <a class="nav-link" data-toggle="tab" href="#comfirmed">Đã nhận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#processing">Đang xử lí</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#completed">Đã xử lí</a>
                     </li>
                 </ul>
 
                 <div class="">
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in active show" id="home">
-                            <ListOrderTransferShipper :listOrderData="listOrderTransferForShipper"/>
+                            <ListOrderTransferShipper />
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="contact">
-                            <ListOrderShipper/>
+                        <div role="tabpanel" class="tab-pane fade" id="comfirmed">
+                            <ListOrderConfirmedShipper />
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="processing">
+                            <ListOrderProcessingShipper />
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="completed">
+                            <ListOrderCompleteShipper />
                         </div>
                     </div>
                 </div>

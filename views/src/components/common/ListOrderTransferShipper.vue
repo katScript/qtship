@@ -4,17 +4,17 @@
     <div class="row">
       <h5>
         <i class="fa-solid fa-play"></i> Đơn hàng: Bàn giao cho Shipper
-        <span>(Tổng số: 10 ĐH)</span>
+        <span>(Tổng số: {{listOrderTransfer.length}})</span>
       </h5>
-      <div class="col-12 mb-1">
+      <div class="col-12">
         <div class="row">
-          <div class="col-sm-10 mb-1">
+          <div class="col-sm-10">
             <div class="row">
-              <div class="col-10">
-                <input type="text" class="form-control" placeholder="Mã ĐH hoặc Sđt người nhận"
+              <div class="col-11">
+                <input type="text" class="form-control mb-1" placeholder="Mã ĐH hoặc Sđt người nhận"
                   v-model="conditionFilter" />
               </div>
-              <div class="col-2">
+              <div class="col-1">
                 <button class="btn btn-outline-danger" v-on:click="filter">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -28,10 +28,10 @@
       </div>
       <easy-data-table :headers="headersOrder" :items="listOrderTransfer" v-model:items-selected="itemsSelected">
         <template #item-name-receiver="item">
-          {{ item.orderItem[0].shippingAddress.name }}
+          {{ item.shippingAddress.name }}
         </template>
         <template #item-phone-receiver="item">
-          {{ item.orderItem[0].shippingAddress.phone }}
+          {{ item.shippingAddress.phone }}
         </template>
         <template #item-address-receiver="item">
           {{ buildAddressReceriver(item) }}
@@ -46,10 +46,9 @@
   import ShipperData from "@/components/models/shipping/shipper-data";
 
   import { commonFunction } from '@/scripts/ulti';
-  // import axios from "axios";
+  import axios from "axios";
 
   export default {
-    props: ["listOrderData"],
     setup() {
       const shipperModel = new ShipperData();
       const orderModel = new OrderData();
@@ -63,11 +62,12 @@
         idRequest: 0,
         listOrderTransfer: [],
         listOrderTransferBk: [],
+        listOrderIdSelected: [],
         headersOrder: [
           { text: "Mã ĐH", value: "orderCode", sortable: true },
-          { text: "Người nhận", value: "name-receiver", sortable: true,  width: 120},
+          { text: "Người nhận", value: "name-receiver", sortable: true, width: 120 },
           { text: "SĐT nhận", value: "phone-receiver" },
-          { text: "Địa chỉ giao hàng", value: "address-receiver" ,  width: 250},
+          { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
         ],
         itemsSelected: [],
         conditionFilter: ""
@@ -78,28 +78,55 @@
         JSON.parse(commonFunction.getShipperStorage())
       );
       this.idRequest = this.shipperModel.getData().id;
+      // get all order asigned shipper
+      axios.get(
+        commonFunction.DOMAIN_URL +
+        "v1/shipper/order/assign/" +
+        this.shipperModel.getData().id,
+        commonFunction.configApi()
+      ).then((response) => {
+
+        // handle not found
+        response.data.forEach(o => {
+          let order = new OrderData();
+          order.setData(o.order);
+
+          this.listOrderTransfer.push(order.getData());
+          this.listOrderTransferBk.push(order.getData());
+        });
+      }).catch((e) => {
+        console.log(e);
+      });
+
+      // this.itemsSelected.forEach(item => {
+      //     this.listOrderIdSelected.push(item.id);
+      //   }
+      // )
     },
     updated() {
-      this.listOrderTransfer = this.listOrderData;
-      this.listOrderTransferBk = this.listOrderData;
     },
     watch: {
+      itemsSelected: {
+        handler: function () {
+
+        }
+      }
     },
     methods: {
       buildAddressReceriver(item) {
-        return item.orderItem[0].shippingAddress.street
+        return item.shippingAddress.street
           + ", " +
-          item.orderItem[0].shippingAddress.ward
+          item.shippingAddress.ward
           + ", " +
-          item.orderItem[0].shippingAddress.district
+          item.shippingAddress.district
           + ", " +
-          item.orderItem[0].shippingAddress.province;
+          item.shippingAddress.province;
       },
       filter: function () {
         this.listOrderTransfer = this.listOrderTransferBk;
         this.listOrderTransfer = this.listOrderTransfer.filter(
           e => e.orderCode.includes(this.conditionFilter)
-            || e.orderItem[0].shippingAddress.phone.includes(this.conditionFilter));
+            || e.shippingAddress.phone.includes(this.conditionFilter));
       },
     },
   }
