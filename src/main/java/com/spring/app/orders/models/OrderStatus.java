@@ -12,16 +12,17 @@ public class OrderStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
-
     @Column(name = "code")
     private String code;
-
+    @Column(name = "label")
+    private String label;
+    @Column(name = "enable")
+    private Boolean enable;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "orders_status_flow",
                     joinColumns = {@JoinColumn(name = "parent_id")},
                     inverseJoinColumns={@JoinColumn(name="child_id")})
     private Set<OrderStatus> child = new HashSet<>();
-
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -29,8 +30,14 @@ public class OrderStatus {
 
     public OrderStatus() {}
 
-    public OrderStatus(String code) {
+    public OrderStatus(
+            String code,
+            String label,
+            Boolean enable
+    ) {
         this.code = code;
+        this.label = label;
+        this.enable = enable;
     }
 
     public Long getId() {
@@ -66,5 +73,21 @@ public class OrderStatus {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

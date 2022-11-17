@@ -7,6 +7,7 @@ import com.spring.app.orders.payload.OrderData;
 import com.spring.app.orders.payload.OrderStatusData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
 import com.spring.app.orders.services.OrderService;
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -15,6 +16,9 @@ import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,31 +80,38 @@ public class OrderController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrder(
-            @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "from", required = false) String from,
-            @RequestParam(value = "to", required = false) String to
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
     ) {
-        List<Order> orders = orderRepository.findAllByStatusAndCreatedAtBetween(
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findAllByStatusAndCreatedAtBetween(
                 status,
                 from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                to != null ? DateFormatHelper.stringToDate(to) : new Date()
+                to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+                pageable
         );
-
+        CustomPageResponse pageResponse = new CustomPageResponse(orders);
         List<OrderData> listOrder = new ArrayList<>();
 
         for (Order o : orders) {
             listOrder.add(this.orderService.getOrderDetail(o));
         }
 
+        pageResponse.setContent(listOrder);
         return ResponseEntity.ok(listOrder);
     }
 
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getOrderByCustomerId(
             @Valid @PathVariable Long id,
-            @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "from", required = false) String from,
-            @RequestParam(value = "to", required = false) String to
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
     ) throws ParseException {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
@@ -108,15 +119,20 @@ public class OrderController {
         List<OrderData> listOrder = new ArrayList<>();
 
         if (customer != null) {
-            List<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, status,
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, status,
                     from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                    to != null ? DateFormatHelper.stringToDate(to) : new Date());
+                    to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+                    pageable
+            );
+            CustomPageResponse pageResponse = new CustomPageResponse(orders);
 
             for (Order o : orders) {
                 listOrder.add(this.orderService.getOrderDetail(o));
             }
 
-            return ResponseEntity.ok(listOrder);
+            pageResponse.setContent(listOrder);
+            return ResponseEntity.ok(pageResponse);
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
@@ -125,9 +141,11 @@ public class OrderController {
     @GetMapping("/all/shipper/{id}")
     public ResponseEntity<?> getOrderByShipperId(
         @Valid @PathVariable Long id,
-        @RequestParam(value = "status", required = false) String status,
-        @RequestParam(value = "from", required = false) String from,
-        @RequestParam(value = "to", required = false) String to
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) String from,
+        @RequestParam(required = false) String to,
+        @RequestParam(required = false, defaultValue = "0") Integer page,
+        @RequestParam(required = false, defaultValue = "5") Integer size
     ) throws ParseException {
         Shipper shipper = shipperRepository.findById(id)
                 .orElse(null);
@@ -135,35 +153,22 @@ public class OrderController {
         List<OrderData> listOrder = new ArrayList<>();
 
         if (shipper != null) {
-            List<Order> orders = orderRepository.findByShipperAndStatusAndCreatedAtBetween(shipper, status,
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Order> orders = orderRepository.findByShipperAndStatusAndCreatedAtBetween(shipper, status,
                     from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                    to != null ? DateFormatHelper.stringToDate(to) : new Date());
+                    to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+                    pageable
+            );
+            CustomPageResponse pageResponse = new CustomPageResponse(orders);
 
             for (Order o : orders) {
                 listOrder.add(this.orderService.getOrderDetail(o));
             }
 
-            return ResponseEntity.ok(listOrder);
+            pageResponse.setContent(listOrder);
+            return ResponseEntity.ok(pageResponse);
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
-    }
-
-    @PostMapping("/status/save")
-    public ResponseEntity<?> saveOrderStatus(@Valid @RequestBody OrderStatusData orderStatus) {
-        OrderStatus status = orderStatusRepository.findByCode(orderStatus.getCode())
-                .orElse(new OrderStatus(orderStatus.getCode()));
-
-        Set<OrderStatus> child = new HashSet<>();
-
-        for (String c : orderStatus.getChild()) {
-            child.add(orderStatusRepository.findByCode(c)
-                    .orElseThrow(() -> new RuntimeException("Can not find order status!")));
-        }
-
-        status.setChild(child);
-        this.orderStatusRepository.save(status);
-
-        return ResponseEntity.ok(new MessageResponse("Status save successfully!"));
     }
 }

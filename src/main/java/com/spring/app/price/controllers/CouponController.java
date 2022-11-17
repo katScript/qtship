@@ -1,11 +1,15 @@
 package com.spring.app.price.controllers;
 
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.price.models.Coupon;
 import com.spring.app.price.models.repository.CouponRepository;
 import com.spring.app.price.payload.CouponData;
 import com.spring.app.price.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +26,21 @@ public class CouponController {
     @Autowired
     CouponService couponService;
     @GetMapping("/all")
-    public ResponseEntity<?> getAllCoupon() {
-        List<Coupon> couponList = couponRepository.findAll();
+    public ResponseEntity<?> getAllCoupon(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Coupon> couponList = couponRepository.findAll(pageable);
         List<CouponData> response = new ArrayList<>();
+        CustomPageResponse pageResponse = new CustomPageResponse(couponList);
 
         for (Coupon c : couponList) {
             response.add(couponService.processCouponDataResponse(c));
         }
 
-        return ResponseEntity.ok(response);
+        pageResponse.setContent(response);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @PostMapping("/save")

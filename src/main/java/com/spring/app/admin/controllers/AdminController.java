@@ -7,9 +7,13 @@ import com.spring.app.admin.payload.request.AssignOrderRequest;
 import com.spring.app.admin.service.AdminService;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.UserRepository;
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.ShipperOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +33,21 @@ public class AdminController {
     UserRepository userRepository;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllAdmin() {
-        List<Admin> adminList = adminRepository.findAll();
-        List<AdminData> response = new ArrayList<>();
+    public ResponseEntity<?> getAllAdmin(
+        @RequestParam(required = false, defaultValue = "0") Integer page,
+        @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Admin> adminList = adminRepository.findAll(pageable);
+        List<AdminData> listAdmin = new ArrayList<>();
+        CustomPageResponse responseData = new CustomPageResponse(adminList);
 
         for (Admin admin : adminList) {
-            response.add(adminService.processAdminResponse(admin));
+            listAdmin.add(adminService.processAdminResponse(admin));
         }
 
-        return ResponseEntity.ok(response);
+        responseData.setContent(listAdmin);
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping("/detail/{id}")
