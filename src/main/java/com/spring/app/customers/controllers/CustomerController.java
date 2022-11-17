@@ -4,6 +4,7 @@ import com.spring.app.authentication.models.User;
 import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
 import com.spring.app.customers.service.CustomerService;
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Address;
@@ -11,6 +12,9 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.payload.request.customer.SaveAddressRequest;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +35,22 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllCustomer() {
-        List<Customer> customerList = customerRepository.findAll();
-        List<CustomerData> responses = new ArrayList<>();
+    public ResponseEntity<?> getAllCustomer(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Customer> customerList = customerRepository.findAll(pageable);
+        CustomPageResponse pageResponse = new CustomPageResponse(customerList);
+
+        List<CustomerData> content = new ArrayList<>();
 
         for (Customer c: customerList) {
-            responses.add(customerService.processCustomerResponse(c));
+            content.add(customerService.processCustomerResponse(c));
         }
 
-        return ResponseEntity.ok(responses);
+        pageResponse.setContent(content);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/detail/{id}")

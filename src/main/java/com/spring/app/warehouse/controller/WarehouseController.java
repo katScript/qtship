@@ -1,5 +1,6 @@
 package com.spring.app.warehouse.controller;
 
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -10,6 +11,9 @@ import com.spring.app.warehouse.payload.WarehouseData;
 import com.spring.app.warehouse.payload.request.WarehouseDataRequest;
 import com.spring.app.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +33,21 @@ public class WarehouseController {
     WarehouseService warehouseService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllWarehouse() {
-        List<Warehouse> warehouses = warehouseRepository.findAll();
+    public ResponseEntity<?> getAllWarehouse(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Warehouse> warehouses = warehouseRepository.findAll(pageable);
         List<WarehouseData> warehousesResponse = new ArrayList<>();
+        CustomPageResponse pageResponse = new CustomPageResponse(warehouses);
 
         for (Warehouse w: warehouses) {
             warehousesResponse.add(warehouseService.processWarehouseDataResponse(w));
         }
 
-        return ResponseEntity.ok(warehousesResponse);
+        pageResponse.setContent(warehousesResponse);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/detail/{id}")
@@ -76,18 +86,26 @@ public class WarehouseController {
     }
 
     @GetMapping("/all/customer/{id}")
-    public ResponseEntity<?> getWarehouseByCustomer(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> getWarehouseByCustomer(
+            @Valid @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
 
         if (customer != null) {
-            List<WarehouseData> warehouses = new ArrayList<>();
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Warehouse> warehouses = warehouseRepository.findAll(pageable);
+            CustomPageResponse pageResponse = new CustomPageResponse(warehouses);
+            List<WarehouseData> warehouseData = new ArrayList<>();
 
-            for (Warehouse w: customer.getWarehouses()) {
-                warehouses.add(warehouseService.processWarehouseDataResponse(w));
+            for (Warehouse w: warehouses) {
+                warehouseData.add(warehouseService.processWarehouseDataResponse(w));
             }
 
-            return ResponseEntity.ok(warehouses);
+            pageResponse.setContent(pageable);
+            return ResponseEntity.ok(warehouseData);
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));

@@ -2,6 +2,7 @@ package com.spring.app.shipping.controller;
 
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.UserRepository;
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
@@ -10,6 +11,9 @@ import com.spring.app.shipping.payload.ShipperOrderData;
 import com.spring.app.shipping.service.ShippingOrderService;
 import com.spring.app.shipping.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,14 +35,20 @@ public class ShipperController {
     ShippingOrderService shippingOrderService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllShipper() {
-        List<Shipper> shipperList = shipperRepository.findAll();
+    public ResponseEntity<?> getAllShipper(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Shipper> shipperList = shipperRepository.findAll(pageable);
         List<ShipperData> shipperResponses = new ArrayList<>();
+        CustomPageResponse pageResponse = new CustomPageResponse(shipperList);
 
         for (Shipper sh : shipperList) {
             shipperResponses.add(shippingService.processShipperDataResponse(sh));
         }
 
+        pageResponse.setContent(shipperResponses);
         return ResponseEntity.ok(shipperResponses);
     }
 

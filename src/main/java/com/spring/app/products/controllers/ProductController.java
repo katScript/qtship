@@ -1,6 +1,7 @@
 package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
+import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -10,6 +11,9 @@ import com.spring.app.products.payload.request.ProductDataRequest;
 import com.spring.app.products.models.repository.ProductRepository;
 import com.spring.app.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +35,20 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllProduct() {
-        List<Product> products = productRepository.findAll();
+    public ResponseEntity<?> getAllProduct(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageable);
+        CustomPageResponse pageResponse = new CustomPageResponse(products);
         List<ProductData> productList = new ArrayList<>();
 
         for (Product p : products) {
             productList.add(this.productService.processProductDataResponse(p));
         }
 
+        pageResponse.setContent(productList);
         return ResponseEntity.ok(productList);
     }
 
@@ -101,17 +111,25 @@ public class ProductController {
     }
 
     @GetMapping("/customer/{id}")
-    public ResponseEntity<?> getProductByCustomerId(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> getProductByCustomerId(
+            @Valid @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
+    ) {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
 
         if (customer != null) {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Product> products = productRepository.findByCustomer(customer, pageable);
             List<ProductData> productList = new ArrayList<>();
+            CustomPageResponse pageResponse = new CustomPageResponse(products);
 
-            for (Product p : customer.getProducts()) {
+            for (Product p : products) {
                 productList.add(this.productService.processProductDataResponse(p));
             }
 
+            pageResponse.setContent(productList);
             return ResponseEntity.ok(productList);
         }
 
