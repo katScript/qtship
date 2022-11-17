@@ -6,6 +6,8 @@ import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.ShipperData;
+import com.spring.app.shipping.payload.ShipperOrderData;
+import com.spring.app.shipping.service.ShippingOrderService;
 import com.spring.app.shipping.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class ShipperController {
     UserRepository userRepository;
     @Autowired
     ShippingService shippingService;
+    @Autowired
+    ShippingOrderService shippingOrderService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllShipper() {
@@ -68,6 +72,30 @@ public class ShipperController {
         shipperRepository.delete(shipper);
 
         return ResponseEntity.ok(new MessageResponse("Delete shipper data success!"));
+    }
 
+    @GetMapping("/order/assign/{id}")
+    public ResponseEntity<?> getAssignOrder(@Valid @PathVariable Long id) {
+        List<ShipperOrderData> response = shippingOrderService.getListOrderAssign(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/order/accept")
+    public ResponseEntity<?> acceptOrder(@Valid @RequestBody List<Long> ids) {
+        for (Long id: ids) {
+            this.shippingService.acceptOrder(id);
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Accept done! Order has assign to shipper!"));
+    }
+
+    @PostMapping("/order/reject")
+    public ResponseEntity<?> rejectOrder(@Valid @RequestBody List<Long> ids) {
+        for (Long id: ids) {
+            this.shippingService.rejectOrder(id);
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Reject done!"));
     }
 }
