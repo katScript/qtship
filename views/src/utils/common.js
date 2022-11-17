@@ -12,4 +12,9 @@ const userCookies = {
 export default {
   TOKEN: () => cookiesManager.cookies.get(userCookies.token),
   DOMAIN_URL: 'https://api.dcodetest.com/v1/',
+  TYPE_ORDER_PENDING: 'PENDING',
+  TYPE_ORDER_PROCESSING: 'PROCESSING',
+  TYPE_ORDER_DONE: 'DONE',
+  TYPE_ORDER_OCCURRED: 'OCCURRED',
+  TYPE_ORDER_CANCEL: 'CANCEL',
 }

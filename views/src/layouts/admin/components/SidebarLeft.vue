@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons-vue';
 import { defineEmits, defineProps } from "vue";
 import { RouterLink, useRouter } from 'vue-router';
+import common from "@/utils/common";
 
 const router = useRouter();
 
@@ -25,20 +26,24 @@ const orderList = [
     path: '/admin/order',
   },
   {
+    name: 'Đơn hàng chờ xử lý',
+    path: '/admin/order?status=' + common.TYPE_ORDER_PENDING,
+  },
+  {
     name: 'Đơn hàng đang xử lý',
-    path: '/admin/order?status=1',
+    path: '/admin/order?status=' + common.TYPE_ORDER_PROCESSING,
   },
   {
     name: 'Đơn hàng đã xử lý',
-    path: '/admin/order?status=2',
+    path: '/admin/order?status=' + common.TYPE_ORDER_DONE,
   },
   {
     name: 'Đơn hàng phát sinh',
-    path: '/admin/order?status=3',
+    path: '/admin/order?status=' + common.TYPE_ORDER_OCCURRED,
   },
   {
     name: 'Đơn hàng bị hủy',
-    path: '/admin/order?status=4',
+    path: '/admin/order?status=' + common.TYPE_ORDER_CANCEL,
   }
 ]
 const handleClickItem = (inList = false, path) => {
@@ -100,7 +105,6 @@ const handleClickItem = (inList = false, path) => {
 }
 
 .menu-item {
-
   background-color: #bf1e2d !important;
   color: #ffffff;
 }
