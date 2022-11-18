@@ -1,6 +1,7 @@
 package com.spring.app.warehouse.controller;
 
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -34,10 +35,9 @@ public class WarehouseController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllWarehouse(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Warehouse> warehouses = warehouseRepository.findAll(pageable);
         List<WarehouseData> warehousesResponse = new ArrayList<>();
         CustomPageResponse pageResponse = new CustomPageResponse(warehouses);
@@ -88,14 +88,13 @@ public class WarehouseController {
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getWarehouseByCustomer(
             @Valid @PathVariable Long id,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
 
         if (customer != null) {
-            Pageable pageable = PageRequest.of(page, size);
+            Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
             Page<Warehouse> warehouses = warehouseRepository.findAll(pageable);
             CustomPageResponse pageResponse = new CustomPageResponse(warehouses);
             List<WarehouseData> warehouseData = new ArrayList<>();

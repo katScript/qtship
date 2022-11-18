@@ -1,10 +1,8 @@
 package com.spring.app.orders.controllers;
 
 import com.spring.app.helper.services.DateFormatHelper;
-import com.spring.app.orders.models.OrderStatus;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
-import com.spring.app.orders.payload.OrderStatusData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
 import com.spring.app.orders.services.OrderService;
 import com.spring.app.payload.CustomPageResponse;
@@ -109,11 +107,7 @@ public class OrderController {
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getOrderByCustomerId(
             @Valid @PathVariable Long id,
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String from,
-            @RequestParam(required = false) String to,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid OrderFilterRequest oF
     ) throws ParseException {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
@@ -121,10 +115,10 @@ public class OrderController {
         List<OrderData> listOrder = new ArrayList<>();
 
         if (customer != null) {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, status,
-                    from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                    to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+            Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+            Page<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, oF.getStatus(),
+                    oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
                     pageable
             );
             CustomPageResponse pageResponse = new CustomPageResponse(orders);
@@ -143,11 +137,7 @@ public class OrderController {
     @GetMapping("/all/shipper/{id}")
     public ResponseEntity<?> getOrderByShipperId(
         @Valid @PathVariable Long id,
-        @RequestParam(required = false) String status,
-        @RequestParam(required = false) String from,
-        @RequestParam(required = false) String to,
-        @RequestParam(required = false, defaultValue = "0") Integer page,
-        @RequestParam(required = false, defaultValue = "5") Integer size
+        @Valid OrderFilterRequest oF
     ) throws ParseException {
         Shipper shipper = shipperRepository.findById(id)
                 .orElse(null);
@@ -155,10 +145,10 @@ public class OrderController {
         List<OrderData> listOrder = new ArrayList<>();
 
         if (shipper != null) {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Order> orders = orderRepository.findByShipperAndStatusAndCreatedAtBetween(shipper, status,
-                    from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                    to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+            Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+            Page<Order> orders = orderRepository.findByShipperAndStatusAndCreatedAtBetween(shipper, oF.getStatus(),
+                    oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
                     pageable
             );
             CustomPageResponse pageResponse = new CustomPageResponse(orders);

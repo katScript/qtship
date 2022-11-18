@@ -3,6 +3,7 @@ package com.spring.app.shipping.controller;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
@@ -36,10 +37,9 @@ public class ShipperController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllShipper(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Shipper> shipperList = shipperRepository.findAll(pageable);
         List<ShipperData> shipperResponses = new ArrayList<>();
         CustomPageResponse pageResponse = new CustomPageResponse(shipperList);

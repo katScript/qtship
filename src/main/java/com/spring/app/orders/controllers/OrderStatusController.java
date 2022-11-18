@@ -6,6 +6,7 @@ import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderStatusData;
 import com.spring.app.orders.services.OrderStatusService;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,10 +54,9 @@ public class OrderStatusController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrderStatus(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<OrderStatus> orderStatuses = orderStatusRepository.findAll(pageable);
         CustomPageResponse pageResponse = new CustomPageResponse(orderStatuses);
         List<OrderStatusData> orderStatusDataList = new ArrayList<>();
