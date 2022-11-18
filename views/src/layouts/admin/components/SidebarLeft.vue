@@ -22,7 +22,7 @@ const toggleOpenMenu = () => {
 
 const orderList = [
   {
-    name: 'Tất cả',
+    name: 'Tất cả đơn hàng',
     path: '/admin/order',
   },
   {
@@ -44,6 +44,10 @@ const orderList = [
   {
     name: 'Đơn hàng bị hủy',
     path: '/admin/order?status=' + common.TYPE_ORDER_CANCEL,
+  },
+  {
+    name: 'Đơn hàng trả lại',
+    path: '/admin/order?status=' + common.TYPE_ORDER_RETURN,
   }
 ]
 const handleClickItem = (inList = false, path) => {
