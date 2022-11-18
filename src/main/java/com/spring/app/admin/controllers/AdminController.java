@@ -8,6 +8,7 @@ import com.spring.app.admin.service.AdminService;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.shipping.models.ShipperOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,9 @@ public class AdminController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllAdmin(
-        @RequestParam(required = false, defaultValue = "0") Integer page,
-        @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Admin> adminList = adminRepository.findAll(pageable);
         List<AdminData> listAdmin = new ArrayList<>();
         CustomPageResponse responseData = new CustomPageResponse(adminList);

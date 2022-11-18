@@ -2,6 +2,7 @@ package com.spring.app.products.controllers;
 
 import com.spring.app.customers.payload.request.DeleteRequest;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
@@ -36,10 +37,9 @@ public class ProductController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Product> products = productRepository.findAll(pageable);
         CustomPageResponse pageResponse = new CustomPageResponse(products);
         List<ProductData> productList = new ArrayList<>();
@@ -113,14 +113,13 @@ public class ProductController {
     @GetMapping("/customer/{id}")
     public ResponseEntity<?> getProductByCustomerId(
             @Valid @PathVariable Long id,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
         Customer customer = customerRepository.findById(id)
                 .orElse(null);
 
         if (customer != null) {
-            Pageable pageable = PageRequest.of(page, size);
+            Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
             Page<Product> products = productRepository.findByCustomer(customer, pageable);
             List<ProductData> productList = new ArrayList<>();
             CustomPageResponse pageResponse = new CustomPageResponse(products);

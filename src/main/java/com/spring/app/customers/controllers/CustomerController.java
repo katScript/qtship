@@ -5,6 +5,7 @@ import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
 import com.spring.app.customers.service.CustomerService;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.customers.models.Address;
@@ -36,10 +37,9 @@ public class CustomerController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCustomer(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
+            @Valid FilterRequest fR
+            ) {
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Customer> customerList = customerRepository.findAll(pageable);
         CustomPageResponse pageResponse = new CustomPageResponse(customerList);
 

@@ -1,6 +1,7 @@
 package com.spring.app.price.controllers;
 
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.price.models.Coupon;
 import com.spring.app.price.models.repository.CouponRepository;
@@ -27,10 +28,9 @@ public class CouponController {
     CouponService couponService;
     @GetMapping("/all")
     public ResponseEntity<?> getAllCoupon(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid FilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
         Page<Coupon> couponList = couponRepository.findAll(pageable);
         List<CouponData> response = new ArrayList<>();
         CustomPageResponse pageResponse = new CustomPageResponse(couponList);
