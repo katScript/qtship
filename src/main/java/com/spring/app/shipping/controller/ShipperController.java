@@ -49,7 +49,7 @@ public class ShipperController {
         }
 
         pageResponse.setContent(shipperResponses);
-        return ResponseEntity.ok(shipperResponses);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/detail/{id}")

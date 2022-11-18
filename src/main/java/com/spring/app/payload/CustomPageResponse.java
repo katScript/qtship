@@ -3,16 +3,18 @@ package com.spring.app.payload;
 import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
+
 public class CustomPageResponse {
-    private Boolean first;
-    private Boolean last;
-    private Integer numberOfElements;
-    private Integer totalPages;
-    private Long totalElements;
-    private Integer size;
-    private Integer number;
-    private Boolean empty;
-    private Object content;
+    private Boolean first = true;
+    private Boolean last = true;
+    private Integer numberOfElements = 0;
+    private Integer totalPages = 0;
+    private Long totalElements = 0L;
+    private Integer size = 0;
+    private Integer number = 0;
+    private Boolean empty = true;
+    private Object content = new ArrayList<> ();
 
     public CustomPageResponse() {}
 

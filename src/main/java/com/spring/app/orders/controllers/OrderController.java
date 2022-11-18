@@ -81,27 +81,31 @@ public class OrderController {
     public ResponseEntity<?> getAllOrder(
             @Valid OrderFilterRequest oF
     ) {
-        Long id = oF.getCode() != null ? Long.parseLong(oF.getCode().substring(3)) : null;
-        Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
-        Page<Order> orders = orderRepository.findAllWithFilter(
-                oF.getStatus(),
-                oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
-                oF.getPhone(),
-                DateFormatHelper.stringToDate(oF.getTime()),
-                oF.getType(),
-                id,
-                pageable
-        );
-        CustomPageResponse pageResponse = new CustomPageResponse(orders);
-        List<OrderData> listOrder = new ArrayList<>();
+        try {
+            Long id = oF.getCode() != null ? Long.parseLong(oF.getCode().substring(3)) : null;
+            Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+            Page<Order> orders = orderRepository.findAllWithFilter(
+                    oF.getStatus(),
+                    oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
+                    oF.getPhone(),
+                    DateFormatHelper.stringToDate(oF.getTime()),
+                    oF.getType(),
+                    id,
+                    pageable
+            );
+            CustomPageResponse pageResponse = new CustomPageResponse(orders);
+            List<OrderData> listOrder = new ArrayList<>();
 
-        for (Order o : orders) {
-            listOrder.add(this.orderService.getOrderDetail(o));
+            for (Order o : orders) {
+                listOrder.add(this.orderService.getOrderDetail(o));
+            }
+
+            pageResponse.setContent(listOrder);
+            return ResponseEntity.ok(pageResponse);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.ok(new CustomPageResponse());
         }
-
-        pageResponse.setContent(listOrder);
-        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/all/customer/{id}")
