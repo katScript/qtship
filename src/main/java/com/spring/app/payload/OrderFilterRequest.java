@@ -1,13 +1,13 @@
 package com.spring.app.payload;
 
 public class OrderFilterRequest extends FilterRequest {
-    private String code;
-    private String phone;
-    private String status;
-    private String time;
-    private String type;
-    private String from;
-    private String to;
+    private String code = null;
+    private String phone = null;
+    private String status = null;
+    private String time = null;
+    private String type = null;
+    private String from = null;
+    private String to = null;
 
     public String getCode() {
         return code;
