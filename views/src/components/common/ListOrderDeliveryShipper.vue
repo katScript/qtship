@@ -2,23 +2,8 @@
   <div class="container-fluid list-order-shipper p-0">
     <br />
     <div class="row">
-      <div class="col-4">
-        <label for="" class="label-control">Loại đơn hàng: </label>
-      </div>
-      <div class="col-8">
-        <select class="form-select" aria-label="Default select example" v-model="conditionFilter">
-          <option value="ALL">Tất cả</option>
-          <option value="SUCCESS">Đã giao</option>
-          <option value="PAYMENTED">Đã thanh toán</option>
-          <option value="DELAY">Delay giao hàng</option>
-          <option value="OCCURRED">Đơn phát sinh</option>
-          <option value="RETURN">Đơn hoàn</option>
-        </select>
-      </div>
-    </div>
-    <div class="row">
       <h5>
-        <i class="fa-solid fa-play"></i> Đơn hàng: Đơn đã xử lí
+        <i class="fa-solid fa-play"></i> Đơn hàng: Đơn đang giao
         <span>(Tổng số: 10 ĐH)</span>
       </h5>
       <div class="col-12">
@@ -38,7 +23,7 @@
         </div>
         <easy-data-table
           :headers="headersOrder"
-          :items="listOrderComplete"
+          :items="listOrderDelivery"
           v-model:items-selected="itemsSelected"
         >
           <template #item-name-receiver="item">
@@ -55,7 +40,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import OrderData from "@/components/models/order/order-data";
@@ -75,10 +59,9 @@ export default {
   },
   data() {
     return {
-      listOrderComplete: [],
-      listOrderCompleteBk: [],
+      listOrderDelivery: [],
+      listOrderDeliveryBk: [],
       itemsSelected: [],
-      conditionFilter: 'ALL',
       headersOrder: [
         { text: "Mã ĐH", value: "orderCode", sortable: true },
         {
@@ -107,7 +90,7 @@ export default {
       .then((response) => {
         // handle not found
         response.data.forEach((o) => {
-          if (this.conditionFilterStatus(o.order.status)) {
+          if (o.order.status == commonFunction.orderStatus.Delivery) {
             let order = new OrderData();
             order.setData(o.order);
             this.listOrderDelivery.push(order.getData());
@@ -136,27 +119,27 @@ export default {
       );
     },
     filter: function () {
-      this.listOrderComplete = this.listOrderCompleteBk;
-      this.listOrderComplete = this.listOrderComplete.filter(
+      this.listOrderDelivery = this.listOrderDeliveryBk;
+      this.listOrderDelivery = this.listOrderDelivery.filter(
         (e) =>
           e.orderCode.includes(this.conditionFilter) ||
           e.shippingAddress.phone.includes(this.conditionFilter)
       );
-      if(this.conditionFilter == 'ALL') {
-        this.listOrderComplete = this.listOrderCompleteBk;
-      }
     },
-    conditionFilterStatus: function (status) {
-      if (
-        status == commonFunction.orderStatus.Success ||
-        status == commonFunction.orderStatus.Payment ||
-        status == commonFunction.orderStatus.Delay ||
-        status == commonFunction.orderStatus.Occurred ||
-        status == commonFunction.orderStatus.Return
-      ) {
-        return true;
-      }
-      return false;
+    changeStatus: function () {
+      // this.prepareListIdRequest();
+      // axios
+      //   .post(
+      //     commonFunction.DOMAIN_URL + "v1/shipper/order/accept",
+      //     {},
+      //     commonFunction.configApi()
+      //   )
+      //   .then((response) => {
+      //     console.log(response.data);
+      //   })
+      //   .catch((e) => {
+      //     console.log(e);
+      //   });
     },
   },
 };

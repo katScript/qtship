@@ -94,7 +94,7 @@
                             <ListOrderConfirmedShipper />
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="processing">
-                            <ListOrderProcessingShipper />
+                            <ListOrderDeliveryShipper />
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="completed">
                             <ListOrderCompleteShipper />

@@ -203,7 +203,8 @@ const commonFunction = {
         Storage: "STORAGE",
         TransferShipper: "TRANSFER_SHIPPER",
         ShipperConfirm: "SHIPPER_CONFIRMED",
-        Done: "DONE"
+        Done: "DONE",
+        Return: "RETURN"  // bổ sung
     }
 }
 

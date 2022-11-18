@@ -3,7 +3,7 @@ import FooterClient from "@/components/common/FooterClient.vue";
 import ListOrderConfirmedShipper from "@/components/common/ListOrderConfirmedShipper.vue";
 import ListOrderTransferShipper from "@/components/common/ListOrderTransferShipper.vue";
 import ListOrderCompleteShipper from "@/components/common/ListOrderCompleteShipper.vue";
-import ListOrderProcessingShipper from "@/components/common/ListOrderProcessingShipper.vue";
+import ListOrderDeliveryShipper from "@/components/common/ListOrderDeliveryShipper.vue";
 
 import ShipperData from "@/components/models/shipping/shipper-data";
 import OrderData from "@/components/models/order/order-data";
@@ -18,7 +18,7 @@ export default {
         ListOrderConfirmedShipper,
         ListOrderTransferShipper,
         ListOrderCompleteShipper,
-        ListOrderProcessingShipper
+        ListOrderDeliveryShipper
     },
     setup() {
         let shipperModel = new ShipperData(),

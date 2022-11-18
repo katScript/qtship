@@ -4,7 +4,7 @@
     <div class="row">
       <h5>
         <i class="fa-solid fa-play"></i> Đơn hàng: Bàn giao cho Shipper
-        <span>(Tổng số: {{listOrderTransfer.length}})</span>
+        <span>(Tổng số: {{ listOrderTransfer.length }})</span>
       </h5>
       <div class="col-12">
         <div class="row">
@@ -22,7 +22,9 @@
             </div>
           </div>
           <div class="col-sm-2 mb-1">
-            <button class="btn btn-danger" style="float: right;">Nhận giao đơn</button>
+            <button class="btn btn-danger" style="float: right" v-on:click="accessOrder()">
+              Nhận giao đơn
+            </button>
           </div>
         </div>
       </div>
@@ -45,7 +47,7 @@
   import OrderData from "@/components/models/order/order-data";
   import ShipperData from "@/components/models/shipping/shipper-data";
 
-  import { commonFunction } from '@/scripts/ulti';
+  import { commonFunction } from "@/scripts/ulti";
   import axios from "axios";
 
   export default {
@@ -54,8 +56,8 @@
       const orderModel = new OrderData();
       return {
         shipperModel,
-        orderModel
-      }
+        orderModel,
+      };
     },
     data() {
       return {
@@ -65,71 +67,102 @@
         listOrderIdSelected: [],
         headersOrder: [
           { text: "Mã ĐH", value: "orderCode", sortable: true },
-          { text: "Người nhận", value: "name-receiver", sortable: true, width: 120 },
+          {
+            text: "Người nhận",
+            value: "name-receiver",
+            sortable: true,
+            width: 120,
+          },
           { text: "SĐT nhận", value: "phone-receiver" },
           { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
         ],
         itemsSelected: [],
-        conditionFilter: ""
-      }
+        conditionFilter: "",
+      };
     },
     mounted() {
-      this.shipperModel.setData(
-        JSON.parse(commonFunction.getShipperStorage())
-      );
+      this.shipperModel.setData(JSON.parse(commonFunction.getShipperStorage()));
       this.idRequest = this.shipperModel.getData().id;
       // get all order asigned shipper
-      axios.get(
-        commonFunction.DOMAIN_URL +
-        "v1/shipper/order/assign/" +
-        this.shipperModel.getData().id,
-        commonFunction.configApi()
-      ).then((response) => {
-
-        // handle not found
-        response.data.forEach(o => {
-          let order = new OrderData();
-          order.setData(o.order);
-
-          this.listOrderTransfer.push(order.getData());
-          this.listOrderTransferBk.push(order.getData());
+      axios
+        .get(
+          commonFunction.DOMAIN_URL +
+          "v1/shipper/order/assign/" +
+          this.shipperModel.getData().id,
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          // handle not found
+          response.data.forEach((o) => {
+            if (o.order.status == commonFunction.orderStatus.TransferShipper) {
+              let order = new OrderData();
+              order.setData(o.order);
+              this.listOrderTransfer.push(order.getData());
+              this.listOrderTransferBk.push(order.getData());
+            }
+          });
+        })
+        .catch((e) => {
+          console.log(e);
         });
-      }).catch((e) => {
-        console.log(e);
-      });
-
       // this.itemsSelected.forEach(item => {
       //     this.listOrderIdSelected.push(item.id);
       //   }
       // )
     },
-    updated() {
-    },
+    updated() { },
     watch: {
       itemsSelected: {
-        handler: function () {
-
-        }
-      }
+        handler: function () { },
+      },
     },
     methods: {
       buildAddressReceriver(item) {
-        return item.shippingAddress.street
-          + ", " +
-          item.shippingAddress.ward
-          + ", " +
-          item.shippingAddress.district
-          + ", " +
-          item.shippingAddress.province;
+        return (
+          item.shippingAddress.street +
+          ", " +
+          item.shippingAddress.ward +
+          ", " +
+          item.shippingAddress.district +
+          ", " +
+          item.shippingAddress.province
+        );
       },
       filter: function () {
         this.listOrderTransfer = this.listOrderTransferBk;
         this.listOrderTransfer = this.listOrderTransfer.filter(
-          e => e.orderCode.includes(this.conditionFilter)
-            || e.shippingAddress.phone.includes(this.conditionFilter));
+          (e) =>
+            e.orderCode.includes(this.conditionFilter) ||
+            e.shippingAddress.phone.includes(this.conditionFilter)
+        );
       },
+      accessOrder: function () {
+        this.prepareListIdRequest();
+        axios
+          .post(
+            commonFunction.DOMAIN_URL + "v1/shipper/order/accept",
+            this.listOrderIdSelected,
+            commonFunction.configApi()
+          )
+          .then((response) => {
+            console.log(response.data);
+            alert("SUCCESS: " + response.data.message + " - Shipper nhận đơn thành công!");
+            commonFunction.reloadPage();
+          })
+          .catch((e) => {
+            console.log(e);
+            alert("ERROR: Có lỗi xảy ra! Vui lòng thử lại hoặc liên hệ với quản trị viên!");
+            commonFunction.reloadPage();
+          });
+      },
+      prepareListIdRequest: function() {
+        this.listOrderIdSelected = [];
+        this.itemsSelected.forEach(element => {
+          this.listOrderIdSelected.push(element.id);
+        });
+      }
     },
-  }
+  };
 </script>
 
 <style scoped>
