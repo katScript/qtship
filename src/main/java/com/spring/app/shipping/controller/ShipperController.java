@@ -35,8 +35,8 @@ public class ShipperController {
     @Autowired
     ShippingOrderService shippingOrderService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllShipper(
+    @GetMapping("/all/page")
+    public ResponseEntity<?> getAllShipperPage(
             @Valid FilterRequest fR
     ) {
         Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
@@ -50,6 +50,18 @@ public class ShipperController {
 
         pageResponse.setContent(shipperResponses);
         return ResponseEntity.ok(pageResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllShipper() {
+        List<Shipper> shipperList = shipperRepository.findAll();
+        List<ShipperData> shipperResponses = new ArrayList<>();
+
+        for (Shipper sh : shipperList) {
+            shipperResponses.add(shippingService.processShipperDataResponse(sh));
+        }
+
+        return ResponseEntity.ok(shipperResponses);
     }
 
     @GetMapping("/detail/{id}")
