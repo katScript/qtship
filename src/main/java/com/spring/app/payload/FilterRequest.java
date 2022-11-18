@@ -1,8 +1,8 @@
 package com.spring.app.payload;
 
 public class FilterRequest {
-    private Integer size;
-    private Integer page;
+    private Integer size = 0;
+    private Integer page = 5;
 
     public Integer getSize() {
         return size;
