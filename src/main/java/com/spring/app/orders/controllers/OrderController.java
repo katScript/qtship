@@ -13,6 +13,7 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
+import com.spring.app.payload.OrderFilterRequest;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,17 +81,18 @@ public class OrderController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrder(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String from,
-            @RequestParam(required = false) String to,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "5") Integer size
+            @Valid @RequestBody OrderFilterRequest oF
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Order> orders = orderRepository.findAllByStatusAndCreatedAtBetween(
-                status,
-                from != null ? DateFormatHelper.stringToDate(from) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
-                to != null ? DateFormatHelper.stringToDate(to) : new Date(),
+        Long id = oF.getCode() != null ? Long.parseLong(oF.getCode().substring(3)) : null;
+        Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+        Page<Order> orders = orderRepository.findAllWithFilter(
+                oF.getStatus(),
+                oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
+                oF.getPhone(),
+                DateFormatHelper.stringToDate(oF.getTime()),
+                oF.getType(),
+                id,
                 pageable
         );
         CustomPageResponse pageResponse = new CustomPageResponse(orders);
