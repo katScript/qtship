@@ -81,7 +81,7 @@ public class OrderController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrder(
-            @Valid @RequestBody OrderFilterRequest oF
+            @Valid OrderFilterRequest oF
     ) {
         Long id = oF.getCode() != null ? Long.parseLong(oF.getCode().substring(3)) : null;
         Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
