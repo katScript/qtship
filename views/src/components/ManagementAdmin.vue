@@ -72,14 +72,6 @@
     overflow: hidden;
   }
 
-  .show {
-    display: block;
-  }
-
-  .hide {
-    display: none;
-  }
-
   .content-management {
     margin-left: 40px;
   }

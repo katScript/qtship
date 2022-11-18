@@ -7,6 +7,12 @@
         <span>(Tổng số: 10 ĐH)</span>
       </h5>
       <div class="col-12">
+        <div class="popup-order" :class="isShowDetail ? 'show' : 'hide'">
+          <PopupDetailOrderShipper
+            :orderDetail="orderDetail"
+            @isCloseDetail="isCloseDetail"
+          />
+        </div>
         <div class="row d-flex justify-content-end">
           <div class="col-11 mb-1">
             <input
@@ -35,6 +41,80 @@
           <template #item-address-receiver="item">
             {{ buildAddressReceriver(item) }}
           </template>
+          <template #item-btn-function="item">
+            <div class="d-flex">
+              <div class="row">
+                <div class="col-12 m-1">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Ghi chú"
+                  />
+                </div>
+                <div class="col-12">
+                  <button
+                    class="btn btn-info a-function a-detail m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="detail(item)"
+                    title="Chi tiết"
+                  >
+                    Chi tiết
+                  </button>
+
+                  <button
+                    class="btn btn-primary a-function m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="success(item)"
+                    title="Đã giao hàng"
+                  >
+                    Đã giao hàng
+                  </button>
+
+                  <button
+                    class="btn btn-success a-function m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="paymented(item)"
+                    title="Đã thanh toán"
+                  >
+                    Đã thanh toán
+                  </button>
+
+                  <button
+                    class="btn btn-warning a-function m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="delay(item)"
+                    title="Delay giao"
+                  >
+                    Delay giao
+                  </button>
+
+                  <button
+                    class="btn btn-danger a-function m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="occurred(item)"
+                    title="Phát sinh"
+                  >
+                    Phát sinh
+                  </button>
+
+                  <button
+                    class="btn btn-danger a-function m-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    v-on:click="returnn(item)"
+                    title="Đơn hoàn"
+                  >
+                    Đơn hoàn
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
         </easy-data-table>
       </div>
     </div>
@@ -44,6 +124,7 @@
 <script>
 import OrderData from "@/components/models/order/order-data";
 import ShipperData from "@/components/models/shipping/shipper-data";
+import PopupDetailOrderShipper from "@/components/common/PopupDetailOrderShipper.vue";
 
 import { commonFunction } from "@/scripts/ulti";
 import axios from "axios";
@@ -56,6 +137,9 @@ export default {
       shipperModel,
       orderModel,
     };
+  },
+  components: {
+    PopupDetailOrderShipper,
   },
   data() {
     return {
@@ -72,7 +156,11 @@ export default {
         },
         { text: "SĐT nhận", value: "phone-receiver" },
         { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
+        { text: "Chức năng", value: "btn-function" },
       ],
+      isShowDetail: false,
+      orderDetail: {},
+      action: ""
     };
   },
   watch: {},
@@ -126,20 +214,97 @@ export default {
           e.shippingAddress.phone.includes(this.conditionFilter)
       );
     },
-    changeStatus: function () {
-      // this.prepareListIdRequest();
-      // axios
-      //   .post(
-      //     commonFunction.DOMAIN_URL + "v1/shipper/order/accept",
-      //     {},
-      //     commonFunction.configApi()
-      //   )
-      //   .then((response) => {
-      //     console.log(response.data);
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
+    success: function (item) {
+      axios
+        .post(
+          commonFunction.DOMAIN_URL + "v1/order/update/status",
+          {
+            id: item.id,
+            status: commonFunction.orderStatus.Success,
+          },
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    paymented: function (item) {
+      axios
+        .post(
+          commonFunction.DOMAIN_URL + "v1/order/update/status",
+          {
+            id: item.id,
+            status: commonFunction.orderStatus.Payment,
+          },
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    delay: function (item) {
+      axios
+        .post(
+          commonFunction.DOMAIN_URL + "v1/order/update/status",
+          {
+            id: item.id,
+            status: commonFunction.orderStatus.Delay,
+          },
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    occurred: function (item) {
+      axios
+        .post(
+          commonFunction.DOMAIN_URL + "v1/order/update/status",
+          {
+            id: item.id,
+            status: commonFunction.orderStatus.Occurred,
+          },
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    returnn: function (item) {
+      axios
+        .post(
+          commonFunction.DOMAIN_URL + "v1/order/update/status",
+          {
+            id: item.id,
+            status: commonFunction.orderStatus.Return,
+          },
+          commonFunction.configApi()
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    detail: function (item) {
+      this.orderDetail = item;
+      this.isShowDetail = true;
+    },
+    isCloseDetail: function (value) {
+      this.isShowDetail = value;
     },
   },
 };

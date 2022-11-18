@@ -7,6 +7,9 @@
         <span>(Tổng số: 10 ĐH)</span>
       </h5>
       <div class="col-12">
+        <!-- <div class="popup-order" :class=" isShowDetail ? 'show' : 'hide'">
+          <PopupDetailOrderShipper :orderDetail="orderDetail" @isCloseDetail="isCloseDetail" />
+        </div> -->
         <div class="row d-flex justify-content-end">
           <div class="col-11 mb-1">
             <input type="text" class="form-control" placeholder="Mã ĐH hoặc Sđt người nhận" />
@@ -27,6 +30,15 @@
           <template #item-address-receiver="item">
             {{ buildAddressReceriver(item) }}
           </template>
+          <template #item-btn-function="item">
+            <div class="d-flex">
+              <!-- <button class="btn btn-primary a-function a-detail m-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                v-on:click="detail(item)" title="Chi tiết">Chi tiết</button> -->
+
+              <button class="btn btn-danger a-function m-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                v-on:click="delivery(item)" title="Đang giao hàng">Đang giao hàng</button>
+            </div>
+          </template>
         </easy-data-table>
       </div>
     </div>
@@ -36,6 +48,7 @@
 <script>
   import OrderData from "@/components/models/order/order-data";
   import ShipperData from "@/components/models/shipping/shipper-data";
+  // import PopupDetailOrderShipper from "@/components/common/PopupDetailOrderShipper.vue";
 
   import { commonFunction } from "@/scripts/ulti";
   import axios from "axios";
@@ -48,6 +61,9 @@
         shipperModel,
         orderModel,
       };
+    },
+    components: {
+      // PopupDetailOrderShipper
     },
     data() {
       return {
@@ -64,7 +80,10 @@
           },
           { text: "SĐT nhận", value: "phone-receiver" },
           { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
+          { text: "Chức năng", value: "btn-function" },
         ],
+        isShowDetail: false,
+        orderDetail: {},
       };
     },
     watch: {},
@@ -118,21 +137,30 @@
             e.shippingAddress.phone.includes(this.conditionFilter)
         );
       },
-      changeStatus: function () {
-        // this.prepareListIdRequest();
-        // axios
-        //   .post(
-        //     commonFunction.DOMAIN_URL + "v1/shipper/order/accept",
-        //     {},
-        //     commonFunction.configApi()
-        //   )
-        //   .then((response) => {
-        //     console.log(response.data);
-        //   })
-        //   .catch((e) => {
-        //     console.log(e);
-        //   });
+      delivery: function (item) {
+        axios
+          .post(
+            commonFunction.DOMAIN_URL + "v1/order/update/status",
+            {
+              "id": item.id,
+              "status": commonFunction.orderStatus.Delivery
+            },
+            commonFunction.configApi()
+          )
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       },
+      detail: function (item) {
+        this.orderDetail = item;
+        this.isShowDetail = true;
+      },
+      // isCloseDetail: function (value) {
+      //   this.isShowDetail = value;
+      // }
     },
   };
 </script>
@@ -146,4 +174,7 @@
       width: 45px;
     }
   }
+
+
+  /* popup */
 </style>

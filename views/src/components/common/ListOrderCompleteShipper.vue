@@ -89,6 +89,7 @@ export default {
         },
         { text: "SĐT nhận", value: "phone-receiver" },
         { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
+        { text: "Trạng thái", value: "status" },
       ],
     };
   },
