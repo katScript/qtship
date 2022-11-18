@@ -10,6 +10,9 @@ import java.util.List;
 
 @Service
 public class OrderStatusService {
+    public static final String TRANSFER_SHIPPER = "TRANSFER_SHIPPER";
+    public static final String SHIPPER_CONFIRMED = "SHIPPER_CONFIRMED";
+
     public OrderStatusData processOrderStatusData(OrderStatus orderStatus) {
         List<String> child = new ArrayList<>();
 

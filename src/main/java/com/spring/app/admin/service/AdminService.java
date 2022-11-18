@@ -9,6 +9,7 @@ import com.spring.app.authentication.models.User;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
+import com.spring.app.orders.services.OrderStatusService;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShipperOrder;
 import com.spring.app.shipping.models.repository.ShipperOrderRepository;
@@ -77,7 +78,10 @@ public class AdminService {
         Order order = orderRepository.findById(data.getOrderId()).orElse(null);
         Shipper shipper = shipperRepository.findById(data.getShipperId()).orElse(null);
 
-        if (order != null && shipper != null)
+        if (order != null && shipper != null) {
             shipperOrderRepository.save(new ShipperOrder(order, shipper));
+            order.setStatus(OrderStatusService.TRANSFER_SHIPPER);
+            orderRepository.save(order);
+        }
     }
 }
