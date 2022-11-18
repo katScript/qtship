@@ -4,6 +4,7 @@ import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.services.OrderService;
+import com.spring.app.orders.services.OrderStatusService;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShipperOrder;
 import com.spring.app.shipping.models.ShippingAddress;
@@ -87,7 +88,8 @@ public class ShippingService {
             Shipper shipper = shipperOrder.getShipper();
             Order order = shipperOrder.getOrder();
 
-            order.setShipper(shipper);
+            order.setShipper(shipper)
+                    .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
 
             orderRepository.save(order);
             shipperOrderRepository.delete(shipperOrder);
