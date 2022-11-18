@@ -104,30 +104,4 @@ public class CustomerController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
-
-    @PostMapping("/address/save")
-    public ResponseEntity<?> saveAddress(@Valid @RequestBody SaveAddressRequest addressRequest) {
-        Customer customer = customerRepository.findById(addressRequest.getCustomerId())
-                .orElse(null);
-
-        if (customer == null)
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
-
-        Address address = new Address();
-
-//        address.setProvince(addressRequest.getAddress().getProvince())
-//                        .setPro
-//                addressRequest.getAddress().getProvinceId(),
-//                addressRequest.getAddress().getDistrict(),
-//                addressRequest.getAddress().getDistrictId(),
-//                addressRequest.getAddress().getWard(),
-//                addressRequest.getAddress().getWardId(),
-//                addressRequest.getAddress().getStreet(),
-//                addressRequest.getAddress().getPrimary()
-
-        customer.addAddress(address);
-        customerRepository.saveAndFlush(customer);
-
-        return ResponseEntity.ok(new MessageResponse("Save success!"));
-    }
 }

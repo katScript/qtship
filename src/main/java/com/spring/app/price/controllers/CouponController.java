@@ -66,4 +66,16 @@ public class CouponController {
         couponRepository.delete(c);
         return ResponseEntity.ok(new MessageResponse("Coupon delete success!"));
     }
+
+    @GetMapping("/active/all")
+    public ResponseEntity<?> getAllCouponValid() {
+        List<Coupon> listCoupon = this.couponRepository.findCouponByEnable();
+        List<CouponData> response = new ArrayList<>();
+
+        for (Coupon c : listCoupon) {
+            response.add(this.couponService.processCouponDataResponse(c));
+        }
+
+        return ResponseEntity.ok(response);
+    }
 }
