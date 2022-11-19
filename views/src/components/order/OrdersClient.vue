@@ -120,8 +120,8 @@
                                         <option value="" disabled hidden selected>
                                             Dịch vụ giao hàng
                                         </option>
-                                        <option v-for="(type, index) in listTypeShipping" :key="index">
-                                            {{ generateCodeToText(type) }}
+                                        <option v-for="(type, index) in listTypeShipping" :key="index" :value="index">
+                                            {{ type }}
                                         </option>
                                     </select>
                                 </div>
@@ -174,7 +174,7 @@
                                         <tr>
                                             <td>
                                                 <!-- + idRequest +'/' add to url detail whent api updated -->
-                                                <a :href="'/client/orders/detail/'+idRequest+'/'+item.id"
+                                                <a :href="getDetailUrl(item.id)"
                                                    class="btn btn-primary a-function a-detail" data-bs-toggle="tooltip"
                                                    data-bs-placement="top"
                                                    title="Chi tiết đơn hàng"><i

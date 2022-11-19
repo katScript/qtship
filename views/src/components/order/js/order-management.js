@@ -140,7 +140,7 @@ export default {
                 console.log(e);
             });
 
-
+            this.listTypeShipping = commonFunction.shippingType;
     },
     watch: {
         filterTime: {
@@ -208,23 +208,23 @@ export default {
             this.listOrderByCustomer = this.listOrderByCustomerBk;
             this.listOrderByCustomer = this.listOrderByCustomer.filter(
                 (o) =>
-                    o.orderCode ==
-                    (this.filterOderCondition.orderId != ""
+                    o.orderCode ===
+                    (this.filterOderCondition.orderId !== ""
                         ? this.filterOderCondition.orderId
                         : o.orderCode) &&
 
-                    o.orderItem[0].shippingAddress.phone ==
-                    (this.filterOderCondition.phoneReceiver != ""
+                    o.shippingAddress.phone ===
+                    (this.filterOderCondition.phoneReceiver !== ""
                         ? this.filterOderCondition.phoneReceiver
-                        : o.orderItem[0].shippingAddress.phone) &&
+                        : o.shippingAddress.phone) &&
 
-                    o.status ==
-                    (this.filterOderCondition.orderStatus != ""
+                    o.status ===
+                    (this.filterOderCondition.orderStatus !== ""
                         ? this.filterOderCondition.orderStatus
                         : o.status) &&
 
-                    o.shippingType ==
-                    (this.filterOderCondition.shippingType != ""
+                    o.shippingType ===
+                    (this.filterOderCondition.shippingType !== ""
                         ? this.filterOderCondition.shippingType
                         : o.shippingType)
             );
@@ -233,33 +233,33 @@ export default {
         },
         // moment().subtract(1, "weeks").format("YYYY-MM-DD HH:MM:SS");
         conditionFilterByTimeCreate(listOrderByCustomer) {
-            if (this.filterTime == "timeCOToday") {
+            if (this.filterTime === "timeCOToday") {
                 this.listOrderByCustomer = listOrderByCustomer.filter(
                     (o) =>
-                        this.fomartDateYYYYMMDD(o.createdAt) ==
+                        this.fomartDateYYYYMMDD(o.createdAt) ===
                         this.fomartDateYYYYMMDD(new Date())
                 );
-            } else if (this.filterTime == "timeCO1week") {
+            } else if (this.filterTime === "timeCO1week") {
                 this.listOrderByCustomer = listOrderByCustomer.filter(
                     (o) =>
                         this.fomartDateYYYYMMDD(o.createdAt) >=
                         this.fomartDateYYYYMMDD(moment().subtract(1, "weeks"))
                 );
-            } else if (this.filterTime == "timeCO1month") {
+            } else if (this.filterTime === "timeCO1month") {
                 this.listOrderByCustomer = listOrderByCustomer.filter(
                     (o) =>
                         this.fomartDateYYYYMMDD(o.createdAt) >=
                         this.fomartDateYYYYMMDD(moment().subtract(1, "months"))
                 );
-            } else if (this.filterTime == "timeCO1year") {
+            } else if (this.filterTime === "timeCO1year") {
                 this.listOrderByCustomer = listOrderByCustomer.filter(
                     (o) =>
                         this.fomartDateYYYYMMDD(o.createdAt) >=
                         this.fomartDateYYYYMMDD(moment().subtract(1, "years"))
                 );
-            } else if (this.filterTime == "timeCOAll") {
+            } else if (this.filterTime === "timeCOAll") {
                 console.log(this.filterTime);
-            } else if (this.filterTime == "timeCOTimeAbout") {
+            } else if (this.filterTime === "timeCOTimeAbout") {
                 this.listOrderByCustomer = listOrderByCustomer.filter(
                     (o) =>
                         this.fomartDateYYYYMMDD(o.createdAt) >=
@@ -294,5 +294,8 @@ export default {
         fomartDateYYYYMMDD(date) {
             return moment(date).format("YYYY-MM-DD");
         },
+        getDetailUrl(id) {
+            return '/client/orders/detail/'+ this.customerModel.getData().id +'/' + id;
+        }
     },
 };
