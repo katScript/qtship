@@ -9,6 +9,7 @@ import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.ShipperData;
 import com.spring.app.shipping.payload.ShipperOrderData;
+import com.spring.app.shipping.payload.request.AssignOrderRequest;
 import com.spring.app.shipping.service.ShippingOrderService;
 import com.spring.app.shipping.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,8 +105,8 @@ public class ShipperController {
     }
 
     @PostMapping("/order/accept")
-    public ResponseEntity<?> acceptOrder(@Valid @RequestBody List<Long> ids) {
-        for (Long id: ids) {
+    public ResponseEntity<?> acceptOrder(@Valid @RequestBody List<AssignOrderRequest> ids) {
+        for (AssignOrderRequest id: ids) {
             this.shippingService.acceptOrder(id);
         }
 
@@ -113,8 +114,8 @@ public class ShipperController {
     }
 
     @PostMapping("/order/reject")
-    public ResponseEntity<?> rejectOrder(@Valid @RequestBody List<Long> ids) {
-        for (Long id: ids) {
+    public ResponseEntity<?> rejectOrder(@Valid @RequestBody List<AssignOrderRequest> ids) {
+        for (AssignOrderRequest id: ids) {
             this.shippingService.rejectOrder(id);
         }
 

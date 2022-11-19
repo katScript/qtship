@@ -13,6 +13,7 @@ import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.ShipperData;
 import com.spring.app.shipping.payload.ShipperOrderData;
 import com.spring.app.shipping.payload.ShippingAddressData;
+import com.spring.app.shipping.payload.request.AssignOrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,23 +82,23 @@ public class ShippingService {
         );
     }
 
-    public void acceptOrder(Long id) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findById(id).orElse(null);
+    public void acceptOrder(AssignOrderRequest data) {
+        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found!"));
+        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found!"));
+        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(shipper, order).orElseThrow(() -> new RuntimeException("Not found order assignment!"));
 
-        if (shipperOrder != null) {
-            Shipper shipper = shipperOrder.getShipper();
-            Order order = shipperOrder.getOrder();
+        order.setShipper(shipper)
+                .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
 
-            order.setShipper(shipper)
-                    .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
-
-            orderRepository.save(order);
-            shipperOrderRepository.delete(shipperOrder);
-        }
+        orderRepository.save(order);
+        shipperOrderRepository.delete(shipperOrder);
     }
 
-    public void rejectOrder(Long id) {
-        shipperOrderRepository.findById(id)
-                .ifPresent(shipperOrder -> shipperOrderRepository.delete(shipperOrder));
+    public void rejectOrder(AssignOrderRequest data) {
+        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found!"));
+        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found!"));
+        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(shipper, order).orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+
+        shipperOrderRepository.delete(shipperOrder);
     }
 }
