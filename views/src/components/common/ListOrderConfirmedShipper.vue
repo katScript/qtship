@@ -79,6 +79,7 @@
             width: 120,
           },
           { text: "SĐT nhận", value: "phone-receiver" },
+          { text: "Trạng thái", value: "status" },
           { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
           { text: "Chức năng", value: "btn-function" },
         ],
@@ -87,23 +88,23 @@
       };
     },
     watch: {},
-    mounted() {
+    async mounted() {
       this.shipperModel.setData(JSON.parse(commonFunction.getShipperStorage()));
       this.idRequest = this.shipperModel.getData().id;
       // get all order asigned shipper
-      axios
+      await axios
         .get(
           commonFunction.DOMAIN_URL +
-          "v1/shipper/order/assign/" +
+          "v1/order/all/shipper/" +
           this.shipperModel.getData().id,
           commonFunction.configApi()
         )
         .then((response) => {
           // handle not found
-          response.data.forEach((o) => {
-            if (o.order.status == commonFunction.orderStatus.ShipperConfirm) {
+          response.data.content.forEach((o) => {
+            if (o.status == commonFunction.orderStatus.ShipperConfirm) {
               let order = new OrderData();
-              order.setData(o.order);
+              order.setData(o);
               this.listOrderConfirmed.push(order.getData());
               this.listOrderConfirmedBk.push(order.getData());
             }
@@ -149,9 +150,12 @@
           )
           .then((response) => {
             console.log(response.data);
+            alert("SUCCESS: Đã chuyển trạng thái thành: Đang giao hàng!");
+            commonFunction.reloadPage();
           })
           .catch((e) => {
             console.log(e);
+            alert("ERROR: Đã có lỗi xảy ra! Vui lòng thử lại hoặc liên hệ với quản trị viên.");
           });
       },
       detail: function (item) {
@@ -161,6 +165,9 @@
       // isCloseDetail: function (value) {
       //   this.isShowDetail = value;
       // }
+      emitTabSelected: function(value) {
+        this.$emit("emitTabSelected",value);
+      }
     },
   };
 </script>

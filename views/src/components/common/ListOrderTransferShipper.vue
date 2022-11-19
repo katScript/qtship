@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="col-sm-2 mb-1">
-            <button class="btn btn-danger" style="float: right" v-on:click="accessOrder()">
+            <button class="btn btn-danger" style="float: right" v-on:click="acceptOrder()">
               Nhận giao đơn
             </button>
           </div>
@@ -64,7 +64,7 @@
         idRequest: 0,
         listOrderTransfer: [],
         listOrderTransferBk: [],
-        listOrderIdSelected: [],
+        bodyRequestAccept: [],
         headersOrder: [
           { text: "Mã ĐH", value: "orderCode", sortable: true },
           {
@@ -74,6 +74,7 @@
             width: 120,
           },
           { text: "SĐT nhận", value: "phone-receiver" },
+          { text: "Trạng thái", value: "status" },
           { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
         ],
         itemsSelected: [],
@@ -95,10 +96,8 @@
           // handle not found
           response.data.forEach((o) => {
             if (o.order.status == commonFunction.orderStatus.TransferShipper) {
-              let order = new OrderData();
-              order.setData(o.order);
-              this.listOrderTransfer.push(order.getData());
-              this.listOrderTransferBk.push(order.getData());
+              this.listOrderTransfer.push(o.order);
+              this.listOrderTransferBk.push(o.order);
             }
           });
         })
@@ -106,7 +105,7 @@
           console.log(e);
         });
       // this.itemsSelected.forEach(item => {
-      //     this.listOrderIdSelected.push(item.id);
+      //     this.bodyRequestAccept.push(item.id);
       //   }
       // )
     },
@@ -136,12 +135,12 @@
             e.shippingAddress.phone.includes(this.conditionFilter)
         );
       },
-      accessOrder: function () {
-        this.prepareListIdRequest();
+      acceptOrder: function () {
+        this.prepareBodyRequestAccept();
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/shipper/order/accept",
-            this.listOrderIdSelected,
+            this.bodyRequestAccept,
             commonFunction.configApi()
           )
           .then((response) => {
@@ -155,12 +154,17 @@
             commonFunction.reloadPage();
           });
       },
-      prepareListIdRequest: function() {
-        this.listOrderIdSelected = [];
+      prepareBodyRequestAccept: function () {
+        this.bodyRequestAccept = [];
         this.itemsSelected.forEach(element => {
-          this.listOrderIdSelected.push(element.id);
+          this.bodyRequestAccept.push(
+            {
+              orderId: element.id,
+              shipperId: this.idRequest
+            }
+          );
         });
-      }
+      },
     },
   };
 </script>

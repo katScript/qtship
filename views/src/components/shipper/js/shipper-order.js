@@ -40,6 +40,7 @@ export default {
             listOrderByStatus: this.orderStatusService.getListOrderStatusSupport(),
             totalPrice: "0",
             totalSuccessPrice: "0",
+            tabSelected: "TRANSFER"
         };
     },
     async mounted() {
@@ -105,5 +106,8 @@ export default {
 
             this.totalSuccessPrice = currencyFormat.format(successOrderTotal);
         },
+        emitTabSelected: function(value) {
+            this.tabSelected = value;
+        }
     },
 };
