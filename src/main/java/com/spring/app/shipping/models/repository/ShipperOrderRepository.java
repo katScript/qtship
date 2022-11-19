@@ -14,6 +14,5 @@ import java.util.Optional;
 public interface ShipperOrderRepository extends JpaRepository<ShipperOrder, Long> {
     List<ShipperOrder> findByOrder(Order order);
     List<ShipperOrder> findByShipper(Shipper shipper);
-    @Query("select s from ShipperOrder s where s.shipper.id = ?1 and s.order.id = ?2")
-    Optional<ShipperOrder> findByShipperAndOrder(Long shipperId, Long orderId);
+    List<ShipperOrder> findByShipperAndOrder(Shipper shipper, Order order);
 }
