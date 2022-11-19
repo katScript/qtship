@@ -51,7 +51,6 @@ export default {
             countOrder: 0,
             idRequest: "",
             isLoading: false,
-            configRequestApi: {},
             headersOrder: [
                 { text: "Mã ĐH", value: "orderCode", sortable: true },
                 { text: "Tên người nhận", value: "name-receiver", sortable: true },
@@ -85,16 +84,11 @@ export default {
 
     mounted() {
         let auth = commonFunction.getCookies(commonFunction.userCookies.username),
-            role = commonFunction.getCookies(commonFunction.userCookies.roles),
-            token = commonFunction.getCookies(commonFunction.userCookies.token);
+            role = commonFunction.getCookies(commonFunction.userCookies.roles);
 
         if (auth == null && role !== "customer") {
             commonFunction.redirect("/");
         }
-
-        this.configRequestApi = {
-            headers: { Authorization: "Bearer " + token },
-        };
 
         this.customerModel.setData(
             JSON.parse(commonFunction.getCustomerStorage())
@@ -102,16 +96,13 @@ export default {
 
         let customerId = this.customerModel.getData().id;
 
-        this.idRequest = customerId;
-
         axios
             .get(
-                commonFunction.DOMAIN_URL + "v1/order/all/customer/" + this.idRequest,
+                commonFunction.DOMAIN_URL + "v1/order/all/customer/" + customerId,
                 commonFunction.configApi()
             )
             .then((response) => {
-                let respronseData = response.data;
-                respronseData.forEach(element => {
+                response.data.content.forEach((element) => {
                     let newOrderModel = new OrderData();
                     newOrderModel.setData(element);
                     this.listOrderByCustomer.push(newOrderModel.getData());
@@ -137,9 +128,6 @@ export default {
                         break;
                     case commonFunction.orderStatus.Return:
                         this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Return);
-                        break;
-                    case commonFunction.typeOrderUpdated:
-                        this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.typeOrderUpdated);
                         break;
                     case commonFunction.orderStatus.Pending:
                         this.listOrderByCustomer = this.listOrderByCustomer.filter(o => o.status == commonFunction.orderStatus.Pending);
@@ -193,14 +181,14 @@ export default {
             this.typeComponent = "ORDER";
             this.dataNotify = {
                 name: item.orderCode,
-                idRequest: this.idRequest,
+                idRequest: this.customerModel.getData().id,
                 data: item,
             };
             this.isShowNotify = true;
             console.log(item);
         },
         genUrlUpdateOrder(item) {
-            return "/customer/orders/save#" + item.id;
+            return "/customer/orders/save" + item.id;
         },
         closePopupNotify: function () {
             this.isShowNotify = false;

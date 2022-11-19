@@ -164,10 +164,10 @@
                                              table-class-name="easy-data-table-customize">
                                 <!-- #item-btn-function="item"  item: valua of row-->
                                 <template #item-name-receiver="item">
-                                    {{ item.orderItem[0].shippingAddress.name }}
+                                    {{ item.shippingAddress.name }}
                                 </template>
                                 <template #item-phone-receiver="item">
-                                    {{ item.orderItem[0].shippingAddress.phone }}
+                                    {{ item.shippingAddress.phone }}
                                 </template>
                                 <template #item-btn-function-order="item">
                                     <table class="w-100" v-if="item.status != 'CANCEL'">

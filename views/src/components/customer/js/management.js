@@ -100,9 +100,9 @@ export default {
                 commonFunction.configApi()
             )
             .then((response) => {
-                self.listOrderByCustomer = response.data;
-                self.listOrderByCustomerBk = response.data;
-                self.totalOrderAll = response.data.length;
+                self.listOrderByCustomer = response.data.content;
+                self.listOrderByCustomerBk = response.data.content;
+                self.totalOrderAll = response.data.content.length;
                 self.totalOrderByDate = self.listOrderByCustomer.length;
 
                 self.numberOrderSuccess = self.listOrderByCustomer.filter(
