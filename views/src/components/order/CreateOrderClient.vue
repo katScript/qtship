@@ -201,12 +201,12 @@
                                                                 <div class="col-6">
                                                                     <input type="text" class="form-control product-select-weight"
                                                                            v-model="ps.weight"
-                                                                           placeholder="Trọng lượng (kg)" disabled readonly/>
+                                                                           placeholder="Trọng lượng (kg)"/>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <input type="text" class="form-control product-select-public-price"
                                                                            v-model="ps.price"
-                                                                           placeholder="Giá bán (VNĐ)" disabled readonly/>
+                                                                           placeholder="Giá bán (VNĐ)"/>
                                                                 </div>
                                                             </div>
                                                         </div>

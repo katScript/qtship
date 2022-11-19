@@ -31,21 +31,21 @@
           <div class="col-6 d-inline">
             <div class="  w-100 p-1">
               <label for="">Đến: </label>
-              <small>{{ orderData.orderItem[0].shippingAddress.name }}</small>
+              <small>{{ orderData.shippingAddress.name }}</small>
               <br />
               <small>Đ/c:
                 {{
-                orderData.orderItem[0].shippingAddress.street +
+                orderData.shippingAddress.street +
                 ", " +
-                orderData.orderItem[0].shippingAddress.ward +
+                orderData.shippingAddress.ward +
                 ", " +
-                orderData.orderItem[0].shippingAddress.district +
+                orderData.shippingAddress.district +
                 ", " +
-                orderData.orderItem[0].shippingAddress.province
+                orderData.shippingAddress.province
                 }}
               </small>
               <br />
-              <small>SĐT: {{ orderData.orderItem[0].shippingAddress.phone }}</small>
+              <small>SĐT: {{ orderData.shippingAddress.phone }}</small>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="  w-100 p-1">
               <label for="">Nội dung đơn hàng:</label>
               <br />
-              <small class="ps-1" v-for="(item, index) in orderData.orderItem[0].products" :key="index"><label for="">{{ index + 1
+              <small class="ps-1" v-for="(item, index) in orderData.products" :key="index"><label for="">{{ index + 1
                   }}. </label>
                 {{ item.product.name }} - SL: {{ item.qty }} <br></small> 
               <br />
