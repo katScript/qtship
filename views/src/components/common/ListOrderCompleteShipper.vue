@@ -149,7 +149,6 @@ export default {
     },
     conditionFilterStatus: function (status) {
       if (
-        status == commonFunction.orderStatus.Success ||
         status == commonFunction.orderStatus.Payment ||
         status == commonFunction.orderStatus.Delay ||
         status == commonFunction.orderStatus.Occurred ||

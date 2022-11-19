@@ -160,6 +160,9 @@
         this.itemsSelected.forEach(element => {
           this.listOrderIdSelected.push(element.id);
         });
+      },
+      emitTabSelected: function(value) {
+        this.$emit("emitTabSelected",value);
       }
     },
   };

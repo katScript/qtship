@@ -205,7 +205,7 @@ const commonFunction = {
         ShipperConfirm: "SHIPPER_CONFIRMED",
         Done: "DONE",
         Return: "RETURN"  // bổ sung
-    }
+    },
 }
 
 export { commonFunction };

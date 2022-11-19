@@ -87,11 +87,11 @@
       };
     },
     watch: {},
-    mounted() {
+    async mounted() {
       this.shipperModel.setData(JSON.parse(commonFunction.getShipperStorage()));
       this.idRequest = this.shipperModel.getData().id;
       // get all order asigned shipper
-      axios
+      await axios
         .get(
           commonFunction.DOMAIN_URL +
           "v1/shipper/order/assign/" +
@@ -149,9 +149,11 @@
           )
           .then((response) => {
             console.log(response.data);
+            alert("SUCCESS: Đã chuyển trạng thái thành: Đang giao hàng!");
           })
           .catch((e) => {
             console.log(e);
+            alert("ERROR: Đã có lỗi xảy ra! Vui lòng thử lại hoặc liên hệ với quản trị viên.");
           });
       },
       detail: function (item) {
@@ -161,6 +163,9 @@
       // isCloseDetail: function (value) {
       //   this.isShowDetail = value;
       // }
+      emitTabSelected: function(value) {
+        this.$emit("emitTabSelected",value);
+      }
     },
   };
 </script>
