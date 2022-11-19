@@ -108,6 +108,36 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/all/page/customer/{id}")
+    public ResponseEntity<?> getOrderByCustomerIdPage(
+            @Valid @PathVariable Long id,
+            @Valid OrderFilterRequest oF
+    ) throws ParseException {
+        Customer customer = customerRepository.findById(id)
+                .orElse(null);
+
+        List<OrderData> listOrder = new ArrayList<>();
+
+        if (customer != null) {
+            Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+            Page<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, oF.getStatus(),
+                    oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
+                    oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
+                    pageable
+            );
+            CustomPageResponse pageResponse = new CustomPageResponse(orders);
+
+            for (Order o : orders) {
+                listOrder.add(this.orderService.getOrderDetail(o));
+            }
+
+            pageResponse.setContent(listOrder);
+            return ResponseEntity.ok(pageResponse);
+        }
+
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer is not found."));
+    }
+
     @GetMapping("/all/customer/{id}")
     public ResponseEntity<?> getOrderByCustomerId(
             @Valid @PathVariable Long id,
@@ -119,7 +149,7 @@ public class OrderController {
         List<OrderData> listOrder = new ArrayList<>();
 
         if (customer != null) {
-            Pageable pageable = PageRequest.of(oF.getPage(), oF.getSize());
+            Pageable pageable = Pageable.unpaged();
             Page<Order> orders = orderRepository.findByCustomerAndStatusAndCreatedAtBetween(customer, oF.getStatus(),
                     oF.getFrom() != null ? DateFormatHelper.stringToDate(oF.getFrom()) : DateFormatHelper.stringToDate(DateFormatHelper.START_DATE),
                     oF.getTo() != null ? DateFormatHelper.stringToDate(oF.getTo()) : new Date(),
