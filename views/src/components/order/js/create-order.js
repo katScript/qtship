@@ -142,7 +142,7 @@ export default {
         //coupon
         axios.get(
             commonFunction.DOMAIN_URL +
-            "v1/coupon/all",
+            "v1/coupon/active/all",
             commonFunction.configApi()
         ).then((response) => {
             // handle not found
