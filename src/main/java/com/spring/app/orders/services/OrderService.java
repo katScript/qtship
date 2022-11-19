@@ -50,8 +50,7 @@ public class OrderService {
     public void updateStatus(OrderStatusUpdateRequest order) {
         Order _order = this.orderRepository.findById(order.getId())
                 .orElseThrow(() -> new RuntimeException("Order not found!"));
-
-
+        
         OrderStatus status = this.orderStatusRepository.findByCode(order.getStatus())
                 .orElseThrow(() -> new RuntimeException("Order status not found!"));
 
@@ -83,7 +82,7 @@ public class OrderService {
             order = new Order();
         }
 
-        OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus()).orElseThrow(() -> new RuntimeException("Order status not found!"));
+        OrderStatus status = this.orderStatusRepository.findByCode(data.getStatus() != null ? data.getStatus() : OrderStatus.DEFAULT).orElseThrow(() -> new RuntimeException("Order status not found!"));
 
         order.setSenderName(data.getSenderName())
                 .setSenderPhone(data.getSenderPhone())
