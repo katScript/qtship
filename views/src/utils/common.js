@@ -52,4 +52,9 @@ export default {
     // { name: 'Tất cả', value: 'timeCOAll' },
     { name: 'Tùy chỉnh', value: 'timeCOTimeAbout' },
   ],
+  RETURN_TYPE: [
+    { name: 'Lưu kho chờ shop check', value: 'SAVE_WARE_WAITING_CHECK' },
+    { name: 'Không được hoàn', value: 'CAN_NOT_RETURN' },
+    { name: 'Không lưu kho , trả shop ngay', value: 'DON_NOT_SAVE_RETURN_NOW' },
+  ],
 }

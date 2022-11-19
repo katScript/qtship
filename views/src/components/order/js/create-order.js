@@ -121,7 +121,7 @@ export default {
 
         // can update
         if (this.auth == null || this.role !== "customer") {
-            commonFunction.redirect("/");
+            // commonFunction.redirect("/");
         }
 
         //warehouse

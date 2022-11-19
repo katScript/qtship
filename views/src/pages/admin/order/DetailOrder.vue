@@ -21,7 +21,6 @@ const handleClose = () => {
 <template>
   <a-modal :visible="openDetail" title="Chi tiết đơn hàng" width="80%" style="top: 20px;" @cancel="handleClose">
     <div class="content">
-
       <div class="border">
         <div class="fs-4 border-bottom bg-secondary px-3 py-1 text-white">Thông tin đơn hàng</div>
         <div class="p-3">

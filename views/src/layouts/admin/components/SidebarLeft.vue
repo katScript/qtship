@@ -86,7 +86,7 @@ const handleClickItem = (inList = false, path) => {
         <ShoppingCartOutlined />
       </template>
       <template #title>Tạo đơn hàng tại bưu cục</template>
-      <a-menu-item key="sub-21">Tạo đơn hàng mới</a-menu-item>
+      <a-menu-item key="sub-21" @click="handleClickItem(true, '/admin/order/create')">Tạo đơn hàng mới</a-menu-item>
     </a-sub-menu>
   </a-menu>
 </template>
