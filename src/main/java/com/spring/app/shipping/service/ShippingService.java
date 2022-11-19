@@ -83,9 +83,11 @@ public class ShippingService {
     }
 
     public void acceptOrder(AssignOrderRequest data) {
-        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found!"));
-        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found!"));
-        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(shipper, order).orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(data.getShipperId(), data.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+
+        Order order = shipperOrder.getOrder();
+        Shipper shipper = shipperOrder.getShipper();
 
         order.setShipper(shipper)
                 .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
@@ -95,9 +97,8 @@ public class ShippingService {
     }
 
     public void rejectOrder(AssignOrderRequest data) {
-        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found!"));
-        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found!"));
-        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(shipper, order).orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(data.getShipperId(), data.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Not found order assignment!"));
 
         shipperOrderRepository.delete(shipperOrder);
     }
