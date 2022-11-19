@@ -41,15 +41,15 @@
           :items="listOrderComplete"
           v-model:items-selected="itemsSelected"
         >
-          <template #item-name-receiver="item">
-            {{ item.orderItem[0].shippingAddress.name }}
-          </template>
-          <template #item-phone-receiver="item">
-            {{ item.orderItem[0].shippingAddress.phone }}
-          </template>
-          <template #item-address-receiver="item">
-            {{ buildAddressReceriver(item) }}
-          </template>
+        <template #item-name-receiver="item">
+          {{ item.shippingAddress.name }}
+        </template>
+        <template #item-phone-receiver="item">
+          {{ item.shippingAddress.phone }}
+        </template>
+        <template #item-address-receiver="item">
+          {{ buildAddressReceriver(item) }}
+        </template>
         </easy-data-table>
       </div>
     </div>
@@ -88,6 +88,7 @@ export default {
           width: 120,
         },
         { text: "SĐT nhận", value: "phone-receiver" },
+        { text: "Trạng thái", value: "status" },
         { text: "Địa chỉ giao hàng", value: "address-receiver", width: 250 },
         { text: "Trạng thái", value: "status" },
       ],
@@ -101,18 +102,18 @@ export default {
     axios
       .get(
         commonFunction.DOMAIN_URL +
-          "v1/shipper/order/assign/" +
+          "v1/order/all/shipper/" +
           this.shipperModel.getData().id,
         commonFunction.configApi()
       )
       .then((response) => {
         // handle not found
-        response.data.forEach((o) => {
-          if (this.conditionFilterStatus(o.order.status)) {
+        response.data.content.forEach((o) => {
+          if (this.conditionFilterStatus(o.status)) {
             let order = new OrderData();
-            order.setData(o.order);
-            this.listOrderDelivery.push(order.getData());
-            this.listOrderDeliveryBk.push(order.getData());
+            order.setData(o);
+            this.listOrderComplete.push(order.getData());
+            this.listOrderCompleteBk.push(order.getData());
           }
         });
       })
