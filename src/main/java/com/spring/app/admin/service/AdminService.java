@@ -17,6 +17,8 @@ import com.spring.app.shipping.models.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AdminService {
     @Autowired
@@ -75,10 +77,11 @@ public class AdminService {
     }
 
     public void assignOrderToShipper(AssignOrderRequest data) {
-        Order order = orderRepository.findById(data.getOrderId()).orElse(null);
-        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElse(null);
+        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found"));
+        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
+        List<ShipperOrder> shipperOrders = shipperOrderRepository.findByShipperAndOrder(shipper, order);
 
-        if (order != null && shipper != null) {
+        if (shipperOrders.isEmpty()) {
             shipperOrderRepository.save(new ShipperOrder(order, shipper));
             order.setStatus(OrderStatusService.TRANSFER_SHIPPER);
             orderRepository.save(order);

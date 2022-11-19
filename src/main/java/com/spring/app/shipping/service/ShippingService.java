@@ -83,23 +83,28 @@ public class ShippingService {
     }
 
     public void acceptOrder(AssignOrderRequest data) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(data.getShipperId(), data.getOrderId())
-                .orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found"));
+        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
+        List<ShipperOrder> shipperOrders = shipperOrderRepository.findByShipperAndOrder(shipper, order);
 
-        Order order = shipperOrder.getOrder();
-        Shipper shipper = shipperOrder.getShipper();
+        if (!shipperOrders.isEmpty()) {
+            ShipperOrder shipperOrder = shipperOrders.get(0);
 
-        order.setShipper(shipper)
-                .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
+            order.setShipper(shipper)
+                    .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
 
-        orderRepository.save(order);
-        shipperOrderRepository.delete(shipperOrder);
+            orderRepository.save(order);
+            shipperOrderRepository.delete(shipperOrder);
+        }
     }
 
     public void rejectOrder(AssignOrderRequest data) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByShipperAndOrder(data.getShipperId(), data.getOrderId())
-                .orElseThrow(() -> new RuntimeException("Not found order assignment!"));
+        Order order = orderRepository.findById(data.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found"));
+        Shipper shipper = shipperRepository.findById(data.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
+        List<ShipperOrder> shipperOrder = shipperOrderRepository.findByShipperAndOrder(shipper, order);
 
-        shipperOrderRepository.delete(shipperOrder);
+        if (!shipperOrder.isEmpty()) {
+            shipperOrderRepository.delete(shipperOrder.get(0));
+        }
     }
 }
