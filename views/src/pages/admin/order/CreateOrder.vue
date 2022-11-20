@@ -5,31 +5,17 @@ import { UserOutlined, PhoneOutlined, AimOutlined, AccountBookOutlined, CheckCir
 import common from "@/utils/common";
 import { province, district, ward } from "@/services/outService";
 import { listActive } from "@/services/coupon";
+import { dataSample, handleResetData, handleSetData } from "./configOrder";
+import ProductOrder from "../components/ProductOrder.vue";
+import { message } from "ant-design-vue";
 
 const route = useRoute();
 
 const data = reactive({
-  senderName: '',
-  senderPhone: '',
-  senderAddress: '',
-  shippingType: '',
-  shippingTime: '',
-  shipPayer: true,
-  note: '',
-  coupon: '',
-  returnCode: '',
-  warehouse: '',
-  shippingAddressName: '',
-  shippingAddressPhone: '',
-  shippingAddressProvince: '',
-  shippingAddressProvinceId: '',
-  shippingAddressDistrict: '',
-  shippingAddressDistrictId: '',
-  shippingAddressWard: '',
-  shippingAddressWardId: '',
-  shippingAddressStreet: '',
+  ...dataSample
 });
 
+const form = ref(null);
 const listOrder = ref([{}]);
 const activeKey = ref(0);
 const placeTake = ref('default');
@@ -38,6 +24,9 @@ const districts = ref([]);
 const wards = ref([]);
 const coupons = ref([]);
 const showCoupon = ref(false);
+const startCheck = ref(false);
+const endCheck = ref(false);
+const hasProductError = ref(false);
 const getTitle = computed(() => {
   const title = {
     update: 'Cập nhật đơn hàng',
@@ -45,13 +34,37 @@ const getTitle = computed(() => {
   }
   return title[route.params?.action] || 'đơn hàng';
 });
-const onFinish = (values) => {
-  listOrder.value[activeKey.value] = values;
-  listOrder.value[activeKey.value + 1] = {};
-  activeKey.value = activeKey.value + 1;
-  handleResetData();
-};
 
+//
+const onFinish = (values) => {
+  startCheck.value = true;
+  endCheck.value = false;
+  setTimeout(() => {
+    if (hasProductError.value) {
+      return message.error('Vui lòng kiểm tra lại thông tin sản phẩm');
+    } else {
+      listOrder.value[activeKey.value] = values;
+      activeKey.value = activeKey.value + 1;
+      listOrder.value[activeKey.value] = listOrder.value[activeKey.value] || {};
+      if (!Object.keys(listOrder.value[activeKey.value]).length) {
+        handleResetData(data);
+      }
+      if (activeKey.value == listOrder.value.length - 1) {
+        message.success('Thêm đơn hàng mới thành công');
+      } else {
+        message.success('Cập nhật lại đơn hàng thành công');
+      }
+      endCheck.value = true;
+    }
+  }, 100);
+};
+const handleErrorProduct = (value) => {
+  hasProductError.value = value;
+  startCheck.value = false;
+};
+const handleThrowProduct = (value) => {
+  data.products = value;
+}
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
@@ -77,54 +90,16 @@ const handleSetCoupon = (code) => {
   data.coupon = code;
 }
 const handleTabClick = (key) => {
-  handleSetData(listOrder.value[key]);
+  if (activeKey.value == key) {
+    return;
+  }
+  handleSetData(data, listOrder.value[key]);
+  form.value.clearValidate();
   if (key == listOrder.value.length - 1) {
-    handleResetData();
+    handleResetData(data);
   }
 }
 
-const handleResetData = () => {
-  data.senderName = '';
-  data.senderPhone = '';
-  data.senderAddress = '';
-  data.shippingType = '';
-  data.shippingTime = '';
-  data.shipPayer = true;
-  data.note = '';
-  data.coupon = '';
-  data.returnCode = '';
-  data.warehouse = '';
-  data.shippingAddressName = '';
-  data.shippingAddressPhone = '';
-  data.shippingAddressProvince = '';
-  data.shippingAddressProvinceId = '';
-  data.shippingAddressDistrict = '';
-  data.shippingAddressDistrictId = '';
-  data.shippingAddressWard = '';
-  data.shippingAddressWardId = '';
-  data.shippingAddressStreet = '';
-}
-const handleSetData = (input) => {
-  data.senderName = input.senderName;
-  data.senderPhone = input.senderPhone;
-  data.senderAddress = input.senderAddress;
-  data.shippingType = input.shippingType;
-  data.shippingTime = input.shippingTime;
-  data.shipPayer = input.shipPayer;
-  data.note = input.note;
-  data.coupon = input.coupon;
-  data.returnCode = input.returnCode;
-  data.warehouse = input.warehouse;
-  data.shippingAddressName = input.shippingAddressName;
-  data.shippingAddressPhone = input.shippingAddressPhone;
-  data.shippingAddressProvince = input.shippingAddressProvince;
-  data.shippingAddressProvinceId = input.shippingAddressProvinceId;
-  data.shippingAddressDistrict = input.shippingAddressDistrict;
-  data.shippingAddressDistrictId = input.shippingAddressDistrictId;
-  data.shippingAddressWard = input.shippingAddressWard;
-  data.shippingAddressWardId = input.shippingAddressWardId;
-  data.shippingAddressStreet = input.shippingAddressStreet;
-}
 //
 handleGetCoupon();
 handleGetProvince();
@@ -168,18 +143,17 @@ watch(() => data.shippingAddressWardId, () => {
 <template>
   <div class="px-4">
     <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase">{{ getTitle }}</div>
-    <a-tabs
-      v-model:activeKey="activeKey" 
-      @tabClick="handleTabClick"  
-    >
-      <a-tab-pane
-        v-for="(order, index) in listOrder"
-        :key="index"
-        :tab="order.shippingAddressName || 'Đơn hàng ' + index"
-      />
+    <a-tabs v-model:activeKey="activeKey" @tabClick="handleTabClick">
+      <a-tab-pane v-for="(order, index) in listOrder" :key="index"
+        :tab="order.shippingAddressName || 'Đơn hàng ' + index" />
     </a-tabs>
-    <a-form :model="data" layout="vertical" name="basic" autocomplete="off" @finish="onFinish"
+    <a-form :model="data" layout="vertical" name="basic" autocomplete="off" @finish="onFinish" ref="form"
       @finishFailed="onFinishFailed">
+      <a-form-item :wrapper-col="{ offset: 16, span: 16 }">
+        <a-button html-type="submit" :type="activeKey == listOrder.length - 1 ? 'primary' : ''" ref="submitList">{{
+            activeKey == listOrder.length - 1 ? 'Thêm đơn hàng mới' : 'Cập nhật lại đơn hàng'
+        }}</a-button>
+      </a-form-item>
       <a-row type="flex" class="my-4" :gutter="[10, 10]" align="top">
         <a-col :span="8">
           <div class="border">
@@ -335,7 +309,8 @@ watch(() => data.shippingAddressWardId, () => {
                         </div>
                         <small>Giảm giá {{ coupon.value }} {{ coupon.rule == 'base' ? "VND" : "%" }}</small>
                       </div>
-                      <CheckCircleOutlined style="color: green; cursor: pointer;" @click="handleSetCoupon(coupon.code)" />
+                      <CheckCircleOutlined style="color: green; cursor: pointer;"
+                        @click="handleSetCoupon(coupon.code)" />
                     </div>
                   </div>
                 </template>
@@ -354,12 +329,10 @@ watch(() => data.shippingAddressWardId, () => {
           </div>
         </a-col>
         <a-col :span="8">
-
+          <ProductOrder :startValidate="startCheck" :endValidate="endCheck" @on-error-product="handleErrorProduct"
+            @on-throw-product="handleThrowProduct" />
         </a-col>
       </a-row>
-      <a-form-item :wrapper-col="{ offset: 16, span: 16 }">
-        <a-button html-type="submit">Thêm đơn hàng mới</a-button>
-      </a-form-item>
     </a-form>
   </div>
 </template>
