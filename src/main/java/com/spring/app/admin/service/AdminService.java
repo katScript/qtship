@@ -8,7 +8,10 @@ import com.spring.app.admin.payload.request.AssignOrderRequest;
 import com.spring.app.authentication.models.User;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
+import com.spring.app.orders.models.OrderLog;
+import com.spring.app.orders.models.repository.OrderLogRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
+import com.spring.app.orders.services.OrderLogService;
 import com.spring.app.orders.services.OrderStatusService;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShipperOrder;
@@ -29,6 +32,8 @@ public class AdminService {
     ShipperRepository shipperRepository;
     @Autowired
     ShipperOrderRepository shipperOrderRepository;
+    @Autowired
+    OrderLogService orderLogService;
 
     public void createUser(User user, AdminData data) {
         Admin admin = processAdminData(data);
@@ -83,7 +88,17 @@ public class AdminService {
 
         if (shipperOrders.isEmpty()) {
             shipperOrderRepository.save(new ShipperOrder(order, shipper));
-            order.setStatus(OrderStatusService.TRANSFER_SHIPPER);
+            order.setStatus(OrderStatusService.TRANSFER_SHIPPER).setShippingTime(
+                    DateFormatHelper.stringToDate(data.getShippingTime())
+            );
+
+            OrderLog orderLog = orderLogService.createStatusLog(
+                    order,
+                    OrderStatusService.TRANSFER_SHIPPER,
+                    String.format("Assign order %s to shipper %s", order.getOrderCode(), shipper.getShipperCode())
+                );
+            order.getHistories().add(orderLog);
+
             orderRepository.save(order);
         }
     }

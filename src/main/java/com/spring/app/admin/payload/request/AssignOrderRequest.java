@@ -3,6 +3,7 @@ package com.spring.app.admin.payload.request;
 public class AssignOrderRequest {
     private Long orderId;
     private Long shipperId;
+    private String shippingTime;
 
     public Long getOrderId() {
         return orderId;
@@ -18,5 +19,13 @@ public class AssignOrderRequest {
 
     public void setShipperId(Long shipperId) {
         this.shipperId = shipperId;
+    }
+
+    public String getShippingTime() {
+        return shippingTime;
+    }
+
+    public void setShippingTime(String shippingTime) {
+        this.shippingTime = shippingTime;
     }
 }
