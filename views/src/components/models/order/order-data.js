@@ -18,6 +18,7 @@ export default class OrderData {
         senderAddress: "",
         subtotal: 0,
         totalWeight: 0,
+        returnCode: "",
         note: "",
         status: commonFunction.orderStatus.Pending,
         feedback: "",
