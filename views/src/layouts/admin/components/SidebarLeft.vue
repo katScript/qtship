@@ -6,7 +6,10 @@ import {
   ShoppingCartOutlined
 } from '@ant-design/icons-vue';
 import { defineEmits, defineProps } from "vue";
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import common from "@/utils/common";
+
+const router = useRouter();
 
 const emits = defineEmits(['on-click-menu']);
 
@@ -19,26 +22,39 @@ const toggleOpenMenu = () => {
 
 const orderList = [
   {
-    name: 'Tất cả',
-    path: '/',
+    name: 'Tất cả đơn hàng',
+    path: '/admin/order',
   },
   {
-    name: 'Đơn hàng đang xủ lý',
-    path: '/',
+    name: 'Đơn hàng chờ xử lý',
+    path: '/admin/order?status=' + common.TYPE_ORDER_PENDING,
   },
   {
-    name: 'Đơn hàng đã xủ lý',
-    path: '/',
+    name: 'Đơn hàng đang xử lý',
+    path: '/admin/order?status=' + common.TYPE_ORDER_PROCESSING,
+  },
+  {
+    name: 'Đơn hàng đã xử lý',
+    path: '/admin/order?status=' + common.TYPE_ORDER_DONE,
   },
   {
     name: 'Đơn hàng phát sinh',
-    path: '/',
+    path: '/admin/order?status=' + common.TYPE_ORDER_OCCURRED,
   },
   {
     name: 'Đơn hàng bị hủy',
-    path: '/',
+    path: '/admin/order?status=' + common.TYPE_ORDER_CANCEL,
+  },
+  {
+    name: 'Đơn hàng trả lại',
+    path: '/admin/order?status=' + common.TYPE_ORDER_RETURN,
   }
 ]
+const handleClickItem = (inList = false, path) => {
+  if (inList) {
+    return router.push(path);
+  }
+}
 </script>
 
 <template>
@@ -63,14 +79,14 @@ const orderList = [
         <ShoppingCartOutlined />
       </template>
       <template #title>Quản lý đơn hàng</template>
-      <a-menu-item :key="'sub-1' + index" v-for="(option, index) in orderList">{{ option.name }}</a-menu-item>
+      <a-menu-item :key="'sub-1' + index" v-for="(option, index) in orderList" @click="handleClickItem(true, option.path)">{{ option.name }}</a-menu-item>
     </a-sub-menu>
     <a-sub-menu key="sub-2" style="background: #bf1e2d; color: #ffffff;">
       <template #icon>
         <ShoppingCartOutlined />
       </template>
       <template #title>Tạo đơn hàng tại bưu cục</template>
-      <a-menu-item key="sub-21">Tạo đơn hàng mới</a-menu-item>
+      <a-menu-item key="sub-21" @click="handleClickItem(true, '/admin/order/create')">Tạo đơn hàng mới</a-menu-item>
     </a-sub-menu>
   </a-menu>
 </template>
@@ -93,7 +109,6 @@ const orderList = [
 }
 
 .menu-item {
-
   background-color: #bf1e2d !important;
   color: #ffffff;
 }
