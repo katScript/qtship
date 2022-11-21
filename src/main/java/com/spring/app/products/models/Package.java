@@ -27,7 +27,7 @@ public class Package {
     private Double price;
     @Column(name = "weight")
     private Double weight;
-    @Column(name = "long")
+    @Column(name = "`long`")
     private Double longPackage;
     @Column(name = "width")
     private Double widthPackage;
