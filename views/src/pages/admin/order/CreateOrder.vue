@@ -1,21 +1,25 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { UserOutlined, PhoneOutlined, AimOutlined, AccountBookOutlined, CheckCircleOutlined } from "@ant-design/icons-vue";
 import common from "@/utils/common";
 import { province, district, ward } from "@/services/outService";
+import { saveOrder } from "@/services/admin";
 import { listActive } from "@/services/coupon";
-import { dataSample, handleResetData, handleSetData } from "./configOrder";
+import { dataSample, handleResetData, handleSetData, requiredData, omitKey } from "./configOrder";
 import ProductOrder from "../components/ProductOrder.vue";
 import { message } from "ant-design-vue";
+import { isEmpty, omit } from "lodash"
 
 const route = useRoute();
+const router = useRouter();
 
 const data = reactive({
   ...dataSample
 });
 
 const form = ref(null);
+const submitList = ref(null);
 const listOrder = ref([{}]);
 const activeKey = ref(0);
 const placeTake = ref('default');
@@ -24,7 +28,6 @@ const districts = ref([]);
 const wards = ref([]);
 const coupons = ref([]);
 const showCoupon = ref(false);
-const startCheck = ref(false);
 const endCheck = ref(false);
 const hasProductError = ref(false);
 const getTitle = computed(() => {
@@ -36,31 +39,87 @@ const getTitle = computed(() => {
 });
 
 //
-const onFinish = (values) => {
-  startCheck.value = true;
-  endCheck.value = false;
-  setTimeout(() => {
-    if (hasProductError.value) {
-      return message.error('Vui lòng kiểm tra lại thông tin sản phẩm');
-    } else {
-      listOrder.value[activeKey.value] = values;
-      activeKey.value = activeKey.value + 1;
-      listOrder.value[activeKey.value] = listOrder.value[activeKey.value] || {};
-      if (!Object.keys(listOrder.value[activeKey.value]).length) {
-        handleResetData(data);
-      }
-      if (activeKey.value == listOrder.value.length - 1) {
-        message.success('Thêm đơn hàng mới thành công');
-      } else {
-        message.success('Cập nhật lại đơn hàng thành công');
-      }
-      endCheck.value = true;
+const handleSubmitForm = async () => {
+  let indexError = null;
+  const results = [];
+  const res = await form.value.validate();
+  if (res) {
+    if (listOrder.value.length - 1 == activeKey.value) {
+      listOrder.value[activeKey.value] = data;
     }
-  }, 100);
+    listOrder.value.forEach((order, index) => {
+      order.products.forEach(product => {
+        for (const property in product) {
+          if (!product[property] && property != 'specialType') {
+            return indexError = index + ' phần thông tin sản phẩm';
+          }
+        }
+      })
+      for (const property in order) {
+        if (!order[property] && requiredData.includes(property)) {
+          return indexError = index;
+        }
+      }
+    });
+
+    if (indexError != null) {
+      return message.error('Đơn hàng thứ ' + indexError + ' chưa được hoàn thiện');
+    } else {
+      listOrder.value.forEach((order, index) => {
+        order.shippingAddress = {
+          name: order.shippingAddressName,
+          phone: order.shippingAddressPhone,
+          province: order.shippingAddressProvince,
+          provinceId: order.shippingAddressProvinceId,
+          district: order.shippingAddressDistrict,
+          districtId: order.shippingAddressDistrictId,
+          ward: order.shippingAddressWard,
+          wardId: order.shippingAddressWardId,
+          street: order.shippingAddressStreet,
+        }
+        if (!order.warehouse) {
+          order.warehouse = {
+            id: null
+          };
+        }
+        results[index] = omit(order, omitKey);
+      });
+    }
+    await saveOrder(results);
+    return router.push('/admin/order');
+  }
+};
+
+const handleSetCurrentData = () => {
+  listOrder.value[activeKey.value] = listOrder.value[activeKey.value] || {};
+  if (isEmpty(listOrder.value[activeKey.value])) {
+    handleResetData(data);
+  } else {
+    handleSetData(data, listOrder.value[activeKey.value])
+  }
+  message.success('Cập nhật đơn hàng thành công');
+}
+
+const onFinish = (values) => {
+  handleErrorProduct(data.products);
+  if (hasProductError.value) {
+    return message.error('Vui lòng kiểm tra lại thông tin sản phẩm');
+  } else {
+    listOrder.value[activeKey.value] = { ...data, ...values };
+    activeKey.value = activeKey.value + 1;
+    handleSetCurrentData();
+  }
 };
 const handleErrorProduct = (value) => {
-  hasProductError.value = value;
-  startCheck.value = false;
+  hasProductError.value = false;
+  value.forEach(product => {
+    for (const property in product) {
+      if (!product[property] && property != 'specialType') {
+        hasProductError.value = true;
+        return;
+      }
+    }
+  })
 };
 const handleThrowProduct = (value) => {
   data.products = value;
@@ -93,16 +152,31 @@ const handleTabClick = (key) => {
   if (activeKey.value == key) {
     return;
   }
-  handleSetData(data, listOrder.value[key]);
   form.value.clearValidate();
-  if (key == listOrder.value.length - 1) {
-    handleResetData(data);
-  }
+  listOrder.value[activeKey.value] = { ...data };
+  handleSetData(data, listOrder.value[key]);
+  activeKey.value = key;
 }
-
+const remove = targetKey => {
+  listOrder.value = listOrder.value.filter((x, index) => index != targetKey);
+};
+const onEdit = (targetKey, action) => {
+  if (targetKey == 0) {
+    activeKey.value = targetKey + 1;
+  } else {
+    activeKey.value = targetKey - 1;
+  }
+  handleSetCurrentData();
+  if (action === 'add') {
+    return
+  } else {
+    remove(targetKey);
+  }
+};
 //
 handleGetCoupon();
 handleGetProvince();
+//
 watch(() => data.shippingAddressProvinceId, () => {
   if (!data.shippingAddressProvinceId) {
     data.shippingAddressProvince = '';
@@ -143,16 +217,21 @@ watch(() => data.shippingAddressWardId, () => {
 <template>
   <div class="px-4">
     <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase">{{ getTitle }}</div>
-    <a-tabs v-model:activeKey="activeKey" @tabClick="handleTabClick">
+    <a-tabs v-model:activeKey="activeKey" hide-add @tabClick="handleTabClick" @edit="onEdit" type="editable-card">
       <a-tab-pane v-for="(order, index) in listOrder" :key="index"
-        :tab="order.shippingAddressName || 'Đơn hàng ' + index" />
+        :tab="order.shippingAddressName || 'Đơn hàng ' + index" :closable="index != 0" />
     </a-tabs>
     <a-form :model="data" layout="vertical" name="basic" autocomplete="off" @finish="onFinish" ref="form"
       @finishFailed="onFinishFailed">
       <a-form-item :wrapper-col="{ offset: 16, span: 16 }">
-        <a-button html-type="submit" :type="activeKey == listOrder.length - 1 ? 'primary' : ''" ref="submitList">{{
-            activeKey == listOrder.length - 1 ? 'Thêm đơn hàng mới' : 'Cập nhật lại đơn hàng'
-        }}</a-button>
+        <div class="px-2 d-flex justify-content-between">
+          <button type="submit"
+            :class="activeKey == listOrder.length - 1 ? 'btn btn-outline-info' : 'btn btn-info text-white'"
+            ref="submitList">{{
+                activeKey == listOrder.length - 1 ? 'Thêm đơn hàng mới' : 'Cập nhật lại đơn hàng'
+            }}</button>
+          <button class="btn btn-primary" @click.prevent="handleSubmitForm">Lưu đơn hàng</button>
+        </div>
       </a-form-item>
       <a-row type="flex" class="my-4" :gutter="[10, 10]" align="top">
         <a-col :span="8">
@@ -329,8 +408,8 @@ watch(() => data.shippingAddressWardId, () => {
           </div>
         </a-col>
         <a-col :span="8">
-          <ProductOrder :startValidate="startCheck" :endValidate="endCheck" @on-error-product="handleErrorProduct"
-            @on-throw-product="handleThrowProduct" />
+          <ProductOrder :hasError="hasProductError" :products="data.products" :endValidate="endCheck"
+            @on-error-product="handleErrorProduct" @on-throw-product="handleThrowProduct" />
         </a-col>
       </a-row>
     </a-form>

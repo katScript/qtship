@@ -95,7 +95,7 @@ export const handleResetData = (data) => {
   data.shippingAddressWard = '';
   data.shippingAddressWardId = '';
   data.shippingAddressStreet = '';
-  data.products = '';
+  data.products = [];
 }
 
 export const handleSetData = (data, input) => {
@@ -120,3 +120,29 @@ export const handleSetData = (data, input) => {
   data.shippingAddressStreet = input.shippingAddressStreet;
   data.products = input.products;
 }
+
+export const requiredData = [
+  'senderName',
+  'senderPhone',
+  'senderAddress',
+  'shippingType',
+  'shipPayer',
+  'returnCode',
+  'shippingAddressName',
+  'shippingAddressPhone',
+  'shippingAddressProvinceId',
+  'shippingAddressDistrictId',
+  'shippingAddressWardId',
+];
+
+export const omitKey = [
+  'shippingAddressName',
+  'shippingAddressPhone',
+  'shippingAddressProvince',
+  'shippingAddressProvinceId',
+  'shippingAddressDistrict',
+  'shippingAddressDistrictId',
+  'shippingAddressWard',
+  'shippingAddressWardId',
+  'shippingAddressStreet'
+];
