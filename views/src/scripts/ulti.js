@@ -204,7 +204,8 @@ const commonFunction = {
         TransferShipper: "TRANSFER_SHIPPER",
         ShipperConfirm: "SHIPPER_CONFIRMED",
         Done: "DONE",
-        Return: "RETURN"  // bổ sung
+        Return: "RETURN",  // bổ sung
+        AdminConfirm: "ADMIN_CONFIRMED",
     },
 }
 

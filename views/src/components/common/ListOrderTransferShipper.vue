@@ -49,6 +49,7 @@
 
   import { commonFunction } from "@/scripts/ulti";
   import axios from "axios";
+  import moment from "moment";
 
   export default {
     setup() {
@@ -88,14 +89,16 @@
       axios
         .get(
           commonFunction.DOMAIN_URL +
-          "v1/shipper/order/assign/" +
-          this.shipperModel.getData().id,
-          commonFunction.configApi()
+            "v1/shipper/order/assign/" +
+            this.shipperModel.getData().id,
+            commonFunction.configApi()
         )
         .then((response) => {
           // handle not found
           response.data.forEach((o) => {
-            if (o.order.status == commonFunction.orderStatus.TransferShipper) {
+            if (o.order.status == commonFunction.orderStatus.TransferShipper 
+            && moment(o.order.shippingTime).format("YYYY-MM-DD") == moment(new Date()).format("YYYY-MM-DD")
+            ) {
               this.listOrderTransfer.push(o.order);
               this.listOrderTransferBk.push(o.order);
             }
