@@ -1,7 +1,7 @@
 import axios from "axios";
 import common from "./common";
 
-const accessToken = common.TOKEN || null;
+const accessToken = common.TOKEN() || null;
 
 const API = common.DOMAIN_URL;
 

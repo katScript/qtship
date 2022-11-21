@@ -123,7 +123,7 @@ export default {
         let customerId = this.customerModel.getData().id;
 
         if (this.auth == null || this.role !== "customer") {
-            commonFunction.redirect("/");
+            // commonFunction.redirect("/");
         }
         this.orderData.data.shippingTime = null;
         //warehouse

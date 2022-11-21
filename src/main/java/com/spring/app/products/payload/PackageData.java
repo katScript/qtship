@@ -7,6 +7,10 @@ public class PackageData {
     private Integer qty;
     private Double price;
     private Double weight;
+    private Double longPackage;
+    private Double widthPackage;
+    private Double heightPackage;
+    private Boolean specialType;
     private String image;
     private String createdAt;
     private String updatedAt;
@@ -101,5 +105,37 @@ public class PackageData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Double getLongPackage() {
+        return longPackage;
+    }
+
+    public void setLongPackage(Double longPackage) {
+        this.longPackage = longPackage;
+    }
+
+    public Double getWidthPackage() {
+        return widthPackage;
+    }
+
+    public void setWidthPackage(Double widthPackage) {
+        this.widthPackage = widthPackage;
+    }
+
+    public Double getHeightPackage() {
+        return heightPackage;
+    }
+
+    public void setHeightPackage(Double heightPackage) {
+        this.heightPackage = heightPackage;
+    }
+
+    public Boolean getSpecialType() {
+        return specialType;
+    }
+
+    public void setSpecialType(Boolean specialType) {
+        this.specialType = specialType;
     }
 }

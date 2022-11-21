@@ -27,6 +27,14 @@ public class Package {
     private Double price;
     @Column(name = "weight")
     private Double weight;
+    @Column(name = "`long`")
+    private Double longPackage;
+    @Column(name = "width")
+    private Double widthPackage;
+    @Column(name = "height")
+    private Double heightPackage;
+    @Column(name = "special_type")
+    private Boolean specialType;
     @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "created_at", insertable = false, updatable = false)
@@ -136,5 +144,41 @@ public class Package {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Double getLongPackage() {
+        return longPackage;
+    }
+
+    public Package setLongPackage(Double longPackage) {
+        this.longPackage = longPackage;
+        return this;
+    }
+
+    public Double getWidthPackage() {
+        return widthPackage;
+    }
+
+    public Package setWidthPackage(Double widthPackage) {
+        this.widthPackage = widthPackage;
+        return this;
+    }
+
+    public Double getHeightPackage() {
+        return heightPackage;
+    }
+
+    public Package setHeightPackage(Double heightPackage) {
+        this.heightPackage = heightPackage;
+        return this;
+    }
+
+    public Boolean getSpecialType() {
+        return specialType;
+    }
+
+    public Package setSpecialType(Boolean specialType) {
+        this.specialType = specialType;
+        return this;
     }
 }

@@ -29,6 +29,7 @@ public class OrderData {
     private ShipperData shipper;
     private ShippingAddressData shippingAddress;
     private String shippingType;
+    private String takenTime;
     private String shippingTime;
     private String returnCode;
     private Set<PackageData> products;
@@ -60,6 +61,7 @@ public class OrderData {
             ShipperData shipper,
             ShippingAddressData shippingAddress,
             String shippingType,
+            String takenTime,
             String shippingTime,
             String returnCode,
             Set<PackageData> products
@@ -87,6 +89,7 @@ public class OrderData {
         this.shippingTime = shippingTime;
         this.returnCode = returnCode;
         this.products = products;
+        this.takenTime = takenTime;
     }
 
     public Long getId() {
@@ -287,5 +290,9 @@ public class OrderData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getTakenTime() {
+        return takenTime;
     }
 }
