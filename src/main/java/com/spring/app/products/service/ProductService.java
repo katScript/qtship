@@ -149,7 +149,11 @@ public class ProductService {
         packageItem.setPrice(data.getPrice())
                 .setName(data.getName())
                 .setQty(data.getQty())
-                .setWeight(data.getWeight());
+                .setWeight(data.getWeight())
+                .setLongPackage(data.getLongPackage())
+                .setWidthPackage(data.getWidthPackage())
+                .setHeightPackage(data.getHeightPackage())
+                .setSpecialType(data.getSpecialType());
 
         return packageItem;
     }
