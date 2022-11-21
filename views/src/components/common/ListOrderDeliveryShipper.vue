@@ -34,7 +34,7 @@
             <div class="d-flex">
               <div class="row">
                 <div class="col-12 m-1">
-                  <input type="text" class="form-control" placeholder="Ghi chú" />
+                  <input type="text" class="form-control" placeholder="Ghi chú" v-model="descriptionStatus[listOrderDelivery.findIndex(object => {return object.id === item.id;})]" />
                 </div>
                 <div class="col-12 d-flex">
                   <button class="btn btn-info a-function a-detail m-1" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -116,7 +116,8 @@
         ],
         isShowDetail: false,
         orderDetail: {},
-        action: ""
+        action: "",
+        descriptionStatus: [],
       };
     },
     watch: {},
@@ -215,6 +216,7 @@
             {
               id: item.id,
               status: commonFunction.orderStatus.Delay,
+              description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
             },
             commonFunction.configApi()
           )
@@ -234,6 +236,7 @@
             {
               id: item.id,
               status: commonFunction.orderStatus.Occurred,
+              description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
             },
             commonFunction.configApi()
           )
@@ -253,6 +256,7 @@
             {
               id: item.id,
               status: commonFunction.orderStatus.Return,
+              description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
             },
             commonFunction.configApi()
           )

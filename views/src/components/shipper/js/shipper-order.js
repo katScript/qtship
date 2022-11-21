@@ -10,6 +10,7 @@ import OrderData from "@/components/models/order/order-data";
 import OrderStatusService from "@/components/service/order-status-service";
 import { commonFunction } from '@/scripts/ulti';
 import axios from "axios";
+import moment from "moment";
 
 export default {
     components: {
@@ -60,12 +61,15 @@ export default {
             commonFunction.configApi()
         ).then((response) => {
             // handle not found
-            this.listOrder.total = response.data.length;
             response.data.forEach(o => {
-                let order = new OrderData();
-                order.setData(o.order);
-                this.listOrder.data.push(order.getData());
+                if (moment(o.order.shippingTime).format("YYYY-MM-DD") == moment(new Date()).format("YYYY-MM-DD")) {
+                    let order = new OrderData();
+                    order.setData(o.order);
+                    this.listOrder.data.push(order.getData());
+                }
             });
+
+            this.listOrder.total = this.listOrder.data.length;
         }).catch((e) => {
             console.log(e);
         });
@@ -106,7 +110,7 @@ export default {
 
             this.totalSuccessPrice = currencyFormat.format(successOrderTotal);
         },
-        emitTabSelected: function(value) {
+        emitTabSelected: function (value) {
             this.tabSelected = value;
         }
     },
