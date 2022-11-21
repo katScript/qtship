@@ -57,6 +57,8 @@ public class Order {
     private ShippingAddress shippingAddress;
     @Column(name = "shipping_type")
     private String shippingType;
+    @Column(name = "taken_time")
+    private Date takenTime;
     @Column(name = "shipping_time")
     private Date shippingTime;
     @Column(name = "return_code")
@@ -64,6 +66,9 @@ public class Order {
     @OneToMany(mappedBy = "order",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Package> packages;
+    @OneToMany(mappedBy = "order",
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OrderLog> histories;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -71,6 +76,7 @@ public class Order {
 
     public Order() {
         this.packages = new HashSet<>();
+        this.histories = new HashSet<>();
     }
 
     public Order (
@@ -89,9 +95,11 @@ public class Order {
             Shipper shipper,
             ShippingAddress shippingAddress,
             String shippingType,
+            Date takenTime,
             Date shippingTime,
             String returnCode,
-            Set<Package> packages
+            Set<Package> packages,
+            Set<OrderLog> histories
     ) {
         this.customer = customer;
         this.senderName = senderName;
@@ -111,6 +119,8 @@ public class Order {
         this.shippingTime = shippingTime;
         this.returnCode = returnCode;
         this.packages = packages;
+        this.takenTime = takenTime;
+        this.histories = histories;
     }
 
     public Long getId() {
@@ -312,5 +322,22 @@ public class Order {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Date getTakenTime() {
+        return takenTime;
+    }
+
+    public Order setTakenTime(Date takenTime) {
+        this.takenTime = takenTime;
+        return this;
+    }
+
+    public Set<OrderLog> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(Set<OrderLog> histories) {
+        this.histories = histories;
     }
 }

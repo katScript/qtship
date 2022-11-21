@@ -4,7 +4,9 @@ import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
+import com.spring.app.orders.models.OrderLog;
 import com.spring.app.orders.models.OrderStatus;
+import com.spring.app.orders.models.repository.OrderLogRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
@@ -46,6 +48,8 @@ public class OrderService {
     public WarehouseService warehouseService;
     @Autowired
     public ShippingService shippingService;
+    @Autowired
+    public OrderLogService orderLogService;
 
     public void updateStatus(OrderStatusUpdateRequest order) {
         Order _order = this.orderRepository.findById(order.getId())
@@ -55,6 +59,13 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Order status not found!"));
 
         _order.setStatus(status.getCode());
+        OrderLog orderLog = orderLogService.createStatusLog(
+                _order,
+                status.getCode(),
+                order.getDescription()
+        );
+
+        _order.getHistories().add(orderLog);
         this.orderRepository.save(_order);
     }
 
@@ -83,7 +94,7 @@ public class OrderService {
                     .orElseThrow(() -> new RuntimeException("Order status not found!"));
         } else {
             order = new Order();
-            status = this.orderStatusRepository.findByCode(OrderStatus.DEFAULT)
+            status = this.orderStatusRepository.findByCode(OrderStatusService.DEFAULT)
                     .orElseThrow(() -> new RuntimeException("Order status not found!"));
         }
 
@@ -111,9 +122,9 @@ public class OrderService {
 
     public void processWarehouse(OrderData data, Order order) {
         if (data.getWarehouse() == null || data.getWarehouse().getId() == null) {
-            order.setShippingTime(null).setWarehouse(null);
+            order.setTakenTime(null).setWarehouse(null);
         } else {
-            order.setShippingTime(
+            order.setTakenTime(
                     DateFormatHelper.stringToDate(data.getShippingTime())
             ).setWarehouse(
                     this.warehouseRepository.findById(data.getWarehouse().getId())
@@ -203,6 +214,7 @@ public class OrderService {
                 shipperData,
                 shippingService.processShippingAddressResponse(order.getShippingAddress()),
                 order.getShippingType(),
+                DateFormatHelper.dateToString(order.getTakenTime()),
                 DateFormatHelper.dateToString(order.getShippingTime()),
                 order.getReturnCode(),
                 products

@@ -8,7 +8,6 @@ import java.util.Set;
 @Entity
 @Table(name="orders_status")
 public class OrderStatus {
-    public static final String DEFAULT = "PENDING";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
