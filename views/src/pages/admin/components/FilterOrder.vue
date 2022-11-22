@@ -88,13 +88,13 @@ watch(() => props.status, () => {
     <a-col :span="6">
       <a-button type="primary" @click="handleFind">
         <template #icon>
-          <SearchOutlined />
+          <SearchOutlined style="transform: translate(0px, -3px)" />
         </template>
         Tìm kiếm
       </a-button>
       <a-button type="danger" class="ms-4" @click="handleReset">
         <template #icon>
-          <CloseCircleOutlined />
+          <CloseCircleOutlined style="transform: translate(0px, -3px)" />
         </template>
         Đặt lại
       </a-button>

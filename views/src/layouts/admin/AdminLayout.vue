@@ -21,7 +21,7 @@ const handleOpenMenu = (value) => {
       />
     </a-col>
     <a-col :span="!openMenu ? 23 : 20">
-      <a-spin :spinning="isLoading" size="large" tip="Vui lòng chờ...">
+      <a-spin :spinning="!isLoading" size="large" tip="Vui lòng chờ...">
       <div class="content">
         <slot></slot>
       </div>
@@ -40,5 +40,8 @@ const handleOpenMenu = (value) => {
 <style>
 .ant-spin-nested-loading > div > .ant-spin {
   max-height: 100vh!important;
+}
+.ant-spin-dot-item {
+  background-color: #BF1E2D!important;
 }
 </style>

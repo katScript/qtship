@@ -3,7 +3,7 @@ import { computed, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { UserOutlined, PhoneOutlined, AimOutlined, AccountBookOutlined, CheckCircleOutlined } from "@ant-design/icons-vue";
 import common from "@/utils/common";
-import { province, district, ward } from "@/services/outService";
+import { province, district, ward } from "@/services/region";
 import { saveOrder, detailOrder } from "@/services/admin";
 import { listActive } from "@/services/coupon";
 import { dataSample, handleResetData, handleSetData, requiredData, omitKey } from "./configOrder";
@@ -219,15 +219,15 @@ const handleSetCoupon = (code) => {
 // Handle Address
 const handleGetProvince = async () => {
   const { data } = await province();
-  provinces.value = data.results;
+  provinces.value = data;
 }
 const handleGetDistrict = async (provinceId) => {
   const { data } = await district(provinceId);
-  districts.value = data.results;
+  districts.value = data;
 }
 const handleGetWard = async (districtId) => {
   const { data } = await ward(districtId);
-  wards.value = data.results;
+  wards.value = data;
 }
 watch(() => data.shippingAddressProvinceId, () => {
   if (!data.shippingAddressProvinceId) {
