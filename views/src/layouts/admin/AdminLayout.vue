@@ -21,7 +21,7 @@ const handleOpenMenu = (value) => {
       />
     </a-col>
     <a-col :span="!openMenu ? 23 : 20">
-      <a-spin :spinning="!isLoading" size="large" tip="Vui lòng chờ...">
+      <a-spin :spinning="isLoading" size="large" tip="Vui lòng chờ...">
       <div class="content">
         <slot></slot>
       </div>
