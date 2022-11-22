@@ -9,7 +9,7 @@ export default [
   },
   {
     name: 'admin-create-update-order',
-    path: '/admin/order/:action',
+    path: '/admin/order/:action/:id?',
     meta: {
       isAdmin: true,
     },

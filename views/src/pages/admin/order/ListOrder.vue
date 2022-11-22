@@ -106,7 +106,7 @@ const handleCloseDetail = () => {
   detail.value = {};
 }
 const handleChangePage = (page) => {
-  getListOrder({ page: page.current - 1, ...filtersSet.value})
+  getListOrder({ page: page.current - 1, ...filtersSet.value })
 }
 const handleFind = (value) => {
   const filters = {
@@ -118,19 +118,19 @@ const handleFind = (value) => {
     to: null,
   };
   switch (value.orderTime) {
-    case 'timeCOToday': 
+    case 'timeCOToday':
       filters.from = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
       filters.to = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
       break;
-    case 'timeCO1week': 
+    case 'timeCO1week':
       filters.from = moment().startOf('week').format('YYYY-MM-DD HH:mm:ss');
       filters.to = moment().endOf('week').format('YYYY-MM-DD HH:mm:ss');
       break;
-    case 'timeCO1month': 
+    case 'timeCO1month':
       filters.from = moment().startOf('month').format('YYYY-MM-DD HH:mm:ss');
       filters.to = moment().endOf('month').format('YYYY-MM-DD HH:mm:ss');
       break;
-    case 'timeCO1year': 
+    case 'timeCO1year':
       filters.from = moment().startOf('year').format('YYYY-MM-DD HH:mm:ss');
       filters.to = moment().endOf('year').format('YYYY-MM-DD HH:mm:ss');
       break;
@@ -138,7 +138,7 @@ const handleFind = (value) => {
     //   filters.from = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
     //   filters.to = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
     //   break;
-    case 'timeCOTimeAbout': 
+    case 'timeCOTimeAbout':
       filters.from = moment(value.orderTimeAbout[0].$d).startOf('day').format('YYYY-MM-DD HH:mm:ss');
       filters.to = moment(value.orderTimeAbout[1].$d).endOf('day').format('YYYY-MM-DD HH:mm:ss');
       break;
@@ -153,6 +153,14 @@ const handleFind = (value) => {
   filtersSet.value = filters;
   getListOrder(filtersSet.value);
 }
+const shippingTypeStyle = (value) => {
+  const type = common.TYPE_SHIPPING.find(x => x.value == value);
+  return `<div style="${type.style}">${type.value}</div>`;
+}
+const shippingStatusStyle = (value) => {
+  const type = common.ALL_TYPE.find(x => x.value == value);
+  return `<div style="${type.style}">${type.value}</div>`;
+}
 //
 getListOrder();
 getListShipper();
@@ -166,14 +174,9 @@ watch(() => route.query?.status, () => getListOrder());
     <a-popover v-model:visible="shipperShow" title="Chuyển giao hàng" @click="handleResetShipper" trigger="click"
       v-if="!!listSelectOrder.length">
       <template #content>
-        <a-select
-          v-model:value="shipper"
-          style="width: 250px"
-          show-search
-          :filter-option="filterOption"
+        <a-select v-model:value="shipper" style="width: 250px" show-search :filter-option="filterOption"
           placeholder="Select a person"
-          :options="listAllShipper.map(shipper => ({...shipper, label: shipper.fullName, value: shipper.id }))"
-        />
+          :options="listAllShipper.map(shipper => ({ ...shipper, label: shipper.fullName, value: shipper.id }))" />
         <a-button type="primary" class="ms-3" :disabled="!shipper" @click="handleTransferShipper">
           Giao hàng
         </a-button>
@@ -192,10 +195,10 @@ watch(() => route.query?.status, () => getListOrder());
           {{ record.shippingAddress.phone }}
         </template>
         <template v-if="column.key === 'shipping_status'">
-          {{ text }}
+          <span class="text-center" v-html="shippingStatusStyle(text)"></span>
         </template>
         <template v-if="column.key === 'shipping_type'">
-          {{ text }}
+          <span class="text-center" v-html="shippingTypeStyle(text)"></span>
         </template>
         <template v-if="column.key === 'shipper_code'">
           {{ record.shipper.shipperCode }}
