@@ -45,18 +45,26 @@ const handleGetOrder = async () => {
   if (!onlyUpdate.value) {
     return;
   }
-  const { data: results } = await detailOrder({ id: route.params?.id });
-  Object.assign(data, results);
-  data.shippingAddressName = results.shippingAddress.name
-  data.shippingAddressPhone = results.shippingAddress.phone
-  data.shippingAddressProvince = results.shippingAddress.province
-  data.shippingAddressProvinceId = results.shippingAddress.provinceId
-  data.shippingAddressDistrict = results.shippingAddress.district
-  data.shippingAddressDistrictId = results.shippingAddress.districtId
-  data.shippingAddressWard = results.shippingAddress.ward
-  data.shippingAddressWardId = results.shippingAddress.wardId
-  data.shippingAddressStreet = results.shippingAddress.street
-  handleGetWard(data.shippingAddressDistrictId);
+  try {
+    const { data: results } = await detailOrder({ id: route.params?.id });
+    Object.assign(data, results);
+    data.shippingAddressName = results.shippingAddress.name
+    data.shippingAddressPhone = results.shippingAddress.phone
+    data.shippingAddressProvince = results.shippingAddress.province
+    data.shippingAddressProvinceId = results.shippingAddress.provinceId
+    data.shippingAddressDistrict = results.shippingAddress.district
+    data.shippingAddressDistrictId = results.shippingAddress.districtId
+    data.shippingAddressWard = results.shippingAddress.ward
+    data.shippingAddressWardId = results.shippingAddress.wardId
+    data.shippingAddressStreet = results.shippingAddress.street
+    handleGetWard(data.shippingAddressDistrictId);
+  } catch (e) {
+    if (e.response.data.status == 500) {
+      message.error('Đơn hàng không tồn tại');
+      router.push('/admin/order/update')
+    }
+  }
+
 }
 // Hanlde Click
 const handleSubmitForm = async () => {
@@ -267,6 +275,10 @@ watch(() => data.shippingAddressWardId, () => {
 const requiredWard = computed(() => data.shippingAddressProvinceId && data.shippingAddressDistrictId && wards.value.length);
 // Handle Action
 handleGetOrder();
+watch(
+  () => route.fullPath,
+  () => handleGetOrder()
+);
 handleGetCoupon();
 handleGetProvince();
 //
