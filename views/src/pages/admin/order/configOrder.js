@@ -24,16 +24,16 @@ export const columns = [
     dataIndex: 'shippingType',
     key: 'shipping_type',
   },
-  {
-    title: 'Mã Shipper',
-    dataIndex: 'shipper_code',
-    key: 'shipper_code',
-  },
-  {
-    title: 'Tên Shipper',
-    dataIndex: 'shipper_name',
-    key: 'shipper_name',
-  },
+  // {
+  //   title: 'Mã Shipper',
+  //   dataIndex: 'shipper_code',
+  //   key: 'shipper_code',
+  // },
+  // {
+  //   title: 'Tên Shipper',
+  //   dataIndex: 'shipper_name',
+  //   key: 'shipper_name',
+  // },
   {
     title: 'Tổng giá trị ĐH (VNĐ)',
     dataIndex: 'subtotal',
