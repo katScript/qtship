@@ -1,15 +1,14 @@
-package com.spring.app.admin.service;
+package com.spring.app.admin.user.service;
 
 
-import com.spring.app.admin.models.Admin;
-import com.spring.app.admin.models.repository.AdminRepository;
-import com.spring.app.admin.payload.AdminData;
-import com.spring.app.admin.payload.request.AssignOrderRequest;
+import com.spring.app.admin.user.models.Admin;
+import com.spring.app.admin.user.models.repository.AdminRepository;
+import com.spring.app.admin.user.payload.AdminData;
+import com.spring.app.admin.user.payload.request.AssignOrderRequest;
 import com.spring.app.authentication.models.User;
 import com.spring.app.helper.services.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.OrderLog;
-import com.spring.app.orders.models.repository.OrderLogRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.services.OrderLogService;
 import com.spring.app.orders.services.OrderStatusService;

@@ -1,5 +1,6 @@
 package com.spring.app;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandl
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -27,12 +29,16 @@ import java.util.List;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.spring"})
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
 
         app.setDefaultProperties(Collections.singletonMap("server.port", "8091"));
         app.run(args);
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 
     @Bean

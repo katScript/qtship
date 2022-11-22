@@ -1,16 +1,15 @@
-package com.spring.app.admin.controllers;
+package com.spring.app.admin.user.controllers;
 
-import com.spring.app.admin.models.Admin;
-import com.spring.app.admin.models.repository.AdminRepository;
-import com.spring.app.admin.payload.AdminData;
-import com.spring.app.admin.payload.request.AssignOrderRequest;
-import com.spring.app.admin.service.AdminService;
+import com.spring.app.admin.user.models.Admin;
+import com.spring.app.admin.user.models.repository.AdminRepository;
+import com.spring.app.admin.user.payload.AdminData;
+import com.spring.app.admin.user.payload.request.AssignOrderRequest;
+import com.spring.app.admin.user.service.AdminService;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
-import com.spring.app.shipping.models.ShipperOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

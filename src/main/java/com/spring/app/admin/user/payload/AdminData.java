@@ -1,4 +1,4 @@
-package com.spring.app.admin.payload;
+package com.spring.app.admin.user.payload;
 
 public class AdminData {
     private Long id;

@@ -1,4 +1,4 @@
-package com.spring.app.admin.payload.request;
+package com.spring.app.admin.user.payload.request;
 
 public class AssignOrderRequest {
     private Long orderId;
