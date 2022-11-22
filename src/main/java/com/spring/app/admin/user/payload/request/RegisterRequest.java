@@ -1,6 +1,6 @@
-package com.spring.app.admin.payload.request;
+package com.spring.app.admin.user.payload.request;
 
-import com.spring.app.admin.payload.AdminData;
+import com.spring.app.admin.user.payload.AdminData;
 
 public class RegisterRequest {
     private String userName;

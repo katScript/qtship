@@ -88,13 +88,13 @@ public class ShippingService {
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findByShipperAndOrder(shipper, order);
 
         if (!shipperOrders.isEmpty()) {
-            ShipperOrder shipperOrder = shipperOrders.get(0);
-
             order.setShipper(shipper)
                     .setStatus(OrderStatusService.SHIPPER_CONFIRMED);
 
             orderRepository.save(order);
-            shipperOrderRepository.delete(shipperOrder);
+
+            List<ShipperOrder> assignedOrder = shipperOrderRepository.findByOrder(order);
+            shipperOrderRepository.deleteAll(assignedOrder);
         }
     }
 

@@ -1,5 +1,4 @@
-package com.spring.app.admin.models;
-
+package com.spring.app.admin.user.models;
 
 import com.spring.app.authentication.models.User;
 

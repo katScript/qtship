@@ -1,14 +1,14 @@
-package com.spring.app.admin.controllers;
+package com.spring.app.admin.user.controllers;
 
-import com.spring.app.admin.models.Admin;
-import com.spring.app.admin.models.repository.AdminRepository;
-import com.spring.app.admin.service.AdminService;
+import com.spring.app.admin.user.models.Admin;
+import com.spring.app.admin.user.models.repository.AdminRepository;
+import com.spring.app.admin.user.service.AdminService;
 import com.spring.app.authentication.models.Role;
 import com.spring.app.authentication.models.User;
 import com.spring.app.authentication.models.repository.RoleRepository;
 import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.authentication.security.jwt.JwtUtils;
-import com.spring.app.admin.payload.request.RegisterRequest;
+import com.spring.app.admin.user.payload.request.RegisterRequest;
 import com.spring.app.customers.payload.request.auth.ResetPasswordRequest;
 import com.spring.app.payload.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;

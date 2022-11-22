@@ -1,6 +1,6 @@
-package com.spring.app.admin.models.repository;
+package com.spring.app.admin.user.models.repository;
 
-import com.spring.app.admin.models.Admin;
+import com.spring.app.admin.user.models.Admin;
 import com.spring.app.authentication.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
