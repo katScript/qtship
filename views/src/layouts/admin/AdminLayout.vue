@@ -41,4 +41,7 @@ const handleOpenMenu = (value) => {
 .ant-spin-nested-loading > div > .ant-spin {
   max-height: 100vh!important;
 }
+.ant-spin-dot-item {
+  background-color: #BF1E2D!important;
+}
 </style>

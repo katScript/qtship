@@ -3,7 +3,7 @@ import { computed, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { UserOutlined, PhoneOutlined, AimOutlined, AccountBookOutlined, CheckCircleOutlined } from "@ant-design/icons-vue";
 import common from "@/utils/common";
-import { province, district, ward } from "@/services/outService";
+import { province, district, ward } from "@/services/region";
 import { saveOrder, detailOrder } from "@/services/admin";
 import { listActive } from "@/services/coupon";
 import { dataSample, handleResetData, handleSetData, requiredData, omitKey } from "./configOrder";
@@ -45,18 +45,26 @@ const handleGetOrder = async () => {
   if (!onlyUpdate.value) {
     return;
   }
-  const { data: results } = await detailOrder({ id: route.params?.id });
-  Object.assign(data, results);
-  data.shippingAddressName = results.shippingAddress.name
-  data.shippingAddressPhone = results.shippingAddress.phone
-  data.shippingAddressProvince = results.shippingAddress.province
-  data.shippingAddressProvinceId = results.shippingAddress.provinceId
-  data.shippingAddressDistrict = results.shippingAddress.district
-  data.shippingAddressDistrictId = results.shippingAddress.districtId
-  data.shippingAddressWard = results.shippingAddress.ward
-  data.shippingAddressWardId = results.shippingAddress.wardId
-  data.shippingAddressStreet = results.shippingAddress.street
-  handleGetWard(data.shippingAddressDistrictId);
+  try {
+    const { data: results } = await detailOrder({ id: route.params?.id });
+    Object.assign(data, results);
+    data.shippingAddressName = results.shippingAddress.name
+    data.shippingAddressPhone = results.shippingAddress.phone
+    data.shippingAddressProvince = results.shippingAddress.province
+    data.shippingAddressProvinceId = results.shippingAddress.provinceId
+    data.shippingAddressDistrict = results.shippingAddress.district
+    data.shippingAddressDistrictId = results.shippingAddress.districtId
+    data.shippingAddressWard = results.shippingAddress.ward
+    data.shippingAddressWardId = results.shippingAddress.wardId
+    data.shippingAddressStreet = results.shippingAddress.street
+    handleGetWard(data.shippingAddressDistrictId);
+  } catch (e) {
+    if (e.response.data.status == 500) {
+      message.error('Đơn hàng không tồn tại');
+      router.push('/admin/order/update')
+    }
+  }
+
 }
 // Hanlde Click
 const handleSubmitForm = async () => {
@@ -219,15 +227,15 @@ const handleSetCoupon = (code) => {
 // Handle Address
 const handleGetProvince = async () => {
   const { data } = await province();
-  provinces.value = data.results;
+  provinces.value = data;
 }
 const handleGetDistrict = async (provinceId) => {
   const { data } = await district(provinceId);
-  districts.value = data.results;
+  districts.value = data;
 }
 const handleGetWard = async (districtId) => {
   const { data } = await ward(districtId);
-  wards.value = data.results;
+  wards.value = data;
 }
 watch(() => data.shippingAddressProvinceId, () => {
   if (!data.shippingAddressProvinceId) {
@@ -267,6 +275,10 @@ watch(() => data.shippingAddressWardId, () => {
 const requiredWard = computed(() => data.shippingAddressProvinceId && data.shippingAddressDistrictId && wards.value.length);
 // Handle Action
 handleGetOrder();
+watch(
+  () => route.fullPath,
+  () => handleGetOrder()
+);
 handleGetCoupon();
 handleGetProvince();
 //

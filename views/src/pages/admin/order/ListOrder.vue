@@ -17,8 +17,10 @@ const route = useRoute();
 
 const listOrder = ref([]);
 const shipper = ref('');
+const status = ref('');
 const listAllShipper = ref([]);
 const shipperShow = ref(false);
+const statusShow = ref(false);
 const listSelectOrder = ref([]);
 const openDetail = ref(false);
 const detail = ref({});
@@ -30,15 +32,23 @@ const pagination = reactive({
 })
 const rowSelection = ref({
   onSelect: (record, selected, selectedRows) => {
-    listSelectOrder.value = selectedRows.map(x => x.id);
-    console.log(listSelectOrder.value, record, selected);
+    listSelectOrder.value = selectedRows.map(x => {
+      if (x) {
+        return x.id
+      }
+    });
   },
   onSelectAll: (selected, selectedRows) => {
-    listSelectOrder.value = selectedRows.map(x => x.id);
-    console.log(listSelectOrder.value, selected);
+    listSelectOrder.value = selectedRows.map(x => {
+      if (x) {
+        return x.id
+      }
+    });
   },
   getCheckboxProps: record => ({
-    disabled: !common.PROCESSING_TYPE.find(x => x.value == record.status),
+    disabled: route.query?.status == common.TYPE_ORDER_PROCESSING
+      ? !common.PROCESSING_TYPE.find(x => x.value == record.status)
+      : (route.query?.status == common.TYPE_ORDER_PENDING ? false : true),
   }),
 });
 const getTitle = computed(() => {
@@ -48,9 +58,13 @@ const getTitle = computed(() => {
     DONE: 'Đơn hàng đã xử lý',
     OCCURRED: 'Đơn hàng phát sinh',
     CANCEL: 'Đơn hàng bị hủy',
+    RETURN: 'Đơn hàng trả lại',
   }
   return route.query?.status ? title[route.query?.status] : 'Tất cả đơn hàng';
 });
+watch(() => route.query?.status, () => {
+  listSelectOrder.value = [];
+})
 //
 const handleTransferShipper = async () => {
   const data = listSelectOrder.value.map(order => ({ orderId: order, shipperId: shipper.value }));
@@ -60,9 +74,21 @@ const handleTransferShipper = async () => {
   handleResetShipper();
   getListOrder();
 }
+const handleChangeStatus = async () => {
+  const data = listSelectOrder.value.map(order => ({ orderId: order, shipperId: shipper.value }));
+  await transferShipper(data);
+  message.success('Chuyển trạng thái đơn hàng thành công');
+  listSelectOrder.value = [];
+  handleResetStatus();
+  getListOrder();
+} 
 const handleResetShipper = () => {
   shipper.value = '';
   shipperShow.value = false;
+}
+const handleResetStatus = () => {
+  status.value = '';
+  statusShow.value = false;
 }
 const getListShipper = async () => {
   const { data } = await listShipper();
@@ -154,11 +180,20 @@ const handleFind = (value) => {
   getListOrder(filtersSet.value);
 }
 const shippingTypeStyle = (value) => {
+  if (!value) {
+    return ''
+  }
   const type = common.TYPE_SHIPPING.find(x => x.value == value);
   return `<div style="${type.style}">${type.value}</div>`;
 }
 const shippingStatusStyle = (value) => {
+  if (!value) {
+    return ''
+  }
   const type = common.ALL_TYPE.find(x => x.value == value);
+  if (!type) {
+    return ''
+  }
   return `<div style="${type.style}">${type.value}</div>`;
 }
 //
@@ -172,7 +207,7 @@ watch(() => route.query?.status, () => getListOrder());
     <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase">{{ getTitle }}</div>
     <FilterOrder :status="route.query?.status" @on-handle-find="handleFind" />
     <a-popover v-model:visible="shipperShow" title="Chuyển giao hàng" @click="handleResetShipper" trigger="click"
-      v-if="!!listSelectOrder.length">
+      v-if="!!listSelectOrder.length && route.query.status == common.TYPE_ORDER_PROCESSING">
       <template #content>
         <a-select v-model:value="shipper" style="width: 250px" show-search :filter-option="filterOption"
           placeholder="Select a person"
@@ -183,6 +218,21 @@ watch(() => route.query?.status, () => getListOrder());
       </template>
       <a-button type="primary" class="mb-3">
         Chuyển giao hàng
+      </a-button>
+    </a-popover>
+    <a-popover v-model:visible="statusShow" title="Chuyển trạng thái đơn hàng" @click="handleResetStatus" trigger="click"
+      v-if="!!listSelectOrder.length && route.query.status == common.TYPE_ORDER_PENDING">
+      <template #content>
+        <a-select v-model:value="status" style="width: 250px">
+            <a-select-option :value="common.TYPE_ORDER_ADMIN_CONFIRM">Xác nhận </a-select-option>
+            <a-select-option :value="common.TYPE_ORDER_CANCEL">Hủy</a-select-option>
+        </a-select>
+        <a-button type="primary" class="ms-3" :disabled="!status" @click="handleChangeStatus">
+          Chuyển trạng thái
+        </a-button>
+      </template>
+      <a-button type="primary" class="mb-3">
+        Chuyển trạng thái đơn hàng
       </a-button>
     </a-popover>
     <a-table :dataSource="listOrder" :row-selection="rowSelection" bordered :pagination="pagination"
