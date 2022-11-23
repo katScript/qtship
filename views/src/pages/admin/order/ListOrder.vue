@@ -2,7 +2,7 @@
 import { list, updateStatus, transferShipper } from "@/services/admin";
 import { list as listShipper } from "@/services/shipper";
 import { ref, watch, reactive, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import common from "@/utils/common";
@@ -14,6 +14,7 @@ import moment from "moment";
 
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 
 const listOrder = ref([]);
 const shipper = ref('');
@@ -261,7 +262,7 @@ watch(() => route.query?.status, () => getListOrder());
             <button type="button" @click="handleShowDetail(record)" class="btn btn-primary">
               <EyeOutlined />
             </button>
-            <button type="button" class="btn btn-secondary">
+            <button type="button" @click="router.push('/admin/order/update/' + record.id)" class="btn btn-secondary">
               <EditOutlined />
             </button>
             <a-popconfirm title="Bạn có muốn xóa đơn hàng này không ?" ok-text="Có" cancel-text="Không"

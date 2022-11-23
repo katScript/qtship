@@ -45,10 +45,9 @@ export const columns = [
     key: 'created_at',
   },
   {
-    title: 'Chức năng',
+    title: '',
     dataIndex: 'action',
     key: 'action',
-    width: '200px',
   }
 ];
 
