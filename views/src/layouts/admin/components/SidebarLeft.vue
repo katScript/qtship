@@ -3,7 +3,10 @@ import {
   DoubleLeftOutlined,
   DoubleRightOutlined,
   HomeOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  ShopOutlined,
+  TeamOutlined,
+  LogoutOutlined
 } from '@ant-design/icons-vue';
 import { defineEmits, defineProps, onMounted, ref, watch } from "vue";
 import { RouterLink, useRouter, useRoute } from 'vue-router';
@@ -22,17 +25,26 @@ const toggleOpenMenu = () => {
 const openKeys = ref('');
 const selectedKeys = ref('');
 
+const handleSignOut = () => {
+  common.SIGNOUT();
+  router.push('/');
+}
+
 onMounted(() => {
+  handleChangeRoute();
+});
+
+const handleChangeRoute = () => {
   selectedKeys.value = [route.fullPath.replace(/\/[0-9]/g, '')]
-  openKeys.value = [[...orderList, ...createOrderList].find(x => x.path == selectedKeys.value)?.parent] || [];
-})
+  openKeys.value = [[...orderList, ...createOrderList, ...customerList].find(x => x.path == selectedKeys.value)?.parent] || [];
+}
 
 watch(
   () => route.fullPath,
   () => {
-  selectedKeys.value = [route.fullPath]
-  openKeys.value = [[...orderList, ...createOrderList].find(x => x.path == selectedKeys.value)?.parent] || [];
-})
+    handleChangeRoute();
+  });
+
 
 const orderList = [
   {
@@ -83,7 +95,15 @@ const createOrderList = [
     name: 'Cập nhật đơn hàng',
     path: '/admin/order/update',
   },
-]
+];
+
+const customerList = [
+  {
+    parent: 3,
+    name: 'Danh sách khách hàng',
+    path: '/admin/customer',
+  }
+];
 
 const handleClickItem = (inList = false, path) => {
   if (inList) {
@@ -91,45 +111,62 @@ const handleClickItem = (inList = false, path) => {
   }
 }
 const onOpenChange = key => {
- openKeys.value = [key[key.length - 1]]
+  openKeys.value = [key[key.length - 1]]
 };
 </script>
 
 <template>
-  <div class="d-flex align-items-center justify-content-between">
-    <RouterLink :to="'/'" v-if="openMenu">
-      <img src="@/images/logo-branch.png" alt="Logo branch" width="150" />
-    </RouterLink>
-    <DoubleLeftOutlined v-if="openMenu" @click="toggleOpenMenu" class="half-circle-left" />
-    <DoubleRightOutlined v-else @click="toggleOpenMenu" class="half-circle-right" />
+  <div class="position-relative h-100">
+    <div class="d-flex align-items-center justify-content-between">
+      <RouterLink :to="'/'" v-if="openMenu">
+        <img src="@/images/logo-branch.png" alt="Logo branch" width="150" />
+      </RouterLink>
+      <DoubleLeftOutlined v-if="openMenu" @click="toggleOpenMenu" class="half-circle-left" />
+      <DoubleRightOutlined v-else @click="toggleOpenMenu" class="half-circle-right" />
+    </div>
+    <a-menu mode="inline" :inline-collapsed="!openMenu" class="mt-5" v-model:openKeys="openKeys"
+      v-model:selectedKeys="selectedKeys" @openChange="onOpenChange">
+      <a-menu-item key="1" style="background: #bf1e2d; color: #ffffff;">
+        <template #icon>
+          <HomeOutlined />
+        </template>
+        Trang chủ
+      </a-menu-item>
+      <a-sub-menu :key="1" style="background: #bf1e2d; color: #ffffff;">
+        <template #icon>
+          <ShoppingCartOutlined />
+        </template>
+        <template #title>Quản lý đơn hàng</template>
+        <a-menu-item :key="option.path" v-for="option in orderList" @click="handleClickItem(true, option.path)">{{
+            option.name
+        }}</a-menu-item>
+      </a-sub-menu>
+      <a-sub-menu :key="2" style="background: #bf1e2d; color: #ffffff;">
+        <template #icon>
+          <ShopOutlined />
+        </template>
+        <template #title>Tạo đơn hàng tại bưu cục</template>
+        <a-menu-item :key="option.path" v-for="option in createOrderList" @click="handleClickItem(true, option.path)">{{
+            option.name
+        }}</a-menu-item>
+      </a-sub-menu>
+      <a-sub-menu :key="3" style="background: #bf1e2d; color: #ffffff;">
+        <template #icon>
+          <TeamOutlined />
+        </template>
+        <template #title>Khách hàng</template>
+        <a-menu-item :key="option.path" v-for="option in customerList" @click="handleClickItem(true, option.path)">{{
+            option.name
+        }}</a-menu-item>
+      </a-sub-menu>
+    </a-menu>
+    <div class="position-absolute bottom-0 left-0 right-0 w-100">
+      <div class="bg-dark text-white p-2 text-center" style="cursor: pointer;" @click="handleSignOut">
+        <LogoutOutlined class="me-2" style="transform: translate(0px, -3px)" />
+        <span v-if="openMenu">Đăng xuất</span>
+      </div>
+    </div>
   </div>
-  <a-menu mode="inline" :inline-collapsed="!openMenu" class="mt-5" v-model:openKeys="openKeys"
-    v-model:selectedKeys="selectedKeys" @openChange="onOpenChange">
-    <a-menu-item key="1" style="background: #bf1e2d; color: #ffffff;">
-      <template #icon>
-        <HomeOutlined />
-      </template>
-      Trang chủ
-    </a-menu-item>
-    <a-sub-menu :key="1" style="background: #bf1e2d; color: #ffffff;">
-      <template #icon>
-        <ShoppingCartOutlined />
-      </template>
-      <template #title>Quản lý đơn hàng</template>
-      <a-menu-item :key="option.path" v-for="option in orderList" @click="handleClickItem(true, option.path)">{{
-          option.name
-      }}</a-menu-item>
-    </a-sub-menu>
-    <a-sub-menu :key="2" style="background: #bf1e2d; color: #ffffff;">
-      <template #icon>
-        <ShoppingCartOutlined />
-      </template>
-      <template #title>Tạo đơn hàng tại bưu cục</template>
-      <a-menu-item :key="option.path" v-for="option in createOrderList" @click="handleClickItem(true, option.path)">{{
-          option.name
-      }}</a-menu-item>
-    </a-sub-menu>
-  </a-menu>
 </template>
 
 <style scoped>

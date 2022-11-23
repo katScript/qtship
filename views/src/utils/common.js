@@ -11,6 +11,12 @@ const userCookies = {
 
 export default {
   TOKEN: () => cookiesManager.cookies.get(userCookies.token),
+  SIGNOUT: () => {
+    cookiesManager.cookies.remove(userCookies.token);
+    cookiesManager.cookies.remove(userCookies.username);
+    cookiesManager.cookies.remove(userCookies.id);
+    cookiesManager.cookies.remove(userCookies.roles);
+  },
   DOMAIN_URL: 'https://api.dcodetest.com/v1/',
   TYPE_ORDER_PENDING: 'PENDING',
   TYPE_ORDER_PROCESSING: 'PROCESSING',

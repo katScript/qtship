@@ -14,5 +14,13 @@ export default [
       isAdmin: true,
     },
     component: () => import("@/pages/admin/order/CreateOrder.vue"),
-  }
+  },
+  {
+    name: 'admin-list-customer',
+    path: '/admin/customer',
+    meta: {
+      isAdmin: true,
+    },
+    component: () => import("@/pages/admin/customer/ListCustomer.vue"),
+  },
 ]

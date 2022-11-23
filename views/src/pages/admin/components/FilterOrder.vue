@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineEmits, reactive, watch } from 'vue';
-import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, UndoOutlined } from '@ant-design/icons-vue';
 import common from '@/utils/common';
 
 const props = defineProps({
@@ -94,7 +94,7 @@ watch(() => props.status, () => {
       </a-button>
       <a-button type="danger" class="ms-4" @click="handleReset">
         <template #icon>
-          <CloseCircleOutlined style="transform: translate(0px, -3px)" />
+          <UndoOutlined style="transform: translate(0px, -3px)" />
         </template>
         Đặt lại
       </a-button>
