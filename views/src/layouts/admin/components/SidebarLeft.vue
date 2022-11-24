@@ -35,6 +35,9 @@ onMounted(() => {
 });
 
 const handleChangeRoute = () => {
+  if (!props.openMenu) {
+    return;
+  }
   selectedKeys.value = [route.fullPath.replace(/\/[0-9]/g, '')]
   openKeys.value = [[...orderList, ...createOrderList, ...customerList].find(x => x.path == selectedKeys.value)?.parent] || [];
 }

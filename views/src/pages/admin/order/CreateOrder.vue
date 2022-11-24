@@ -57,6 +57,7 @@ const handleGetOrder = async () => {
     data.shippingAddressWard = results.shippingAddress.ward
     data.shippingAddressWardId = results.shippingAddress.wardId
     data.shippingAddressStreet = results.shippingAddress.street
+    handleGetDistrict(data.shippingAddressDistrictId);
     handleGetWard(data.shippingAddressDistrictId);
   } catch (e) {
     if (e.response.data.status == 500) {
