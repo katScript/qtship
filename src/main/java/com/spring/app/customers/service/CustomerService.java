@@ -183,7 +183,7 @@ public class CustomerService {
     public String processUploadCustomerImage(MultipartFile file, String customerCode, String name, String current) {
         Resource resource = null;
 
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             storageService.setPath(getImageScope(customerCode));
             resource = storageService.save(file, name);
         }
