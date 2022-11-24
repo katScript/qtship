@@ -1,9 +1,8 @@
 package com.spring.app.shipping.service;
 
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.repository.OrderRepository;
-import com.spring.app.orders.services.OrderService;
 import com.spring.app.orders.services.OrderStatusService;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShipperOrder;
@@ -11,13 +10,11 @@ import com.spring.app.shipping.models.ShippingAddress;
 import com.spring.app.shipping.models.repository.ShipperOrderRepository;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.ShipperData;
-import com.spring.app.shipping.payload.ShipperOrderData;
 import com.spring.app.shipping.payload.ShippingAddressData;
 import com.spring.app.shipping.payload.request.AssignOrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

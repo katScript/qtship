@@ -2,9 +2,8 @@ package com.spring.app.products.service;
 
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
-import com.spring.app.helper.services.DateFormatHelper;
-import com.spring.app.helper.services.FilesStorageServiceImpl;
-import com.spring.app.orders.models.Order;
+import com.spring.app.helper.date.DateFormatHelper;
+import com.spring.app.helper.file.services.image.ImageStorageServiceImpl;
 import com.spring.app.products.models.Package;
 import com.spring.app.products.models.Product;
 import com.spring.app.products.models.repository.PackageRepository;
@@ -24,7 +23,7 @@ public class ProductService {
     public static final String SCOPE = "product";
 
     @Autowired
-    FilesStorageServiceImpl storageService;
+    ImageStorageServiceImpl storageService;
     @Autowired
     ProductRepository productRepository;
     @Autowired
@@ -137,7 +136,7 @@ public class ProductService {
 
         if (data.getProduct() == null || data.getProduct().getId() == null) {
             packageItem.setProduct(null)
-                    .setImageUrl(getImageUrl(FilesStorageServiceImpl.DEFAULT));
+                    .setImageUrl(getImageUrl(ImageStorageServiceImpl.DEFAULT));
         } else {
             Product product = productRepository.findById(data.getProduct().getId())
                     .orElseThrow(() -> new RuntimeException("Product not found!"));
@@ -184,7 +183,7 @@ public class ProductService {
     public String processProductImage(Product product) {
         return product.getImage() != null ?
                 getImageUrl(product.getCustomer().getCustomerId() + File.separator + product.getImage()) :
-                getImageUrl(FilesStorageServiceImpl.DEFAULT);
+                getImageUrl(ImageStorageServiceImpl.DEFAULT);
     }
 
     public void processDeleteProductImage(String customerCode, String image) {

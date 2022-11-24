@@ -1,14 +1,8 @@
-package com.spring.app.helper.services;
+package com.spring.app.helper.file.services;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,22 +11,13 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.apache.commons.io.FilenameUtils;
-
-import javax.imageio.ImageIO;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
     @Value("${qt.app.serviceBasePath}")
-    private String basePath;
+    protected String basePath;
 
-    public static final String DEFAULT = "img-default.jpg";
-
-    private String path;
-
+    protected String path;
     public String getPath() {
         return path;
     }
@@ -49,9 +34,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     public Path getRoot() {
         if (this.path != null)
-            return Paths.get(basePath + "/views/src/images/" + path);
+            return Paths.get(basePath + path);
 
-        return Paths.get(basePath + "/views/src/images");
+        return Paths.get(basePath);
     }
 
     @Override
@@ -69,37 +54,13 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             if (!Files.exists(this.getRoot()))
                 this.init();
 
-            String filename = name + ".png";
+            Path fileResolve = this.getRoot().resolve(name);
+            Files.copy(file.getInputStream(), fileResolve, StandardCopyOption.REPLACE_EXISTING);
 
-            Path fileResolve = this.getRoot().resolve(filename);
-
-            BufferedImage image = ImageIO.read(file.getInputStream());
-            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_DEFAULT);
-            ImageIO.write(
-                    this.convertToBufferedImage(scaledImage),
-                    "png",
-                    new File(fileResolve.toString())
-            );
-
-            return this.load(filename);
+            return this.load(name);
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
-    }
-
-    private BufferedImage convertToBufferedImage(Image img) {
-        if (img instanceof BufferedImage)
-            return (BufferedImage) img;
-
-        BufferedImage bi = new BufferedImage(
-                img.getWidth(null), img.getHeight(null),
-                BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D graphics2D = bi.createGraphics();
-        graphics2D.drawImage(img, 0, 0, null);
-        graphics2D.dispose();
-
-        return bi;
     }
 
     @Override
@@ -139,11 +100,5 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
-    }
-
-    public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-        return Files.readAllBytes(new File(
-                this.getRoot().resolve(fileName).toString()
-        ).toPath());
     }
 }

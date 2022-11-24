@@ -1,7 +1,7 @@
-package com.spring.app.helper.controllers;
+package com.spring.app.helper.file.controllers;
 
 import com.spring.app.customers.service.CustomerService;
-import com.spring.app.helper.services.FilesStorageServiceImpl;
+import com.spring.app.helper.file.services.image.ImageStorageServiceImpl;
 import com.spring.app.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -18,7 +17,7 @@ import java.io.IOException;
 @RequestMapping("/image")
 public class FileController {
     @Autowired
-    private FilesStorageServiceImpl service;
+    private ImageStorageServiceImpl service;
     @Autowired
     private ProductService productService;
     @Autowired

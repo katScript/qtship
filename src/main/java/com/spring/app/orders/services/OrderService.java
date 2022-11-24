@@ -2,11 +2,10 @@ package com.spring.app.orders.services;
 
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.OrderLog;
 import com.spring.app.orders.models.OrderStatus;
-import com.spring.app.orders.models.repository.OrderLogRepository;
 import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
@@ -92,10 +91,22 @@ public class OrderService {
                     .orElseThrow(() -> new RuntimeException("Order not found!"));
             status = this.orderStatusRepository.findByCode(data.getStatus() != null ? data.getStatus() : order.getStatus())
                     .orElseThrow(() -> new RuntimeException("Order status not found!"));
+
+            order.getHistories().add(orderLogService.createStatusLog(
+                    order,
+                    status.getCode(),
+                    "Update order."
+            ));
         } else {
             order = new Order();
             status = this.orderStatusRepository.findByCode(OrderStatusService.DEFAULT)
                     .orElseThrow(() -> new RuntimeException("Order status not found!"));
+
+            order.getHistories().add(orderLogService.createStatusLog(
+                    order,
+                    status.getCode(),
+                    "Create order."
+            ));
         }
 
         order.setSenderName(data.getSenderName())

@@ -31,7 +31,7 @@ public class PriceCalculate {
 
     public void processShippingFee(Order order) {
         int power = (int) Math.max(Math.round(order.getTotalWeight() / 0.5) - 1, 0);
-        String province = order.getShippingAddress().getProvince();
+        String provinceId = order.getShippingAddress().getProvinceId();
 
         // find type price by province
         String type = "A";

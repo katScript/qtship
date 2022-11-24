@@ -2,7 +2,7 @@ package com.spring.app.warehouse.service;
 
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.warehouse.models.Warehouse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
 import com.spring.app.warehouse.payload.WarehouseData;

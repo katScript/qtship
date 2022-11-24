@@ -15,6 +15,8 @@ public class OrderLog {
     private Order order;
     @Column(name = "log_data")
     private String data;
+    @Column(name = "status")
+    private String status;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -24,10 +26,12 @@ public class OrderLog {
 
     public OrderLog(
             Order order,
-            String data
+            String data,
+            String status
     ) {
         this.order = order;
         this.data = data;
+        this.status = status;
     }
 
     public Long getId() {
@@ -72,6 +76,15 @@ public class OrderLog {
 
     public OrderLog setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public OrderLog setStatus(String status) {
+        this.status = status;
         return this;
     }
 }
