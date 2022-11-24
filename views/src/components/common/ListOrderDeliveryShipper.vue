@@ -175,10 +175,10 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               id: item.id,
               status: commonFunction.orderStatus.Success,
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {
@@ -194,10 +194,10 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               id: item.id,
               status: commonFunction.orderStatus.Payment,
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {
@@ -213,11 +213,11 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               id: item.id,
               status: commonFunction.orderStatus.Delay,
               description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {
@@ -233,11 +233,11 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               id: item.id,
               status: commonFunction.orderStatus.Occurred,
               description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {
@@ -253,11 +253,11 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               id: item.id,
               status: commonFunction.orderStatus.Return,
               description: this.descriptionStatus[this.listOrderDelivery.findIndex(object => {return object.id === item.id;})]
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {

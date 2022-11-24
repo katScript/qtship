@@ -152,10 +152,11 @@ export default {
           });
       } else if (typeComponent == "ORDER") {
         axios
-          .post(commonFunction.DOMAIN_URL + "v1/order/update/status", {
-              id: dataNotify.data.id,
-              status: commonFunction.orderStatus.Cancel
-            },
+          .post(commonFunction.DOMAIN_URL + "v1/order/update/status", 
+              {
+                id: dataNotify.data.id,
+                status: commonFunction.orderStatus.Cancel
+              },
             this.configRequestApi
           )
           .then((response) => {

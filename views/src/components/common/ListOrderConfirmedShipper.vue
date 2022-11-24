@@ -142,10 +142,10 @@
         axios
           .post(
             commonFunction.DOMAIN_URL + "v1/order/update/status",
-            {
+            [{
               "id": item.id,
               "status": commonFunction.orderStatus.Delivery
-            },
+            }],
             commonFunction.configApi()
           )
           .then((response) => {
