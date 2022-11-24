@@ -3,6 +3,8 @@ package com.spring.app.orders.services;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.helper.date.DateFormatHelper;
+import com.spring.app.office.models.Office;
+import com.spring.app.office.models.repository.OfficeRepository;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.OrderLog;
 import com.spring.app.orders.models.OrderStatus;
@@ -49,6 +51,8 @@ public class OrderService {
     public ShippingService shippingService;
     @Autowired
     public OrderLogService orderLogService;
+    @Autowired
+    public OfficeRepository officeRepository;
 
     public void updateStatus(OrderStatusUpdateRequest order) {
         Order _order = this.orderRepository.findById(order.getId())
@@ -126,9 +130,17 @@ public class OrderService {
         this.processWarehouse(data, order);
         this.processPackage(data.getProducts(), order);
         this.processOrderWeight(order);
+        this.processOffice(data, order);
         this.priceCalculate.processSubtotal(order);
 
         return order;
+    }
+
+    public void processOffice(OrderData data, Order order) {
+        if (data.getOfficeId() != null) {
+            Office office = officeRepository.findById(data.getOfficeId()).orElseThrow(() -> new RuntimeException("Office not found!"));
+            order.setOffice(office);
+        }
     }
 
     public void processWarehouse(OrderData data, Order order) {
@@ -228,7 +240,8 @@ public class OrderService {
                 DateFormatHelper.dateToString(order.getTakenTime()),
                 DateFormatHelper.dateToString(order.getShippingTime()),
                 order.getReturnCode(),
-                products
+                products,
+                order.getOffice() == null ? null : order.getOffice().getId()
         );
 
         orderData.setCreatedAt(

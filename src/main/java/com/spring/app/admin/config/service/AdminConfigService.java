@@ -39,4 +39,9 @@ public class AdminConfigService {
                 DateFormatHelper.dateToString(ac.getUpdatedAt())
         );
     }
+
+    public AdminConfig getFeeConfig(String key) {
+        return adminConfigRepository.findFirstByKeyAndScope(key, "fee")
+                .orElseThrow(() -> new RuntimeException("Config not found!"));
+    }
 }
