@@ -33,6 +33,7 @@ public class OrderData {
     private String shippingTime;
     private String returnCode;
     private Set<PackageData> products;
+    private Long officeId;
     private String createdAt;
     private String updatedAt;
 
@@ -64,7 +65,8 @@ public class OrderData {
             String takenTime,
             String shippingTime,
             String returnCode,
-            Set<PackageData> products
+            Set<PackageData> products,
+            Long officeId
     ) {
         this.id = id;
         this.orderCode = orderCode;
@@ -90,6 +92,7 @@ public class OrderData {
         this.returnCode = returnCode;
         this.products = products;
         this.takenTime = takenTime;
+        this.officeId = officeId;
     }
 
     public Long getId() {
@@ -294,5 +297,13 @@ public class OrderData {
 
     public String getTakenTime() {
         return takenTime;
+    }
+
+    public Long getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
     }
 }

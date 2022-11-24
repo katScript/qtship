@@ -1,6 +1,7 @@
 package com.spring.app.orders.models;
 
 import com.spring.app.customers.models.Customer;
+import com.spring.app.office.models.Office;
 import com.spring.app.products.models.Package;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShippingAddress;
@@ -69,6 +70,9 @@ public class Order {
     @OneToMany(mappedBy = "order",
             fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderLog> histories;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "office_id", referencedColumnName = "id")
+    private Office office;
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = false)
@@ -339,5 +343,14 @@ public class Order {
 
     public void setHistories(Set<OrderLog> histories) {
         this.histories = histories;
+    }
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public Order setOffice(Office office) {
+        this.office = office;
+        return this;
     }
 }

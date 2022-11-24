@@ -1,8 +1,17 @@
 package com.spring.app.price.service;
 
+import com.spring.app.admin.config.models.AdminConfig;
+import com.spring.app.admin.config.models.repository.AdminConfigRepository;
+import com.spring.app.admin.config.service.AdminConfigService;
+import com.spring.app.office.models.Office;
 import com.spring.app.orders.models.Order;
 import com.spring.app.price.models.Coupon;
+import com.spring.app.price.models.Rule;
+import com.spring.app.price.models.RuleArea;
+import com.spring.app.price.models.RulePriceList;
 import com.spring.app.price.models.repository.CouponRepository;
+import com.spring.app.price.models.repository.RuleAreaRepository;
+import com.spring.app.price.models.repository.RulePriceListRepository;
 import com.spring.app.products.models.Package;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +25,18 @@ public class PriceCalculate {
     @Autowired
     private CouponRepository couponRepository;
 
+    @Autowired
+    private RuleAreaRepository ruleAreaRepository;
+
+    @Autowired
+    private RulePriceListRepository rulePriceListRepository;
+
+    @Autowired
+    private AdminConfigRepository adminConfigRepository;
+
+    @Autowired
+    private AdminConfigService adminConfigService;
+
     public void processSubtotal(Order order) {
         Double subtotal = 0.0;
 
@@ -23,63 +44,73 @@ public class PriceCalculate {
             subtotal += item.getQty() * item.getPrice();
         }
 
-        this.processShippingFee(order);
+        processShippingFee(order);
         subtotal += order.getShippingFee();
 
         order.setSubtotal(subtotal);
     }
 
     public void processShippingFee(Order order) {
-        int power = (int) Math.max(Math.round(order.getTotalWeight() / 0.5) - 1, 0);
-        String provinceId = order.getShippingAddress().getProvinceId();
+        Office office = order.getOffice();
+        Coupon coupon = couponRepository.findByCode(order.getCoupon()).orElse(null);
 
-        // find type price by province
-        String type = "A";
+        Double shippingFee = calculateShippingFee(
+                office,
+                order.getShippingAddress().getProvinceId(),
+                order.getTotalWeight(),
+                coupon
+        );
 
-        // get rule of type
-        String rulePrice = "23.800,27.500,31.800,35.800";
-        List<String> rules = new ArrayList<>(Arrays.asList(rulePrice.split(",")));
-        int maxBoundary = rules.size() - 1;
-        double maxBoundaryPrice = Double.parseDouble(rules.get(maxBoundary)),
-                // get advance price from config
-                advancePrice = 5.500;
+        order.setShippingFee(shippingFee);
+    }
 
-        Double shippingFee;
+    public Double calculateShippingFee(Office office, String provinceId, Double weight, Coupon coupon) {
+        Double shippingFee = 0.0;
 
-        if (power <= maxBoundary) {
-            shippingFee = Double.parseDouble(rules.get(power));
-        } else {
-            shippingFee = maxBoundaryPrice;
+        if (office != null) {
+            Rule rule = office.getPriceRule();
+            RuleArea area = ruleAreaRepository.findFirstByRuleAndProvinceId(rule, provinceId)
+                    .orElseThrow(() -> new RuntimeException("Can not find area!"));
 
-            for (int i = maxBoundary; i < power; ++i) {
-                shippingFee += advancePrice;
+            RulePriceList priceList = rulePriceListRepository.findFirstByRuleAndAreaCode(rule, area.getAreaCode())
+                    .orElseThrow(() -> new RuntimeException("Can not get price list!"));
+
+            int factor = (int) Math.max(Math.round(weight / priceList.getWeightFactor()) - 1, 0);
+
+            int maxBoundary = priceList.getPriceList().size();
+            double advancePrice = priceList.getAdvancePrice();
+
+            if (factor < maxBoundary) {
+                shippingFee = priceList.getPriceList().get(factor);
+            } else {
+                shippingFee = priceList.getPriceList().get(maxBoundary - 1);
+
+                for (int i = maxBoundary; i <= factor; ++i) {
+                    shippingFee += advancePrice;
+                }
+            }
+
+            AdminConfig VAT = adminConfigService.getFeeConfig("VAT"),
+                    fuel = adminConfigService.getFeeConfig("fuel"),
+                    weightLimit = adminConfigService.getFeeConfig("weight_limit"),
+                    advanceFeeWeightLimit = adminConfigService.getFeeConfig("advance_fee_weight");
+
+            shippingFee += shippingFee * Double.parseDouble(VAT.getValue()) +
+                    shippingFee * Double.parseDouble(fuel.getValue());
+
+            if (weight >= Double.parseDouble(weightLimit.getValue())) {
+                shippingFee += shippingFee * Double.parseDouble(advanceFeeWeightLimit.getValue()) / 100;
             }
         }
-
-        // advance fee
-
-        // get from admin config
-        double VAT = 0.08,
-                fuel = 0.15,
-                weightLimit = 10;
-
-        shippingFee += shippingFee * VAT + shippingFee * fuel;
-
-        if (order.getTotalWeight() >= weightLimit) {
-            // get price advance in config
-            shippingFee += shippingFee * 0.2;
-        }
-
-        Coupon coupon = couponRepository.findByCode(order.getCoupon()).orElse(null);
 
         if (coupon != null && coupon.isValid()) {
             if (coupon.getRule().equals(Coupon.BASE)) {
                 shippingFee -= coupon.getValue();
             } else if (coupon.getRule().equals(Coupon.PERCENT)) {
-                shippingFee -= shippingFee * (coupon.getValue() / 100);
+                shippingFee -= shippingFee * coupon.getValue() / 100;
             }
         }
 
-        order.setShippingFee(shippingFee);
+        return shippingFee;
     }
 }
