@@ -119,17 +119,8 @@ getCustomer();
         <template v-if="column.key === 'action'">
           <div class="d-flex justify-content-between">
             <button type="button" @click="handleShowDetail(record)" class="btn btn-primary">
-              <EyeOutlined />
+              <EyeOutlined style="transform: translate(0px, -3px)" />
             </button>
-            <!-- <button type="button" class="btn btn-secondary">
-              <EditOutlined />
-            </button> -->
-            <!-- <a-popconfirm title="Bạn có muốn xóa đơn hàng này không ?" ok-text="Có" cancel-text="Không"
-              @confirm="setStatus(record.id, common.TYPE_ORDER_CANCEL)">
-              <button type="button" class="btn btn-danger">
-                <DeleteOutlined />
-              </button>
-            </a-popconfirm> -->
           </div>
         </template>
       </template>
