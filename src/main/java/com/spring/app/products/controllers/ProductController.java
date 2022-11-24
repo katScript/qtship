@@ -62,38 +62,41 @@ public class ProductController {
             consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> saveProduct(@Valid ProductDataRequest productDataRequest) {
-        ProductData productData = new ProductData(
-                productDataRequest.getId(),
-                productDataRequest.getCustomerId(),
-                productDataRequest.getCustomerCode(),
-                productDataRequest.getCustomerName(),
-                productDataRequest.getSku(),
-                productDataRequest.getQty(),
-                productDataRequest.getName(),
-                productDataRequest.getWeight(),
-                productDataRequest.getBasePrice(),
-                productDataRequest.getPublicPrice(),
-                productDataRequest.getDescription()
-        );
+        try {
+            ProductData productData = new ProductData(
+                    productDataRequest.getId(),
+                    productDataRequest.getCustomerId(),
+                    productDataRequest.getCustomerCode(),
+                    productDataRequest.getCustomerName(),
+                    productDataRequest.getSku(),
+                    productDataRequest.getQty(),
+                    productDataRequest.getName(),
+                    productDataRequest.getWeight(),
+                    productDataRequest.getBasePrice(),
+                    productDataRequest.getPublicPrice(),
+                    productDataRequest.getDescription()
+            );
 
-        if (productData.getCustomerId() == null)
-            productService.saveProduct(productData, productDataRequest.getFile());
-        else
-            productService.saveProduct(productData, productDataRequest.getFile(), productData.getCustomerId());
+            if (productData.getCustomerId() == null)
+                productService.saveProduct(productData, productDataRequest.getFile());
+            else
+                productService.saveProduct(productData, productDataRequest.getFile(), productData.getCustomerId());
 
-        return ResponseEntity.ok(new MessageResponse("Product save success"));
+            return ResponseEntity.ok(new MessageResponse("Product save success"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Can not save product: " + e.getMessage()));
+        }
+
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteProduct(@Valid @RequestBody DeleteRequest deleteRequest) {
-        Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
-                .orElse(null);
+        try {
+            Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
-        if (customer != null) {
-            Product product = productRepository.findById(deleteRequest.getId()).orElse(null);
-
-            if (product == null)
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Product is not found."));
+            Product product = productRepository.findById(deleteRequest.getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
 
             if (!product.getCustomer().getId().equals(customer.getId()))
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Can't not delete product! Customer not valid!!"));
@@ -105,9 +108,9 @@ public class ProductController {
             productService.processDeleteProductImage(customerCode, image);
 
             return ResponseEntity.ok(new MessageResponse("Product deleted successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Can not delete product: " + e.getMessage()));
         }
-
-        return ResponseEntity.badRequest().body(new MessageResponse("Error: Customer not found!"));
     }
 
     @GetMapping("/customer/{id}")

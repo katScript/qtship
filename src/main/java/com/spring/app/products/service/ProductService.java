@@ -187,7 +187,8 @@ public class ProductService {
     }
 
     public void processDeleteProductImage(String customerCode, String image) {
-        storageService.setPath(getImageScope(customerCode)).deleteByName(image);
+        if (image != null)
+            storageService.setPath(getImageScope(customerCode)).deleteByName(image);
     }
 
     public String getImageScope(String path) {
