@@ -1,6 +1,6 @@
 package com.spring.app.orders.controllers;
 
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
@@ -42,22 +42,32 @@ public class OrderController {
 
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody List<OrderData> data) {
-        for (OrderData order : data) {
-            if (order.getCustomerId() != null) {
-                this.orderService.saveCustomerOrder(order);
-            } else {
-                this.orderService.saveGuestOrder(order);
+        try {
+            for (OrderData order : data) {
+                if (order.getCustomerId() != null) {
+                    this.orderService.saveCustomerOrder(order);
+                } else {
+                    this.orderService.saveGuestOrder(order);
+                }
             }
-        }
 
-        return ResponseEntity.ok(new MessageResponse("Save order successfully!"));
+            return ResponseEntity.ok(new MessageResponse("Save order successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 
     @PostMapping("/update/status")
-    public ResponseEntity<?> updateOrderStatus(@Valid @RequestBody OrderStatusUpdateRequest order) {
-        this.orderService.updateStatus(order);
+    public ResponseEntity<?> updateOrderStatus(@Valid @RequestBody List<OrderStatusUpdateRequest> order) {
+        try {
+            for (OrderStatusUpdateRequest os : order) {
+                this.orderService.updateStatus(os);
+            }
 
-        return ResponseEntity.ok(new MessageResponse("Status update successfully!"));
+            return ResponseEntity.ok(new MessageResponse("Status update successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 
     @GetMapping("/detail/{id}")

@@ -6,30 +6,40 @@ import java.util.Date;
 @Entity
 @Table(name="coupons")
 public class Coupon {
+    public static String BASE = "base";
+    public static String PERCENT = "percent";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
+
     @Column(name = "code")
     private String code;
+
     @Column(name = "enable")
     private Boolean enable;
+
     @Column(name = "rule")
     private String rule;
+
     @Column(name = "value")
     private Double value;
+
     @Column(name = "valid_from")
     private Date validFrom;
+
     @Column(name = "valid_to")
     private Date validTo;
+
     @Column(name = "valid_roles")
     private String validRoles;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private Date createdAt;
+
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Date updatedAt;
-    public static String BASE = "base";
-    public static String PERCENT = "percent";
 
     public Coupon() {
         this.validFrom = new Date();

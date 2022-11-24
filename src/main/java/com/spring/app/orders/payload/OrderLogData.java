@@ -4,6 +4,7 @@ public class OrderLogData {
     private Long id;
     private Long orderId;
     private String detail;
+    private String status;
     private String createdAt;
     private String updatedAt;
 
@@ -13,12 +14,14 @@ public class OrderLogData {
             Long id,
             Long orderId,
             String detail,
+            String status,
             String createdAt,
             String updatedAt
     ) {
         this.id = id;
         this.orderId = orderId;
         this.detail = detail;
+        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -61,5 +64,13 @@ public class OrderLogData {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

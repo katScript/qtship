@@ -1,6 +1,6 @@
 package com.spring.app.price.service;
 
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.price.models.Coupon;
 import com.spring.app.price.models.repository.CouponRepository;
 import com.spring.app.price.payload.CouponData;

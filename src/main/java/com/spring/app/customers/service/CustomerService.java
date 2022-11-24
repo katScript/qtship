@@ -10,9 +10,8 @@ import com.spring.app.customers.payload.AddressData;
 import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.ForControlData;
 import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
-import com.spring.app.helper.services.DateFormatHelper;
-import com.spring.app.helper.services.FilesStorageServiceImpl;
-import com.spring.app.products.models.Product;
+import com.spring.app.helper.date.DateFormatHelper;
+import com.spring.app.helper.file.services.image.ImageStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class CustomerService {
     @Autowired
     private ForControlRepository forControlRepository;
     @Autowired
-    FilesStorageServiceImpl storageService;
+    ImageStorageServiceImpl storageService;
 
     public Customer processCustomerData(CustomerData data) {
         Customer customer;
@@ -198,11 +197,11 @@ public class CustomerService {
 
     public void processCustomerCid(Customer customer, CustomerData customerData) {
         String cidFront = customer.getCidFront() == null ?
-                getImageUrl(FilesStorageServiceImpl.DEFAULT) :
+                getImageUrl(ImageStorageServiceImpl.DEFAULT) :
                 getImageUrl(customer.getCustomerId() + File.separator + customer.getCidFront());
 
         String cidBack = customer.getCidBack() == null ?
-                getImageUrl(FilesStorageServiceImpl.DEFAULT) :
+                getImageUrl(ImageStorageServiceImpl.DEFAULT) :
                 getImageUrl(customer.getCustomerId() + File.separator + customer.getCidBack());
 
         customerData.setCidFront(cidFront);

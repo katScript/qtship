@@ -1,6 +1,6 @@
 package com.spring.app.orders.services;
 
-import com.spring.app.helper.services.DateFormatHelper;
+import com.spring.app.helper.date.DateFormatHelper;
 import com.spring.app.orders.models.Order;
 import com.spring.app.orders.models.OrderLog;
 import com.spring.app.orders.payload.OrderLogData;
@@ -13,6 +13,7 @@ public class OrderLogService {
                 orderLog.getId(),
                 orderLog.getOrder().getId(),
                 orderLog.getData(),
+                orderLog.getStatus(),
                 DateFormatHelper.dateToString(orderLog.getCreatedAt()),
                 DateFormatHelper.dateToString(orderLog.getUpdatedAt())
         );
@@ -21,7 +22,8 @@ public class OrderLogService {
     public OrderLog createStatusLog(Order order, String status, String description) {
         return new OrderLog(
                 order,
-                String.format("%s - %s", status, description)
+                description,
+                status
         );
     }
 }
