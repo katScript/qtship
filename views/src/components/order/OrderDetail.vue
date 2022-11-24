@@ -90,51 +90,12 @@
                         </div>
                         <div class="col-md-4">
                             <h5>Tình trạng đơn hàng</h5>
-                            <vue-timeline theme="#2ecc71">
-                                <vue-timeline-item slots="others" class="timeline-item ps-2">
-                                    <small><b>2022-11-09 10:00:00</b></small>
-                                    <br>
-                                    <small>Đơn hàng đang chờ xử lí</small>
-                                    <template #others>
-                                        <i class="fa-solid fa-list-check actioned"></i>
-                                    </template>
-                                </vue-timeline-item>
-                                <vue-timeline-item slots="others" class="timeline-item ps-2">
-                                    <small><b>2022-11-09 00:00:00</b></small>
-                                    <br>
-                                    <small>Đã xác nhận đơn hàng</small>
-                                    <template #others>
-                                        <i class="fa-solid fa-boxes-packing actioned"></i>
-                                    </template>
-                                </vue-timeline-item>
-                                <vue-timeline-item slots="others" class="timeline-item ps-2">
-                                    <ul class="ul-detail-timeline-item">
-                                        <li>
-                                            <small><b>2022-11-10 08:00:00</b></small>
-                                            <br>
-                                            <small>Đơn hàng đang được giao</small>
-                                        </li>
-                                        <li>
-                                            <small><b>2022-11-10 06:00:00</b></small>
-                                            <br>
-                                            <small>Shipper đã lấy hàng</small>
-                                        </li>
-                                    </ul>
-                                    <template #others>
-                                        <i class="fa-solid fa-truck-fast actioned"></i>
-                                    </template>
-                                </vue-timeline-item>
-                                <vue-timeline-item slots="others" class="timeline-item ps-2">
-                                    <template #others>
-                                        <i class="fa-solid fa-check-to-slot"></i>
-                                    </template>
-                                </vue-timeline-item>
-                                <vue-timeline-item slots="others" class="timeline-item ps-2">
-                                    <template #others>
-                                        <i class="fa-solid fa-wallet"></i>
-                                    </template>
-                                </vue-timeline-item>
-                            </vue-timeline>
+                            <a-timeline>
+                                <a-timeline-item v-for="(item, index) in historyOrder" :key="index">
+                                    <b>{{ item.createdAt }}</b>:
+                                    <p>{{genCodeStatusToTextDisplay(item.status)}}</p>
+                                </a-timeline-item>
+                            </a-timeline>
                         </div>
                     </div>
                 </div>

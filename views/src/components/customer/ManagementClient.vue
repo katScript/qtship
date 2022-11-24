@@ -136,64 +136,6 @@
                             <br/>
                         </div>
                         <br/>
-                        <div class="row list-management">
-                            <div class="col-md-6 list-top-product">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5>Top sản phẩm</h5>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end">
-                                        <table>
-                                            <tr>
-                                                <td style="padding-right: 10px">Lọc:</td>
-                                                <td>
-                                                    <select name="cars" id="cars">
-                                                        <option value="bcn">Bán chạy nhất</option>
-                                                        <option value="bit">Bán ít nhất</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                </ul>
-                                <br/>
-                            </div>
-                            <div class="col-md-6 list-top-provinces">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5>Top khu vực</h5>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end">
-                                        <table>
-                                            <tr>
-                                                <td style="padding-right: 10px">Lọc:</td>
-                                                <td>
-                                                    <select name="" id="">
-                                                        <option value="bcn">Bán chạy nhất</option>
-                                                        <option value="bit">Bán ít nhất</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                    <li class="list-group-item">Item ranking</li>
-                                </ul>
-                                <br/>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-md-2">
