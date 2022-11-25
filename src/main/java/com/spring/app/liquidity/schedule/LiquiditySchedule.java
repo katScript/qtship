@@ -1,8 +1,5 @@
 package com.spring.app.liquidity.schedule;
 
-import com.spring.app.customers.models.repository.CustomerRepository;
-import com.spring.app.liquidity.models.Liquidity;
-import com.spring.app.liquidity.models.repository.LiquidityRepository;
 import com.spring.app.liquidity.service.LiquidityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +14,7 @@ public class LiquiditySchedule {
     @Autowired
     LiquidityService liquidityService;
 
-    @Scheduled(cron = "0 0 * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void createNewLiquiditySession() {
         logger.info("Create New Liquidity Session...");
         liquidityService.createNewLiquiditySession();
