@@ -2,6 +2,7 @@ package com.spring.app.orders.models;
 
 import com.spring.app.customers.models.Customer;
 import com.spring.app.office.models.Office;
+import com.spring.app.orders.event.OrderListener;
 import com.spring.app.products.models.Package;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.ShippingAddress;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@EntityListeners(OrderListener.class)
 @Table(name = "orders")
 public class Order {
     public static final String PREFIX = "ORD";
@@ -47,6 +49,8 @@ public class Order {
     private Double shippingFee;
     @Column(name = "coupon")
     private String coupon;
+    @Column(name = "coupon_fee")
+    private Double couponFee;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
     private Warehouse warehouse;
@@ -351,6 +355,15 @@ public class Order {
 
     public Order setOffice(Office office) {
         this.office = office;
+        return this;
+    }
+
+    public Double getCouponFee() {
+        return couponFee;
+    }
+
+    public Order setCouponFee(Double couponFee) {
+        this.couponFee = couponFee;
         return this;
     }
 }

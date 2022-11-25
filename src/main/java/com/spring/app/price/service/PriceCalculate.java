@@ -57,14 +57,16 @@ public class PriceCalculate {
         Double shippingFee = calculateShippingFee(
                 office,
                 order.getShippingAddress().getProvinceId(),
-                order.getTotalWeight(),
-                coupon
+                order.getTotalWeight()
         );
 
-        order.setShippingFee(shippingFee);
+        Double couponFee = applyCoupon(shippingFee, coupon);
+
+        order.setShippingFee(shippingFee)
+                .setCouponFee(couponFee);
     }
 
-    public Double calculateShippingFee(Office office, String provinceId, Double weight, Coupon coupon) {
+    public Double calculateShippingFee(Office office, String provinceId, Double weight) {
         Double shippingFee = 0.0;
 
         if (office != null) {
@@ -103,14 +105,21 @@ public class PriceCalculate {
             }
         }
 
-        if (coupon != null && coupon.isValid()) {
+        return shippingFee;
+    }
+
+    public Double applyCoupon(Double shippingFee, Coupon coupon) {
+        if (shippingFee != 0.0 && coupon != null && coupon.isValid()) {
+            Double couponFee = 0.0;
             if (coupon.getRule().equals(Coupon.BASE)) {
-                shippingFee -= coupon.getValue();
+                couponFee = coupon.getValue();
             } else if (coupon.getRule().equals(Coupon.PERCENT)) {
-                shippingFee -= shippingFee * coupon.getValue() / 100;
+                couponFee = shippingFee * coupon.getValue() / 100;
             }
+
+            return Math.min(shippingFee, couponFee);
         }
 
-        return shippingFee;
+        return 0.0;
     }
 }

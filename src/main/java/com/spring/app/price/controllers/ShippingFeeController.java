@@ -36,14 +36,14 @@ public class ShippingFeeController {
             Coupon coupon = couponRepository.findByCode(rq.getCouponCode())
                     .orElseThrow(() -> new RuntimeException("Coupon code not found!"));
 
-            return ResponseEntity.ok(new ShippingFeeCalculateResponse(
-                    priceCalculate.calculateShippingFee(
-                            office,
-                            rq.getProvinceId(),
-                            rq.getWeight(),
-                            coupon
-                    )
-            ));
+            Double shippingFee = priceCalculate.calculateShippingFee(
+                    office,
+                    rq.getProvinceId(),
+                    rq.getWeight()
+            );
+
+            shippingFee = priceCalculate.applyCoupon(shippingFee, coupon);
+            return ResponseEntity.ok(new ShippingFeeCalculateResponse(shippingFee));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
