@@ -16,6 +16,9 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomer (Customer customer);
 
+    @Query("select o from Order o where o.customer = :customer and o.status not in :status")
+    List<Order> findByCustomerAndStatusNotIn(Customer customer, List<String> status);
+
     @Query("select o from Order o order by o.createdAt desc")
     Page<Order> findAll(Pageable pageable);
 
@@ -33,5 +36,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "and ( :shippingType is null or o.shippingType = :shippingType ) " +
             "and ( :id is null or o.id = :id ) order by o.createdAt desc")
     Page<Order> findAllWithFilter(String status, Date from, Date to, String phone, Date shippingTime, String shippingType, Long id, Pageable pageable);
-
 }
