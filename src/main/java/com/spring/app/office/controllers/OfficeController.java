@@ -6,8 +6,8 @@ import com.spring.app.office.models.repository.OfficeRepository;
 import com.spring.app.office.payload.OfficeData;
 import com.spring.app.office.service.OfficeService;
 import com.spring.app.payload.CustomPageResponse;
-import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
+import com.spring.app.payload.OfficeFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,11 +43,16 @@ public class OfficeController {
 
     @GetMapping("/all/page")
     public ResponseEntity<?> getAllOffice(
-            @Valid FilterRequest fR
+            @Valid OfficeFilterRequest fR
     ) {
         try {
             Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
-            Page<Office> offices = officeRepository.findAll(pageable);
+            Page<Office> offices = officeRepository.findAllWithFilter(
+                    fR.getName(),
+                    fR.getPhone(),
+                    fR.getProvinceId(),
+                    pageable
+            );
             CustomPageResponse pageResponse = new CustomPageResponse(offices);
 
             List<OfficeData> officeData = new ArrayList<>();
