@@ -41,25 +41,29 @@ public class ShipperController {
     public ResponseEntity<?> getAllShipperPage(
             @Valid ShipperFilterRequest fR
     ) {
-        Long id = fR.getCode() != null ? Long.parseLong(fR.getCode().substring(3)) : null;
-        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
+        try {
+            Long id = fR.getCode() != null ? Long.parseLong(fR.getCode()) : null;
+            Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
 
-        Page<Shipper> shipperList = shipperRepository.findAllWithFilter(
-                id,
-                fR.getName(),
-                fR.getPhone(),
-                fR.getEmail(),
-                pageable
-        );
-        List<ShipperData> shipperResponses = new ArrayList<>();
-        CustomPageResponse pageResponse = new CustomPageResponse(shipperList);
+            Page<Shipper> shipperList = shipperRepository.findAllWithFilter(
+                    id,
+                    fR.getName(),
+                    fR.getPhone(),
+                    fR.getEmail(),
+                    pageable
+            );
+            List<ShipperData> shipperResponses = new ArrayList<>();
+            CustomPageResponse pageResponse = new CustomPageResponse(shipperList);
 
-        for (Shipper sh : shipperList) {
-            shipperResponses.add(shippingService.processShipperDataResponse(sh));
+            for (Shipper sh : shipperList) {
+                shipperResponses.add(shippingService.processShipperDataResponse(sh));
+            }
+
+            pageResponse.setContent(shipperResponses);
+            return ResponseEntity.ok(pageResponse);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.ok(new CustomPageResponse());
         }
-
-        pageResponse.setContent(shipperResponses);
-        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/all")
