@@ -23,9 +23,10 @@ public class ForControlController {
 
     @PostMapping("/save/customerId/{id}")
     public ResponseEntity<?> saveCustomerForControl(@Valid @PathVariable Long id, @RequestBody ForControlData forControlData) {
-        Customer customer = customerRepository.findById(id).orElse(null);
+        try {
+            Customer customer = customerRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
-        if (customer != null) {
             ForControl forControl;
 
             if (forControlData.getId() != null) {
@@ -43,9 +44,9 @@ public class ForControlController {
 
             forControlRepository.save(forControl);
             return ResponseEntity.ok(new MessageResponse("ForControl save complete!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
-
-        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 
     @DeleteMapping("/delete/{id}")
