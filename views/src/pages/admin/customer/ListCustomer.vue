@@ -89,7 +89,7 @@ handleGetListCustomer();
 <template>
   <div class="px-4">
     <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase">
-      Danh sách khách hàng
+      Quản lý khách hàng
     </div>
     <FilterCustomer @on-handle-find="handleFind" />
     <!-- <a-button type="primary" class="my-3" @click="handleDetail(null, 'create')"
