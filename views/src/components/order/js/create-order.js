@@ -12,6 +12,7 @@ import ShippingData from "@/components/models/shipping/shipping-data";
 import CustomerData from "@/components/models/customer/customer-data";
 import CouponData from "@/components/models/sales/coupon-data";
 import PackageData from "@/components/models/product/package-data";
+import CreateOrder from "@/pages/admin/order/CreateOrder.vue";
 
 import moment from "moment";
 import { commonFunction } from "@/scripts/ulti";
@@ -24,7 +25,8 @@ export default {
         ToolbarRight,
         NotificationClient,
         LocationPicker,
-        ActionLoading
+        ActionLoading,
+        CreateOrder
     },
 
     setup() {
@@ -281,30 +283,30 @@ export default {
         },
         saveOrder: function () {
             let orderData = [this.prepareOrderData()];
-
-            axios
-                .post(
-                    commonFunction.DOMAIN_URL + "v1/order/save",
-                    orderData,
-                    commonFunction.configApi()
-                )
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.isLoading = false;
-                        alert("SUCCESS: Tạo mới thành công - " + response.data.message);
-                        commonFunction.redirect("/customer/orders");
-                    } else {
-                        this.isLoading = false;
-                        alert("FAIL: Tạo mới không thành công! Vui lòng thử lại!");
-                        commonFunction.redirect("/customer/orders");
-                    }
-                })
-                .catch((e) => {
-                    this.isLoading = false;
-                    alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
-                    console.log(e);
-                    commonFunction.redirect("/customer/orders");
-                });
+            console.log(orderData);
+            // axios
+            //     .post(
+            //         commonFunction.DOMAIN_URL + "v1/order/save",
+            //         orderData,
+            //         commonFunction.configApi()
+            //     )
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             this.isLoading = false;
+            //             alert("SUCCESS: Tạo mới thành công - " + response.data.message);
+            //             commonFunction.redirect("/customer/orders");
+            //         } else {
+            //             this.isLoading = false;
+            //             alert("FAIL: Tạo mới không thành công! Vui lòng thử lại!");
+            //             commonFunction.redirect("/customer/orders");
+            //         }
+            //     })
+            //     .catch((e) => {
+            //         this.isLoading = false;
+            //         alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
+            //         console.log(e);
+            //         commonFunction.redirect("/customer/orders");
+            //     });
         },
         prepareOrderData: function () {
             let packageItems = [];

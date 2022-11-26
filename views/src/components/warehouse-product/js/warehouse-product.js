@@ -187,7 +187,7 @@ export default {
                         console.log(e);
                     });
             } else {
-                this.msgValidationFor = this.warehouseModel.error;
+                this.msgValidationFor.warehouse = this.warehouseModel.error;
             }
         },
         updateWarehouse: function () {
@@ -219,6 +219,8 @@ export default {
                         alert("ERROR: Vui lòng thử lại hoặc liên hệ với quản trị viên!");
                         console.log(e);
                     });
+            } else {
+                this.msgValidationFor.product = this.warehouseModel.error;
             }
         },
         selectWareHouseForUpdate: function (item) {
@@ -236,7 +238,7 @@ export default {
             this.typeComponent = "WAREHOUSE";
             this.dataNotify = {
                 idRequest: this.idRequest,
-                data: item,
+                data: item.data,
             };
             this.isShowNotify = true;
         },

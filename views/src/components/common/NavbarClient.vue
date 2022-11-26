@@ -28,7 +28,7 @@
                                 class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>
                     </li>
                     <li class="nav-item nav-item-qt nav-item-qt-button">
-                        <a class="nav-link" href="/customer/orders/save"><i class="fa-solid fa-circle-plus"></i> Tạo đơn
+                        <a class="nav-link" href="/customer/order/create"><i class="fa-solid fa-circle-plus"></i> Tạo đơn
                             hàng</a>
                     </li>
                 </ul>

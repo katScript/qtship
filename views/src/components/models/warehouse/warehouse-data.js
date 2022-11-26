@@ -31,7 +31,11 @@ export default class WarehouseData {
 
     validate() {
         let isValid = true;
-
+        this.error = {
+            name: "",
+            address: "",
+            phone: "",
+        }
         if (this.data.name === undefined || this.data.name === "") {
             isValid = false;
             this.error.name =

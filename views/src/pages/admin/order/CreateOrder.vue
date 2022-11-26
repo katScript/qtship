@@ -204,6 +204,13 @@ const handleErrorProduct = (value) => {
         hasProductError.value = true;
         return;
       }
+      const province = provinces.value.find(
+        (x) => x.province_id == data.shippingAddressProvinceId
+      );
+      if (province) {
+        data.shippingAddressProvince = province.province_name;
+        handleGetDistrict(data.shippingAddressProvinceId);
+      }
     }
   });
 };
@@ -697,6 +704,74 @@ handleGetProvince();
                       >
                     </a-radio-group>
                   </a-form-item>
+                  <a-radio-group v-model:value="placeTake">
+                    <a-radio class="d-block mb-2" :value="'default'"
+                      >Gửi hàng tại bưu cục</a-radio
+                    >
+                    <a-radio style="d-block my-2" :value="'option'"
+                      >Lấy hàng tận nơi</a-radio
+                    >
+                  </a-radio-group>
+                  <div v-if="placeTake == 'option'" class="my-2">
+                    <a-form-item
+                      label="Địa điểm lấy hàng"
+                      name="warehouse"
+                      :rules="[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập địa điểm lấy hàng!',
+                        },
+                      ]"
+                    >
+                      <a-select
+                        v-model:value="data.warehouse"
+                        style="width: 100%"
+                      >
+                        <a-select-option class="my-2" value=""
+                          >- Địa điểm lấy hàng -</a-select-option
+                        >
+                      </a-select>
+                    </a-form-item>
+                    <a-form-item
+                      label="Thời gian lấy hàng"
+                      name="shippingTime"
+                      :rules="[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập thời gian lấy hàng!',
+                        },
+                      ]"
+                    >
+                      <a-date-picker
+                        v-model:value="data.shippingTime"
+                        class="my-2"
+                        style="width: 100%"
+                        show-time
+                        placeholder="Thời gian lấy hàng"
+                      />
+                    </a-form-item>
+                  </div>
+                  <div class="border-top mt-2 pt-2">
+                    <a-form-item
+                      label="Trả phí ship"
+                      name="shipPayer"
+                      :rules="[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập trả phí ship!',
+                        },
+                      ]"
+                    >
+                      <a-radio-group v-model:value="data.shipPayer">
+                        <a-radio class="d-block mb-2" :value="true"
+                          >Shop trả phí ship</a-radio
+                        >
+                        <a-radio style="d-block my-2" :value="false"
+                          >Người nhận trả phí ship</a-radio
+                        >
+                      </a-radio-group>
+                    </a-form-item>
+                  </div>
                 </div>
               </div>
             </div>
@@ -739,7 +814,13 @@ handleGetProvince();
                       >
                         <div>
                           <div>
-                            <b>{{ coupon.code }}</b>
+                            <div>
+                              <b>{{ coupon.code }}</b>
+                            </div>
+                            <small
+                              >Giảm giá {{ coupon.value }}
+                              {{ coupon.rule == "base" ? "VND" : "%" }}</small
+                            >
                           </div>
                           <small
                             >Giảm giá {{ coupon.value }}
