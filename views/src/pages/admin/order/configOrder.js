@@ -1,28 +1,28 @@
 export const columns = [
   {
-    title: 'Mã ĐH',
-    dataIndex: 'customerCode',
-    key: 'customerCode',
+    title: "Mã ĐH",
+    dataIndex: "customerCode",
+    key: "customerCode",
   },
   {
-    title: 'Tên người nhận',
-    dataIndex: 'name',
-    key: 'name'
+    title: "Tên người nhận",
+    dataIndex: "name",
+    key: "name",
   },
   {
-    title: 'SĐT nhận',
-    dataIndex: 'phone',
-    key: 'phone',
+    title: "SĐT nhận",
+    dataIndex: "phone",
+    key: "phone",
   },
   {
-    title: 'Trạng thái ĐH',
-    dataIndex: 'status',
-    key: 'shipping_status',
+    title: "Trạng thái ĐH",
+    dataIndex: "status",
+    key: "shipping_status",
   },
   {
-    title: 'Dịch vụ giao hàng',
-    dataIndex: 'shippingType',
-    key: 'shipping_type',
+    title: "Dịch vụ giao hàng",
+    dataIndex: "shippingType",
+    key: "shipping_type",
   },
   // {
   //   title: 'Mã Shipper',
@@ -35,69 +35,67 @@ export const columns = [
   //   key: 'shipper_name',
   // },
   {
-    title: 'Tổng giá trị ĐH (VNĐ)',
-    dataIndex: 'subtotal',
-    key: 'sub_total',
+    title: "Tổng giá trị ĐH (VNĐ)",
+    dataIndex: "subtotal",
+    key: "sub_total",
   },
   {
-    title: 'Ngày tạo đơn',
-    dataIndex: 'createdAt',
-    key: 'created_at',
+    title: "Ngày tạo đơn",
+    dataIndex: "createdAt",
+    key: "created_at",
   },
   {
-    title: '',
-    dataIndex: 'action',
-    key: 'action',
-  }
+    title: "",
+    dataIndex: "action",
+    key: "action",
+  },
 ];
 
-
-
 export const dataSample = {
-  senderName: '',
-  senderPhone: '',
-  senderAddress: '',
-  shippingType: '',
-  shippingTime: '',
+  senderName: "",
+  senderPhone: "",
+  senderAddress: "",
+  shippingType: "",
+  shippingTime: "",
   shipPayer: true,
-  note: '',
-  coupon: '',
-  returnCode: '',
-  warehouse: '',
-  shippingAddressName: '',
-  shippingAddressPhone: '',
-  shippingAddressProvince: '',
-  shippingAddressProvinceId: '',
-  shippingAddressDistrict: '',
-  shippingAddressDistrictId: '',
-  shippingAddressWard: '',
-  shippingAddressWardId: '',
-  shippingAddressStreet: '',
+  note: "",
+  coupon: "",
+  returnCode: "",
+  warehouse: "",
+  shippingAddressName: "",
+  shippingAddressPhone: "",
+  shippingAddressProvince: "",
+  shippingAddressProvinceId: "",
+  shippingAddressDistrict: "",
+  shippingAddressDistrictId: "",
+  shippingAddressWard: "",
+  shippingAddressWardId: "",
+  shippingAddressStreet: "",
   products: [],
 };
 
 export const handleResetData = (data) => {
-  data.senderName = '';
-  data.senderPhone = '';
-  data.senderAddress = '';
-  data.shippingType = '';
-  data.shippingTime = '';
+  data.senderName = "";
+  data.senderPhone = "";
+  data.senderAddress = "";
+  data.shippingType = "";
+  data.shippingTime = "";
   data.shipPayer = true;
-  data.note = '';
-  data.coupon = '';
-  data.returnCode = '';
-  data.warehouse = '';
-  data.shippingAddressName = '';
-  data.shippingAddressPhone = '';
-  data.shippingAddressProvince = '';
-  data.shippingAddressProvinceId = '';
-  data.shippingAddressDistrict = '';
-  data.shippingAddressDistrictId = '';
-  data.shippingAddressWard = '';
-  data.shippingAddressWardId = '';
-  data.shippingAddressStreet = '';
+  data.note = "";
+  data.coupon = "";
+  data.returnCode = "";
+  data.warehouse = "";
+  data.shippingAddressName = "";
+  data.shippingAddressPhone = "";
+  data.shippingAddressProvince = "";
+  data.shippingAddressProvinceId = "";
+  data.shippingAddressDistrict = "";
+  data.shippingAddressDistrictId = "";
+  data.shippingAddressWard = "";
+  data.shippingAddressWardId = "";
+  data.shippingAddressStreet = "";
   data.products = [];
-}
+};
 
 export const handleSetData = (data, input) => {
   data.senderName = input.senderName;
@@ -120,30 +118,30 @@ export const handleSetData = (data, input) => {
   data.shippingAddressWardId = input.shippingAddressWardId;
   data.shippingAddressStreet = input.shippingAddressStreet;
   data.products = input.products;
-}
+};
 
 export const requiredData = [
-  'senderName',
-  'senderPhone',
-  'senderAddress',
-  'shippingType',
-  'shipPayer',
-  'returnCode',
-  'shippingAddressName',
-  'shippingAddressPhone',
-  'shippingAddressProvinceId',
-  'shippingAddressDistrictId',
-  'shippingAddressWardId',
+  "senderName",
+  "senderPhone",
+  "senderAddress",
+  "shippingType",
+  "shipPayer",
+  "returnCode",
+  "shippingAddressName",
+  "shippingAddressPhone",
+  "shippingAddressProvinceId",
+  "shippingAddressDistrictId",
+  "shippingAddressWardId",
 ];
 
 export const omitKey = [
-  'shippingAddressName',
-  'shippingAddressPhone',
-  'shippingAddressProvince',
-  'shippingAddressProvinceId',
-  'shippingAddressDistrict',
-  'shippingAddressDistrictId',
-  'shippingAddressWard',
-  'shippingAddressWardId',
-  'shippingAddressStreet'
+  "shippingAddressName",
+  "shippingAddressPhone",
+  "shippingAddressProvince",
+  "shippingAddressProvinceId",
+  "shippingAddressDistrict",
+  "shippingAddressDistrictId",
+  "shippingAddressWard",
+  "shippingAddressWardId",
+  "shippingAddressStreet",
 ];

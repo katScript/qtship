@@ -7,7 +7,6 @@ const emits = defineEmits(["on-handle-find"]);
 const filters = reactive({
   code: "",
   name: "",
-  company: "",
   phone: "",
   email: "",
 });
@@ -19,7 +18,6 @@ const handleFind = () => {
 const handleReset = () => {
   filters.code = "";
   filters.name = "";
-  filters.company = "";
   filters.phone = "";
   filters.email = "";
   emits("on-handle-find", filters);
@@ -31,18 +29,12 @@ const handleReset = () => {
       <a-input-number
         style="width: 100%"
         v-model:value="filters.code"
-        addon-before="CTM"
-        placeholder="Mã khách hàng"
+        addon-before="SPC"
+        placeholder="Mã người giao hàng"
       />
     </a-col>
     <a-col :span="6">
-      <a-input v-model:value="filters.name" placeholder="Tên khách hàng" />
-    </a-col>
-    <a-col :span="6">
-      <a-input
-        v-model:value="filters.company"
-        placeholder="Tên cửa hàng / công ty"
-      />
+      <a-input v-model:value="filters.name" placeholder="Tên người giao hàng" />
     </a-col>
     <a-col :span="6">
       <a-input v-model:value="filters.phone" placeholder="Số điện thoại" />

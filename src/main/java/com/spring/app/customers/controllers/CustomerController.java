@@ -5,6 +5,7 @@ import com.spring.app.customers.payload.CustomerData;
 import com.spring.app.customers.payload.request.customer.UpdateCidRequest;
 import com.spring.app.customers.service.CustomerService;
 import com.spring.app.payload.CustomPageResponse;
+import com.spring.app.payload.CustomerFilterRequest;
 import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
 import com.spring.app.authentication.models.repository.UserRepository;
@@ -37,20 +38,33 @@ public class CustomerController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCustomer(
-            @Valid FilterRequest fR
-            ) {
-        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
-        Page<Customer> customerList = customerRepository.findAll(pageable);
-        CustomPageResponse pageResponse = new CustomPageResponse(customerList);
+            @Valid CustomerFilterRequest fR
+    ) {
+        try {
+            Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
+            Long id = fR.getCode() != null ? Long.parseLong(fR.getCode()) : null;
 
-        List<CustomerData> content = new ArrayList<>();
+            Page<Customer> customerList = customerRepository.findAllWithFilter(
+                    id,
+                    fR.getName(),
+                    fR.getCompany(),
+                    fR.getPhone(),
+                    fR.getEmail(),
+                    pageable
+            );
+            CustomPageResponse pageResponse = new CustomPageResponse(customerList);
 
-        for (Customer c: customerList) {
-            content.add(customerService.processCustomerResponse(c));
+            List<CustomerData> content = new ArrayList<>();
+
+            for (Customer c: customerList) {
+                content.add(customerService.processCustomerResponse(c));
+            }
+
+            pageResponse.setContent(content);
+            return ResponseEntity.ok(pageResponse);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.ok(new CustomPageResponse());
         }
-
-        pageResponse.setContent(content);
-        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/detail/{id}")

@@ -5,6 +5,7 @@ import com.spring.app.authentication.models.repository.UserRepository;
 import com.spring.app.payload.CustomPageResponse;
 import com.spring.app.payload.FilterRequest;
 import com.spring.app.payload.MessageResponse;
+import com.spring.app.payload.ShipperFilterRequest;
 import com.spring.app.shipping.models.Shipper;
 import com.spring.app.shipping.models.repository.ShipperRepository;
 import com.spring.app.shipping.payload.ShipperData;
@@ -38,19 +39,31 @@ public class ShipperController {
 
     @GetMapping("/all/page")
     public ResponseEntity<?> getAllShipperPage(
-            @Valid FilterRequest fR
+            @Valid ShipperFilterRequest fR
     ) {
-        Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
-        Page<Shipper> shipperList = shipperRepository.findAll(pageable);
-        List<ShipperData> shipperResponses = new ArrayList<>();
-        CustomPageResponse pageResponse = new CustomPageResponse(shipperList);
+        try {
+            Long id = fR.getCode() != null ? Long.parseLong(fR.getCode()) : null;
+            Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
 
-        for (Shipper sh : shipperList) {
-            shipperResponses.add(shippingService.processShipperDataResponse(sh));
+            Page<Shipper> shipperList = shipperRepository.findAllWithFilter(
+                    id,
+                    fR.getName(),
+                    fR.getPhone(),
+                    fR.getEmail(),
+                    pageable
+            );
+            List<ShipperData> shipperResponses = new ArrayList<>();
+            CustomPageResponse pageResponse = new CustomPageResponse(shipperList);
+
+            for (Shipper sh : shipperList) {
+                shipperResponses.add(shippingService.processShipperDataResponse(sh));
+            }
+
+            pageResponse.setContent(shipperResponses);
+            return ResponseEntity.ok(pageResponse);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.ok(new CustomPageResponse());
         }
-
-        pageResponse.setContent(shipperResponses);
-        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/all")

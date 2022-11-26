@@ -1,33 +1,30 @@
+import { Table } from 'ant-design-vue';
+
 export const columns = [
   {
-    title: 'Mã KH',
-    dataIndex: 'customerId',
-    key: 'customerId',
+    title: "Mã KH",
+    dataIndex: "customerId",
+    key: "customerId",
   },
   {
-    title: 'Tên KH',
-    dataIndex: 'fullName',
-    key: 'fullName'
+    title: "Tên KH",
+    dataIndex: "fullName",
+    key: "fullName",
   },
   {
-    title: 'Cửa hàng / Công ty',
-    dataIndex: 'companyName',
-    key: 'companyName',
+    title: "Cửa hàng / Công ty",
+    dataIndex: "companyName",
+    key: "companyName",
   },
   {
-    title: 'SĐT',
-    dataIndex: 'phone',
-    key: 'phone',
+    title: "SĐT",
+    dataIndex: "phone",
+    key: "phone",
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Địa chỉ',
-    dataIndex: 'address',
-    key: 'address',
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
   },
   {
     title: 'Ngày tạo',
@@ -39,9 +36,5 @@ export const columns = [
     dataIndex: 'updatedAt',
     key: 'updatedAt',
   },
-  {
-    title: '',
-    dataIndex: 'action',
-    key: 'action',
-  },
-]
+  Table.EXPAND_COLUMN,
+];
