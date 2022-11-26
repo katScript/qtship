@@ -32,6 +32,14 @@ const handleOpenMenu = (value) => {
   height: 100vh;
   overflow-y: scroll;
 }
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+.content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 </style>
 <style>
 .ant-spin-nested-loading > div > .ant-spin {

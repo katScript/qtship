@@ -1,9 +1,10 @@
 <script setup>
 import { defineProps, defineEmits, computed, watch, reactive, ref } from "vue";
 import { province, district, ward } from "@/services/region";
-import { update } from "@/services/customer";
+import { save } from "@/services/office";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
+import { pick } from "lodash"
 
 const store = useStore();
 
@@ -107,14 +108,6 @@ watch(
   () => {
     if (props.detail.action == "update") {
       Object.assign(formState, props.detail.data);
-      formState.provinceId = formState.addressSet[0].provinceId;
-      formState.districtId = formState.addressSet[0].districtId;
-      formState.wardId = formState.addressSet[0].wardId;
-      formState.street = formState.addressSet[0].street;
-      formState.holderName = formState.forControls[0].holderName;
-      formState.cardNumber = formState.forControls[0].cardNumber;
-      formState.bank = formState.forControls[0].bank;
-      formState.address = formState.forControls[0].address;
       handleGetDistrict(formState.provinceId);
       handleGetWard(formState.districtId);
     }
@@ -133,54 +126,18 @@ const handleClose = (value = false) => {
 
 const onFinish = async (values) => {
   const data = {};
-  data.id = action.value == 1 ? formState.id : null;
-  data.fullName = values.fullName;
-  data.userName = values.userName;
-  data.customerId = formState.customerId || null;
-  data.companyName = values.companyName;
-  data.phone = values.phone;
-  data.email = values.email;
-  data.gender = null;
-  data.dob = null;
-  data.cidFront = null;
-  data.cidBack = null;
-  data.subscription = null;
-  data.addressSet = [
-    {
-      id: action.value == 1 ? formState.addressSet[0].id : null,
-      primary: action.value == 1 ? formState.addressSet[0].primary : false,
-      provinceId: values.provinceId,
-      districtId: values.districtId,
-      wardId: values.wardId,
-      street: values.street,
-      province: formState.province,
-      district: formState.district,
-      ward: formState.ward,
-    },
-  ];
+  if (props.detail.action == "update") {
+    data.id = formState.id;
+  }
+  Object.assign(data, {
+    ...data,
+    ...values,
+    ...pick(formState, ['province', 'district', 'ward']),
+  });
 
-  data.forControls = [
-    {
-      holderName: formState.holderName,
-      cardNumber: formState.cardNumber,
-      bank: formState.bank,
-      address: formState.address,
-      id: action.value == 1 ? formState.forControls[0].id : null,
-    },
-  ];
-
-  if (!data.id) {
-    delete data.id;
-  }
-  if (!data.addressSet[0].id) {
-    delete data.addressSet[0].id;
-  }
-  if (!data.forControls[0].id) {
-    delete data.forControls[0].id;
-  }
   store.dispatch("setLoading", true);
   try {
-    await update(data);
+    await save(data);
     message.success("Thành công");
   } catch (e) {
     console.log(e.response.data);
@@ -193,7 +150,6 @@ const onFinish = async (values) => {
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
-
 //
 handleGetProvince();
 </script>
@@ -217,30 +173,11 @@ handleGetProvince();
         @finishFailed="onFinishFailed"
       >
         <a-form-item
-          label="Cửa hàng / công ty"
-          name="companyName"
-          :rules="[
-            { required: true, message: 'Vui lòng nhập cửa hàng / công ty !' },
-          ]"
+          label="Tên bưu cục"
+          name="name"
+          :rules="[{ required: true, message: 'Vui lòng nhập tên bưu cục !' }]"
         >
-          <a-input v-model:value="formState.companyName" />
-        </a-form-item>
-        <a-form-item
-          label="Tài khoản"
-          name="userName"
-          :rules="[{ required: true, message: 'Vui lòng nhập tài khoản !' }]"
-        >
-          <a-input v-model:value="formState.userName" />
-        </a-form-item>
-
-        <a-form-item
-          label="Tên khách hàng"
-          name="fullName"
-          :rules="[
-            { required: true, message: 'Vui lòng nhập tên khách hàng !' },
-          ]"
-        >
-          <a-input v-model:value="formState.fullName" />
+          <a-input v-model:value="formState.name" />
         </a-form-item>
 
         <a-form-item
@@ -251,20 +188,6 @@ handleGetProvince();
           ]"
         >
           <a-input v-model:value="formState.phone" />
-        </a-form-item>
-
-        <a-form-item
-          label="Địa chỉ email"
-          name="email"
-          :rules="[
-            {
-              required: true,
-              type: 'email',
-              message: 'Vui lòng nhập địa chỉ email !',
-            },
-          ]"
-        >
-          <a-input v-model:value="formState.email" />
         </a-form-item>
 
         <a-form-item
@@ -345,49 +268,11 @@ handleGetProvince();
             placeholder="Địa chỉ cụ thể: Số nhà, Tên đường..."
           />
         </a-form-item>
-        <a-form-item
-          label="Tên chủ tài khoản"
-          name="holderName"
-          :rules="[
-            {
-              required: true,
-              message: 'Vui lòng nhập tên chủ tài khoản !',
-            },
-          ]"
-        >
-          <a-input v-model:value="formState.holderName" />
-        </a-form-item>
-        <a-form-item
-          label="Số tài khoản"
-          name="cardNumber"
-          :rules="[{ required: true, message: 'Vui lòng nhập số tài khoản !' }]"
-        >
-          <a-input v-model:value="formState.cardNumber" />
-        </a-form-item>
-
-        <a-form-item
-          label="Ngân hàng"
-          name="bank"
-          :rules="[{ required: true, message: 'Vui lòng nhập ngân hàng !' }]"
-        >
-          <a-input v-model:value="formState.bank" />
-        </a-form-item>
-
-        <a-form-item
-          label="Chi nhánh"
-          name="address"
-          :rules="[
-            {
-              required: true,
-              message: 'Vui lòng nhập chi nhánh!',
-            },
-          ]"
-        >
-          <a-input v-model:value="formState.address" />
-        </a-form-item>
 
         <a-form-item v-if="action" :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="primary" html-type="submit" :loading="isLoading">{{ title }}</a-button>
+          <a-button type="primary" html-type="submit" :loading="isLoading">{{
+            title
+          }}</a-button>
         </a-form-item>
       </a-form>
     </div>

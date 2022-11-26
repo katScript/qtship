@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   LogoutOutlined,
   CarOutlined,
+  ClusterOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import { defineEmits, defineProps, onMounted, ref, watch } from "vue";
@@ -80,7 +81,7 @@ const createOrderList = [
 const customerList = [
   {
     parent: 3,
-    name: "Danh sách khách hàng",
+    name: "Quản lý khách hàng",
     path: "/admin/customer",
   },
 ];
@@ -88,8 +89,16 @@ const customerList = [
 const shipperList = [
   {
     parent: 4,
-    name: "Danh sách người giao hàng",
+    name: "Quản lý người giao hàng",
     path: "/admin/shipper",
+  },
+];
+
+const officeList = [
+  {
+    parent: 5,
+    name: "Quản lý bưu cục",
+    path: "/admin/office",
   },
 ];
 
@@ -210,6 +219,17 @@ const onOpenChange = (key) => {
       >
         <template #icon>
           <CarOutlined />
+        </template>
+        {{ option.name }}</a-menu-item
+      >
+      <a-menu-item
+        style="background: #bf1e2d; color: #ffffff"
+        :key="option.parent"
+        v-for="option in officeList"
+        @click="handleClickItem(true, option.path)"
+      >
+        <template #icon>
+          <ClusterOutlined />
         </template>
         {{ option.name }}</a-menu-item
       >

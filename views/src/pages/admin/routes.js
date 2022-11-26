@@ -40,6 +40,14 @@ export default [
     component: () => import("@/pages/admin/shipper/ListShipper.vue"),
   },
   {
+    name: 'admin-list-office',
+    path: '/admin/office',
+    meta: {
+      isAdmin: true,
+    },
+    component: () => import("@/pages/admin/office/ListOffice.vue"),
+  },
+  {
     name: 'admin-list-config',
     path: '/admin/config',
     meta: {
