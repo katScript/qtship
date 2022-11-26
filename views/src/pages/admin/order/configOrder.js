@@ -51,7 +51,9 @@ export const columns = [
   }
 ];
 
-export const dataSample= {
+
+
+export const dataSample = {
   senderName: '',
   senderPhone: '',
   senderAddress: '',

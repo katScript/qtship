@@ -87,7 +87,7 @@ onMounted(() => {
 
 <template>
   <div class="border">
-    <div class="fs-4 border-bottom bg-secondary px-3 py-1 text-white">Thông tin sản phẩm</div>
+    <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Thông tin sản phẩm</div>
     <div class="p-3">
       <div v-for="(product, index) in listProduct" :key="index" class="my-3 border-bottom pb-3">
         <a-input v-model:value="product.name" :class="{ 'border-danger': !product.name && hasError }"

@@ -38,7 +38,7 @@
                   alt="Warning Action"
                 />
                 <br /><br />
-                <h5>Bạn có chắc chắn muốn xóa {{ dataNotify.name }} ?</h5>
+                <h5>Bạn có chắc chắn muốn xóa {{ dataNotify.data.name }} ?</h5>
                 <hr />
                 <button
                   class="btn btn-warning"
@@ -59,7 +59,7 @@
                   alt="Warning Action"
                 />
                 <br /><br />
-                <h5>Bạn có chắc chắn muốn hủy {{ dataNotify.name }} ?</h5>
+                <h5>Bạn có chắc chắn muốn hủy {{ dataNotify.data.name }} ?</h5>
                 <hr />
                 <button
                   class="btn btn-warning"
@@ -100,18 +100,18 @@ export default {
               },
               data: {
                 customerId: dataNotify.idRequest,
-                id: dataNotify.data.data.id,
+                id: dataNotify.data.id,
               },
             },
             this.configRequestApi
           )
           .then((response) => {
             if (response.status == 200) {
-              alert(`"SUCCESS: Xóa ${dataNotify.data.data.name} thành công!"`);
+              alert(`"SUCCESS: Xóa ${dataNotify.data.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
               alert(
-                `"FAIL: Xóa ${dataNotify.data.data.name} không thành công!"`
+                `"FAIL: Xóa ${dataNotify.data.name} không thành công!"`
               );
               commonFunction.reloadPage();
             }
@@ -136,10 +136,10 @@ export default {
           })
           .then((response) => {
             if (response.status == 200) {
-              alert(`"SUCCESS: Xóa ${dataNotify.data.data.name} thành công!"`);
+              alert(`"SUCCESS: Xóa ${dataNotify.data.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
-              alert(`"FAIL: Xóa ${dataNotify.data.data.name} không thành công!"`);
+              alert(`"FAIL: Xóa ${dataNotify.data.name} không thành công!"`);
               commonFunction.reloadPage();
             }
           })
@@ -161,10 +161,10 @@ export default {
           )
           .then((response) => {
             if (response.status == 200) {
-              alert(`"SUCCESS: Hủy ${dataNotify.name} thành công!"`);
+              alert(`"SUCCESS: Hủy ${dataNotify.data.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
-              alert(`"FAIL: Hủy ${dataNotify.name} không thành công!"`);
+              alert(`"FAIL: Hủy ${dataNotify.data.name} không thành công!"`);
               commonFunction.reloadPage();
             }
           })
