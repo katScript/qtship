@@ -15,9 +15,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByUser(User user);
 
     @Query("select c from Customer c where (:id is null or c.id = :id) " +
-            "and (:fullName is null or c.fullName = :fullName) " +
-            "and (:companyName is null or c.companyName = :companyName) " +
-            "and (:phone is null or c.phone = :phone) " +
-            "and (:email) is null or c.email = :email")
+            "and (:fullName is null or c.fullName like concat('%', :fullName, '%')) " +
+            "and (:companyName is null or c.companyName like concat('%', :companyName, '%')) " +
+            "and (:phone is null or c.phone like concat('%', :phone, '%')) " +
+            "and (:email) is null or c.email like concat('%', :email, '%')")
     Page<Customer> findAllWithFilter(Long id, String fullName, String companyName, String phone, String email, Pageable pageable);
 }
