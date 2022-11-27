@@ -17,14 +17,14 @@
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label label-qt">Password</label>
-                <input type="password" class="form-control" id="input-password-login" v-model="loginData.password" required/>
+                <input type="password" class="form-control" id="input-password-login" v-model="loginData.password" required @keyup.enter="login()"/>
               </div>
               <br>
               <div class="mb-3 text-center">
                 <a href="/forget-password" class="a-forget-password">Bạn quên mật khẩu?</a>
                 <br/>
                 <br/>
-                <button type="submit" class="btn btn-danger btn-login-qt" v-on:click="login()">
+                <button type="submit" class="btn btn-danger btn-login-qt" v-on:click.enter="login()">
                   Đăng nhập
                 </button>
                 <br/>
