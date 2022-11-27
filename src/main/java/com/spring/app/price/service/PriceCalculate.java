@@ -1,7 +1,6 @@
 package com.spring.app.price.service;
 
 import com.spring.app.admin.config.models.AdminConfig;
-import com.spring.app.admin.config.models.repository.AdminConfigRepository;
 import com.spring.app.admin.config.service.AdminConfigService;
 import com.spring.app.office.models.Office;
 import com.spring.app.orders.models.Order;
@@ -30,9 +29,6 @@ public class PriceCalculate {
 
     @Autowired
     private RulePriceListRepository rulePriceListRepository;
-
-    @Autowired
-    private AdminConfigRepository adminConfigRepository;
 
     @Autowired
     private AdminConfigService adminConfigService;

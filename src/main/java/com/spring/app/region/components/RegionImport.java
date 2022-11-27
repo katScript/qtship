@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
 
-
 @Component
 public class RegionImport implements CommandLineRunner {
     @Autowired

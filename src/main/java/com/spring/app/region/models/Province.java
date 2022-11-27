@@ -9,6 +9,10 @@ import java.util.Set;
 @Table(name="region_province")
 public class Province {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "province_id")
     private String provinceId;
 
@@ -85,6 +89,15 @@ public class Province {
 
     public Province setDistricts(Set<District> districts) {
         this.districts = districts;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Province setId(Long id) {
+        this.id = id;
         return this;
     }
 }

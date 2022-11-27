@@ -10,4 +10,6 @@ public interface AdminConfigRepository extends JpaRepository<AdminConfig, Long> 
     Optional<AdminConfig> findFirstByKeyAndScope(String key, String scope);
 
     List<AdminConfig> findByScope(String scope);
+
+    void deleteAdminConfigByScope(String scope);
 }

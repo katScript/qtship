@@ -9,6 +9,10 @@ import java.util.Set;
 @Table(name="region_district")
 public class District {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "district_id")
     private String districtId;
 
@@ -25,7 +29,7 @@ public class District {
     private Double longitude;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="province_id", referencedColumnName = "province_id")
+    @JoinColumn(name="province_id", referencedColumnName = "id")
     private Province province;
 
     @OneToMany(mappedBy = "district",
@@ -128,6 +132,15 @@ public class District {
 
     public District setWards(Set<Ward> wards) {
         this.wards = wards;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public District setId(Long id) {
+        this.id = id;
         return this;
     }
 }

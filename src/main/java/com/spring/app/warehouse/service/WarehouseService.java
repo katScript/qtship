@@ -38,7 +38,14 @@ public class WarehouseService {
 
         warehouse.setName(data.getName())
                 .setPhone(data.getPhone())
-                .setAddress(data.getAddress());
+                .setAddress(data.getAddress())
+                .setProvince(data.getProvince())
+                .setProvinceId(data.getProvinceId())
+                .setDistrict(data.getDistrict())
+                .setDistrictId(data.getDistrictId())
+                .setWard(data.getWard())
+                .setWardId(data.getWardId())
+                .setStreet(data.getStreet());
 
         return warehouse;
     }
@@ -49,7 +56,14 @@ public class WarehouseService {
                 warehouse.getName(),
                 warehouse.getAddress(),
                 warehouse.getCustomer().getCustomerId(),
-                warehouse.getPhone()
+                warehouse.getPhone(),
+                warehouse.getProvince(),
+                warehouse.getProvinceId(),
+                warehouse.getDistrict(),
+                warehouse.getDistrictId(),
+                warehouse.getWard(),
+                warehouse.getWardId(),
+                warehouse.getStreet()
         );
 
         wh.setCreatedAt(
