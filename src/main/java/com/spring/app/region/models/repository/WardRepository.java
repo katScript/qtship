@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WardRepository extends JpaRepository<Ward, String> {
+public interface WardRepository extends JpaRepository<Ward, Long> {
     @Query("select w from Ward w where w.district.districtId = :districtId")
     List<Ward> findByDistrictId(String districtId);
 }

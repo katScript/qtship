@@ -7,6 +7,10 @@ import java.util.Date;
 @Table(name="region_ward")
 public class Ward {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "ward_id")
     private String wardId;
 
@@ -17,7 +21,7 @@ public class Ward {
     private String wardType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="district_id", referencedColumnName = "district_id")
+    @JoinColumn(name="district_id", referencedColumnName = "id")
     private District district;
 
     @Column(name = "created_at", insertable = false, updatable = false)
@@ -82,5 +86,14 @@ public class Ward {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Ward setId(Long id) {
+        this.id = id;
+        return this;
     }
 }

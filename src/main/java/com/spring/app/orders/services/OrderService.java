@@ -21,6 +21,7 @@ import com.spring.app.shipping.models.repository.ShippingAddressRepository;
 import com.spring.app.shipping.payload.ShipperData;
 import com.spring.app.shipping.payload.ShippingAddressData;
 import com.spring.app.shipping.service.ShippingService;
+import com.spring.app.warehouse.models.Warehouse;
 import com.spring.app.warehouse.models.repository.WarehouseRepository;
 import com.spring.app.warehouse.payload.WarehouseData;
 import com.spring.app.warehouse.service.WarehouseService;
@@ -127,10 +128,10 @@ public class OrderService {
                         this.processShippingAddress(data.getShippingAddress())
                 ).setStatus(status.getCode());
 
+        this.processOffice(data, order);
         this.processWarehouse(data, order);
         this.processPackage(data.getProducts(), order);
         this.processOrderWeight(order);
-        this.processOffice(data, order);
         this.priceCalculate.processSubtotal(order);
 
         return order;
@@ -147,11 +148,16 @@ public class OrderService {
         if (data.getWarehouse() == null || data.getWarehouse().getId() == null) {
             order.setTakenTime(null).setWarehouse(null);
         } else {
+            Warehouse warehouse = this.warehouseRepository.findById(data.getWarehouse().getId())
+                    .orElseThrow(() -> new RuntimeException("Warehouse not found!"));
+
             order.setTakenTime(
                     DateFormatHelper.stringToDate(data.getShippingTime())
             ).setWarehouse(
-                    this.warehouseRepository.findById(data.getWarehouse().getId())
-                            .orElseThrow(() -> new RuntimeException("Warehouse not found!"))
+                    warehouse
+            ).setOffice(
+                    officeRepository.findFirstByProvinceId(warehouse.getProvinceId())
+                            .orElseThrow(() -> new RuntimeException("Office not found!"))
             );
         }
     }

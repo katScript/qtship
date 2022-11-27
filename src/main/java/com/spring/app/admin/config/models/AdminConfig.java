@@ -7,10 +7,11 @@ import java.util.Date;
 @Table(name="admin_config")
 public class AdminConfig {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", insertable = false, updatable = false)
     private Long id;
 
-    @Column(name = "key")
+    @Column(name = "`key`")
     private String key;
 
     @Column(name = "scope")

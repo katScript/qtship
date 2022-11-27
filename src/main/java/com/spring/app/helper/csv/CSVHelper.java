@@ -35,7 +35,7 @@ public class CSVHelper {
         return TYPE.equals(file.getContentType());
     }
 
-    public CSVParser getCSVParse() {
+    public List<CSVRecord> getCSVRecord() {
         if (hasCSVFormat()) {
             try (BufferedReader fileReader = new BufferedReader(
                     new InputStreamReader(
@@ -45,7 +45,8 @@ public class CSVHelper {
                  CSVParser csvParser = new CSVParser(fileReader,
                          CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())
             ) {
-                return csvParser;
+                setHeader(csvParser.getHeaderNames());
+                return csvParser.getRecords();
             } catch (IOException e) {
                 throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
             }
