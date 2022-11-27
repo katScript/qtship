@@ -1,6 +1,6 @@
 <template>
     <div class="">
-      <div class="my-2 border-bottom px-4 py-2 fs-2 text-uppercase"><h4>{{ getTitle }}</h4></div>
+      <div class="my-2 border-bottom px-4 py-2 fs-2"><h4>{{ getTitle }}</h4></div>
       <div class="d-flex p-5" v-if="!(onlyUpdate || onlyCreate)">
         <a-input-number style="width: 200px;" v-model:value="orderCode" addon-before="ORD" placeholder="Mã đơn hàng" />
         <a-button type="primary" class="ms-2" @click="router.push('/customer/orders/update/' + orderCode)">Cập nhật</a-button>
@@ -121,9 +121,12 @@
                     </a-radio-group>
                     <div v-if="placeTake == 'option'" class="my-2">
                       <a-form-item label="Địa điểm lấy hàng" name="warehouse"
-                        :rules="[{ required: true, message: 'Vui lòng nhập địa điểm lấy hàng!' }]">
+                        :rules="[{ required: true, message: 'Vui lòng chọn địa điểm lấy hàng!' }]">
                         <a-select v-model:value="data.warehouse" style="width: 100%">
                           <a-select-option class="my-2" value="">- Địa điểm lấy hàng -</a-select-option>
+                          <a-select-option v-for="(type, index) in warehouses" :value="type.value" :key="index">{{
+                              type.name
+                          }}</a-select-option>
                         </a-select>
                       </a-form-item>
                       <a-form-item label="Thời gian lấy hàng" name="shippingTime"
@@ -219,6 +222,7 @@
     import { province, district, ward } from "@/services/region";
     import { saveOrder, detailOrder } from "@/services/admin";
     import { listActive } from "@/services/coupon";
+    import { listWarehouse } from "@/services/warehouse";
     import { dataSample, handleResetData, handleSetData, requiredData, omitKey } from "@/pages/admin/order/configOrder";
     import ProductOrder from "@/pages/admin/components/ProductOrder.vue";
     import { message } from "ant-design-vue";
@@ -252,6 +256,7 @@
     const orderCode = ref('');
     const wards = ref([]);
     const coupons = ref([]);
+    const warehouses = ref([]);
     const showCoupon = ref(false);
     const endCheck = ref(false);
     const hasProductError = ref(false);
@@ -450,6 +455,13 @@
       showCoupon.value = false;
       data.coupon = code;
     }
+
+    // Handle warehouse
+    const handleGetWarehouse = async () => {
+      const { data } = await listWarehouse(customerStorage.id);
+      warehouses.value = data;
+    }
+
     // Handle Address
     const handleGetProvince = async () => {
       const { data } = await province();
@@ -507,6 +519,7 @@
     );
     handleGetCoupon();
     handleGetProvince();
+    handleGetWarehouse();
     //
   </script>
   <style scoped>
