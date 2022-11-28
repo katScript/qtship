@@ -15,6 +15,7 @@ import DetailOrder from "@/pages/admin/order/DetailOrder.vue";
 import { useStore } from "vuex";
 import { columns } from "./configOrder";
 import moment from "moment";
+import { commonFunction } from "@/scripts/ulti";
 
 const store = useStore();
 const route = useRoute();
@@ -90,10 +91,11 @@ const handleTransferShipper = async () => {
 };
 const handleChangeStatus = async () => {
   const data = listSelectOrder.value.map((order) => ({
-    orderId: order,
-    shipperId: shipper.value,
+    id: order,
+    status: commonFunction.orderStatus.AdminConfirm,
+    description: ""
   }));
-  await transferShipper(data);
+  await updateStatus(data);
   message.success("Chuyển trạng thái đơn hàng thành công");
   listSelectOrder.value = [];
   handleResetStatus();
