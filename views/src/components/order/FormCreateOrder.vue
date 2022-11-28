@@ -117,7 +117,7 @@
                     </a-form-item>
                     <a-radio-group v-model:value="placeTake">
                       <a-radio class="d-block mb-2" :value="'default'">Gửi hàng tại bưu cục</a-radio>
-                      <a-radio style="d-block my-2" :value="'option'">Lấy hàng tận nơi</a-radio>
+                      <a-radio class="d-block my-2" :value="'option'">Lấy hàng tận nơi</a-radio>
                     </a-radio-group>
                     <div v-if="placeTake == 'option'" class="my-2">
                       <a-form-item label="Địa điểm lấy hàng" name="warehouse"
@@ -140,7 +140,7 @@
                         :rules="[{ required: true, message: 'Vui lòng nhập trả phí ship!' }]">
                         <a-radio-group v-model:value="data.shipPayer">
                           <a-radio class="d-block mb-2" :value="true">Shop trả phí ship</a-radio>
-                          <a-radio style="d-block my-2" :value="false">Người nhận trả phí ship</a-radio>
+                          <a-radio class="d-block my-2" :value="false">Người nhận trả phí ship</a-radio>
                         </a-radio-group>
                       </a-form-item>
                     </div>
@@ -191,7 +191,7 @@
                 </div>
               </a-col>
               <a-col class="col-md-6">
-                <ProductOrder :hasError="hasProductError" :products="data.products" :endValidate="endCheck"
+                <ProductSelect :hasError="hasProductError" :products="data.products" :endValidate="endCheck"
                   @on-error-product="handleErrorProduct" @on-throw-product="handleThrowProduct" />
               </a-col>
             </div>
@@ -224,7 +224,7 @@
     import { listActive } from "@/services/coupon";
     import { listWarehouse } from "@/services/warehouse";
     import { dataSample, handleResetData, handleSetData, requiredData, omitKey } from "@/pages/admin/order/configOrder";
-    import ProductOrder from "@/pages/admin/components/ProductOrder.vue";
+    import ProductSelect from "@/components/common/ProductSelect";
     import { message } from "ant-design-vue";
     import { isEmpty, omit } from "lodash"
     import { commonFunction } from "@/scripts/ulti";
@@ -268,8 +268,8 @@
       return title[route.params?.action] || 'đơn hàng';
     });
     
-    const onlyCreate = computed(() => route.params?.action == 'create');
-    const onlyUpdate = computed(() => route.params?.action == 'update' && route.params?.id);
+    const onlyCreate = computed(() => route.params?.action === 'create');
+    const onlyUpdate = computed(() => route.params?.action === 'update' && route.params?.id);
     //
     const handleGetOrder = async () => {
       if (!onlyUpdate.value) {
@@ -290,9 +290,9 @@
         handleGetDistrict(data.shippingAddressDistrictId);
         handleGetWard(data.shippingAddressDistrictId);
       } catch (e) {
-        if (e.response.data.status == 500) {
+        if (e.response.data.status === 500) {
           message.error('Đơn hàng không tồn tại');
-          router.push('/admin/order/update')
+          router.push('/customer/order/update')
         }
       }
     
@@ -326,6 +326,7 @@
           });
     
           listOrder.value.forEach((order, index) => {
+              order.customerId = customerStorage.id;
             order.shippingAddress = {
               name: order.shippingAddressName,
               phone: order.shippingAddressPhone,
@@ -379,7 +380,7 @@
         }
         await saveOrder(results);
         message.success('Lưu đơn hàng thành công');
-        return router.push('/admin/order');
+        return router.push('/customer/orders');
       }
     };
     const handleSetCurrentData = () => {
@@ -443,6 +444,7 @@
     };
     // Handle Emit
     const handleThrowProduct = (value) => {
+        console.log(value);
       data.products = value;
     }
     
