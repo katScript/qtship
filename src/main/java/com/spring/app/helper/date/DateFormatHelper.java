@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateFormatHelper {
     public static String FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -14,7 +15,7 @@ public class DateFormatHelper {
             return "";
 
         return date.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                .atZone(ZoneId.of("Asia/Saigon")).toLocalDateTime()
                 .format(DateTimeFormatter.ofPattern(FORMAT));
     }
 
