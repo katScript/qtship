@@ -24,7 +24,7 @@
                             kho & sản phẩm</a>
                     </li>
                     <li class="nav-item nav-item-qt">
-                        <a class="nav-link" href="/customer/management-cash"><i
+                        <a class="nav-link" href="/customer/management-liquidity"><i
                                 class="fa-solid fa-money-bill-transfer"></i> QL dòng tiền</a>
                     </li>
                     <li class="nav-item nav-item-qt nav-item-qt-button">
