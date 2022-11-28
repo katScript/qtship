@@ -1,6 +1,6 @@
 <template>
   <div class="management-client-page">
-    <div :class="listLiquidity.length == 0 ? 'show' : 'hide'">
+    <div :class="listLiquidityBk.length == 0 ? 'show' : 'hide'">
       <ActionLoading />
     </div>
     <NavbarClient />
@@ -75,10 +75,11 @@
             </div>
             <hr />
             <div class="row">
-              <div class="col-md-3">
+              <div class="">
                 <h5>Lịch sử đối soát</h5>
               </div>
-              <div class="col-md-9">
+              <div class="col-md-12">
+                <span class="text-danger">{{msgValidFilter}}</span>
                 <div class="row">
                   <div class="col-md-5 d-flex">
                     <span class="mt-2 me-1">Từ: </span>
@@ -88,16 +89,18 @@
                     <span class="mt-2 me-1">Đến: </span>
                     <input type="datetime-local" name="" id="" class="form-control w-100" v-model="dateFilter.to" />
                   </div>
-                  <div class="col-md-2">
-                    <button class="btn btn-success w-100" v-on:click="filterLiquidity()">
-                      <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                  <div class="col-md-2 d-flex">
+                    <button class="btn btn-success w-100 me-1" v-on:click="filterLiquidity()">
+                      Tìm kiếm
+                    </button>
+                    <button class="btn btn-secondary w-100" v-on:click="resetFilter()">
+                      Bỏ lọc
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="col-12 mt-1"  v-if="listLiquidity.length > 0">
-                <easy-data-table :headers="headers" :items="listLiquidity"
-                  table-class-name="easy-data-table-customize">
+              <div class="col-12 mt-1" v-if="listLiquidity.length > 0">
+                <easy-data-table :headers="headers" :items="listLiquidity" table-class-name="easy-data-table-customize">
                 </easy-data-table>
               </div>
             </div>
@@ -146,6 +149,7 @@
           from: "",
           to: ""
         },
+        msgValidFilter: "",
         headers: [
           { text: "Tiền thu hộ", value: "moneyReceivable" },
           { text: "PP_PM (2)", value: "ppPm" },
@@ -154,7 +158,7 @@
           { text: "Tiền đối soát", value: "forControl" },
           { text: "Tiền công nợ (5)", value: "receivable" },
           { text: "Tiền Khuyến Mãi (6)", value: "couponCash" },
-          { text: "Ngày đối soát", value: "createdAt",sortable: true },
+          { text: "Ngày đối soát", value: "createdAt", sortable: true },
         ],
       };
     },
@@ -218,12 +222,27 @@
     },
     watch: {},
     methods: {
-      filterLiquidity: function() {
+      filterLiquidity: function () {
+        let dateFromFormat = this.dateFilter.from == "" ? moment(new Date()).format("YYYY-MM-DD hh:mm:ss") : moment(this.dateFilter.from).format("YYYY-MM-DD hh:mm:ss");
+        let dateToFormat = this.dateFilter.to == "" ? moment(new Date()).format("YYYY-MM-DD hh:mm:ss") : moment(this.dateFilter.to).format("YYYY-MM-DD hh:mm:ss");
         this.listLiquidity = this.listLiquidityBk;
-        this.listLiquidity = this.listLiquidity.filter(item =>
-          item.createdAt >= moment(this.dateFilter.from).format("YYYY-MM-DD hh:mm:ss") 
-          && item.createdAt <= moment(this.dateFilter.to).format("YYYY-MM-DD hh:mm:ss")
-        )
+        if (dateFromFormat >= dateToFormat) {
+          this.msgValidFilter = "Điều kiện tìm kiếm không hợp lệ!"
+        } else {
+          this.msgValidFilter = "";
+          this.listLiquidity = this.listLiquidity.filter(item =>
+            item.createdAt >= dateFromFormat
+            && item.createdAt <= dateToFormat
+          )
+        }
+      },
+      resetFilter: function () {
+        this.listLiquidity = this.listLiquidityBk;
+        this.msgValidFilter = "";
+        this.dateFilter = {
+          from: "",
+          to: ""
+        }
       }
     },
   };
