@@ -1,8 +1,8 @@
 export const columns = [
   {
     title: "Mã ĐH",
-    dataIndex: "customerCode",
-    key: "customerCode",
+    dataIndex: "orderCode",
+    key: "orderCode",
   },
   {
     title: "Tên người nhận",
