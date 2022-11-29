@@ -3,8 +3,8 @@ import { defineProps, defineEmits, computed, watch, reactive, ref } from "vue";
 import { province, district, ward } from "@/services/region";
 import {
   update,
-  // saveAddress, 
-  // saveForConltrol
+  saveAddress, 
+  saveForConltrol
 } from "@/services/customer";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
@@ -185,8 +185,8 @@ const onFinish = async (values) => {
   store.dispatch("setLoading", true);
   try {
     await update(data);
-    // await saveForConltrol(data.id, data.forControls);
-    // await saveAddress(data.id, data.addressSet);
+    await saveForConltrol(data.id, data.forControls[0]);
+    await saveAddress(data.id, data.addressSet[0]);
     message.success("Thành công");
   } catch (e) {
     console.log(e.response.data);
