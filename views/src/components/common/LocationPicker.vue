@@ -28,23 +28,24 @@
 
 <script>
 import {commonFunction} from '@/scripts/ulti'
+import axios from "axios";
 
 export default {
-    props: ['dataValidate'],
+    props: ['dataValidate','warehouseData'],
     components: {},
     data() {
         return {
             province: {
-                label: "",
+                label: "Chọn Tỉnh/Thành phố",
                 code: ""
             },
             district: {
-                label: "",
+                label: "Chọn Quận/Huyện",
                 code: "",
                 provinceId: ""
             },
             ward: {
-                label: "",
+                label: "Chọn Phường/Xã",
                 code: "",
                 districtId: ""
             },
@@ -54,9 +55,18 @@ export default {
             street: ""
         }
     },
-    mounted() {
-        this.axios.get(commonFunction.apiProvincesURL).then((response) => {
-            let dataProvince = response.data.results;
+    async mounted() {
+        if(this.warehouseData != undefined) {
+            this.province.label = this.warehouseData?.province == "" ? "Chọn Tỉnh/Thành phố" : this.warehouseData.province;
+            this.province.code = this.warehouseData?.provinceId;
+            this.district.label = this.warehouseData?.district == "" ? "Chọn Quận/Huyện" : this.warehouseData.district;
+            this.district.code = this.warehouseData?.districtId;
+            this.ward.label = this.warehouseData?.ward == "" ? "Chọn Phường/Xã" : this.warehouseData.ward;
+            this.ward.code = this.warehouseData?.wardId;
+            this.street = this.warehouseData?.street == "" ? "Địa chỉ cụ thể: Số nhà, tên Đường,..." : this.warehouseData.street;
+        }
+        await axios.get(commonFunction.apiProvincesURL).then((response) => {
+            let dataProvince = response.data;
             for (let province in dataProvince) {
                 this.provinceList.push({
                     label: dataProvince[province].province_name,
@@ -64,6 +74,9 @@ export default {
                 });
             }
         });
+    },
+    updated() {
+
     },
     watch: {
         province: {
@@ -73,10 +86,10 @@ export default {
                 let districtList = [],
                     district = {};
 
-                this.axios.get(
-                    commonFunction.apiProvincesURL + 'district/' + this.province?.code
+                axios.get(
+                    commonFunction.apiProvincesURL + '/district/' + this.province?.code
                 ).then((response) => {
-                    let dataDistricts = response.data.results;
+                    let dataDistricts = response.data;
                     for (let district in dataDistricts) {
                         districtList.push({
                             label: dataDistricts[district].district_name,
@@ -99,10 +112,10 @@ export default {
                 let wardList = [],
                     ward = {};
 
-                this.axios.get(
-                    commonFunction.apiProvincesURL + 'ward/' + this.district?.code
+                axios.get(
+                    commonFunction.apiProvincesURL + '/ward/' + this.district?.code
                 ).then((response) => {
-                    let dataWards = response.data.results;
+                    let dataWards = response.data;
                     for (let ward in dataWards) {
                         wardList.push({
                             label: dataWards[ward].ward_name,

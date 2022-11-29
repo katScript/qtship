@@ -1,4 +1,5 @@
 import NavbarClient from "@/components/common/NavbarClient.vue";
+import LocationPicker from "@/components/common/LocationPicker.vue";
 import FooterClient from "@/components/common/FooterClient.vue";
 import ToolbarRight from "@/components/common/ToolbarRight.vue";
 import NotificationClient from "@/components/common/NotficationClient.vue";
@@ -20,6 +21,7 @@ export default {
         NotificationClient,
         PopupNotify,
         ActionLoading,
+        LocationPicker
     },
     setup() {
         const warehouseModel = new WarehouseData();
@@ -34,7 +36,19 @@ export default {
     },
     data() {
         return {
-            warehouseData: {},
+            warehouseData: {
+                name: "",
+                customerCode: "",
+                address: "",
+                provinceId: "",
+                province: "",
+                districtId: "",
+                district: "",
+                wardId: "",
+                ward: "",
+                street: "",
+                phone: "",
+            },
             productData: {},
             listWarehouseByCustomer: [],
             listProductByCustomer: [],
@@ -60,9 +74,9 @@ export default {
                 }
             },
             headersWarehouse: [
-                { text: "Tên kho", value: "data.name", sortable: true },
-                { text: "Địa chỉ", value: "data.address" },
-                { text: "TT liên hệ", value: "data.phone" },
+                { text: "Tên kho", value: "name", sortable: true },
+                { text: "Địa chỉ", value: "address" },
+                { text: "TT liên hệ", value: "phone" },
                 { text: "Chức năng", value: "btn-function" },
             ],
             headersProduct: [
@@ -91,6 +105,56 @@ export default {
                 idRequest: 0,
                 data: {},
             },
+            customerData: {
+                data: {
+                    username: "",
+                    password: "",
+                    confirmPassword: "",
+                    customer: {
+                        fullName: "",
+                        phone: "",
+                        companyName: "",
+                        email: ""
+                    },
+                    customerAddress: {
+                        province: "",
+                        provinceId: "",
+                        district: "",
+                        districtId: "",
+                        ward: "",
+                        wardId: "",
+                        street: ""
+                    },
+                    forControl: {
+                        holderName: "",
+                        cardNumber: "",
+                        bank: "",
+                        address: ""
+                    },
+                },
+                errors: {
+                    isAccepted: "",
+                    password: "",
+                    confirmPassword: "",
+                    customer: {
+                        phone: "",
+                        companyName: "",
+                        email: ""
+                    },
+                    customerAddress: {
+                        provinceId: "",
+                        districtId: "",
+                        wardId: "",
+                        street: ""
+                    },
+                    forControl: {
+                        holderName: "",
+                        cardNumber: "",
+                        bank: "",
+                        address: ""
+                    },
+                }
+            }
         };
     },
 
@@ -125,11 +189,7 @@ export default {
                 this.configRequestApi
             )
             .then((response) => {
-                response.data.forEach(element => {
-                    let warehouse = new WarehouseData();
-                    warehouse.setData(element);
-                    this.listWarehouseByCustomer.push(warehouse);
-                });
+                this.listWarehouseByCustomer = response.data;
             })
             .catch((e) => {
                 console.log(e);
@@ -167,7 +227,7 @@ export default {
                         commonFunction.DOMAIN_URL + "v1/warehouse/save",
                         {
                             customerId: this.idRequest,
-                            data: this.warehouseModel.getData()
+                            data: this.warehouseData
                         },
                         this.configRequestApi
                     )
@@ -224,9 +284,7 @@ export default {
             }
         },
         selectWareHouseForUpdate: function (item) {
-            let modelUpdate = new WarehouseData();
-            modelUpdate.setData(item.data);
-            this.warehouseData = modelUpdate.getData();
+            this.warehouseData = item;
             this.isUpdateWarehouseAction = true;
         },
         cancelUpdateWarehouse: function () {
@@ -373,6 +431,28 @@ export default {
             this.listProductByCustomer = this.listProductByCustomer.filter(
                 p => p.data.sku.toLowerCase().includes(conditionString) || p.data.name.toLowerCase().includes(conditionString)
             )
-        }
+        },
+        updateAddress(data, type) {
+            switch (type) {
+                case "PROVINCE":
+                    this.warehouseData.provinceId = data?.code;
+                    this.warehouseData.province = data?.label;
+                    break;
+                case "DISTRICT":
+                    this.warehouseData.districtId = data?.code;
+                    this.warehouseData.district = data?.label;
+                    break;
+                case "WARD":
+                    this.warehouseData.wardId = data?.code;
+                    this.warehouseData.ward = data?.label;
+                    break;
+                case "STREET":
+                    this.warehouseData.street = data;
+                    break;
+                default:
+                    break;
+            }
+            this.warehouseData.address = this.warehouseData.street +", " + this.warehouseData.ward +", " + this.warehouseData.district +", " + this.warehouseData.province;
+        },
     },
 };

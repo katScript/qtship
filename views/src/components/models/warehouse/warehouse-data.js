@@ -4,6 +4,13 @@ export default class WarehouseData {
         name: "",
         customerCode: "",
         address: "",
+        provinceId: "",
+        province: "",
+        districtId: "",
+        district: "",
+        wardId: "",
+        ward: "",
+        street: "",
         phone: "",
         createdAt: null,
         updatedAt: null
@@ -21,6 +28,12 @@ export default class WarehouseData {
         this.data.customerCode = data.customerCode;
         this.data.address = data.address;
         this.data.phone = data.phone;
+        this.province = data.province;
+        this.provinceId = data.provinceId;
+        this.district = data.district;
+        this.districtId = data.districtId;
+        this.wardId = data.wardId;
+        this.ward = data.ward;
         this.data.createdAt = data.createdAt;
         this.data.updatedAt = data.updatedAt;
     }

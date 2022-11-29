@@ -4,7 +4,11 @@ import $ from "jquery";
 import { useCookies } from "vue3-cookies";
 import moment from "moment/moment";
 
+const APIUrl = "https://api.dcodetest.com/";
 const commonFunction = {
+    DOMAIN_URL: 'https://api.dcodetest.com/',
+    ORIGIN_URL: window.location.origin,
+    EXPIRED_TIME_COOKIES: "1d",
     // cookies manager
     userCookies: {
         token: "gEZkA7zyDqT7ZcMVLVhA2dYdiNHmLQD4",
@@ -14,7 +18,7 @@ const commonFunction = {
     },
     cookiesManager: useCookies(),
     setCookies: function (key, value) {
-        this.cookiesManager.cookies.set(key, value, this.EXPIRED_TIME_COOKIES);
+        this.cookiesManager.cookies.set(key, value, commonFunction.EXPIRED_TIME_COOKIES);
     },
     setListCookies: function (array) {
         array.forEach(elm => this.setCookies(elm.key, elm.value));
@@ -112,13 +116,9 @@ const commonFunction = {
 
         return moment().format(format);
     },
-
-    // ======================================================================================
-
-    // code cua anh Duong :D
     redirect: function(url) { window.location.href = url; },
     reloadPage: function() {location.reload(true);},
-    apiProvincesURL: 'https://vapi.vnappmob.com/api/province/',
+    apiProvincesURL: APIUrl+"v1/region/province",
     apiBanksURL: 'https://api.vietqr.io/v2/banks',
     encodePassword: function(pass) { return md5(sha256(pass)); },
     regexPassword: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/,
@@ -149,9 +149,6 @@ const commonFunction = {
         }
         return valid;
     },
-    DOMAIN_URL: 'https://api.dcodetest.com/',
-    ORIGIN_URL: window.location.origin,
-    EXPIRED_TIME_COOKIES: "1d",
     removeAllCookiesClient: function(cookies){
         cookies.remove("authenication_cookies");
         cookies.remove("accesstoken_cookies");
