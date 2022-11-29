@@ -38,7 +38,7 @@
                   alt="Warning Action"
                 />
                 <br /><br />
-                <h5>Bạn có chắc chắn muốn xóa {{ dataNotify.data.name }} ?</h5>
+                <h5>Bạn có chắc chắn muốn xóa {{ dataNotify.name }} ?</h5>
                 <hr />
                 <button
                   class="btn btn-warning"
@@ -59,7 +59,7 @@
                   alt="Warning Action"
                 />
                 <br /><br />
-                <h5>Bạn có chắc chắn muốn hủy {{ dataNotify.data.name }} ?</h5>
+                <h5>Bạn có chắc chắn muốn hủy {{ dataNotify.name }} ?</h5>
                 <hr />
                 <button
                   class="btn btn-warning"
@@ -153,18 +153,18 @@ export default {
       } else if (typeComponent == "ORDER") {
         axios
           .post(commonFunction.DOMAIN_URL + "v1/order/update/status", 
-              {
+              [{
                 id: dataNotify.data.id,
                 status: commonFunction.orderStatus.Cancel
-              },
+              }],
             this.configRequestApi
           )
           .then((response) => {
             if (response.status == 200) {
-              alert(`"SUCCESS: Hủy ${dataNotify.data.name} thành công!"`);
+              alert(`"SUCCESS: Hủy ${dataNotify.name} thành công!"`);
               commonFunction.reloadPage();
             } else {
-              alert(`"FAIL: Hủy ${dataNotify.data.name} không thành công!"`);
+              alert(`"FAIL: Hủy ${dataNotify.name} không thành công!"`);
               commonFunction.reloadPage();
             }
           })
