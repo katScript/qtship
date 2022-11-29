@@ -238,6 +238,7 @@ export default {
             this.typeComponent = "WAREHOUSE";
             this.dataNotify = {
                 idRequest: this.idRequest,
+                name: item.data.name,
                 data: item.data,
             };
             this.isShowNotify = true;

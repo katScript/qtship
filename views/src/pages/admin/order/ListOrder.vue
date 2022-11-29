@@ -50,14 +50,6 @@ const rowSelection = ref({
       }
     });
   },
-  getCheckboxProps: (record) => ({
-    disabled:
-      route.query?.status == common.TYPE_ORDER_PROCESSING
-        ? !common.PROCESSING_TYPE.find((x) => x.value == record.status)
-        : route.query?.status == common.TYPE_ORDER_PENDING
-        ? false
-        : true,
-  }),
 });
 const getTitle = computed(() => {
   const title = {
@@ -81,6 +73,10 @@ const handleTransferShipper = async () => {
   const data = listSelectOrder.value.map((order) => ({
     orderId: order,
     shipperId: shipper.value,
+    //test trong ngày
+    shippingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    //assign cho shipper ngày mai giao
+    // shippingTime: moment(new Date()).add(1, 'days').format("YYYY-MM-DD HH:mm:ss")
   }));
   await transferShipper(data);
   message.success("Chuyển giao hàng cho shipper thành công");
@@ -89,10 +85,11 @@ const handleTransferShipper = async () => {
   getListOrder();
 };
 const handleChangeStatus = async () => {
+  console.log(status);
   const data = listSelectOrder.value.map((order) => ({
     id: order,
     status: status.value,
-    description: null
+    description: ""
   }));
   await updateStatus(data);
   message.success("Chuyển trạng thái đơn hàng thành công");
@@ -219,7 +216,7 @@ const shippingStatusStyle = (value) => {
   if (!type) {
     return "";
   }
-  return `<div style="${type.style}">${type.value}</div>`;
+  return `<div style="${type.style}; flex">${type.name}</div>`;
 };
 //
 getListOrder();

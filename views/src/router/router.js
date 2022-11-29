@@ -8,7 +8,7 @@ import OrdersClient from '@/components/order/OrdersClient.vue'
 import IndexPage from '@/components/IndexPage.vue'
 import SaveOrderClient from '@/components/order/CreateOrderClient'
 import warehouseProductClient from '@/components/warehouse-product/WarehouseProductClient.vue'
-import ManagementCashClient from '@/components/ManagementCashClient.vue'
+import ManagementLiquidityClient from '@/components/ManagementLiquidityClient.vue'
 import ManageAccountCustomerInfo from '@/components/customer/CustomerDetail.vue'
 import ShipperOrder from '@/components/shipper/ShipperOrder.vue'
 import ManageAccountShipperInfo from '@/components/shipper/ShipperDetail.vue'
@@ -35,7 +35,7 @@ const router = createRouter({
     { path: '/customer/orders/:status?', component: OrdersClient },
     { path: '/customer/order/:action/:id?', component: SaveOrderClient },
     { path: '/customer/warehouse-product', component: warehouseProductClient },
-    { path: '/customer/management-cash', component: ManagementCashClient },
+    { path: '/customer/management-liquidity', component: ManagementLiquidityClient },
     { path: '/customer/account-info', component: ManageAccountCustomerInfo },
     { path: '/shipper/management', component: ShipperOrder },
     { path: '/shipper/account-info', component: ManageAccountShipperInfo },

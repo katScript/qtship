@@ -14,7 +14,7 @@ public class LiquiditySchedule {
     @Autowired
     LiquidityService liquidityService;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void createNewLiquiditySession() {
         logger.info("Create New Liquidity Session...");
         liquidityService.createNewLiquiditySession();

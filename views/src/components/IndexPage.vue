@@ -21,7 +21,11 @@ export default {
         if (auth == null || role == null) {
             commonFunction.redirect('/login-page');
         } else if (auth) {
-            commonFunction.redirect("/" + role + "/management");
+            if(auth && role == "admin") {
+                commonFunction.redirect("/admin/order");
+            } else {
+                commonFunction.redirect("/" + role + "/management");
+            }
         }
     }
 };
