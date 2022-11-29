@@ -24,7 +24,7 @@ export default {
   TYPE_ORDER_OCCURRED: 'OCCURRED',
   TYPE_ORDER_CANCEL: 'CANCEL',
   TYPE_ORDER_RETURN: 'RETURN',
-  TYPE_ORDER_ADMIN_CONFIRM: 'ADMIN_CONFIRM',
+  TYPE_ORDER_ADMIN_CONFIRMED: 'ADMIN_CONFIRMED',
   TYPE_SHIPPING: [
     { name: 'Giao hàng thường', value: 'STANDARD', style: 'color: white; background: green;' },
     { name: 'Giao hàng 24h', value: 'FAST', style: 'color: white; background: orange;' },
@@ -40,7 +40,7 @@ export default {
   ],
   ALL_TYPE: [
     { name: 'Đơn hàng chờ xử lý', value: 'PENDING', style: 'color: #ff9933; border: 1px solid #ff9933;' },
-    { name: 'Đơn hàng xác nhận', value: 'ADMIN_CONFIRM', style: 'color: #ff9933; border: 1px solid #ff9933;' },
+    { name: 'Đơn hàng xác nhận', value: 'ADMIN_CONFIRMED', style: 'color: #AA6633; border: 1px solid #AA6633;' },
     { name: 'Đang giao hàng', value: 'DELIVERY', style: 'color: #663300; border: 1px solid #663300;' },
     { name: 'Đơn delay, chưa thể giao ngay', value: 'DELAY', style: 'color: #0099cc; border: 1px solid #0099cc;' },
     { name: 'Đang kiểm tra lại', value: 'RECHECKING', style: 'color: #8585e0; border: 1px solid ##8585e0;' },

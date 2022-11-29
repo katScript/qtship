@@ -44,7 +44,7 @@ watch(
 </script>
 <template>
   <a-row type="flex" class="my-4" :gutter="[16, 16]" align="top">
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input-number
         style="width: 100%"
         v-model:value="filters.orderCode"
@@ -52,13 +52,13 @@ watch(
         placeholder="Mã đơn hàng"
       />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input
         v-model:value="filters.orderPhone"
         placeholder="Số điện thoại người nhận"
       />
     </a-col>
-    <a-col :span="6" v-if="!status">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }" v-if="!status">
       <a-select v-model:value="filters.orderStatus" style="width: 100%">
         <a-select-option value="" hidden>Trạng thái đơn hàng</a-select-option>
         <a-select-option
@@ -70,7 +70,7 @@ watch(
         </a-select-option>
       </a-select>
     </a-col>
-    <a-col :span="6" v-if="status == 'PROCESSING'">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }"  v-if="status == 'PROCESSING'">
       <a-select v-model:value="filters.orderStatus" style="width: 100%">
         <a-select-option value="" hidden>Trạng thái đơn hàng</a-select-option>
         <a-select-option
@@ -82,7 +82,7 @@ watch(
         </a-select-option>
       </a-select>
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-select v-model:value="filters.orderTime" style="width: 100%">
         <a-select-option value="" hidden>Thời gian tạo đơn</a-select-option>
         <a-select-option
@@ -100,7 +100,7 @@ watch(
         v-model:value="filters.orderTimeAbout"
       />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-select v-model:value="filters.orderType" style="width: 100%">
         <a-select-option value="" hidden>Dịch vụ giao hàng</a-select-option>
         <a-select-option
@@ -111,7 +111,7 @@ watch(
         >
       </a-select>
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-button type="primary" @click="handleFind">
         <template #icon>
           <SearchOutlined style="transform: translate(0px, -3px)" />

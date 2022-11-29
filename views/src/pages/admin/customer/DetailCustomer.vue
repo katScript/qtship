@@ -1,7 +1,11 @@
 <script setup>
 import { defineProps, defineEmits, computed, watch, reactive, ref } from "vue";
 import { province, district, ward } from "@/services/region";
-import { update } from "@/services/customer";
+import {
+  update,
+  // saveAddress, 
+  // saveForConltrol
+} from "@/services/customer";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
 
@@ -181,6 +185,8 @@ const onFinish = async (values) => {
   store.dispatch("setLoading", true);
   try {
     await update(data);
+    // await saveForConltrol(data.id, data.forControls);
+    // await saveAddress(data.id, data.addressSet);
     message.success("Thành công");
   } catch (e) {
     console.log(e.response.data);
@@ -387,7 +393,9 @@ handleGetProvince();
         </a-form-item>
 
         <a-form-item v-if="action" :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="primary" html-type="submit" :loading="isLoading">{{ title }}</a-button>
+          <a-button type="primary" html-type="submit" :loading="isLoading">{{
+            title
+          }}</a-button>
         </a-form-item>
       </a-form>
     </div>

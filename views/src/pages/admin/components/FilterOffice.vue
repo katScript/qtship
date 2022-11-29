@@ -33,13 +33,13 @@ handleGetProvince();
 </script>
 <template>
   <a-row type="flex" class="my-4" :gutter="[16, 16]" align="top">
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input v-model:value="filters.name" placeholder="Tên bưu cục" />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input v-model:value="filters.phone" placeholder="Số điện thoại" />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-select v-model:value="filters.provinceId" style="width: 100%">
         <a-select-option value="">- Tỉnh / thành phố -</a-select-option>
         <a-select-option
@@ -51,7 +51,7 @@ handleGetProvince();
         >
       </a-select>
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-button type="primary" @click="handleFind">
         <template #icon>
           <SearchOutlined style="transform: translate(0px, -3px)" />

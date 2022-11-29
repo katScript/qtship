@@ -100,6 +100,7 @@ handleGetListOffice();
       @change="handleChangePage"
       :columns="columns"
       expandRowByClick
+      :scroll="{ x: 500 }"
       class="border"
       :expandedRowKeys="expandRow"
     >

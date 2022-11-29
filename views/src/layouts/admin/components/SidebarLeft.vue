@@ -147,7 +147,10 @@ const onOpenChange = (key) => {
 
 <template>
   <div class="position-relative h-100">
-    <div class="d-flex align-items-center justify-content-between">
+    <RouterLink :to="'/'" class="d-block d-lg-none my-3">
+      <img src="@/images/logo-branch.png" alt="Logo branch" width="75" />
+    </RouterLink>
+    <div class="d-lg-flex align-items-center justify-content-between d-none">
       <RouterLink :to="'/'" v-if="openMenu">
         <img src="@/images/logo-branch.png" alt="Logo branch" width="150" />
       </RouterLink>

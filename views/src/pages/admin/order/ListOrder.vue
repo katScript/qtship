@@ -90,10 +90,11 @@ const handleTransferShipper = async () => {
 };
 const handleChangeStatus = async () => {
   const data = listSelectOrder.value.map((order) => ({
-    orderId: order,
-    shipperId: shipper.value,
+    id: order,
+    status: status.value,
+    description: null
   }));
-  await transferShipper(data);
+  await updateStatus(data);
   message.success("Chuyển trạng thái đơn hàng thành công");
   listSelectOrder.value = [];
   handleResetStatus();
@@ -282,7 +283,7 @@ watch(
     >
       <template #content>
         <a-select v-model:value="status" style="width: 250px">
-          <a-select-option :value="common.TYPE_ORDER_ADMIN_CONFIRM"
+          <a-select-option :value="common.TYPE_ORDER_ADMIN_CONFIRMED"
             >Xác nhận
           </a-select-option>
           <a-select-option :value="common.TYPE_ORDER_CANCEL"
@@ -306,6 +307,7 @@ watch(
       :dataSource="listOrder"
       :row-selection="rowSelection"
       bordered
+      :scroll="{ x: 500 }"
       :pagination="pagination"
       @change="handleChangePage"
       :columns="columns"

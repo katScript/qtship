@@ -27,7 +27,7 @@ const handleReset = () => {
 </script>
 <template>
   <a-row type="flex" class="my-4" :gutter="[16, 16]" align="top">
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input-number
         style="width: 100%"
         v-model:value="filters.code"
@@ -35,22 +35,22 @@ const handleReset = () => {
         placeholder="Mã khách hàng"
       />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input v-model:value="filters.name" placeholder="Tên khách hàng" />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input
         v-model:value="filters.company"
         placeholder="Tên cửa hàng / công ty"
       />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input v-model:value="filters.phone" placeholder="Số điện thoại" />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-input v-model:value="filters.email" placeholder="Email" />
     </a-col>
-    <a-col :span="6">
+    <a-col :xs="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 6 }">
       <a-button type="primary" @click="handleFind">
         <template #icon>
           <SearchOutlined style="transform: translate(0px, -3px)" />
