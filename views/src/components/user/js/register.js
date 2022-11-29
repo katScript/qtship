@@ -134,7 +134,28 @@ export default {
         },
         validationForm() {
             let isValid = true;
-
+            this.customerData.errors = {
+                isAccepted: "",
+                password: "",
+                confirmPassword: "",
+                customer: {
+                    phone: "",
+                    companyName: "",
+                    email: ""
+                },
+                customerAddress: {
+                    provinceId: "",
+                    districtId: "",
+                    wardId: "",
+                    street: ""
+                },
+                forControl: {
+                    holderName: "",
+                    cardNumber: "",
+                    bank: "",
+                    address: ""
+                },
+            }
             if (this.customerData.data.customer.companyName === "") {
                 this.customerData.errors.customer.companyName = "Vui lòng điền Tên chi nhánh/cửa hàng/shop!";
                 isValid = false;
