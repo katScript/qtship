@@ -95,7 +95,7 @@ export default {
         genCodeStatusToTextDisplay(code) {
             switch (code) {
                 case commonFunction.orderStatus.Pending:
-                    return "Đang đờ xác nhận";
+                    return "Đang chờ xác nhận";
                 case commonFunction.orderStatus.AdminConfirm:
                     return "Đã xác nhận";
                 case commonFunction.orderStatus.TransferShipper:
