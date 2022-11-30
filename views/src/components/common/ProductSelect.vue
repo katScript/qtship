@@ -113,9 +113,7 @@ const handleDeleteProduct = (key) => {
 watch(
     () => props.products,
     () => {
-        if (props.products.length) {
-            productList.value = props.products;
-        }
+        productList.value = props.products;
     }
 );
 
