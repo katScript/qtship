@@ -258,7 +258,13 @@ import {province, district, ward} from "@/services/region";
 import {saveOrder, detailOrder} from "@/services/admin";
 import {listActive} from "@/services/coupon";
 import {listWarehouse} from "@/services/warehouse";
-import {dataSample, handleSetData, requiredData, omitKey} from "@/pages/admin/order/configOrder";
+import {
+    dataSample,
+    handleSetData,
+    requiredData,
+    omitKey,
+    processCustomerDataSample
+} from "@/pages/admin/order/configOrder";
 import ProductSelect from "@/components/common/ProductSelect";
 import {message} from "ant-design-vue";
 import {omit} from "lodash"
@@ -268,9 +274,7 @@ const route = useRoute();
 const router = useRouter();
 
 let customerStorage = JSON.parse(commonFunction.getCustomerStorage());
-dataSample.senderAddress = `${customerStorage.addressSet[0].street}, ${customerStorage.addressSet[0].ward}, ${customerStorage.addressSet[0].district}, ${customerStorage.addressSet[0].province}`;
-dataSample.senderPhone = customerStorage.phone;
-dataSample.senderName = customerStorage.companyName;
+processCustomerDataSample(dataSample, customerStorage);
 
 const data = reactive({...dataSample});
 const currentTabData = reactive({...dataSample});
@@ -462,7 +466,8 @@ const onFinish = () => {
             orders.value[activeKey.value] = {...data};
         }
 
-        setToDefaultTab();
+        processCustomerDataSample(dataSample, null);
+        handleSetData(currentTabData, {...dataSample});
         handleSetCurrentData();
     }
 };
@@ -595,7 +600,6 @@ const handleSubmitForm = async () => {
         }
     }
 };
-// =================================================================
 
 // =================== Process address data ========================
 const provinceProcess = () => {

@@ -1,3 +1,5 @@
+import {commonFunction} from "@/scripts/ulti";
+
 export const columns = [
   {
     title: "Mã ĐH",
@@ -145,3 +147,14 @@ export const omitKey = [
   "shippingAddressWardId",
   "shippingAddressStreet",
 ];
+
+export const processCustomerDataSample = (data, customerStorage) => {
+  if (customerStorage) {
+    customerStorage = JSON.parse(commonFunction.getCustomerStorage());
+    data.senderAddress = `${customerStorage.addressSet[0].street}, ${customerStorage.addressSet[0].ward}, ${customerStorage.addressSet[0].district}, ${customerStorage.addressSet[0].province}`;
+    data.senderPhone = customerStorage.phone;
+    data.senderName = customerStorage.companyName;
+  }
+
+  data.products = [];
+}
