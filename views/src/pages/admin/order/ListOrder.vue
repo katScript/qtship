@@ -1,5 +1,5 @@
 <script setup>
-import { list, updateStatus, transferShipper } from "@/services/admin";
+import { list, updateStatus, transferShipper } from "@/services/order";
 import { list as listShipper } from "@/services/shipper";
 import { ref, watch, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -74,7 +74,7 @@ const handleTransferShipper = async () => {
     orderId: order,
     shipperId: shipper.value,
     //test trong ngày
-    shippingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    shippingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
     //assign cho shipper ngày mai giao
     // shippingTime: moment(new Date()).add(1, 'days').format("YYYY-MM-DD HH:mm:ss")
   }));
@@ -85,12 +85,15 @@ const handleTransferShipper = async () => {
   getListOrder();
 };
 const handleChangeStatus = async () => {
-  console.log(status);
-  const data = listSelectOrder.value.map((order) => ({
-    id: order,
-    status: status.value,
-    description: ""
-  }));
+  const data = listSelectOrder.value.map((order) => {
+    if (order != null) {
+      return {
+        id: order,
+        status: status.value,
+        description: "",
+      };
+    }
+  });
   await updateStatus(data);
   message.success("Chuyển trạng thái đơn hàng thành công");
   listSelectOrder.value = [];

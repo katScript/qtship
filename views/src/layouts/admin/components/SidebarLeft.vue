@@ -102,6 +102,14 @@ const officeList = [
   },
 ];
 
+const configList = [
+  {
+    parent: 6,
+    name: "Cài đặt",
+    path: "/admin/config",
+  },
+];
+
 const toggleOpenMenu = () => {
   emits("on-click-menu", !props.openMenu);
 };
@@ -236,7 +244,12 @@ const onOpenChange = (key) => {
         </template>
         {{ option.name }}</a-menu-item
       >
-      <a-menu-item key="1" style="background: #bf1e2d; color: #ffffff">
+      <a-menu-item
+        style="background: #bf1e2d; color: #ffffff"
+        :key="option.parent"
+        v-for="option in configList"
+        @click="handleClickItem(true, option.path)"
+      >
         <template #icon>
           <SettingOutlined />
         </template>

@@ -53,6 +53,6 @@ export default [
     meta: {
       isAdmin: true,
     },
-    component: () => import("@/pages/admin/shipper/ListShipper.vue"),
+    component: () => import("@/pages/admin/config/ListConfig.vue"),
   },
 ]
