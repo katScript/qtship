@@ -55,4 +55,12 @@ export default [
     },
     component: () => import("@/pages/admin/config/ListConfig.vue"),
   },
+  {
+    name: 'admin-list-price',
+    path: '/admin/price',
+    meta: {
+      isAdmin: true,
+    },
+    component: () => import("@/pages/admin/price/ListPrice.vue"),
+  },
 ]

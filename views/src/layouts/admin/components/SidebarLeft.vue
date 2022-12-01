@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   LogoutOutlined,
   CarOutlined,
+  MoneyCollectOutlined,
   ClusterOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
@@ -107,6 +108,14 @@ const configList = [
     parent: 6,
     name: "Cài đặt",
     path: "/admin/config",
+  },
+];
+
+const priceSetList = [
+  {
+    parent: 7,
+    name: "Tạo bảng giá mới",
+    path: "/admin/price",
   },
 ];
 
@@ -253,7 +262,18 @@ const onOpenChange = (key) => {
         <template #icon>
           <SettingOutlined />
         </template>
-        Cấu hình
+        {{ option.name }}
+      </a-menu-item>
+      <a-menu-item
+        style="background: #bf1e2d; color: #ffffff"
+        :key="option.parent"
+        v-for="option in priceSetList"
+        @click="handleClickItem(true, option.path)"
+      >
+        <template #icon>
+          <MoneyCollectOutlined />
+        </template>
+        {{ option.name }}
       </a-menu-item>
     </a-menu>
     <div class="position-absolute bottom-0 left-0 right-0 w-100">

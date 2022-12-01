@@ -29,7 +29,7 @@ const get = (endPoint, options = {}) =>
 
 const post = (endPoint, data = {}) =>
   axios
-    .post(API + endPoint, JSON.stringify(data), { headers: getHeader(data instanceof FormData) })
+    .post(API + endPoint, data instanceof FormData ? data : JSON.stringify(data), { headers: getHeader(data instanceof FormData) })
     .catch(handleError);
 
 const put = (endPoint, data = {}) =>
