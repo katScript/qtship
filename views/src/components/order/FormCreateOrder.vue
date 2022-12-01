@@ -255,7 +255,7 @@ import {
 } from "@ant-design/icons-vue";
 import common from "@/utils/common";
 import {province, district, ward} from "@/services/region";
-import {saveOrder, detailOrder} from "@/services/admin";
+import {saveOrder, detailOrder} from "@/services/order";
 import {listActive} from "@/services/coupon";
 import {listWarehouse} from "@/services/warehouse";
 import {

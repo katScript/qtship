@@ -28,7 +28,7 @@ export default {
   TYPE_ORDER_CANCEL: 'CANCEL',
   TYPE_ORDER_RETURN: 'RETURN',
   TYPE_ORDER_STORAGE: 'STORAGE',
-  TYPE_ORDER_ADMIN_CONFIRM: 'ADMIN_CONFIRMED',
+  TYPE_ORDER_ADMIN_CONFIRMED: 'ADMIN_CONFIRMED',
   TYPE_SHIPPING: [
     { name: 'Giao hàng thường', value: 'STANDARD', style: 'color: white; background: green;' },
     { name: 'Giao hàng 24h', value: 'FAST', style: 'color: white; background: orange;' },
