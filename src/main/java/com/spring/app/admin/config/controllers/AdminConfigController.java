@@ -35,9 +35,11 @@ public class AdminConfigController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveConfig(@Valid @RequestBody ConfigData cd) {
+    public ResponseEntity<?> saveConfig(@Valid @RequestBody List<ConfigData> cd) {
         try {
-            adminConfigService.saveAdminConfig(cd);
+            for (ConfigData c : cd) {
+                adminConfigService.saveAdminConfig(c);
+            }
             return ResponseEntity.ok(new MessageResponse("save config success!"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
