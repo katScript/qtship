@@ -1,12 +1,19 @@
 import http from "@/utils/http";
 
-const PATH = 'office/';
+const PATH = "office/";
 
-export const list = (params = {}) => http.get(PATH + 'all', { params });
+export const list = (params = {}) => http.get(PATH + "all", { params });
 
-export const listPaginate = (params = {}) => http.get(PATH + 'all/page', { params });
+export const listPaginate = (params = {}) =>
+  http.get(PATH + "all/page", { params });
 
-export const remove = (id) => http.remove(PATH + 'delete/' + id);
+export const remove = (id) => http.remove(PATH + "delete/" + id);
 
-export const save = (params = {}) => http.post(PATH + 'save', params);
+export const save = (params = {}) => http.post(PATH + "save", params);
 
+export const price = (params = {}) => {
+  for (const value of params.values()) {
+    console.log(value);
+  }
+  return http.post(PATH + "price/import", params);
+};
