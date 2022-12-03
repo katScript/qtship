@@ -93,8 +93,8 @@ public class PriceCalculate {
                     weightLimit = adminConfigService.getFeeConfig("weight_limit"),
                     advanceFeeWeightLimit = adminConfigService.getFeeConfig("advance_fee_weight");
 
-            shippingFee += shippingFee * Double.parseDouble(VAT.getValue()) +
-                    shippingFee * Double.parseDouble(fuel.getValue());
+            shippingFee += shippingFee * Double.parseDouble(VAT.getValue()) / 100 +
+                    shippingFee * Double.parseDouble(fuel.getValue()) / 100;
 
             if (weight >= Double.parseDouble(weightLimit.getValue())) {
                 shippingFee += shippingFee * Double.parseDouble(advanceFeeWeightLimit.getValue()) / 100;
