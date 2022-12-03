@@ -59,11 +59,14 @@ export const dataSample = {
   senderAddress: "",
   shippingType: "",
   shippingTime: "",
+  takenTime: "",
   shipPayer: true,
   note: "",
   coupon: "",
   returnCode: "",
-  warehouse: "",
+  warehouse: {
+    id: null
+  },
   shippingAddressName: "",
   shippingAddressPhone: "",
   shippingAddressProvince: "",

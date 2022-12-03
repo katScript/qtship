@@ -140,19 +140,19 @@
                                     <div v-if="placeTake == 'option'" class="my-2">
                                         <a-form-item label="Địa điểm lấy hàng" name="warehouse"
                                                      :rules="[{ required: true, message: 'Vui lòng chọn địa điểm lấy hàng!' }]">
-                                            <a-select v-model:value="data.warehouse" style="width: 100%">
+                                            <a-select v-model:value="data.warehouse.id" style="width: 100%">
                                                 <a-select-option class="my-2" value="">- Địa điểm lấy hàng -
                                                 </a-select-option>
-                                                <a-select-option v-for="(type, index) in warehouses" :value="type.value"
+                                                <a-select-option v-for="(type, index) in warehouses" :value="type.id"
                                                                  :key="index">{{
                                                         type.name
                                                     }}
                                                 </a-select-option>
                                             </a-select>
                                         </a-form-item>
-                                        <a-form-item label="Thời gian lấy hàng" name="shippingTime"
+                                        <a-form-item label="Thời gian lấy hàng" name="takenTime"
                                                      :rules="[{ required: true, message: 'Vui lòng nhập thời gian lấy hàng!' }]">
-                                            <a-date-picker v-model:value="data.shippingTime" class="my-2"
+                                            <a-date-picker v-model:value="data.takenTime" class="my-2"
                                                            style="width: 100%" show-time
                                                            placeholder="Thời gian lấy hàng"/>
                                         </a-form-item>
@@ -510,7 +510,9 @@ const handleThrowProduct = (value) => {
 const handleSubmitForm = async () => {
     let currentValidate = await form.value.validate();
     if (currentValidate) {
-        setToDefaultTab();
+        if (!isDefaultTab())
+            setToDefaultTab();
+
         let validate = await form.value.validate();
 
         if (validate) {
@@ -581,11 +583,7 @@ const handleSubmitForm = async () => {
                         wardId: order.shippingAddressWardId,
                         street: order.shippingAddressStreet,
                     }
-                    if (!order.warehouse) {
-                        order.warehouse = {
-                            id: null
-                        };
-                    }
+                    order.takenTime = commonFunction.getDateTimeFormat(order.takenTime);
                     results[index] = omit(order, omitKey);
                 });
             }
