@@ -96,8 +96,8 @@ public class RuleService {
                             h,
                             priceList,
                             Double.parseDouble(data.get(dataSize - 1).get(h)),
-                            null,
-                            null
+                            0.5,
+                            0.5
                     )
             );
         }
