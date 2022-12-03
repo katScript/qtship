@@ -55,16 +55,20 @@ public class CSVHelper {
         return null;
     }
 
-    public CSVPrinter getCSVPrinter() {
+    public ByteArrayInputStream loadFile(Iterable<List<String>> data) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format)
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(new OutputStreamWriter(out, "UTF-8")), format)
         ) {
-//            csvPrinter.printRecord(List<String>);
-//            csvPrinter.flush();
-//            return new ByteArrayInputStream(out.toByteArray());
-            return csvPrinter;
+            csvPrinter.printRecord(header);
+
+            for (List<String> d : data) {
+                csvPrinter.printRecord(d);
+            }
+
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
