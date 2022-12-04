@@ -218,6 +218,14 @@
                                     </a-form-item>
                                 </div>
                             </div>
+                            <div class="border mt-3">
+                                <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Tóm tắt thông tin dịch vụ</div>
+                                <div class="p-3">
+                                    <div class="d-flex justify-content-between my-2">
+                                        Shipping fee: {{shippingFee}}
+                                    </div>
+                                </div>
+                            </div>
                         </a-col>
                         <a-col class="col-md-6">
                             <ProductSelect :hasError="hasProductError" :products="data.products" :endValidate="endCheck"
@@ -269,6 +277,7 @@ import ProductSelect from "@/components/common/ProductSelect";
 import {message} from "ant-design-vue";
 import {omit} from "lodash"
 import {commonFunction} from "@/scripts/ulti";
+import {getShippingFee} from "@/services/shipping"
 
 const route = useRoute();
 const router = useRouter();
@@ -300,6 +309,17 @@ const getTitle = computed(() => {
     }
     return title[route.params?.action] || 'đơn hàng';
 });
+
+const shippingDetail = ref({
+    shippingType: null,
+    warehouseId: null,
+    officeId: null,
+    provinceId: null,
+    weight: 0,
+    couponCode: null
+});
+
+const shippingFee = ref(0);
 
 const onlyCreate = computed(() => route.params?.action === 'create');
 const onlyUpdate = computed(() => route.params?.action === 'update' && route.params?.id);
@@ -504,6 +524,14 @@ const handleSetCoupon = (code) => {
  */
 const handleThrowProduct = (value) => {
     data.products = value;
+
+    let weight = 0.0;
+    value.forEach(e => {
+        weight += e.weight;
+    });
+
+    shippingDetail.value.weight = weight;
+    calculateShippingFee(shippingDetail.value);
 }
 // ========================== Save order ===========================
 
@@ -598,6 +626,43 @@ const handleSubmitForm = async () => {
         }
     }
 };
+
+// =================== Calculate shipping fee ======================
+watch(
+    () => data.shippingType,
+    () => {
+        if (data.shippingType) {
+            shippingDetail.value.shippingType = data.shippingType;
+            calculateShippingFee(shippingDetail.value);
+        }
+    }
+);
+
+watch(
+    () => data.shippingAddressProvinceId,
+    () => {
+        if (data.shippingAddressProvinceId) {
+            shippingDetail.value.provinceId = data.shippingAddressProvinceId;
+            calculateShippingFee(shippingDetail.value);
+        }
+    }
+);
+
+
+watch(
+    () => data.warehouse.id,
+    () => {
+        if (data.warehouse) {
+            shippingDetail.value.warehouseId = data.warehouse.id;
+            calculateShippingFee(shippingDetail.value);
+        }
+    }
+);
+
+const calculateShippingFee = async (shippingDetailData) => {
+    const {data} = await getShippingFee(shippingDetailData);
+    shippingFee.value = data.shippingFee;
+}
 
 // =================== Process address data ========================
 const provinceProcess = () => {
