@@ -41,7 +41,7 @@ public class PriceCalculate {
         }
 
         processShippingFee(order);
-        subtotal += order.getShippingFee();
+        subtotal += order.getShippingFee() - order.getCouponFee();
 
         order.setSubtotal(subtotal);
     }
