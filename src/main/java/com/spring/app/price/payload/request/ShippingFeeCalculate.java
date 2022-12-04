@@ -1,17 +1,18 @@
 package com.spring.app.price.payload.request;
 
 public class ShippingFeeCalculate {
+    private Long warehouseId;
     private Long officeId;
     private String provinceId;
     private Double weight;
     private String couponCode;
 
-    public Long getOfficeId() {
-        return officeId;
+    public Long getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setOfficeId(Long officeId) {
-        this.officeId = officeId;
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public String getProvinceId() {
@@ -36,5 +37,13 @@ public class ShippingFeeCalculate {
 
     public void setCouponCode(String couponCode) {
         this.couponCode = couponCode;
+    }
+
+    public Long getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
     }
 }
