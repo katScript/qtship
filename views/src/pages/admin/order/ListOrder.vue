@@ -38,14 +38,14 @@ const pagination = reactive({
 const rowSelection = ref({
   onSelect: (record, selected, selectedRows) => {
     listSelectOrder.value = selectedRows.map((x) => {
-      if (x) {
+      if (x.id) {
         return x.id;
       }
     });
   },
   onSelectAll: (selected, selectedRows) => {
     listSelectOrder.value = selectedRows.map((x) => {
-      if (x) {
+      if (x.id) {
         return x.id;
       }
     });

@@ -11,9 +11,8 @@ export const remove = (id) => http.remove(PATH + "delete/" + id);
 
 export const save = (params = {}) => http.post(PATH + "save", params);
 
-export const price = (params = {}) => {
-  for (const value of params.values()) {
-    console.log(value);
-  }
-  return http.post(PATH + "price/import", params);
-};
+export const price = (params = {}) => http.post(PATH + "price/import", params);
+
+export const priceSample = (params = {}) => http.get(PATH + "price/price/sample", params);
+
+export const areaSample = (params = {}) => http.get(PATH + "price/area/sample", params);

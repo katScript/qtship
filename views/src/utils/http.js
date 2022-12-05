@@ -47,4 +47,5 @@ export default {
   post,
   remove,
   put,
+  getHeader,
 };
