@@ -66,23 +66,21 @@ public class WarehouseController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteWarehouse(@Valid @RequestBody DeleteRequest deleteRequest) {
-        Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
-                .orElse(null);
+        try {
+            Customer customer = customerRepository.findById(deleteRequest.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
-        if (customer != null) {
-            Warehouse warehouse = warehouseRepository.findById(deleteRequest.getId()).orElse(null);
-
-            if (warehouse == null)
-                return ResponseEntity.badRequest().body(new MessageResponse("Warehouse not found!"));
+            Warehouse warehouse = warehouseRepository.findById(deleteRequest.getId())
+                    .orElseThrow(() -> new RuntimeException("Warehouse not found!"));
 
             if (!warehouse.getCustomer().getId().equals(customer.getId()))
                 return ResponseEntity.badRequest().body(new MessageResponse("Can't delete this warehouse! Customer not valid!"));
 
             warehouseRepository.delete(warehouse);
             return ResponseEntity.ok(new MessageResponse("Warehouse deleted successfully!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 
     @GetMapping("/all/customer/{id}")
@@ -90,12 +88,12 @@ public class WarehouseController {
             @Valid @PathVariable Long id,
             @Valid FilterRequest fR
     ) {
-        Customer customer = customerRepository.findById(id)
-                .orElse(null);
+        try {
+            Customer customer = customerRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
-        if (customer != null) {
             Pageable pageable = PageRequest.of(fR.getPage(), fR.getSize());
-            Page<Warehouse> warehouses = warehouseRepository.findAll(pageable);
+            Page<Warehouse> warehouses = warehouseRepository.findByCustomer(customer, pageable);
             CustomPageResponse pageResponse = new CustomPageResponse(warehouses);
             List<WarehouseData> warehouseData = new ArrayList<>();
 
@@ -105,8 +103,8 @@ public class WarehouseController {
 
             pageResponse.setContent(pageable);
             return ResponseEntity.ok(warehouseData);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!"));
     }
 }
