@@ -133,7 +133,7 @@ handleGetProduct();
 
 <template>
     <div class="border">
-        <div class="fs-4 border-bottom bg-secondary px-3 py-1 text-white">
+        <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">
             Thông tin sản phẩm
         </div>
         <div class="p-3">

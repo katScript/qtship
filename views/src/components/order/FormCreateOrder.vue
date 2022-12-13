@@ -401,6 +401,8 @@ const handleGetOrder = async () => {
             Object.assign(data, results);
             data.shippingAddressName = results.shippingAddress.name
             data.shippingAddressPhone = results.shippingAddress.phone
+            handleGetDistrict(results.shippingAddress.provinceId);
+            handleGetWard(results.shippingAddress.districtId);
             data.shippingAddressProvince = results.shippingAddress.province
             data.shippingAddressProvinceId = results.shippingAddress.provinceId
             data.shippingAddressDistrict = results.shippingAddress.district
@@ -408,8 +410,6 @@ const handleGetOrder = async () => {
             data.shippingAddressWard = results.shippingAddress.ward
             data.shippingAddressWardId = results.shippingAddress.wardId
             data.shippingAddressStreet = results.shippingAddress.street
-            handleGetDistrict(data.shippingAddressDistrictId);
-            handleGetWard(data.shippingAddressDistrictId);
         } catch (e) {
             if (e.response.data.status === 500) {
                 message.error('Đơn hàng không tồn tại');
