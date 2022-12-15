@@ -15,6 +15,7 @@ let customerStorage = JSON.parse(commonFunction.getCustomerStorage());
 
 const productList = ref([]);
 const productListData = ref([]);
+const emitProduct = ref([]);
 
 const handleGetProduct = async () => {
     const {data} = await listProduct(customerStorage.id);
@@ -38,6 +39,7 @@ const handleProductChange = (value, data) => {
             product: {
                 id: null,
             },
+            qty: "1",
             name: value[0],
             publicPrice: "0",
             weight: "0.1",
@@ -49,12 +51,17 @@ const handleProductChange = (value, data) => {
             inputAddProduct.value.product.id = currentData.id;
         }
 
-        inputAddProduct.value.name = currentData.name;
-        inputAddProduct.value.qty = "1";
-        inputAddProduct.value.price = currentData.publicPrice;
-        inputAddProduct.value.weight = currentData.weight;
-        inputAddProduct.value.specialType = currentData.specialType;
+        processInputAddProduct(currentData);
     }
+}
+
+const processInputAddProduct = (data) => {
+    inputAddProduct.value.name = data.name;
+    inputAddProduct.value.qty = data.qty;
+    inputAddProduct.value.price = data.publicPrice ? data.publicPrice : data.price;
+    inputAddProduct.value.weight = data.weight;
+    inputAddProduct.value.specialType = data.specialType;
+    inputAddProduct.value.productSelect = data.name ? [data.name] : [];
 }
 
 const props = defineProps({
@@ -113,20 +120,64 @@ const handleDeleteProduct = (key) => {
 watch(
     () => props.products,
     () => {
-        productList.value = props.products;
+        emitProduct.value = props.products;
+
+        if (emitProduct.value.length > 0) {
+            let length = props.products.length,
+                currentProduct = props.products[length - 1];
+
+            productList.value = props.products.slice(0, length - 1);
+            processInputAddProduct(currentProduct);
+        } else {
+            productList.value = [];
+            inputAddProduct.value = {
+                productSelect: [],
+                product: {
+                    id: null,
+                },
+                name: "",
+                qty: "",
+                price: "",
+                weight: "",
+                specialType: ""
+            };
+        }
     }
 );
 
 watch(
     () => productList.value,
     () => {
-        emits("on-throw-product", productList.value);
+        let returnData = productList.value.concat([inputAddProduct.value]);
+        let weight = 0;
+        returnData.forEach(e => {
+            weight += e.weight;
+        });
+
+        returnData.weight = weight;
+        emits("on-throw-product", returnData);
+    },
+    {deep: true}
+);
+
+watch(
+    () => inputAddProduct.value,
+    () => {
+        let returnData = productList.value.concat([inputAddProduct.value]);
+        let weight = 0;
+        returnData.forEach(e => {
+            weight += e.weight;
+        });
+
+        returnData.weight = weight;
+        emits("on-throw-product", returnData);
     },
     {deep: true}
 );
 
 onMounted(() => {
-    emits("on-throw-product", productList.value);
+    let returnData = productList.value.concat([inputAddProduct.value]);
+    emits("on-throw-product", returnData);
 });
 handleGetProduct();
 </script>

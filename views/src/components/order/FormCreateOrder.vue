@@ -524,14 +524,7 @@ const handleSetCoupon = (code) => {
  */
 const handleThrowProduct = (value) => {
     data.products = value;
-
-    let weight = 0.0;
-    value.forEach(e => {
-        weight += e.weight;
-    });
-
-    shippingDetail.value.weight = weight;
-    calculateShippingFee(shippingDetail.value);
+    shippingDetail.value.weight = value.weight;
 }
 // ========================== Save order ===========================
 
@@ -549,14 +542,14 @@ const handleSubmitForm = async () => {
             const requiredDataCP = requiredWard.value ? [...requiredData] : [...requiredData].filter(x => x !== 'shippingAddressWardId');
 
             if (onlyUpdate.value) {
-                data.products.forEach(product => {
-                    for (const property in product) {
-                        if (!product[property] && property !== 'specialType') {
-                            indexError = 0 + ' phần thông tin sản phẩm';
-                            break;
-                        }
-                    }
-                });
+                // data.products.forEach(product => {
+                //     for (const property in product) {
+                //         if (!product[property] && property !== 'specialType') {
+                //             indexError = property + ' phần thông tin sản phẩm';
+                //             break;
+                //         }
+                //     }
+                // });
 
                 for (const property in data) {
                     if (!data[property] && requiredDataCP.includes(property) && property !== 'shipPayer') {
@@ -631,20 +624,14 @@ const handleSubmitForm = async () => {
 watch(
     () => data.shippingType,
     () => {
-        if (data.shippingType) {
-            shippingDetail.value.shippingType = data.shippingType;
-            calculateShippingFee(shippingDetail.value);
-        }
+        shippingDetail.value.shippingType = data.shippingType;
     }
 );
 
 watch(
     () => data.shippingAddressProvinceId,
     () => {
-        if (data.shippingAddressProvinceId) {
-            shippingDetail.value.provinceId = data.shippingAddressProvinceId;
-            calculateShippingFee(shippingDetail.value);
-        }
+        shippingDetail.value.provinceId = data.shippingAddressProvinceId;
     }
 );
 
@@ -652,16 +639,22 @@ watch(
 watch(
     () => data.warehouse.id,
     () => {
-        if (data.warehouse) {
-            shippingDetail.value.warehouseId = data.warehouse.id;
-            calculateShippingFee(shippingDetail.value);
-        }
+        shippingDetail.value.warehouseId = data.warehouse.id;
     }
 );
 
-const calculateShippingFee = async (shippingDetailData) => {
-    const {data} = await getShippingFee(shippingDetailData);
-    shippingFee.value = data.shippingFee;
+setInterval(() => {
+    if (data.warehouse && data.shippingAddressProvinceId && data.shippingType) {
+        calculateShippingFee();
+    }
+}, 5000);
+
+
+const calculateShippingFee = async () => {
+    const {data} = await getShippingFee(shippingDetail.value);
+    if (data.shippingFee) {
+        shippingFee.value = data.shippingFee;
+    }
 }
 
 // =================== Process address data ========================
