@@ -1,6 +1,6 @@
 <template>
   <div class="management-client-page">
-    <div :class="listLiquidityBk.length == 0 ? 'show' : 'hide'">
+    <div :class="listLiquidityBk.length > 0 || listLiquidityBk ? 'hide' : 'show'">
       <ActionLoading />
     </div>
     <NavbarClient />
@@ -36,7 +36,7 @@
                 </ul>
               </div>
               <div class="col-12">
-                <h5>Phiên đối soát gần nhất: {{lastLiquidity.createdAt}}</h5>
+                <h5>Phiên đối soát gần nhất: {{lastLiquidity?.createdAt ? lastLiquidity.createdAt : "Chưa có phiên đối soát"}}</h5>
                 <table class="table table-hover">
                   <thead>
                     <tr>
