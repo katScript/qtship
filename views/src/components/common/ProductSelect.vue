@@ -15,7 +15,6 @@ let customerStorage = JSON.parse(commonFunction.getCustomerStorage());
 
 const productList = ref([]);
 const productListData = ref([]);
-const emitProduct = ref([]);
 
 const handleGetProduct = async () => {
     const {data} = await listProduct(customerStorage.id);
@@ -120,13 +119,13 @@ const handleDeleteProduct = (key) => {
 watch(
     () => props.products,
     () => {
-        emitProduct.value = props.products;
-
-        if (emitProduct.value.length > 0) {
+        if (props.products.length > 0) {
             let length = props.products.length,
                 currentProduct = props.products[length - 1];
 
-            productList.value = props.products.slice(0, length - 1);
+            if (props.products.length > 2)
+                productList.value = props.products.slice(0, length - 1);
+
             processInputAddProduct(currentProduct);
         } else {
             productList.value = [];
@@ -148,13 +147,7 @@ watch(
 watch(
     () => productList.value,
     () => {
-        let returnData = productList.value.concat([inputAddProduct.value]);
-        let weight = 0;
-        returnData.forEach(e => {
-            weight += e.weight;
-        });
-
-        returnData.weight = weight;
+        let returnData = [...productList.value, ...[inputAddProduct.value]];
         emits("on-throw-product", returnData);
     },
     {deep: true}
@@ -163,20 +156,13 @@ watch(
 watch(
     () => inputAddProduct.value,
     () => {
-        let returnData = productList.value.concat([inputAddProduct.value]);
-        let weight = 0;
-        returnData.forEach(e => {
-            weight += e.weight;
-        });
-
-        returnData.weight = weight;
-        emits("on-throw-product", returnData);
-    },
-    {deep: true}
+        let returnData = [...productList.value, ...[inputAddProduct.value]];
+        emits("on-throw-product-input", returnData);
+    }
 );
 
 onMounted(() => {
-    let returnData = productList.value.concat([inputAddProduct.value]);
+    let returnData = [...productList.value, ...[inputAddProduct.value]];
     emits("on-throw-product", returnData);
 });
 handleGetProduct();
