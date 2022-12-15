@@ -524,7 +524,14 @@ const handleSetCoupon = (code) => {
  */
 const handleThrowProduct = (value) => {
     data.products = value;
-    shippingDetail.value.weight = value.weight;
+
+    let weight = 0.0;
+    value.forEach((e) => {
+        weight += e.weight;
+    });
+
+    shippingDetail.value.weight = weight;
+    calculateShippingFee(shippingDetail.value);
 }
 // ========================== Save order ===========================
 
@@ -631,7 +638,10 @@ watch(
 watch(
     () => data.shippingAddressProvinceId,
     () => {
-        shippingDetail.value.provinceId = data.shippingAddressProvinceId;
+        if (data.shippingAddressProvinceId) {
+            shippingDetail.value.provinceId = data.shippingAddressProvinceId;
+            calculateShippingFee(shippingDetail.value);
+        }
     }
 );
 
@@ -639,22 +649,16 @@ watch(
 watch(
     () => data.warehouse.id,
     () => {
-        shippingDetail.value.warehouseId = data.warehouse.id;
+        if (data.warehouse) {
+            shippingDetail.value.warehouseId = data.warehouse.id;
+            calculateShippingFee(shippingDetail.value);
+        }
     }
 );
 
-setInterval(() => {
-    if (data.warehouse && data.shippingAddressProvinceId && data.shippingType) {
-        calculateShippingFee();
-    }
-}, 5000);
-
-
-const calculateShippingFee = async () => {
-    const {data} = await getShippingFee(shippingDetail.value);
-    if (data.shippingFee) {
-        shippingFee.value = data.shippingFee;
-    }
+const calculateShippingFee = async (shippingDetailData) => {
+    const {data} = await getShippingFee(shippingDetailData);
+    shippingFee.value = data.shippingFee;
 }
 
 // =================== Process address data ========================
