@@ -416,8 +416,8 @@ watch(
     );
     if (district) {
       data.shippingAddressDistrict = district.district_name;
-      handleGetWard(data.shippingAddressDistrictId);
     }
+    handleGetWard(data.shippingAddressDistrictId);
     // if (!actionShowReceiver.value) {
     //   data.shippingAddressWardId = "";
     //   data.shippingAddressStreet = "";
