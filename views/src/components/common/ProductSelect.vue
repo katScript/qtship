@@ -123,8 +123,9 @@ watch(
             let length = props.products.length,
                 currentProduct = props.products[length - 1];
 
-            if (props.products.length > 1)
+            if (length > 2) {
                 productList.value = props.products.slice(0, length - 1);
+            }
 
             processInputAddProduct(currentProduct);
         } else {
