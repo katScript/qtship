@@ -123,7 +123,7 @@ watch(
             let length = props.products.length,
                 currentProduct = props.products[length - 1];
 
-            if (props.products.length > 1)
+            if (props.products.length > 2)
                 productList.value = props.products.slice(0, length - 1);
 
             processInputAddProduct(currentProduct);
@@ -157,7 +157,7 @@ watch(
     () => inputAddProduct.value,
     () => {
         let returnData = [...productList.value, ...[inputAddProduct.value]];
-        emits("on-throw-product", returnData);
+        emits("on-throw-product-input", returnData);
     }
 );
 
