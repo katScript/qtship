@@ -89,10 +89,14 @@ public class AdminController {
 
     @PostMapping("/order/shipper")
     public ResponseEntity<?> assignOrderToShipper(@Valid @RequestBody List<AssignOrderRequest> request) {
-        for (AssignOrderRequest r: request) {
-            adminService.assignOrderToShipper(r);
-        }
+        try {
+            for (AssignOrderRequest r: request) {
+                adminService.assignOrderToShipper(r);
+            }
 
-        return ResponseEntity.ok(new MessageResponse("Assign successfully!"));
+            return ResponseEntity.ok(new MessageResponse("Assign successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 }
