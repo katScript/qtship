@@ -21,7 +21,18 @@ const handleSetFeeConfig = async () => {
 }
 //
 handleGetFeeConfig();
-
+const name = [
+  'VAT',
+  'Phí nhiên liệu',
+  'Giới hạn khối lượng',
+  'Phí khối lượng',
+];
+const unit = [
+  '%',
+  '%',
+  'kg',
+  '%',
+];
 </script>
 <template>
   <div class="px-4">
@@ -30,10 +41,16 @@ handleGetFeeConfig();
     </div>
     <div class="mt-2 p-2" v-if="feeConfig.length">
       <div class="fs-4">Cài đặt giá</div>
-      <div class="d-flex my-2 flex-wrap gap-3">
-        <div class="flex-fill" v-for="(config, index) in feeConfig" :key="index" style="max-width: 300px;">
-          <span class="font-weight-bold text-capitalize me-3">{{ config.key.replaceAll('_', ' ') }}: </span>
-          <a-input-number style="width: 100%;" v-model:value="config.value" v-if="config.type == 'int'" :placeholder="config.key" />
+      <div class="">
+        <div class="mb-2" v-for="(config, index) in feeConfig" :key="index" style="max-width: 500px;">
+          <div class="font-weight-bold text-capitalize mb-1 mt-2">{{ name[index] }}: </div>
+          <a-input-number
+            style="width: 100%;"
+            v-model:value="config.value"
+            v-if="config.type == 'int'"
+            :placeholder="name[index]"
+            :addon-after="unit[index]"
+          />
         </div>
       </div> 
       <a-button type="primary" @click="handleSetFeeConfig">Lưu</a-button>

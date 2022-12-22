@@ -285,9 +285,6 @@ const handleSubmitForm = async () => {
         "Đơn hàng thứ " + indexError + " chưa được hoàn thiện"
       );
     }
-    if (results.length) {
-      return console.log(results);
-    }
     await saveOrder(results);
     message.success("Lưu đơn hàng thành công");
     return router.push("/admin/order");
@@ -353,6 +350,18 @@ const onEdit = (targetKey, action) => {
   } else {
     remove(targetKey);
   }
+};
+const onChangeProvince = () => {
+  data.shippingAddressDistrictId = "";
+  data.shippingAddressWardId = "";
+  data.shippingAddressStreet = "";
+};
+const onChangeDistrict = () => {
+  data.shippingAddressWardId = "";
+  data.shippingAddressStreet = "";
+};
+const onChangeWard = () => {
+  data.shippingAddressStreet = "";
 };
 // Handle Emit
 const handleThrowProduct = (value) => {
@@ -639,11 +648,8 @@ handleGetProvince();
                   <a-radio class="d-block mb-2" :value="'default'"
                     >Gửi hàng tại bưu cục</a-radio
                   >
-                  <a-radio style="d-block my-2" :value="'option'"
-                    >Lấy hàng tận nơi</a-radio
-                  >
                 </a-radio-group>
-                <div v-if="placeTake == 'option'" class="my-2">
+                <div v-if="placeTake == 'default'" class="my-2">
                   <a-form-item
                     label="Địa điểm lấy hàng"
                     name="warehouse"
@@ -662,24 +668,6 @@ handleGetProvince();
                         >- Địa điểm lấy hàng -</a-select-option
                       >
                     </a-select>
-                  </a-form-item>
-                  <a-form-item
-                    label="Thời gian lấy hàng"
-                    name="shippingTime"
-                    :rules="[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhập thời gian lấy hàng!',
-                      },
-                    ]"
-                  >
-                    <a-date-picker
-                      v-model:value="data.shippingTime"
-                      class="my-2"
-                      style="width: 100%"
-                      show-time
-                      placeholder="Thời gian lấy hàng"
-                    />
                   </a-form-item>
                 </div>
                 <div class="border-top mt-2 pt-2">
@@ -772,6 +760,7 @@ handleGetProvince();
                   <a-select
                     v-model:value="data.shippingAddressProvinceId"
                     style="width: 100%"
+                    @change="onChangeProvince"
                   >
                     <a-select-option value=""
                       >- Tỉnh / thành phố -</a-select-option
@@ -798,6 +787,7 @@ handleGetProvince();
                   <a-select
                     v-model:value="data.shippingAddressDistrictId"
                     style="width: 100%"
+                    @change="onChangeDistrict"
                   >
                     <a-select-option value="">- Quận / huyện -</a-select-option>
                     <a-select-option
@@ -822,6 +812,7 @@ handleGetProvince();
                   <a-select
                     v-model:value="data.shippingAddressWardId"
                     style="width: 100%"
+                    @change="onChangeWard"
                   >
                     <a-select-option value="">- Xã / phường -</a-select-option>
                     <a-select-option

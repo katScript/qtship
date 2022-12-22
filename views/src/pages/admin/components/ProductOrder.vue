@@ -98,7 +98,9 @@ onMounted(() => {
 
 <template>
   <div class="border">
-    <div class="fs-4 border-bottom bg-secondary px-3 py-1 text-white">
+    <div
+      style="background: #bf1e2d"
+      class="fs-4 border-bottom px-3 py-1 text-white">
       Thông tin sản phẩm
     </div>
     <div class="p-3">
@@ -189,17 +191,17 @@ onMounted(() => {
               <MoneyCollectOutlined class="me-2" />
             </template>
           </a-input-number>
-          <PlusOutlined
-            class="btn btn-success text-white px-3"
-            v-if="index == listProduct.length - 1"
-            @click.prevent="handleAddProduct"
-          />
           <DeleteOutlined
             class="btn btn-danger text-white px-3"
-            v-else
+            v-if="listProduct.length != 1"
             @click.prevent="handleDeleteProduct(index)"
           />
         </div>
+        <PlusOutlined
+          class="btn btn-success text-white px-3 mt-3"
+          v-if="index == listProduct.length - 1"
+          @click.prevent="handleAddProduct"
+        />
       </div>
     </div>
   </div>
