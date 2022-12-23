@@ -222,7 +222,7 @@
                                 <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Tóm tắt thông tin dịch vụ</div>
                                 <div class="p-3">
                                     <div class="d-flex justify-content-between my-2">
-                                        Shipping fee: {{shippingFee}}
+                                        Phí ship : {{shippingFee}} VNĐ
                                     </div>
                                 </div>
                             </div>
