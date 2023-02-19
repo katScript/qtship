@@ -4,9 +4,9 @@ import $ from "jquery";
 import { useCookies } from "vue3-cookies";
 import moment from "moment/moment";
 
-const APIUrl = "https://api.dcodetest.com/";
+const APIUrl = "https://api.qtxpresss.app/";
 const commonFunction = {
-    DOMAIN_URL: 'https://api.dcodetest.com/',
+    DOMAIN_URL: 'https://api.qtxpresss.app/',
     ORIGIN_URL: window.location.origin,
     EXPIRED_TIME_COOKIES: "1d",
     // cookies manager

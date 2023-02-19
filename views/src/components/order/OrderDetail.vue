@@ -82,7 +82,7 @@
                                         </p>
                                         <br/>
                                     </div>
-                                    <button v-if="orderData.status == 'WAITING_CONFIRM'" class="btn btn-primary"
+                                    <button v-if="orderData.status !== 'PENDING'" class="btn btn-primary"
                                             v-on:click="isShowBill = true">Xuất hóa đơn
                                     </button>
                                 </div>
