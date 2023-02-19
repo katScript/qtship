@@ -17,7 +17,7 @@ export default {
     cookiesManager.cookies.remove(userCookies.id);
     cookiesManager.cookies.remove(userCookies.roles);
   },
-  DOMAIN_URL: 'https://api.dcodetest.com/v1/',
+  DOMAIN_URL: 'https://api.qtxpresss.app/v1/',
   TYPE_ORDER_PENDING: 'PENDING',
   TYPE_ORDER_PROCESSING: 'PROCESSING',
   TYPE_ORDER_PAYMENTED: 'PAYMENTED',
