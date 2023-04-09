@@ -9,16 +9,26 @@
                 <a-tab-pane :tab="'Thông tin đơn hàng'" :key="'default'" :closable="false"/>
             </a-tabs>
 
-            <a-form :model="formData" layout="vertical" name="order" autocomplete="off" ref="form">
+            <a-form :model="formData" :rules="formDataRules" layout="vertical" name="order" autocomplete="off" ref="form">
                 <div class="w-100 m-auto">
                     <div class="row">
                         <a-col class="col-md-6">
                             <SenderInfo :name="formData.senderInfo.name"
                                         :address="formData.senderInfo.address"
                                         :phone="formData.senderInfo.phone"
-                                        @sender-change="handleSenderChange"
+                                        @sender-info-change="handleSenderChange"
                             />
-                            <ShippingInfo/>
+                            <ShippingInfo :name="formData.shippingInfo.name"
+                                          :phone="formData.shippingInfo.phone"
+                                          :province="formData.shippingInfo.province"
+                                          :provinceId="formData.shippingInfo.provinceId"
+                                          :district="formData.shippingInfo.district"
+                                          :districtId="formData.shippingInfo.districtId"
+                                          :ward="formData.shippingInfo.ward"
+                                          :wardId="formData.shippingInfo.wardId"
+                                          :street="formData.shippingInfo.street"
+                                          @shipping-info-change="handleShippingInfoChange"
+                            />
                         </a-col>
                         <a-col class="col-md-6">
                             <ShippingType :customer-id="customerStorage.id" />
@@ -74,8 +84,36 @@ const formData = ref({
         name: '',
         address: '',
         phone: ''
+    },
+    shippingInfo: {
+        name: '',
+        phone: '',
+        province: '',
+        provinceId: null,
+        district: '',
+        districtId: null,
+        ward: '',
+        wardId: null,
+        street: ''
     }
 });
+
+const formDataRules = ref({
+    senderInfo: {
+        name: [{ required: true, message: 'Vui lòng nhập thông tin người gửi!' }],
+        phone: [{ required: true, message: 'Vui lòng nhập số điện thoại người gửi!' }, { pattern: /\d{9,10}/, message: 'Nhập số điện thoại phù hợp' }],
+        address: [{ required: true, message: 'Vui lòng nhập địa chỉ người gửi!' }]
+    },
+    shippingInfo: {
+        name: [{ required: true, message: 'Vui lòng nhập tên người nhận!' }],
+        phone: [{ required: true, message: 'Vui lòng nhập số điện thoại người nhận!' }, { pattern: /\d{9,10}/, message: 'Nhập số điện thoại phù hợp' }],
+        provinceId: [{ required: true, message: 'Vui lòng nhập tỉnh / thành phố người nhận!' }],
+        districtId: [{ required: true, message: 'Vui lòng nhập quận / huyện người nhận!' }],
+        wardId: [{ required: true, message: 'Vui lòng nhập xã / phường người nhận!' }],
+        street: [{ required: true, message: 'Vui lòng nhập Địa chỉ cụ thể người nhận!' }]
+    }
+});
+
 // const orderData = ref({
 //     id: null,
 //     customerId: null,
@@ -129,6 +167,20 @@ const handleSenderChange = (value) => {
     senderData.name = value.name;
     senderData.address = value.address;
     senderData.phone = value.phone;
+}
+
+const handleShippingInfoChange = (value) => {
+    let shippingData = formData.value.shippingInfo;
+
+    shippingData.name = value.name;
+    shippingData.phone = value.phone;
+    shippingData.province = value.province;
+    shippingData.provinceId = value.provinceId;
+    shippingData.district = value.district;
+    shippingData.districtId = value.districtId;
+    shippingData.ward = value.ward;
+    shippingData.wardId = value.wardId;
+    shippingData.street = value.street;
 }
 
 const handleSubmit = async () => {

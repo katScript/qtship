@@ -3,7 +3,7 @@ import {
     UserOutlined,
     PhoneOutlined
 } from "@ant-design/icons-vue";
-import {computed, defineProps, reactive, ref} from "vue";
+import {defineProps, reactive, ref, defineEmits} from "vue";
 import {province, district, ward} from "@/services/region";
 
 const props = defineProps({
@@ -12,10 +12,6 @@ const props = defineProps({
         default: ''
     },
     phone: {
-        type: String,
-        default: ''
-    },
-    address: {
         type: String,
         default: ''
     },
@@ -49,10 +45,11 @@ const props = defineProps({
     }
 });
 
+const emits = defineEmits(['shipping-info-change'])
+
 const data = reactive({
     name: props.name,
     phone: props.phone,
-    address: props.address,
     province: props.province,
     provinceId: props.provinceId,
     district: props.district,
@@ -86,10 +83,9 @@ const handleGetProvince = async () => {
 const handleGetDistrict = async (provinceId) => {
     resetDistrictData();
     const {data} = await district(provinceId);
+    console.log({...data})
     districts.value = data;
 }
-
-const requiredDistrict = computed(() => data.provinceId && districts.value.length);
 
 const handleGetWard = async (districtId) => {
     resetWardData();
@@ -97,31 +93,31 @@ const handleGetWard = async (districtId) => {
     wards.value = data;
 }
 
-const requiredWard = computed(() => data.provinceId && data.districtId && wards.value.length);
-
 // process address data
 const resetDistrictData = () => {
     districts.value = [];
     data.district = '';
-    data.districtId = '';
+    data.districtId = null;
 }
 
 const resetWardData = () => {
     wards.value = [];
     data.ward = '';
-    data.wardId = '';
+    data.wardId = null;
 }
 
 const provinceProcess = () => {
     const province = provinces.value.find(x => x.province_id === data.provinceId);
     if (province) {
         data.province = province.province_name;
-        handleGetDistrict(data.province).then(() => {
+        handleGetDistrict(data.provinceId).then(() => {
             districtProcess();
         });
     } else {
         resetDistrictData();
     }
+
+    emits('shipping-info-change', data);
 }
 
 const districtProcess = () => {
@@ -134,6 +130,8 @@ const districtProcess = () => {
     } else {
         resetWardData();
     }
+
+    emits('shipping-info-change', data);
 }
 
 const wardProcess = () => {
@@ -142,6 +140,8 @@ const wardProcess = () => {
         data.ward = ward?.ward_name;
         data.wardId = ward?.ward_id;
     }
+
+    emits('shipping-info-change', data);
 }
 
 // startup
@@ -153,25 +153,25 @@ handleGetProvince();
         <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Thông tin người nhận
         </div>
         <div class="p-3">
-            <a-form-item label="Tên người nhận" name="name"
-                         :rules="[{ required: true, message: 'Vui lòng nhập tên người nhận!' }]">
-                <a-input v-model:value="data.name" placeholder="Tên người nhận">
+            <a-form-item label="Tên người nhận" :name="['shippingInfo', 'name']">
+                <a-input v-model:value="data.name"
+                         placeholder="Tên người nhận"
+                         @change="emits('shipping-info-change', data)">
                     <template #prefix>
                         <UserOutlined class="me-2"/>
                     </template>
                 </a-input>
             </a-form-item>
-            <a-form-item label="Số điện thoại người nhận" name="phone"
-                         :rules="[{ required: true, message: 'Vui lòng nhập số điện thoại người nhận!' }]">
+            <a-form-item label="Số điện thoại người nhận" :name="['shippingInfo', 'phone']">
                 <a-input v-model:value="data.phone"
-                         placeholder="Số điện thoại người nhận">
+                         placeholder="Số điện thoại người nhận"
+                         @change="emits('shipping-info-change', data)">
                     <template #prefix>
                         <PhoneOutlined class="me-2"/>
                     </template>
                 </a-input>
             </a-form-item>
-            <a-form-item label="Tỉnh / thành phố" name="provinceId"
-                         :rules="[{ required: true, message: 'Vui lòng nhập tỉnh / thành phố người nhận!' }]">
+            <a-form-item label="Tỉnh / thành phố" :name="['shippingInfo', 'provinceId']">
                 <a-select v-model:value="data.provinceId" style="width: 100%" @change="provinceProcess">
                     <a-select-option value=''>- Tỉnh / thành phố -</a-select-option>
                     <a-select-option v-for="(province, index) in provinces"
@@ -182,8 +182,7 @@ handleGetProvince();
                     </a-select-option>
                 </a-select>
             </a-form-item>
-            <a-form-item label="Quận / huyện " name="districtId"
-                         :rules="[{ required: requiredDistrict, message: 'Vui lòng nhập quận / huyện người nhận!' }]">
+            <a-form-item label="Quận / huyện " :name="['shippingInfo', 'districtId']">
                 <a-select v-model:value="data.districtId" style="width: 100%" @change="districtProcess">
                     <a-select-option value=''>- Quận / huyện -</a-select-option>
                     <a-select-option v-for="(district, index) in districts"
@@ -194,8 +193,7 @@ handleGetProvince();
                     </a-select-option>
                 </a-select>
             </a-form-item>
-            <a-form-item label="Xã / phường" name="wardId"
-                         :rules="[{ required: requiredWard, message: 'Vui lòng nhập xã / phường người nhận!' }]">
+            <a-form-item label="Xã / phường" :name="['shippingInfo', 'wardId']">
                 <a-select v-model:value="data.wardId" style="width: 100%" @change="wardProcess">
                     <a-select-option value=''>- Xã / phường -</a-select-option>
                     <a-select-option v-for="(ward, index) in wards" :value="ward.ward_id"
@@ -206,10 +204,11 @@ handleGetProvince();
                     </a-select-option>
                 </a-select>
             </a-form-item>
-            <a-form-item label="Địa chỉ cụ thể" name="street"
-                         :rules="[{ required: true, message: 'Vui lòng nhập Địa chỉ cụ thể người nhận!' }]">
+            <a-form-item label="Địa chỉ cụ thể" :name="['shippingInfo', 'street']">
                 <a-input v-model:value="data.street"
-                         placeholder="Địa chỉ cụ thể: Số nhà, Tên đường..."/>
+                         placeholder="Địa chỉ cụ thể: Số nhà, Tên đường..."
+                         @change="emits('shipping-info-change', data)"
+                />
             </a-form-item>
         </div>
     </div>
