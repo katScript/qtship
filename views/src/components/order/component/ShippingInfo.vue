@@ -14,11 +14,11 @@ const props = defineProps({
         name: '',
         phone: '',
         province: '',
-        provinceId: null,
+        provinceId: '',
         district: '',
-        districtId: null,
+        districtId: '',
         ward: '',
-        wardId: null,
+        wardId: '',
         street: ''
       }
     }
@@ -63,7 +63,6 @@ const handleGetProvince = async () => {
 const handleGetDistrict = async (provinceId) => {
   resetDistrictData();
   const {data} = await district(provinceId);
-  console.log({...data})
   districts.value = data;
 }
 

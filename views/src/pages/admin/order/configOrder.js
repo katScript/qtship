@@ -161,3 +161,104 @@ export const processCustomerDataSample = (data, customerStorage) => {
 
   data.products = [];
 }
+
+export const orderFormData = {
+  senderInfo: {
+    name: '',
+    address: '',
+    phone: ''
+  },
+  shippingInfo: {
+    name: '',
+    phone: '',
+    province: '',
+    provinceId: null,
+    district: '',
+    districtId: null,
+    ward: '',
+    wardId: null,
+    street: ''
+  },
+  shippingType: {
+    type: '',
+    warehouseId: '',
+    time: '',
+    objPay: true
+  },
+  otherInfo: {
+    note: '',
+    coupon: '',
+    returnCode: ''
+  },
+  productSelector: {
+    name: '',
+    qty: null,
+    weight: null,
+    price: null
+  },
+  productList: {}
+}
+
+export const resetOrderFormData = (data) => {
+  data.senderInfo.name = '';
+  data.senderInfo.address = '';
+  data.senderInfo.phone = '';
+
+  data.shippingInfo.name = '';
+  data.shippingInfo.phone = '';
+  data.shippingInfo.province = '';
+  data.shippingInfo.provinceId = '';
+  data.shippingInfo.district = '';
+  data.shippingInfo.districtId = '';
+  data.shippingInfo.ward = '';
+  data.shippingInfo.wardId = '';
+  data.shippingInfo.street = '';
+
+  data.shippingType.type = '';
+  data.shippingType.warehouseId = '';
+  data.shippingType.time = '';
+  data.shippingType.objPay = true;
+
+  data.otherInfo.note = '';
+  data.otherInfo.coupon = '';
+  data.otherInfo.returnCode = '';
+
+  data.productSelector.name = '';
+  data.productSelector.qty = '';
+  data.productSelector.weight = '';
+  data.productSelector.price = '';
+
+  data.productList = {};
+}
+
+export const setOrderFormData = (data, value) => {
+  data.senderInfo.name = value.senderInfo.name;
+  data.senderInfo.address = value.senderInfo.address;
+  data.senderInfo.phone = value.senderInfo.phone;
+
+  data.shippingInfo.name = value.shippingInfo.name;
+  data.shippingInfo.phone = value.shippingInfo.phone;
+  data.shippingInfo.province = value.shippingInfo.province;
+  data.shippingInfo.provinceId = value.shippingInfo.provinceId;
+  data.shippingInfo.district = value.shippingInfo.district;
+  data.shippingInfo.districtId = value.shippingInfo.districtId;
+  data.shippingInfo.ward = value.shippingInfo.ward;
+  data.shippingInfo.wardId = value.shippingInfo.wardId;
+  data.shippingInfo.street = value.shippingInfo.street;
+
+  data.shippingType.type = value.shippingType.type;
+  data.shippingType.warehouseId = value.shippingType.warehouseId;
+  data.shippingType.time = value.shippingType.time;
+  data.shippingType.objPay = value.shippingType.objPay;
+
+  data.otherInfo.note = value.otherInfo.note;
+  data.otherInfo.coupon = value.otherInfo.coupon;
+  data.otherInfo.returnCode = value.otherInfo.returnCode;
+
+  data.productSelector.name = value.productSelector.name;
+  data.productSelector.qty = value.productSelector.qty;
+  data.productSelector.weight = value.productSelector.weight;
+  data.productSelector.price = value.productSelector.price;
+
+  data.productList = value.productList;
+}

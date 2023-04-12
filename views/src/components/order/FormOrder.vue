@@ -2,10 +2,9 @@
   <div class="">
     <div class="my-2 border-bottom px-4 py-2 fs-2"><h4>Tạo mới đơn hàng</h4></div>
     <div class="px-4">
-      <a-tabs v-model:activeKey="activeKey" hide-add
-              type="editable-card">
-        <!--                <a-tab-pane v-for="(order, index) in orders" :key="index"-->
-        <!--                            :tab="order.shippingAddressName" :closable="true"/>-->
+      <a-tabs v-model:activeKey="activeKey" hide-add type="editable-card" @tabClick="handleChangeTab" @edit="handleEditTab">
+        <a-tab-pane v-for="(order, index) in dataOrders" :key="index"
+                    :tab="`Đơn hàng - (${index + 1})`" :closable="true"/>
         <a-tab-pane :tab="'Thông tin đơn hàng'" :key="'default'" :closable="false"/>
       </a-tabs>
 
@@ -49,8 +48,7 @@
         <center>
           <a-form-item class="m-auto">
             <div class="">
-              <button type="submit" class="mt-3 me-1"
-                      :class="'btn btn-outline-info'" ref="submitList">
+              <button :class="'mt-3 me-1 btn btn-outline-info'" @click.prevent="handleAddOrders">
                 {{ 'Thêm đơn hàng mới' }}
               </button>
               <button class="btn btn-success mt-3" @click.prevent="handleSubmit">Lưu đơn hàng</button>
@@ -70,12 +68,15 @@ import ShippingType from "@/components/order/component/ShippingType";
 import OtherInfo from "@/components/order/component/OtherInfo";
 import ProductSelector from "@/components/order/component/ProductSelector";
 import {commonFunction} from "@/scripts/ulti";
+import {setOrderFormData, resetOrderFormData, orderFormData} from "@/pages/admin/order/configOrder";
 
 const activeKey = ref('default');
 let customerStorage = JSON.parse(commonFunction.getCustomerStorage());
 
 const form = ref(null);
-// const data = ref([]);
+const dataOrders = ref([]);
+const defaultTabData = ref({...orderFormData});
+
 const formData = ref({
   senderInfo: {
     name: '',
@@ -95,7 +96,7 @@ const formData = ref({
   },
   shippingType: {
     type: '',
-    warehouseId: null,
+    warehouseId: '',
     time: '',
     objPay: true
   },
@@ -106,9 +107,9 @@ const formData = ref({
   },
   productSelector: {
     name: '',
-    qty: null,
-    weight: null,
-    price: null
+    qty: '',
+    weight: '',
+    price: ''
   },
   productList: {}
 });
@@ -237,6 +238,48 @@ const handleValidateProduct = async (event) => {
 const handleSubmit = async () => {
   let validate = await form.value.validate();
   console.log(validate);
+}
+
+const handleAddOrders = async () => {
+  let validate = await form.value.validate();
+
+  if (validate) {
+    dataOrders.value.push({...formData.value});
+    resetOrderFormData(formData.value);
+  }
+}
+
+const handleChangeTab = async (key) => {
+  let currentTab = activeKey.value;
+
+  if (currentTab === 'default') {
+    setOrderFormData(defaultTabData.value, {...formData.value});
+    setOrderFormData(formData.value, {...dataOrders.value[key]});
+
+    activeKey.value = key;
+  } else {
+    let validate = form.value.validate();
+
+    if (validate) {
+      setOrderFormData(dataOrders.value[currentTab], {...formData.value});
+
+      if (key === 'default') {
+        setOrderFormData(formData.value, {...defaultTabData.value});
+        resetOrderFormData(defaultTabData.value);
+      } else {
+        setOrderFormData(formData.value, {...dataOrders.value[key]});
+      }
+
+      activeKey.value = key;
+    }
+  }
+}
+
+const handleEditTab = (key, action) => {
+  if (action !== 'add') {
+    handleChangeTab('default');
+    dataOrders.value = dataOrders.value.filter((x, index) => index !== key);
+  }
 }
 
 </script>
