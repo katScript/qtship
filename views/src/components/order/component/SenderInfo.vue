@@ -3,25 +3,23 @@ import {AimOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons-vue";
 import {defineEmits, defineProps, reactive  } from "vue";
 
 const props = defineProps({
-    name: {
-        type: String,
-        default: ''
-    },
-    phone: {
-        type: String,
-        default: ''
-    },
-    address: {
-        type: String,
-        default: ''
+  senderInfo: {
+    type: Object,
+    default: () => {
+      return {
+        name: '',
+        phone: '',
+        address: ''
+      }
     }
+  }
 });
 const emits = defineEmits(['sender-info-change']);
 
 const data = reactive({
-    name: props.name,
-    phone: props.phone,
-    address: props.address
+    name: props.senderInfo.name,
+    phone: props.senderInfo.phone,
+    address: props.senderInfo.address
 });
 </script>
 
