@@ -1,4 +1,5 @@
 import {commonFunction} from "@/scripts/ulti";
+import dayjs from "dayjs";
 
 export const columns = [
   {
@@ -162,41 +163,43 @@ export const processCustomerDataSample = (data, customerStorage) => {
   data.products = [];
 }
 
-export const orderFormData = {
-  senderInfo: {
-    name: '',
-    address: '',
-    phone: ''
-  },
-  shippingInfo: {
-    name: '',
-    phone: '',
-    province: '',
-    provinceId: null,
-    district: '',
-    districtId: null,
-    ward: '',
-    wardId: null,
-    street: ''
-  },
-  shippingType: {
-    type: '',
-    warehouseId: '',
-    time: '',
-    objPay: true
-  },
-  otherInfo: {
-    note: '',
-    coupon: '',
-    returnCode: ''
-  },
-  productSelector: {
-    name: '',
-    qty: null,
-    weight: null,
-    price: null
-  },
-  productList: {}
+export const getOrderFormData = () => {
+  return {
+    senderInfo: {
+      name: '',
+      address: '',
+      phone: ''
+    },
+    shippingInfo: {
+      name: '',
+      phone: '',
+      province: '',
+      provinceId: null,
+      district: '',
+      districtId: null,
+      ward: '',
+      wardId: null,
+      street: ''
+    },
+    shippingType: {
+      type: '',
+      warehouseId: '',
+      time: '',
+      objPay: true
+    },
+    otherInfo: {
+      note: '',
+      coupon: '',
+      returnCode: ''
+    },
+    productSelector: {
+      name: '',
+      qty: null,
+      weight: null,
+      price: null
+    },
+    productList: {}
+  }
 }
 
 export const resetOrderFormData = (data) => {
@@ -231,7 +234,9 @@ export const resetOrderFormData = (data) => {
   data.productList = {};
 }
 
-export const setOrderFormData = (data, value) => {
+export const setOrderFormData = (data, obj) => {
+  const value = JSON.parse(JSON.stringify(obj));
+
   data.senderInfo.name = value.senderInfo.name;
   data.senderInfo.address = value.senderInfo.address;
   data.senderInfo.phone = value.senderInfo.phone;
@@ -248,7 +253,7 @@ export const setOrderFormData = (data, value) => {
 
   data.shippingType.type = value.shippingType.type;
   data.shippingType.warehouseId = value.shippingType.warehouseId;
-  data.shippingType.time = value.shippingType.time;
+  data.shippingType.time = value.shippingType.time === null || value.shippingType.time === '' ? '' : dayjs(value.shippingType.time);
   data.shippingType.objPay = value.shippingType.objPay;
 
   data.otherInfo.note = value.otherInfo.note;

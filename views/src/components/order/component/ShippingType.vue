@@ -53,9 +53,11 @@ handleGetWarehouse();
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="Địa điểm lấy hàng" :name="['shippingType', 'warehouseId']"
-                   @change="emits('shipping-type-change', data)">
-        <a-select v-model:value="data.warehouseId" style="width: 100%">
+      <a-form-item label="Địa điểm lấy hàng" :name="['shippingType', 'warehouseId']">
+        <a-select v-model:value="data.warehouseId"
+                  style="width: 100%"
+                  @change="emits('shipping-type-change', data)"
+        >
           <a-select-option class="my-2" value="">- Địa điểm lấy hàng -
           </a-select-option>
           <a-select-option v-for="(type, index) in warehouses" :value="type.id"
@@ -63,11 +65,12 @@ handleGetWarehouse();
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="Thời gian lấy hàng" :name="['shippingType', 'time']"
-                   @change="emits('shipping-type-change', data)">
+      <a-form-item label="Thời gian lấy hàng" :name="['shippingType', 'time']">
         <a-date-picker v-model:value="data.time" class="my-2"
                        style="width: 100%" show-time
-                       placeholder="Thời gian lấy hàng"/>
+                       placeholder="Thời gian lấy hàng"
+                       @change="emits('shipping-type-change', data)"
+        />
       </a-form-item>
       <div class="border-top mt-2 pt-2">
         <a-form-item label="Trả phí ship" :name="['shippingType', 'objPay']">

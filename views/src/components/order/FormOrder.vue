@@ -48,7 +48,7 @@
         <center>
           <a-form-item class="m-auto">
             <div class="">
-              <button :class="'mt-3 me-1 btn btn-outline-info'" @click.prevent="handleAddOrders">
+              <button v-if="activeKey === 'default'" :class="'mt-3 me-1 btn btn-outline-info'" @click.prevent="handleAddOrders">
                 {{ 'Thêm đơn hàng mới' }}
               </button>
               <button class="btn btn-success mt-3" @click.prevent="handleSubmit">Lưu đơn hàng</button>
@@ -68,14 +68,15 @@ import ShippingType from "@/components/order/component/ShippingType";
 import OtherInfo from "@/components/order/component/OtherInfo";
 import ProductSelector from "@/components/order/component/ProductSelector";
 import {commonFunction} from "@/scripts/ulti";
-import {setOrderFormData, resetOrderFormData, orderFormData} from "@/pages/admin/order/configOrder";
+import {setOrderFormData, resetOrderFormData, getOrderFormData} from "@/pages/admin/order/configOrder";
 
 const activeKey = ref('default');
-let customerStorage = JSON.parse(commonFunction.getCustomerStorage());
+
+const customerStorage = JSON.parse(commonFunction.getCustomerStorage());
 
 const form = ref(null);
 const dataOrders = ref([]);
-const defaultTabData = ref({...orderFormData});
+const defaultTabData = ref(getOrderFormData());
 
 const formData = ref({
   senderInfo: {
@@ -244,8 +245,13 @@ const handleAddOrders = async () => {
   let validate = await form.value.validate();
 
   if (validate) {
-    dataOrders.value.push({...formData.value});
+    let length = dataOrders.value.length;
+    dataOrders.value.push(getOrderFormData());
+
+    setOrderFormData(dataOrders.value[length], {...formData.value});
     resetOrderFormData(formData.value);
+
+    console.log('handleAddOrders', dataOrders.value[length].shippingType.time);
   }
 }
 
@@ -258,9 +264,9 @@ const handleChangeTab = async (key) => {
 
     activeKey.value = key;
   } else {
-    let validate = form.value.validate();
+    let validate = await form.value.validate();
 
-    if (validate) {
+    if (!validate) {
       setOrderFormData(dataOrders.value[currentTab], {...formData.value});
 
       if (key === 'default') {
@@ -273,6 +279,8 @@ const handleChangeTab = async (key) => {
       activeKey.value = key;
     }
   }
+
+  console.log(activeKey.value);
 }
 
 const handleEditTab = (key, action) => {
