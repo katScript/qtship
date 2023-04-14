@@ -157,7 +157,7 @@ public class OrderService {
                     warehouse
             ).setOffice(
                     officeRepository.findFirstByProvinceId(warehouse.getProvinceId())
-                            .orElseThrow(() -> new RuntimeException("Office not found!"))
+                            .orElse(new Office())
             );
         }
     }

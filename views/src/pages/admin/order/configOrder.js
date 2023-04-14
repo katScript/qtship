@@ -1,4 +1,5 @@
 import {commonFunction} from "@/scripts/ulti";
+import dayjs from "dayjs";
 
 export const columns = [
   {
@@ -160,4 +161,144 @@ export const processCustomerDataSample = (data, customerStorage) => {
   }
 
   data.products = [];
+}
+
+export const getOrderFormData = () => {
+  return {
+    senderInfo: {
+      name: '',
+      address: '',
+      phone: ''
+    },
+    shippingInfo: {
+      name: '',
+      phone: '',
+      province: '',
+      provinceId: null,
+      district: '',
+      districtId: null,
+      ward: '',
+      wardId: null,
+      street: ''
+    },
+    shippingType: {
+      type: '',
+      warehouseId: '',
+      time: '',
+      objPay: true
+    },
+    otherInfo: {
+      note: '',
+      coupon: '',
+      returnCode: ''
+    },
+    productSelector: {
+      id: null,
+      name: '',
+      qty: null,
+      weight: null,
+      price: null
+    },
+    productList: {}
+  }
+}
+
+export const getOrderPayload = () => {
+  return {
+    id: null,
+    customerId: null,
+    senderName: null,
+    senderPhone: null,
+    senderAddress: null,
+    note: null,
+    status: null,
+    feedback: null,
+    notification: false,
+    shipPayer: false,
+    coupon: null,
+    officeId: null,
+    warehouse: {
+      id: null
+    },
+    shippingAddress: {
+      id: null,
+      name: null,
+      phone: null,
+      province: null,
+      provinceId: null,
+      district: null,
+      districtId: null,
+      ward: null,
+      wardId: null,
+      street: null
+    },
+    shippingType: null,
+    takenTime: null,
+    returnCode: null,
+    products: []
+  }
+}
+
+export const getOrderProductPayload = () => {
+  return {
+    id: null,
+    product: {
+      id: null
+    },
+    name: null,
+    qty: null,
+    price: null,
+    weight: null,
+    longPackage: null,
+    widthPackage: null,
+    heightPackage: null,
+    specialType: false
+  };
+}
+
+export const resetOrderFormData = (data) => {
+  setOrderFormData(data, getOrderFormData());
+}
+
+export const setOrderFormData = (data, obj) => {
+  const value = JSON.parse(JSON.stringify(obj));
+
+  data.senderInfo.name = value.senderInfo.name;
+  data.senderInfo.address = value.senderInfo.address;
+  data.senderInfo.phone = value.senderInfo.phone;
+
+  data.shippingInfo.name = value.shippingInfo.name;
+  data.shippingInfo.phone = value.shippingInfo.phone;
+  data.shippingInfo.province = value.shippingInfo.province;
+  data.shippingInfo.provinceId = value.shippingInfo.provinceId;
+  data.shippingInfo.district = value.shippingInfo.district;
+  data.shippingInfo.districtId = value.shippingInfo.districtId;
+  data.shippingInfo.ward = value.shippingInfo.ward;
+  data.shippingInfo.wardId = value.shippingInfo.wardId;
+  data.shippingInfo.street = value.shippingInfo.street;
+
+  data.shippingType.type = value.shippingType.type;
+  data.shippingType.warehouseId = value.shippingType.warehouseId;
+  data.shippingType.time = value.shippingType.time === null || value.shippingType.time === '' ? '' : dayjs(value.shippingType.time);
+  data.shippingType.objPay = value.shippingType.objPay;
+
+  data.otherInfo.note = value.otherInfo.note;
+  data.otherInfo.coupon = value.otherInfo.coupon;
+  data.otherInfo.returnCode = value.otherInfo.returnCode;
+
+  data.productSelector.name = value.productSelector.name;
+  data.productSelector.qty = value.productSelector.qty;
+  data.productSelector.weight = value.productSelector.weight;
+  data.productSelector.price = value.productSelector.price;
+
+  data.productList = value.productList;
+}
+
+export const setOrderProductData = (data, obj) => {
+  const value = JSON.parse(JSON.stringify(obj));
+
+  data.name = value.name;
+  data.qty = value.qty;
+  data.weight = value.weight;
+  data.price = value.price;
 }

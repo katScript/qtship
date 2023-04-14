@@ -8,7 +8,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="create-order-area">
-                        <FormCreateOrder />
+                        <FormOrder />
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -23,7 +23,8 @@
     </div>
 </template>
 <script>
-    import FormCreateOrder from "@/components/order/FormCreateOrder.vue";
+    // import FormCreateOrder from "@/components/order/FormCreateOrder.vue";
+    import FormOrder from "@/components/order/FormOrder.vue";
     import NavbarClient from "@/components/common/NavbarClient.vue";
     import FooterClient from "@/components/common/FooterClient.vue";
     import ToolbarRight from "@/components/common/ToolbarRight.vue";
@@ -32,7 +33,7 @@
 
     export default {
         components: {
-            FormCreateOrder,
+            FormOrder,
             NavbarClient,
             FooterClient,
             ToolbarRight,

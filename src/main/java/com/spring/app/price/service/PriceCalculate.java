@@ -34,7 +34,7 @@ public class PriceCalculate {
     private AdminConfigService adminConfigService;
 
     public void processSubtotal(Order order) {
-        Double subtotal = 0.0;
+        double subtotal = 0.0;
 
         for (Package item : order.getPackages()) {
             subtotal += item.getQty() * item.getPrice();
