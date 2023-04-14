@@ -65,7 +65,7 @@ public class PriceCalculate {
     public Double calculateShippingFee(Office office, String provinceId, Double weight) {
         Double shippingFee = 0.0;
 
-        if (office != null) {
+        if (office != null && office.getId() != null) {
             Rule rule = office.getPriceRule();
             RuleArea area = ruleAreaRepository.findFirstByRuleAndProvinceId(rule, provinceId)
                     .orElseThrow(() -> new RuntimeException("Can not find area!"));
