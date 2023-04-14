@@ -2,7 +2,7 @@ import http from "@/utils/http";
 
 const PATH = "office/";
 
-export const list = (params = {}) => http.get(PATH + "all", { params });
+export const officeList = (params = {}) => http.get(PATH + "all", { params });
 
 export const listPaginate = (params = {}) =>
   http.get(PATH + "all/page", { params });

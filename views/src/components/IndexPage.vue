@@ -22,7 +22,7 @@ export default {
             commonFunction.redirect('/login-page');
         } else if (auth) {
             if(auth && role == "admin") {
-                commonFunction.redirect("/admin/order");
+                commonFunction.redirect("/admin/order/list");
             } else {
                 commonFunction.redirect("/" + role + "/management");
             }

@@ -3,18 +3,16 @@ import {ref, defineProps, defineEmits} from "vue";
 import {
   ShoppingCartOutlined,
   FieldNumberOutlined,
+  ColumnHeightOutlined,
+  ColumnWidthOutlined,
+  DragOutlined,
   ExpandOutlined,
   MoneyCollectOutlined,
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons-vue";
-import {listProduct} from "@/services/product";
 
 const props = defineProps({
-  customerId: {
-    type: Number,
-    default: null
-  },
   productList: {
     type: Object,
     default: () => {
@@ -29,7 +27,11 @@ const props = defineProps({
         name: '',
         qty: null,
         weight: null,
-        price: null
+        price: null,
+        long: null,
+        width: null,
+        height: null,
+        specialType: false
       }
     }
   }
@@ -37,35 +39,18 @@ const props = defineProps({
 
 const emits = defineEmits(['validate-product', 'change-product', 'product-selector-change']);
 
-const productList = ref([{
-  options: []
-}]);
 const selectedList = ref(props.productList);
 const productForm = ref({
   id: props.productSelector.id,
   name: props.productSelector.name,
   qty: props.productSelector.qty,
   weight: props.productSelector.weight,
-  price: props.productSelector.price
+  price: props.productSelector.price,
+  long: props.productSelector.long,
+  width: props.productSelector.width,
+  height: props.productSelector.height,
+  specialType: props.productSelector.specialType
 });
-
-const selectedProduct = ref({});
-
-const onProductSelect = (input, option) => {
-  let productFormData = productForm.value;
-  productFormData.id = option.data.id;
-  productFormData.name = option.data.name;
-  productFormData.qty = productFormData.qty === null || productFormData.qty === '' ? 1 : productFormData.qty;
-  productFormData.weight = option.data.weight;
-  productFormData.price = option.data.publicPrice;
-  selectedProduct.value = option.data;
-
-  emits('product-selector-change', productForm);
-}
-
-const onProductFilter = (input, option) => {
-  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-}
 
 const handleRemoveProduct = (key) => {
   delete selectedList.value[key];
@@ -78,52 +63,32 @@ const handleAddProduct = () => {
 }
 
 const addProduct = () => {
-  if (Object.keys(selectedProduct.value).length !== 0) {
-    selectedList.value[selectedProduct.value.sku] = productForm.value;
-  } else {
-    let size = Object.keys(selectedList).length;
-    selectedList.value[size] = productForm.value;
-  }
+  let size = Object.keys(selectedList).length;
+  selectedList.value[size] = productForm.value;
 
-  emits('change-product', selectedList);
-
-  selectedProduct.value = {};
   productForm.value = {
     id: null,
     name: ' ',
     qty: null,
     weight: null,
-    price: null
+    price: null,
+    long: null,
+    width: null,
+    height: null,
+    specialType: false
   }
 
   emits('product-selector-change', productForm);
 }
-
-const handGetListProduct = async () => {
-  if (props.customerId) {
-    const {data} = await listProduct(props.customerId);
-
-    Object.values(data).forEach(val => {
-      productList.value[0].options.push({
-        data: val,
-        value: val.name + ` (${val.sku})`
-      });
-    });
-  }
-}
-
-handGetListProduct();
 </script>
 
 <template>
   <div class="border mt-3">
     <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Thông tin sản phẩm</div>
     <div class="p-3">
-      <div
-          v-for="(product, key) in selectedList"
+      <div v-for="(product, key) in selectedList"
           :key="key"
-          class="my-3 border-bottom pb-3"
-      >
+          class="my-3 border-bottom pb-3">
         <a-input
             v-model:value="product.name"
             :disabled="true"
@@ -172,26 +137,58 @@ handGetListProduct();
       </div>
 
       <div class="my-3 border-bottom pb-3">
-        <div class="certain-category-search-wrapper" style="width: 100%">
-          <a-form-item :name="['productSelector', 'name']" class="my-2">
-            <a-auto-complete
-                v-model:value="productForm.name"
-                style="width: 100%"
-                placeholder="Tên sản phẩm"
-                :options="productList[0].options"
-                :filter-option="onProductFilter"
-                @select="onProductSelect"
-                @change="emits('product-selector-change', productForm)"
-            >
-              <template #option="item">
-                <div style="display: flex; justify-content: space-between">
-                  {{ item.value }}
-                </div>
-              </template>
+        <div class="d-flex gap-2 mt-3">
+          <a-form-item :name="['productSelector', 'name']" class="flex-fill">
+            <a-input v-model:value="productForm.name" placeholder="Tên sản phẩm">
               <template #prefix>
                 <ShoppingCartOutlined class="me-2"/>
               </template>
-            </a-auto-complete>
+            </a-input>
+          </a-form-item>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <a-form-item :name="['productSelector', 'long']" class="flex-fill">
+            <a-input v-model:value="productForm.long"
+                     :min="1"
+                     style="width: 100%"
+                     placeholder="Dài"
+                     @change="emits('product-selector-change', productForm)"
+            >
+              <template #prefix>
+                <DragOutlined class="me-2" />
+              </template>
+            </a-input>
+          </a-form-item>
+          <a-form-item :name="['productSelector', 'width']"
+                       class="flex-fill">
+            <a-input v-model:value="productForm.width"
+                     :min="0"
+                     style="width: 100%"
+                     placeholder="Rộng"
+                     @change="emits('product-selector-change', productForm)"
+            >
+              <template #prefix>
+                <ColumnWidthOutlined class="me-2" />
+              </template>
+            </a-input>
+          </a-form-item>
+          <a-form-item :name="['productSelector', 'height']"
+                       class="flex-fill">
+            <a-input v-model:value="productForm.height"
+                     :min="0"
+                     style="width: 100%"
+                     placeholder="Cao"
+                     @change="emits('product-selector-change', productForm)"
+            >
+              <template #prefix>
+                <ColumnHeightOutlined class="me-2" />
+              </template>
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-switch
+              v-model:checked="productForm.specialType"
+            />
           </a-form-item>
         </div>
         <div class="d-flex gap-2 mt-3">
@@ -236,8 +233,8 @@ handGetListProduct();
           </a-form-item>
           <a-form-item>
             <PlusOutlined
-                class="btn btn-success text-white px-3"
-                @click.prevent="handleAddProduct"
+              class="btn btn-success text-white px-3"
+              @click.prevent="handleAddProduct"
             />
           </a-form-item>
         </div>

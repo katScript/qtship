@@ -24,7 +24,7 @@ const data = reactive({
 </script>
 
 <template>
-    <div class="border">
+    <div class="border mt-3">
         <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Thông tin người gửi</div>
         <div class="p-3">
             <a-form-item label="Thông tin người gửi" :name="['senderInfo', 'name']">

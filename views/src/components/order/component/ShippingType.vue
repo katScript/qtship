@@ -2,6 +2,7 @@
 import {reactive, ref, defineProps, defineEmits} from "vue";
 import common from "@/utils/common";
 import {listWarehouse} from "@/services/warehouse";
+import {officeList} from "@/services/office";
 
 const props = defineProps({
   customerId: {
@@ -14,10 +15,15 @@ const props = defineProps({
       return {
         type: '',
         warehouseId: null,
+        officeId: null,
         time: '',
         objPay: true
       }
     }
+  },
+  isCustomer: {
+    type: Boolean,
+    default: true
   }
 });
 const emits = defineEmits(['shipping-type-change']);
@@ -25,22 +31,30 @@ const emits = defineEmits(['shipping-type-change']);
 const data = reactive({
   type: props.shippingType.type,
   warehouseId: props.shippingType.warehouseId,
+  officeId: props.shippingType.officeId,
   time: props.shippingType.time,
   objPay: props.shippingType.objPay
 });
 
 const warehouses = ref([]);
+const offices = ref([]);
 
 const handleGetWarehouse = async () => {
   const {data} = await listWarehouse(props.customerId);
   warehouses.value = data;
 }
 
+const handleGetOffice = async () => {
+  const {data} = await officeList();
+  offices.value = data;
+}
+
 handleGetWarehouse();
+handleGetOffice();
 </script>
 
 <template>
-  <div class="border">
+  <div class="border mt-3">
     <div class="fs-5 border-bottom bg-danger px-3 py-1 text-white">Phương thức giao & lấy hàng
     </div>
     <div class="p-3">
@@ -53,7 +67,7 @@ handleGetWarehouse();
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="Địa điểm lấy hàng" :name="['shippingType', 'warehouseId']">
+      <a-form-item v-if="props.isCustomer" label="Địa điểm lấy hàng" :name="['shippingType', 'warehouseId']">
         <a-select v-model:value="data.warehouseId"
                   style="width: 100%"
                   @change="emits('shipping-type-change', data)"
@@ -62,6 +76,18 @@ handleGetWarehouse();
           </a-select-option>
           <a-select-option v-for="(type, index) in warehouses" :value="type.id"
                            :key="index">{{ type.name }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item v-else label="Bưu cục nhận hàng" :name="['shippingType', 'officeId']">
+        <a-select v-model:value="data.officeId"
+                  style="width: 100%"
+                  @change="emits('shipping-type-change', data)"
+        >
+          <a-select-option class="my-2" value="">- Địa điểm nhận hàng -
+          </a-select-option>
+          <a-select-option v-for="(of, index) in offices" :value="of.id"
+                           :key="index">{{ of.name }}
           </a-select-option>
         </a-select>
       </a-form-item>
