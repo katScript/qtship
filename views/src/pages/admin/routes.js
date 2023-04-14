@@ -9,7 +9,7 @@ export default [
   },
   {
     name: 'admin-list-order',
-    path: '/admin/order',
+    path: '/admin/order/list',
     meta: {
       isAdmin: true,
     },
@@ -17,11 +17,11 @@ export default [
   },
   {
     name: 'admin-create-update-order',
-    path: '/admin/order/:action/:id?',
+    path: '/admin/order/:id?',
     meta: {
       isAdmin: true,
     },
-    component: () => import("@/pages/admin/order/CreateOrder.vue"),
+    component: () => import("@/pages/admin/order/OrderManage.vue"),
   },
   {
     name: 'admin-list-customer',

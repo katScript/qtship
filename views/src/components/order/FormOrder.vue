@@ -78,6 +78,7 @@ import {
   getOrderProductPayload,
   setOrderProductData
 } from "@/pages/admin/order/configOrder";
+import router from "@/router/router";
 
 const activeKey = ref('default');
 
@@ -191,6 +192,7 @@ const handleChangeTab = (key) => {
 
   if (currentKey === key) return;
 
+  form.value.clearValidate();
   if (currentKey === 'default') {
     setOrderFormData(defaultTabData.value, {...formData.value});
     setOrderFormData(formData.value, {...dataOrders.value[key]});
@@ -322,6 +324,8 @@ const createOrders = (isUseDefault = true) => {
         message: "Tạo đơn hàng thành công!",
         description: "Đơn hàng của bạn đã được chuyển tới trung tâm tiếp nhận"
       });
+
+      router.push({ path: '/customer/orders' });
     }).catch(() => {
       notification['error']({
         message: "Có Lỗi Sảy Ra!",
@@ -381,9 +385,5 @@ const handleSaveOrder = async (data) => {
   width: 200px;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.ant-tabs-tab-btn:focus, .ant-tabs-tab-remove:focus, .ant-tabs-tab-btn:active, .ant-tabs-tab-remove:active {
-  color: red!important;
 }
 </style>

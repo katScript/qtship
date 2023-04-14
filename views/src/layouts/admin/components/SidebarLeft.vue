@@ -32,37 +32,37 @@ const orderList = [
   {
     parent: 1,
     name: "Tất cả đơn hàng",
-    path: "/admin/order",
+    path: "/admin/order/list",
   },
   {
     parent: 1,
     name: "Đơn hàng chờ xử lý",
-    path: "/admin/order?status=" + common.TYPE_ORDER_PENDING,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_PENDING,
   },
   {
     parent: 1,
     name: "Đơn hàng đang xử lý",
-    path: "/admin/order?status=" + common.TYPE_ORDER_PROCESSING,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_PROCESSING,
   },
   {
     parent: 1,
     name: "Đơn hàng đã xử lý",
-    path: "/admin/order?status=" + common.TYPE_ORDER_DONE,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_DONE,
   },
   {
     parent: 1,
     name: "Đơn hàng phát sinh",
-    path: "/admin/order?status=" + common.TYPE_ORDER_OCCURRED,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_OCCURRED,
   },
   {
     parent: 1,
     name: "Đơn hàng bị hủy",
-    path: "/admin/order?status=" + common.TYPE_ORDER_CANCEL,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_CANCEL,
   },
   {
     parent: 1,
     name: "Đơn hàng trả lại",
-    path: "/admin/order?status=" + common.TYPE_ORDER_RETURN,
+    path: "/admin/order/list?status=" + common.TYPE_ORDER_RETURN,
   },
 ];
 
@@ -70,13 +70,8 @@ const createOrderList = [
   {
     parent: 2,
     name: "Tạo đơn hàng mới",
-    path: "/admin/order/create",
-  },
-  {
-    parent: 2,
-    name: "Cập nhật đơn hàng",
-    path: "/admin/order/update",
-  },
+    path: "/admin/order",
+  }
 ];
 
 const customerList = [
