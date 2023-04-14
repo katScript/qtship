@@ -28,6 +28,7 @@ const props = defineProps({
     type: Object,
     default: () => {
       return {
+        id: null,
         name: '',
         qty: null,
         weight: null,
@@ -44,6 +45,7 @@ const productList = ref([{
 }]);
 const selectedList = ref(props.productList);
 const productForm = ref({
+  id: props.productSelector.id,
   name: props.productSelector.name,
   qty: props.productSelector.qty,
   weight: props.productSelector.weight,
@@ -52,13 +54,9 @@ const productForm = ref({
 
 const selectedProduct = ref({});
 
-const onProductChange = (input) => {
-  productForm.value.name = input;
-  emits('product-selector-change', productForm);
-}
-
 const onProductSelect = (input, option) => {
   let productFormData = productForm.value;
+  productFormData.id = option.data.id;
   productFormData.name = option.data.name;
   productFormData.qty = productFormData.qty === null || productFormData.qty === '' ? 1 : productFormData.qty;
   productFormData.weight = option.data.weight;
@@ -94,6 +92,7 @@ const addProduct = () => {
 
   selectedProduct.value = {};
   productForm.value = {
+    id: null,
     name: ' ',
     qty: null,
     weight: null,
@@ -183,7 +182,7 @@ handGetListProduct();
                 :options="productList[0].options"
                 :filter-option="onProductFilter"
                 @select="onProductSelect"
-                @change="onProductChange"
+                @change="emits('product-selector-change', productForm)"
             >
               <template #option="item">
                 <div style="display: flex; justify-content: space-between">

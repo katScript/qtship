@@ -193,6 +193,7 @@ export const getOrderFormData = () => {
       returnCode: ''
     },
     productSelector: {
+      id: null,
       name: '',
       qty: null,
       weight: null,
@@ -202,36 +203,61 @@ export const getOrderFormData = () => {
   }
 }
 
+export const getOrderPayload = () => {
+  return {
+    id: null,
+    customerId: null,
+    senderName: null,
+    senderPhone: null,
+    senderAddress: null,
+    note: null,
+    status: null,
+    feedback: null,
+    notification: false,
+    shipPayer: false,
+    coupon: null,
+    officeId: null,
+    warehouse: {
+      id: null
+    },
+    shippingAddress: {
+      id: null,
+      name: null,
+      phone: null,
+      province: null,
+      provinceId: null,
+      district: null,
+      districtId: null,
+      ward: null,
+      wardId: null,
+      street: null
+    },
+    shippingType: null,
+    takenTime: null,
+    returnCode: null,
+    products: []
+  }
+}
+
+export const getOrderProductPayload = () => {
+  return {
+    id: null,
+    product: {
+      id: null
+    },
+    name: null,
+    qty: null,
+    price: null,
+    weight: null,
+    longPackage: null,
+    widthPackage: null,
+    heightPackage: null,
+    specialType: false
+  };
+}
+
 export const resetOrderFormData = (data) => {
-  data.senderInfo.name = '';
-  data.senderInfo.address = '';
-  data.senderInfo.phone = '';
-
-  data.shippingInfo.name = '';
-  data.shippingInfo.phone = '';
-  data.shippingInfo.province = '';
-  data.shippingInfo.provinceId = '';
-  data.shippingInfo.district = '';
-  data.shippingInfo.districtId = '';
-  data.shippingInfo.ward = '';
-  data.shippingInfo.wardId = '';
-  data.shippingInfo.street = '';
-
-  data.shippingType.type = '';
-  data.shippingType.warehouseId = '';
-  data.shippingType.time = '';
-  data.shippingType.objPay = true;
-
-  data.otherInfo.note = '';
-  data.otherInfo.coupon = '';
-  data.otherInfo.returnCode = '';
-
-  data.productSelector.name = '';
-  data.productSelector.qty = '';
-  data.productSelector.weight = '';
-  data.productSelector.price = '';
-
-  data.productList = {};
+  setOrderFormData(data, getOrderFormData());
 }
 
 export const setOrderFormData = (data, obj) => {
@@ -266,4 +292,13 @@ export const setOrderFormData = (data, obj) => {
   data.productSelector.price = value.productSelector.price;
 
   data.productList = value.productList;
+}
+
+export const setOrderProductData = (data, obj) => {
+  const value = JSON.parse(JSON.stringify(obj));
+
+  data.name = value.name;
+  data.qty = value.qty;
+  data.weight = value.weight;
+  data.price = value.price;
 }
