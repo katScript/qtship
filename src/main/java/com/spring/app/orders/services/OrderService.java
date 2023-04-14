@@ -157,7 +157,7 @@ public class OrderService {
                     warehouse
             ).setOffice(
                     officeRepository.findFirstByProvinceId(warehouse.getProvinceId())
-                            .orElse(new Office())
+                            .orElse(null)
             );
         }
     }
