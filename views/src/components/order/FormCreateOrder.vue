@@ -413,7 +413,7 @@ const handleGetOrder = async () => {
         } catch (e) {
             if (e.response.data.status === 500) {
                 message.error('Đơn hàng không tồn tại');
-                router.push('/customer/order/update')
+                router.push('/customer/order')
             }
         }
     }

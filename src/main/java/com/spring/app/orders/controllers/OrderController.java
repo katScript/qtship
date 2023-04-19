@@ -43,15 +43,16 @@ public class OrderController {
     @PostMapping("/save")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody List<OrderData> data) {
         try {
+            List<String> response = new ArrayList<>();
             for (OrderData order : data) {
                 if (order.getCustomerId() != null) {
-                    this.orderService.saveCustomerOrder(order);
+                    response.add(this.orderService.saveCustomerOrder(order));
                 } else {
-                    this.orderService.saveGuestOrder(order);
+                    response.add(this.orderService.saveGuestOrder(order));
                 }
             }
 
-            return ResponseEntity.ok(new MessageResponse("Save order successfully!"));
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

@@ -3,7 +3,7 @@ import {
   UserOutlined,
   PhoneOutlined
 } from "@ant-design/icons-vue";
-import {defineProps, reactive, ref, defineEmits} from "vue";
+import {defineProps, ref, defineEmits, onMounted, watch} from "vue";
 import {province, district, ward} from "@/services/region";
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const props = defineProps({
 
 const emits = defineEmits(['shipping-info-change'])
 
-const data = reactive({
+const data = ref({
   name: props.shippingInfo.name,
   phone: props.shippingInfo.phone,
   province: props.shippingInfo.province,
@@ -75,21 +75,21 @@ const handleGetWard = async (districtId) => {
 // process address data
 const resetDistrictData = () => {
   districts.value = [];
-  data.district = '';
-  data.districtId = null;
+  data.value.district = '';
+  data.value.districtId = null;
 }
 
 const resetWardData = () => {
   wards.value = [];
-  data.ward = '';
-  data.wardId = null;
+  data.value.ward = '';
+  data.value.wardId = null;
 }
 
 const provinceProcess = () => {
-  const province = provinces.value.find(x => x.province_id === data.provinceId);
+  const province = provinces.value.find(x => x.province_id === data.value.provinceId);
   if (province) {
-    data.province = province.province_name;
-    handleGetDistrict(data.provinceId).then(() => {
+    data.value.province = province.province_name;
+    handleGetDistrict(data.value.provinceId).then(() => {
       districtProcess();
     });
   } else {
@@ -100,10 +100,10 @@ const provinceProcess = () => {
 }
 
 const districtProcess = () => {
-  const district = districts.value.find(x => x.district_id === data.districtId);
+  const district = districts.value.find(x => x.district_id === data.value.districtId);
   if (district) {
-    data.district = district.district_name;
-    handleGetWard(data.districtId).then(() => {
+    data.value.district = district.district_name;
+    handleGetWard(data.value.districtId).then(() => {
       wardProcess();
     });
   } else {
@@ -114,17 +114,23 @@ const districtProcess = () => {
 }
 
 const wardProcess = () => {
-  const ward = wards.value.find(x => x.ward_id === data.wardId);
+  const ward = wards.value.find(x => x.ward_id === data.value.wardId);
   if (ward) {
-    data.ward = ward?.ward_name;
-    data.wardId = ward?.ward_id;
+    data.value.ward = ward?.ward_name;
+    data.value.wardId = ward?.ward_id;
   }
 
   emits('shipping-info-change', data);
 }
 
 // startup
-handleGetProvince();
+onMounted(() => {
+  handleGetProvince();
+});
+
+watch(props, () => {
+  data.value = props.shippingInfo;
+});
 </script>
 
 <template>
