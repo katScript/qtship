@@ -181,7 +181,7 @@
                                                     class="fa-solid fa-circle-info"></i></a>
                                             </td>
                                             <td>
-                                                <a :href="'/customer/order/update/' + item.id"
+                                                <a :href="'/customer/order/' + item.id"
                                                    class="btn btn-success a-function a-detail"
                                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                                    title="Cập nhật đơn hàng"><i

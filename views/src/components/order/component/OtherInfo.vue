@@ -1,5 +1,5 @@
 <script setup>
-import {defineEmits, defineProps, reactive, ref} from "vue";
+import {defineEmits, defineProps, onMounted, ref, watch} from "vue";
 import {
   AccountBookOutlined,
   CheckCircleOutlined
@@ -21,7 +21,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['other-info-change']);
 
-const data = reactive({
+const data = ref({
   note: props.otherInfo.note,
   coupon: props.otherInfo.coupon,
   returnCode: props.otherInfo.returnCode
@@ -34,7 +34,7 @@ const coupons = ref([{
 }]);
 
 const handleSetCoupon = (code) => {
-  data.coupon = code;
+  data.value.coupon = code;
   emits('other-info-change', data);
 }
 
@@ -43,7 +43,14 @@ const handleGetCoupon = async () => {
   coupons.value = data;
 }
 
-handleGetCoupon();
+onMounted(() => {
+  handleGetCoupon();
+});
+
+watch(props, () => {
+  data.value = props.otherInfo;
+});
+
 </script>
 <template>
   <div class="border mt-3">

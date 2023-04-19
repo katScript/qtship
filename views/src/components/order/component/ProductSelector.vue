@@ -79,10 +79,10 @@ const handleAddProduct = () => {
 
 const addProduct = () => {
   if (Object.keys(selectedProduct.value).length !== 0) {
-    selectedList.value[selectedProduct.value.sku] = productForm.value;
+    selectedList.value[selectedProduct.value.sku] = {...productForm.value};
   } else {
-    let size = Object.keys(selectedList).length;
-    selectedList.value[size] = productForm.value;
+    let size = Object.keys(selectedList.value).length;
+    selectedList.value[size] = {...productForm.value};
   }
 
   emits('change-product', selectedList);

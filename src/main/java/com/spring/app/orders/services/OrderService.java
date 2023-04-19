@@ -12,8 +12,10 @@ import com.spring.app.orders.models.repository.OrderRepository;
 import com.spring.app.orders.models.repository.OrderStatusRepository;
 import com.spring.app.orders.payload.OrderData;
 import com.spring.app.orders.payload.request.OrderStatusUpdateRequest;
+import com.spring.app.orders.services.dto.*;
 import com.spring.app.price.service.PriceCalculate;
 import com.spring.app.products.models.Package;
+import com.spring.app.products.models.Product;
 import com.spring.app.products.payload.PackageData;
 import com.spring.app.products.service.ProductService;
 import com.spring.app.shipping.models.ShippingAddress;
@@ -26,7 +28,12 @@ import com.spring.app.warehouse.models.repository.WarehouseRepository;
 import com.spring.app.warehouse.payload.WarehouseData;
 import com.spring.app.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -73,19 +80,83 @@ public class OrderService {
         this.orderRepository.save(_order);
     }
 
-    public void saveGuestOrder(OrderData order) {
+    public String saveGuestOrder(OrderData order) {
         Order _order = this.processOrder(order);
-        this.orderRepository.save(_order);
+        Order orderData = this.orderRepository.save(_order);
+
+        return postOrderToJAndT(orderData);
     }
 
-    public void saveCustomerOrder(OrderData order) {
+    public String saveCustomerOrder(OrderData order) {
         Customer customer = this.customerRepository.findById(order.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer not found!"));
 
         Order _order = this.processOrder(order);
         _order.setCustomer(customer);
 
-        this.orderRepository.save(_order);
+        Order orderData = this.orderRepository.save(_order);
+
+        return postOrderToJAndT(orderData);
+    }
+
+    public String postOrderToJAndT(Order order) {
+        String url = "https://test.jtexpress.vn/yuenan-interface-web/order/orderAction!createOrder.action";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        Address sender = Address.builder()
+                .name(order.getSenderName())
+                .phone(order.getSenderPhone())
+                .mobile(order.getSenderPhone())
+                .address(order.getSenderAddress())
+                .build();
+
+        Address receiver = Address.builder()
+                .name(order.getShippingAddress().getName())
+                .phone(order.getShippingAddress().getPhone())
+                .mobile(order.getShippingAddress().getPhone())
+                .prov(order.getShippingAddress().getProvince())
+                .city(order.getShippingAddress().getDistrict())
+                .area(order.getShippingAddress().getWard())
+                .address(order.getShippingAddress().getStreet())
+                .build();
+
+        String currentDate = DateFormatHelper.dateToString(new Date());
+        LogisticInterface logisticInterface = LogisticInterface.builder()
+                .txlogisticid(order.getOrderCode())
+                .sender(sender)
+                .receiver(receiver)
+                .itemsvalue(String.valueOf(order.getSubtotal()))
+                .goodsvalue(String.valueOf(order.getSubtotal()))
+                .weight(String.valueOf(order.getTotalWeight()))
+                .createordertime(currentDate)
+                .sendstarttime(currentDate)
+                .sendendtime(currentDate)
+                .remark(order.getReturnCode())
+                .items(new ArrayList<>())
+                .build();
+
+        for (Package p : order.getPackages()) {
+            logisticInterface.getItems().add(
+                    Item.builder()
+                            .itemname(p.getName())
+                            .englishName(p.getName())
+                            .itemvalue(String.valueOf(p.getPrice()))
+                            .build()
+            );
+        }
+
+        JAndTBody jAndTBody = JAndTBody.builder()
+                .logistics_interface(logisticInterface)
+                .build();
+
+        HttpEntity<JAndTBody> request = new HttpEntity<>(jAndTBody, headers);
+
+        return restTemplate.postForEntity(url, request, String.class).getBody();
     }
 
     public Order processOrder(OrderData data) {

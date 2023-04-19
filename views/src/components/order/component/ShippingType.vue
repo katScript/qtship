@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref, defineProps, defineEmits} from "vue";
+import {ref, defineProps, defineEmits, watch, onMounted} from "vue";
 import common from "@/utils/common";
 import {listWarehouse} from "@/services/warehouse";
 import {officeList} from "@/services/office";
@@ -11,15 +11,13 @@ const props = defineProps({
   },
   shippingType: {
     type: Object,
-    default: () => {
-      return {
-        type: '',
-        warehouseId: null,
-        officeId: null,
-        time: '',
-        objPay: true
-      }
-    }
+    default: () => ({
+      type: '',
+      warehouseId: null,
+      officeId: null,
+      time: '',
+      objPay: true
+    })
   },
   isCustomer: {
     type: Boolean,
@@ -28,7 +26,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['shipping-type-change']);
 
-const data = reactive({
+const data = ref({
   type: props.shippingType.type,
   warehouseId: props.shippingType.warehouseId,
   officeId: props.shippingType.officeId,
@@ -40,8 +38,10 @@ const warehouses = ref([]);
 const offices = ref([]);
 
 const handleGetWarehouse = async () => {
-  const {data} = await listWarehouse(props.customerId);
-  warehouses.value = data;
+  if (props.customerId != null) {
+    const {data} = await listWarehouse(props.customerId);
+    warehouses.value = data;
+  }
 }
 
 const handleGetOffice = async () => {
@@ -49,8 +49,14 @@ const handleGetOffice = async () => {
   offices.value = data;
 }
 
-handleGetWarehouse();
-handleGetOffice();
+onMounted(() => {
+  handleGetWarehouse();
+  handleGetOffice();
+});
+
+watch(props, () => {
+  data.value = props.shippingType;
+});
 </script>
 
 <template>

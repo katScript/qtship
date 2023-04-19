@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineProps, defineEmits} from "vue";
+import {ref, defineProps, defineEmits, watch} from "vue";
 import {
   ShoppingCartOutlined,
   FieldNumberOutlined,
@@ -21,8 +21,8 @@ const props = defineProps({
   },
   productSelector: {
     type: Object,
-    default: () => {
-      return {
+    default: () => ({
+        packageId: null,
         id: null,
         name: '',
         qty: null,
@@ -32,8 +32,7 @@ const props = defineProps({
         width: null,
         height: null,
         specialType: false
-      }
-    }
+      })
   }
 });
 
@@ -41,6 +40,7 @@ const emits = defineEmits(['validate-product', 'change-product', 'product-select
 
 const selectedList = ref(props.productList);
 const productForm = ref({
+  packageId: props.productSelector.packageId,
   id: props.productSelector.id,
   name: props.productSelector.name,
   qty: props.productSelector.qty,
@@ -63,12 +63,12 @@ const handleAddProduct = () => {
 }
 
 const addProduct = () => {
-  let size = Object.keys(selectedList).length;
-  selectedList.value[size] = productForm.value;
+  let size = Object.keys(selectedList.value).length;
+  selectedList.value[size] = {...productForm.value};
 
   productForm.value = {
     id: null,
-    name: ' ',
+    name: '',
     qty: null,
     weight: null,
     price: null,
@@ -80,6 +80,11 @@ const addProduct = () => {
 
   emits('product-selector-change', productForm);
 }
+
+watch(props, () => {
+  productForm.value = props.productSelector;
+  selectedList.value = props.productList;
+});
 </script>
 
 <template>
@@ -100,38 +105,74 @@ const addProduct = () => {
         </a-input>
         <div class="d-flex gap-2 mt-3">
           <a-input-number
-              v-model:value="product.qty"
+              v-model:value="product.long"
               class="flex-fill"
               :disabled="true"
-              placeholder="Số lượng"
+              placeholder="Dài"
+          >
+            <template #prefix>
+              <DragOutlined class="me-2" />
+            </template>
+          </a-input-number>
+          <a-input-number
+              v-model:value="product.width"
+              class="flex-fill"
+              :disabled="true"
+              placeholder="Rộng"
+          >
+            <template #prefix>
+              <ColumnWidthOutlined class="me-2" />
+            </template>
+          </a-input-number>
+          <a-input-number
+              v-model:value="product.height"
+              class="flex-fill"
+              :disabled="true"
+              placeholder="Cao"
+          >
+            <template #prefix>
+              <ColumnHeightOutlined class="me-2" />
+            </template>
+          </a-input-number>
+          <a-switch
+            :disabled="true"
+            v-model:checked="product.specialType"
+          />
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <a-input-number
+            v-model:value="product.qty"
+            class="flex-fill"
+            :disabled="true"
+            placeholder="Số lượng"
           >
             <template #prefix>
               <FieldNumberOutlined class="me-2"/>
             </template>
           </a-input-number>
           <a-input-number
-              v-model:value="product.weight"
-              class="flex-fill"
-              :disabled="true"
-              placeholder="Khối lượng"
+            v-model:value="product.weight"
+            class="flex-fill"
+            :disabled="true"
+            placeholder="Khối lượng"
           >
             <template #prefix>
               <ExpandOutlined class="me-2"/>
             </template>
           </a-input-number>
           <a-input-number
-              v-model:value="product.price"
-              class="flex-fill"
-              :disabled="true"
-              placeholder="Giá tiền"
+            v-model:value="product.price"
+            class="flex-fill"
+            :disabled="true"
+            placeholder="Cao"
           >
             <template #prefix>
               <MoneyCollectOutlined class="me-2"/>
             </template>
           </a-input-number>
           <DeleteOutlined
-              class="btn btn-danger text-white px-3"
-              @click="handleRemoveProduct(key)"
+            class="btn btn-danger text-white px-3"
+            @click="handleRemoveProduct(key)"
           />
         </div>
       </div>
@@ -139,7 +180,9 @@ const addProduct = () => {
       <div class="my-3 border-bottom pb-3">
         <div class="d-flex gap-2 mt-3">
           <a-form-item :name="['productSelector', 'name']" class="flex-fill">
-            <a-input v-model:value="productForm.name" placeholder="Tên sản phẩm">
+            <a-input v-model:value="productForm.name"
+                     placeholder="Tên sản phẩm"
+                     @change="emits('product-selector-change', productForm)">
               <template #prefix>
                 <ShoppingCartOutlined class="me-2"/>
               </template>

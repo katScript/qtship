@@ -343,7 +343,7 @@ watch(
             </button>
             <button
               type="button"
-              @click="router.push('/admin/order/update/' + record.id)"
+              @click="router.push('/admin/order/' + record.id)"
               class="btn btn-secondary"
             >
               <EditOutlined style="transform: translate(0px, -3px)" />

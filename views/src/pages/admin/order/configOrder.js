@@ -302,3 +302,57 @@ export const setOrderProductData = (data, obj) => {
   data.weight = value.weight;
   data.price = value.price;
 }
+
+export const jAndTOrder = {
+  eccompanyid: "CUSMODEL",
+  customerid: "084LC012345",
+  txlogisticid: null,
+  ordertype: 1,
+  servicetype: 1,
+  selfAddress: 1,
+  partsign: "0",
+  sender: {
+    name: null,
+    phone: null,
+    mobile: null,
+    prov: null,
+    city: null,
+    area: null,
+    address: null
+  },
+  receiver: {
+    name: null,
+    phone: null,
+    mobile: null,
+    prov: null,
+    city: null,
+    area: null,
+    address: null
+  },
+  createordertime: null,
+  sendstarttime: null,
+  sendendtime: null,
+  paytype: null,
+  itemsvalue: null,
+  goodsvalue: null,
+  isInsured: null,
+  items: [],
+  weight: null,
+  volume: null,
+  remark: null
+}
+
+export const jAndTItem = {
+  itemname: null,
+  englishName: null,
+  number: null,
+  itemvalue: null,
+  desc: null
+}
+
+export const jAndTBody = {
+  logistics_interface: {},
+  data_digest: "ODUyNGFkZmY2ZWNiM2M5MjFiNTljMDU2MjI3OTEzM2E=",
+  msg_type: "ORDERCREATE",
+  eccompanyid: "CUSMODEL"
+}
