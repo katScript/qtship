@@ -139,7 +139,7 @@ public class OrderService {
                 .sender(sender)
                 .receiver(receiver)
                 .itemsvalue(String.valueOf(order.getSubtotal()))
-                .weight(order.getTotalWeight())
+                .weight(order.getTotalWeight() > 70L ? 69 : order.getTotalWeight())
                 .createordertime(currentDate)
                 .sendstarttime(currentDate)
                 .sendendtime(currentDate)
@@ -184,8 +184,6 @@ public class OrderService {
         form.add("data_digest", Base64.getEncoder().encodeToString(myHash.getBytes()));
         form.add("msg_type", "ORDERCREATE");
         form.add("eccompanyid", "CUSMODEL");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(form, headers);
 
         return restTemplate.postForObject(url, form, String.class);
     }
