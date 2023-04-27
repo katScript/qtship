@@ -10,6 +10,7 @@ import lombok.*;
 public class Item {
     private String itemname;
     private String englishName;
+    private Integer number;
     private String itemvalue;
     private String desc;
 }
