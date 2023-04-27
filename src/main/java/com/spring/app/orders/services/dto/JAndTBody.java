@@ -9,8 +9,7 @@ import lombok.*;
 @Builder
 public class JAndTBody {
     private LogisticInterface logistics_interface;
-    @Builder.Default
-    private String data_digest = "ODUyNGFkZmY2ZWNiM2M5MjFiNTljMDU2MjI3OTEzM2E=";
+    private String data_digest;
     @Builder.Default
     private String msg_type = "ORDERCREATE";
     @Builder.Default

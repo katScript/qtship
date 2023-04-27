@@ -14,6 +14,8 @@ public class LogisticInterface {
     private String eccompanyid = "CUSMODEL";
     @Builder.Default
     private String customerid = "084LC012345";
+    @Builder.Default
+    private String logisticprviderid = "JNT";
     private String txlogisticid;
     @Builder.Default
     private Integer ordertype = 1;
@@ -30,12 +32,14 @@ public class LogisticInterface {
     private String sendendtime;
     @Builder.Default
     private String paytype = "PP_PM";
+    private String goodsname = null;
     private String itemsvalue;
-    private String goodsvalue;
     @Builder.Default
-    private String isInsured = "1";
+    private String goodsvalue = "0";
+    @Builder.Default
+    private Integer isInsured = 1;
     private List<Item> items;
-    private String weight;
-    private String volume;
+    private Double weight;
+    private Long volume;
     private String remark;
 }

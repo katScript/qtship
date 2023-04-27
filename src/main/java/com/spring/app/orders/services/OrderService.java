@@ -1,5 +1,6 @@
 package com.spring.app.orders.services;
 
+import com.google.gson.Gson;
 import com.spring.app.customers.models.Customer;
 import com.spring.app.customers.models.repository.CustomerRepository;
 import com.spring.app.helper.date.DateFormatHelper;
@@ -33,8 +34,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
@@ -105,8 +111,7 @@ public class OrderService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         Address sender = Address.builder()
                 .name(order.getSenderName())
@@ -131,8 +136,7 @@ public class OrderService {
                 .sender(sender)
                 .receiver(receiver)
                 .itemsvalue(String.valueOf(order.getSubtotal()))
-                .goodsvalue(String.valueOf(order.getSubtotal()))
-                .weight(String.valueOf(order.getTotalWeight()))
+                .weight(order.getTotalWeight())
                 .createordertime(currentDate)
                 .sendstarttime(currentDate)
                 .sendendtime(currentDate)
@@ -145,18 +149,42 @@ public class OrderService {
                     Item.builder()
                             .itemname(p.getName())
                             .englishName(p.getName())
-                            .itemvalue(String.valueOf(p.getPrice()))
+                            .number(p.getQty())
+                            .itemvalue(null)
                             .build()
             );
         }
 
-        JAndTBody jAndTBody = JAndTBody.builder()
-                .logistics_interface(logisticInterface)
-                .build();
+        Gson gson = new Gson();
 
-        HttpEntity<JAndTBody> request = new HttpEntity<>(jAndTBody, headers);
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
 
-        return restTemplate.postForEntity(url, request, String.class).getBody();
+        String key = "04fc653c0f661e1204bd804774e01824";
+        String data = gson.toJson(logisticInterface);
+
+        MessageDigest md;
+        String myHash;
+        try {
+            md = MessageDigest.getInstance("MD5");
+
+            String digestData = data + key;
+
+            md.update(digestData.getBytes());
+            byte[] digest = md.digest();
+            myHash = DatatypeConverter
+                    .printHexBinary(digest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        form.add("logistics_interface", data);
+        form.add("data_digest", Base64.getEncoder().encodeToString(myHash.getBytes()));
+        form.add("msg_type", "ORDERCREATE");
+        form.add("eccompanyid", "CUSMODEL");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(form, headers);
+
+        return restTemplate.postForObject(url, form, String.class);
     }
 
     public Order processOrder(OrderData data) {
