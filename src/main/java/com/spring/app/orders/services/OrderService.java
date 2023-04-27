@@ -117,6 +117,9 @@ public class OrderService {
                 .name(order.getSenderName())
                 .phone(order.getSenderPhone())
                 .mobile(order.getSenderPhone())
+                .prov(order.getShippingAddress().getProvince())
+                .city(order.getShippingAddress().getDistrict())
+                .area(order.getShippingAddress().getWard())
                 .address(order.getSenderAddress())
                 .build();
 
@@ -172,7 +175,7 @@ public class OrderService {
             md.update(digestData.getBytes());
             byte[] digest = md.digest();
             myHash = DatatypeConverter
-                    .printHexBinary(digest);
+                    .printHexBinary(digest).toLowerCase();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

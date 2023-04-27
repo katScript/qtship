@@ -14,8 +14,6 @@ public class LogisticInterface {
     private String eccompanyid = "CUSMODEL";
     @Builder.Default
     private String customerid = "084LC012345";
-    @Builder.Default
-    private String logisticprviderid = "JNT";
     private String txlogisticid;
     @Builder.Default
     private Integer ordertype = 1;
